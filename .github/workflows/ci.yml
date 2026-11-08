@@ -1,9 +1,12 @@
 name: CI
 
+# Läuft bei jedem Push auf jeden Branch. Kein pull_request-Trigger, damit die
+# Checks nicht doppelt laufen – die Pflicht-Checks eines PRs werden über den
+# Head-Commit des Branches erfüllt. Da nur `branches` (ohne `tags`) gesetzt ist,
+# lösen Tag-Pushes (v*) diesen Workflow nicht aus; dafür gibt es release.yml.
 on:
   push:
-    branches: [main]
-  pull_request:
+    branches: ['**']
 
 jobs:
   verify:

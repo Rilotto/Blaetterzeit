@@ -57,6 +57,15 @@ Der CEO bekommt in dem Takt, den er in `docs/vision.md` unter „Prozessvorgaben
 
 Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Ort legt der Entwickler beim Theme-REQ fest). Sagt der CEO im Chat „Primärfarbe auf #… ändern“, lässt du die **Standardwerte** dort durch den Entwickler anpassen. Ab dem nächsten Prototyp ist die Änderung sichtbar. Konkrete Standard-Farbwerte sind deshalb keine eingefrorenen Akzeptanzkriterien. Eingefroren wird nur das Verhalten, also welche Farbrolle welches Element färbt und dass der Nutzer sie ändern kann.
 
+## Git-Workflow
+
+`main` ist geschützt: Änderungen landen dort nur über einen Pull Request mit grünen Checks „verify“ und „android-build“.
+
+1. Für jede Änderung einen Branch anlegen: `sprint-NN/<kurz>`, `fix/<kurz>` oder `docs/<kurz>`.
+2. Vor dem Push `npm run verify` ausführen, dann den Branch pushen.
+3. Abwarten, bis die CI für den Branch grün ist, und das Ergebnis tatsächlich prüfen.
+4. Dem CEO den Link zum Erstellen des Pull Requests geben (`https://github.com/Rilotto/Blaetterzeit/compare/main...<branch>?expand=1`) und kurz zusammenfassen, was drinsteckt. Der CEO führt den Merge durch.
+
 ## Befehle
 
 ```bash
