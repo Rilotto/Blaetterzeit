@@ -16,9 +16,14 @@ Blätterzeit ist eine persönliche App, mit der ich meine Bücher erfasse und me
 - Bereits freigegebene Funktionen dürfen in keinem Folge-Release verloren gehen.
 - Daten gehören mir: Export/Backup muss möglich sein.
 
+## Prozessvorgaben
+
+- **Prototyp-Takt:** _noch festzulegen_ (z. B. „am Ende jedes Sprints“, „wöchentlich“, „nach jedem fertigen REQ“). Zusätzlich jederzeit auf Zuruf.
+- **Farben:** Der CEO kann die Standardfarben jederzeit im Chat ändern lassen. In der App gibt es später Themes mit vier Farbrollen.
+
 ## Grundanforderungen
+
+- Farben/Themes in den Einstellungen anpassbar (vier Farbrollen); Zuordnung Element → Farbrolle wird mit dem Anforderungsmanager geklärt.
 
 <!-- Hier trägt der CEO seine Grundanforderungen ein. Der Anforderungsmanager
      arbeitet sie gemeinsam mit dem CEO zu REQs aus. -->
-
-- …

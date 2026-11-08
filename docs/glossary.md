@@ -8,3 +8,6 @@ Gepflegt vom Anforderungsmanager. Im Code werden die englischen Bezeichner verwe
 | Buch | `Book` | Ein vom Nutzer erfasstes Werk mit Titel und Autor, optional ISBN. |
 | Lesestatus | `ReadingStatus` | Stand des Nutzers zu einem Buch: *Möchte ich lesen* (`want_to_read`), *Lese ich gerade* (`reading`), *Gelesen* (`read`). |
 | Bibliothek | – | Gesamtheit aller erfassten Bücher eines Nutzers. |
+| Theme | `Theme` | Satz aus genau vier Farbwerten, je einer pro Farbrolle, der das Farbaussehen der gesamten App bestimmt. Es ist immer genau ein Theme aktiv. |
+| Farbrolle | `ColorRole` | Benannte Funktion einer Farbe im Theme, der UI-Elemente zugeordnet sind (vorläufig: Primärfarbe `primary`, Sekundärfarbe `secondary`, Hintergrundfarbe `background`, Textfarbe `text`; Namen noch nicht vom CEO bestätigt). Jedes farbige UI-Element gehört zu genau einer Farbrolle. |
+| Standard-Theme | `defaultTheme` | Das mit der App ausgelieferte Theme; aktiv beim ersten Start und Ziel von „Auf Standard zurücksetzen“. Zentral an genau einer Stelle im Code definiert. |

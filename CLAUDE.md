@@ -44,6 +44,19 @@ Prüfe die `docs/definition-of-done.md`. Setze erfüllte REQs auf „Implementie
 ### 5. Release (nur nach CEO-Freigabe)
 Siehe `docs/release-prozess.md`: `npm run release:freeze -- <version> <REQ-IDs>`, Commit, Tag, Push.
 
+## Prototypen für den CEO
+
+Der CEO bekommt in dem Takt, den er in `docs/vision.md` unter „Prozessvorgaben“ festlegt, einen ansehbaren Prototyp. Ändert er den Takt im Chat, trägst du den neuen Wert dort ein.
+
+- **Form:** Der aktuelle Web-Build (`npm run build`) mit Demodaten wird als interaktives Artefakt veröffentlicht, sodass der CEO ihn im Browser oder auf dem Handy öffnen kann. Wenn es sinnvoll ist, kommt zusätzlich die Debug-APK aus der CI dazu.
+- **Inhalt jeder Lieferung:** Was neu ist (REQ-IDs), was bewusst noch fehlt oder nur Platzhalter ist, und was der CEO konkret prüfen soll.
+- **Ehrlichkeit:** Nicht abgenommene Funktionen werden im Prototyp als „Entwurf“ gekennzeichnet. Ein Prototyp ist keine Freigabe.
+- Feedback des CEO zum Prototyp geht an den Anforderungsmanager (neue oder geänderte REQs), nicht direkt in den Code.
+
+## Farben auf Zuruf
+
+Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Ort legt der Entwickler beim Theme-REQ fest). Sagt der CEO im Chat „Primärfarbe auf #… ändern“, lässt du die **Standardwerte** dort durch den Entwickler anpassen. Ab dem nächsten Prototyp ist die Änderung sichtbar. Konkrete Standard-Farbwerte sind deshalb keine eingefrorenen Akzeptanzkriterien. Eingefroren wird nur das Verhalten, also welche Farbrolle welches Element färbt und dass der Nutzer sie ändern kann.
+
 ## Befehle
 
 ```bash
