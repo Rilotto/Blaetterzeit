@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Tags werden für die Ledger-Prüfung gebraucht
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck, Lint, Tests, Traceability
+        run: npm run verify
+      - name: Traceability-Matrix erzeugen
+        if: always()
+        run: npm run trace:write || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-report
+          path: |
+            test-results.json
+            docs/traceability.md
+
+  android-build:
+    name: android-build
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm run android:sync
+      - name: Debug-APK bauen (prüft nur, ob Android kompiliert)
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
