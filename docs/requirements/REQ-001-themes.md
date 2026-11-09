@@ -1,6 +1,6 @@
 ---
 id: REQ-001
-titel: Farben der App in den Einstellungen über die vier Farbrollen anpassen
+titel: Farben der App über Themes mit vier Farbrollen anpassen
 status: Entwurf
 prioritaet: Should
 art: funktional
@@ -18,16 +18,22 @@ Als **Nutzer** möchte ich **die Farben der App jederzeit in den Einstellungen �
 
 ## Anforderung (Satzschablone)
 
-- Farbrollen, Zuordnung Element → Farbrolle und Standard-Theme sind in REQ-002 festgelegt und werden hier vorausgesetzt.
+- Das System muss ein Theme aus genau vier Farbrollen bilden (vorläufige Namen siehe Glossar und Offene Fragen: Primärfarbe, Sekundärfarbe, Hintergrundfarbe, Textfarbe).
+- Das System muss jedem farbigen UI-Element genau eine der vier Farbrollen zuordnen; die verbindliche Zuordnung ergibt sich aus der vom CEO bestätigten Zuordnungstabelle (siehe Offene Fragen, F1).
 - Das System muss dem Nutzer in den Einstellungen die Möglichkeit bieten, jede der vier Farbrollen einzeln zu ändern.
 - Wenn der Nutzer eine Farbrolle ändert, muss das System alle dieser Farbrolle zugeordneten UI-Elemente in der neuen Farbe darstellen, ohne dass die App neu gestartet werden muss.
 - Das System muss das aktive Theme dauerhaft speichern, sodass es nach einem Neustart der App unverändert angewendet wird.
+- Das System muss ein Standard-Theme mitbringen, das beim ersten Start der App aktiv ist.
 - Das System muss dem Nutzer die Möglichkeit bieten, das aktive Theme auf das Standard-Theme zurückzusetzen. _(vorläufig, Bestätigung offen – F4)_
 
 ## Akzeptanzkriterien
 
-<!-- Vorläufig. Werden nach Beantwortung der Offenen Fragen konkretisiert.
-     AK-1 (Standard-Theme beim ersten Start) wurde am 2026-11-09 nach REQ-002 AK-1 verschoben; Nummer bleibt frei. -->
+<!-- Vorläufig. Werden nach Beantwortung der Offenen Fragen konkretisiert (insb. AK-2 mit der Zuordnungstabelle). -->
+
+### AK-1 Standard-Theme beim ersten Start
+- **Gegeben** die App wurde frisch installiert und noch nie gestartet
+- **Wenn** der Nutzer die App startet
+- **Dann** sind alle vier Farbrollen mit den Werten des Standard-Themes belegt und alle UI-Elemente werden in den Farben ihrer jeweiligen Farbrolle dargestellt
 
 ### AK-2 Farbrolle ändern wirkt sofort auf alle zugeordneten Elemente
 - **Gegeben** das Standard-Theme ist aktiv
@@ -64,21 +70,20 @@ Als **Nutzer** möchte ich **die Farben der App jederzeit in den Einstellungen �
 
 ## Abhängigkeiten
 
-- **REQ-002** (Farbrollen, Zuordnungstabelle, Standard-Theme, zentrale Definition der Standardwerte) ist Voraussetzung. Konkrete Standardwerte sind kein AK (CLAUDE.md „Farben auf Zuruf“).
-- Setzt die Hauptseite „Einstellungen“ voraus (REQ-004; bis zur Umsetzung von REQ-001 dort Platzhalterseite nach REQ-005).
+- **Randbedingung Entwicklungsprozess:** Der CEO möchte die Standardfarben der App auch im Chat mit dem Scrum Master ändern lassen können. Daher müssen die Werte des Standard-Themes an genau einer zentralen Stelle im Code definiert sein; UI-Elemente dürfen Farben nur über die Farbrollen beziehen, nicht direkt als Farbwert. Eine Änderung der Standardfarben ist eine Änderung dieses REQ bzw. – nach Freigabe – ein neuer REQ mit `ersetzt: [REQ-001]`.
+- Setzt einen Einstellungsbereich in der App voraus (existiert noch nicht als REQ).
 - Persistenz des Themes über die Speicher-Abstraktion (ADR-0002); Theme sollte im Export/Backup enthalten sein (Vision: „Export/Backup muss möglich sein“) – zu bestätigen.
 
 ## Offene Fragen
 
-- F1: (nach REQ-002 F1 verschoben) Namen der Farbrollen und Zuordnungstabelle werden in REQ-002 geklärt.
+- F1: Namen der vier Farbrollen und Zuordnung der UI-Elemente zu den Farbrollen (Vorschlag liegt dem CEO vor).
 - F2: Nur ein eigenes Theme oder zusätzlich vordefinierte Themes zur Auswahl? Ggf. Aufteilung in eigenen REQ.
 - F3: Hell-/Dunkel-Modus – gewünscht? Falls ja, als vordefiniertes Theme oder als eigener Modus mit je vier Farben (ggf. eigener REQ).
 - F4: Art der Farbauswahl (Farbwähler, Hex-Eingabe, Palette) und Bestätigung „Zurücksetzen auf Standard“.
-- F5: Kontrast-/Lesbarkeitsprüfung bei Nutzeränderung (Warnung, Blockieren oder keine) und Priorität (Standardfarben: siehe REQ-002 F2).
+- F5: Kontrast-/Lesbarkeitsprüfung (Warnung, Blockieren oder keine) sowie konkrete Standardfarben und Priorität.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-08 | Erstellt (Entwurf aus Grundanforderung des CEO) | Anforderungsmanager |
-| 2026-11-09 | Farbrollen-Definition, Zuordnung, Standard-Theme und AK-1 nach REQ-002 herausgelöst; REQ-001 behandelt nur noch die Anpassbarkeit in den Einstellungen. Titel angepasst. | Anforderungsmanager |
