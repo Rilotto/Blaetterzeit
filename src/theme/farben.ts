@@ -12,7 +12,6 @@ export type FarbrubrikId =
   | 'tertiaer'
   | 'ghost'
   | 'ghostframe'
-  | 'schrifttertiaer'
   | 'dunkelbraun';
 
 export interface Farbrubrik {
@@ -31,7 +30,6 @@ export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
   // REQ-006: neue Rubriken, Standardwerte aus dem Referenzbild.
   ghost: { name: 'Ghost', wert: '#ECE8DC' },
   ghostframe: { name: 'GhostFrame', wert: '#DFD9CB' },
-  schrifttertiaer: { name: 'Schrift tertiär', wert: '#685849' },
   // REQ-009: Buchtitel.
   dunkelbraun: { name: 'Dunkelbraun', wert: '#392F25' },
 };
@@ -84,7 +82,7 @@ export const buecherFarbrollen: Record<BuecherFarbrolle, FarbrubrikId> = {
   filterAktivSchrift: 'hintergrund',
   filterInaktivHintergrund: 'ghost',
   filterInaktivRahmen: 'ghostframe',
-  filterInaktivSchrift: 'schrifttertiaer',
+  filterInaktivSchrift: 'tertiaer',
   abschnittsueberschrift: 'tertiaer',
   alleAnsehen: 'primaer',
   buchtitel: 'dunkelbraun',

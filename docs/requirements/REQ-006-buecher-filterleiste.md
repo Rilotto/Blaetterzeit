@@ -51,17 +51,16 @@ Welche Filter es gibt, wie sie heißen, in welcher Reihenfolge sie stehen und we
 | Aktiver Filter – Schrift | Beschriftung des aktiven Filters | Hintergrund | „Schriftfarbe wie Seitenhintergrund“ |
 | Inaktiver Filter – Hintergrund | Hintergrund inaktiver Filter | Ghost (neu) | „Hintergrund wie in Screenshot (wird zukünftig 'Ghost' genannt)“ |
 | Inaktiver Filter – Rahmen | Rahmen inaktiver Filter | GhostFrame (neu) | „Rahmen wie in Screenshot (zukünftig 'GhostFrame')“ |
-| Inaktiver Filter – Schrift | Beschriftung inaktiver Filter | Schrift tertiär (neu) | „Schrift wie in Screenshot (zukünftig 'Schrift teritär')“ |
+| Inaktiver Filter – Schrift | Beschriftung inaktiver Filter | Tertiär | „Merge bitte Schrift tertiär und tertiär“ (2026-11-09; ursprünglich eigene Farbrubrik „Schrift tertiär“) |
 
 - Das System muss den aktiven Filter ohne Rahmen darstellen (CEO zu F11: aktiver Filter hat keinen Rahmen).
-- Das System muss die drei neuen Farbrubriken „Ghost“, „GhostFrame“ und „Schrift tertiär“ zusätzlich zu den bestehenden Farbrubriken (REQ-002) zentral definieren. Die Namen stammen vom CEO („teritär“ als „tertiär“ übernommen, wie bereits bei der Farbrubrik „Tertiär“).
+- Das System muss die zwei neuen Farbrubriken „Ghost“ und „GhostFrame“ zusätzlich zu den bestehenden Farbrubriken (REQ-002) zentral definieren. Die Namen stammen vom CEO. Die früher hier definierte Farbrubrik „Schrift tertiär“ entfällt; sie wurde am 2026-11-09 auf Wunsch des CEO mit der Farbrubrik „Tertiär“ (REQ-002) zusammengelegt.
 - Aktuelle Standardwerte der neuen Farbrubriken (aus dem Referenzbild gemessen, CEO: „wie in Screenshot“; kein Akzeptanzkriterium):
 
 | Farbrubrik | aktueller Standardwert |
 |---|---|
 | Ghost | `#ECE8DC` |
 | GhostFrame | `#DFD9CB` |
-| Schrift tertiär | `#685849` |
 
 - Konkrete Farbwerte sind kein Akzeptanzkriterium. Ändert der CEO den Wert einer Farbrubrik, ändern sich die zugehörigen Elemente mit.
 
@@ -111,7 +110,7 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 - **Wenn** der aktive Filter und die inaktiven Filter betrachtet werden
 - **Dann** ist der Hintergrund des aktiven Filters in der Farbrubrik „Tertiär“ und seine Beschriftung in der Farbrubrik „Hintergrund“ dargestellt
 - **Und** der aktive Filter hat keinen Rahmen
-- **Und** der Hintergrund jedes inaktiven Filters ist in der Farbrubrik „Ghost“, sein Rahmen in der Farbrubrik „GhostFrame“ und seine Beschriftung in der Farbrubrik „Schrift tertiär“ dargestellt
+- **Und** der Hintergrund jedes inaktiven Filters ist in der Farbrubrik „Ghost“, sein Rahmen in der Farbrubrik „GhostFrame“ und seine Beschriftung in der Farbrubrik „Tertiär“ dargestellt
 
 ### AK-8 Horizontal wischen
 - **Gegeben** die Filter sind zusammen breiter als der sichtbare Bereich der Filterleiste
@@ -139,7 +138,7 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 - **Und** alle anderen Filter sind inaktiv
 
 ### AK-12 Neue Farbrubriken zentral definiert und wirksam
-- **Gegeben** der Wert einer der Farbrubriken „Ghost“, „GhostFrame“, „Schrift tertiär“, „Tertiär“ oder „Hintergrund“ wird an der zentralen Stelle geändert
+- **Gegeben** der Wert einer der Farbrubriken „Ghost“, „GhostFrame“, „Tertiär“ oder „Hintergrund“ wird an der zentralen Stelle geändert
 - **Wenn** die Filterleiste angezeigt wird
 - **Dann** sind alle Elemente dieses REQ, deren Farbrolle aus dieser Farbrubrik stammt (Tabelle im Abschnitt „Farben“), im geänderten Wert dargestellt
 - **Und** keines dieser Elemente hat einen eigenen, davon abweichenden Farbwert
@@ -175,3 +174,4 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 | 2026-11-09 | Erstellt (Entwurf aus der Vorgabe des CEO zur Filterleiste der Seite „Bücher“, Punkte 4 bis 9 und Antworten zu Standardfilter). Orientierungswerte des Scrum Masters als Nicht-AK aufgenommen | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt, Vorläufigkeitsvermerk entfernt. F3: Farbzuordnungen eingetragen (aktiver Filter Tertiär / Schrift Hintergrund; inaktive Filter in den neuen Farbrubriken „Ghost“, „GhostFrame“, „Schrift tertiär“ mit Standardwerten aus dem Referenzbild). Die frühere Beschreibung „dunkelbraun mit heller Beschriftung“ bzw. „hellem, beigefarbenem Hintergrund, dezentem Rahmen, dunklerer Schrift“ und die gemessenen Werte des aktiven Filters entfallen zugunsten der Farbrubriken; Rahmenwert neu gemessen (`#DFD9CB`). AK-7 präzisiert, neu AK-12. F6: Aktivierung durch Antippen; außer der Darstellung passiert nichts, die Filterlogik bleibt als Anknüpfungspunkt (AK-10 präzisiert); „Für dich“ ist bei jedem Aufruf der Seite aktiv, auch nach Seitenwechsel (neu AK-11). F5 nach REQ-005 verschoben und dort als F10 neu formuliert; F5 blockiert diesen REQ nicht mehr. Zahl hinter Filtern in die Abgrenzung (CEO-Antwort 7). Neue offene Frage F11 (Rahmen des aktiven Filters) | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F11: Aktiver Filter hat keinen Rahmen (Anforderung im Abschnitt „Farben“, AK-7 ergänzt). F10 (REQ-005): Bereich unterhalb der Filterleiste bleibt leer, Verweise in „Wischen“ und Abgrenzung angepasst. Vom CEO am 2026-11-09 bestätigt, Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-09 | CEO: „Merge bitte Schrift tertiär und tertiär“. Farbrubrik „Schrift tertiär“ (Standardwert `#685849`) entfällt und wird mit „Tertiär“ (Standardwert `#6B5849`, REQ-002) zusammengelegt. Beschriftung inaktiver Filter jetzt in Farbrubrik „Tertiär“ (Farbtabelle, Definition neuer Farbrubriken, Standardwerte, AK-7, AK-12 angepasst). Reine Farbzuordnung, Status bleibt „Implementiert“; Code und Akzeptanztest sind anzupassen | Anforderungsmanager |
