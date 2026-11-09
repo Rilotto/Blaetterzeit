@@ -10,8 +10,6 @@ ersetzt_durch:
 freigegeben_in:
 ---
 
-<!-- Priorität "Must": vorläufig, Bestätigung durch den CEO ausstehend (MoSCoW ist CEO-Entscheidung, siehe Offene Fragen). -->
-
 ## Ziel / Nutzen
 
 Als **Nutzer** möchte ich **auf der Seite „Bücher“ direkt unter der Überschrift eine horizontal wischbare Leiste mit Filtern**, damit **ich später mit einem Filter festlegen kann, welche Bücher mir angezeigt werden**.
@@ -31,22 +29,40 @@ Welche Filter es gibt, wie sie heißen, in welcher Reihenfolge sie stehen und we
 
 **Wischen**
 - Das System muss dem Nutzer die Möglichkeit bieten, die gesamte Filterleiste horizontal nach links und rechts zu wischen.
-- Das System muss die Filterleiste unabhängig von anderen Bereichen der Seite scrollen. Insbesondere muss sie unabhängig von einer darunterliegenden horizontalen Buchliste scrollbar sein (CEO).
+- Das System muss die Filterleiste unabhängig von anderen Bereichen der Seite scrollen. Das gilt auch gegenüber der vom CEO erwähnten darunterliegenden horizontalen Buchliste, sobald es sie gibt (CEO). Ob sie bereits zum Grundgerüst gehört, ist in REQ-005, F10 offen.
 
 **Form**
 - Das System muss jeden Filter als längliche, vollständig abgerundete Kapsel (Pill) darstellen.
 - Das System muss die Breite jedes Filters nach seinem Inhalt und den definierten Innenabständen bemessen.
 
 **Aktiver Filter**
-- Das System muss genau einen Filter als aktiven Filter darstellen (CEO: „Der aktive Filter …“).
-- Wenn die Seite „Bücher“ nach dem Öffnen der App angezeigt wird, muss das System den Filter „Für dich“ als aktiven Filter darstellen (CEO: standardmäßig aktiv ist „Für dich“).
-- Das System muss den aktiven Filter dunkelbraun mit heller Beschriftung darstellen.
-- Das System muss inaktive Filter mit hellem, beigefarbenem Hintergrund, dezentem Rahmen und dunklerer Schrift darstellen.
-- Wenn ein Filter aktiviert wird, muss das System ihn als aktiven Filter darstellen, den zuvor aktiven Filter als inaktiven Filter darstellen und die dem Filter in der Filterkonfiguration zugeordnete Filterlogik auslösen.
-- Wie der Nutzer einen Filter aktiviert und was die Filterlogik im Grundgerüst sichtbar bewirkt, ist offen (siehe Offene Fragen).
+- Das System muss genau einen Filter als aktiven Filter darstellen.
+- Wenn die Seite „Bücher“ aufgerufen wird, muss das System den Filter „Für dich“ als aktiven Filter darstellen. Das gilt bei jedem Aufruf, auch nach einem Seitenwechsel (CEO: „Standardmäßig auch bei einem Seitenwechsel, soll immer 'Für dich' aktiv sein.“).
+- Wenn der Nutzer einen Filter antippt, muss das System ihn als aktiven Filter und den zuvor aktiven Filter als inaktiven Filter darstellen.
+- Wenn der Nutzer einen Filter antippt, muss das System die dem Filter in der Filterkonfiguration zugeordnete Filterlogik auslösen (Anknüpfungspunkt für die spätere Filterlogik, REQ-007).
+- Wenn der Nutzer einen Filter antippt, darf sich auf der Seite „Bücher“ außer der Darstellung der Filter (aktiv/inaktiv) nichts ändern (CEO: „aktuell soll […] erstmal nichts passieren, außer, dass ein Filter aktiv angezeigt wird.“). Die Filterlogik bewirkt im Grundgerüst nichts Sichtbares.
 
 **Farben**
-- Das System muss alle Farben dieses REQ aus zentral definierten Farbrubriken beziehen (REQ-002, „Farben“; CLAUDE.md, „Farben auf Zuruf“). Welche Farbrubrik welche Farbrolle speist, ist offen (siehe Offene Fragen).
+- Das System muss alle Farben dieses REQ über Farbrollen aus zentral definierten Farbrubriken beziehen (REQ-002, „Farben“; CLAUDE.md, „Farben auf Zuruf“). Zuordnung:
+
+| Farbrolle | Element | Farbrubrik | Aussage des CEO |
+|---|---|---|---|
+| Aktiver Filter – Hintergrund | Hintergrund des aktiven Filters | Tertiär | „Hintergrund wie nicht aktive Schrift in Navigation“ |
+| Aktiver Filter – Schrift | Beschriftung des aktiven Filters | Hintergrund | „Schriftfarbe wie Seitenhintergrund“ |
+| Inaktiver Filter – Hintergrund | Hintergrund inaktiver Filter | Ghost (neu) | „Hintergrund wie in Screenshot (wird zukünftig 'Ghost' genannt)“ |
+| Inaktiver Filter – Rahmen | Rahmen inaktiver Filter | GhostFrame (neu) | „Rahmen wie in Screenshot (zukünftig 'GhostFrame')“ |
+| Inaktiver Filter – Schrift | Beschriftung inaktiver Filter | Schrift tertiär (neu) | „Schrift wie in Screenshot (zukünftig 'Schrift teritär')“ |
+
+- Das System muss die drei neuen Farbrubriken „Ghost“, „GhostFrame“ und „Schrift tertiär“ zusätzlich zu den bestehenden Farbrubriken (REQ-002) zentral definieren. Die Namen stammen vom CEO („teritär“ als „tertiär“ übernommen, wie bereits bei der Farbrubrik „Tertiär“).
+- Aktuelle Standardwerte der neuen Farbrubriken (aus dem Referenzbild gemessen, CEO: „wie in Screenshot“; kein Akzeptanzkriterium):
+
+| Farbrubrik | aktueller Standardwert |
+|---|---|
+| Ghost | `#ECE8DC` |
+| GhostFrame | `#DFD9CB` |
+| Schrift tertiär | `#685849` |
+
+- Konkrete Farbwerte sind kein Akzeptanzkriterium. Ändert der CEO den Wert einer Farbrubrik, ändern sich die zugehörigen Elemente mit.
 
 **Orientierungswerte aus dem Referenzbild (kein Akzeptanzkriterium)**
 Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung, Prüfung durch den CEO im Prototyp:
@@ -54,8 +70,6 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 | Element | Orientierungswert |
 |---|---|
 | Höhe eines Filters | ≈ 30 dp |
-| Aktiver Filter | Hintergrund ≈ `#392F25` (dunkelbraun), Schrift ≈ `#F7EFE4` (hell) |
-| Inaktiver Filter | Hintergrund ≈ `#ECE8DC` (helles Beige), Schrift ≈ `#685849`, Rahmen ≈ `#EEE8DA` (kaum sichtbar) |
 
 ## Akzeptanzkriterien
 
@@ -91,12 +105,11 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 - **Dann** ist der Filter mit der längeren Beschriftung breiter
 - **Und** jede Beschriftung ist vollständig lesbar (nicht abgeschnitten)
 
-### AK-7 Darstellung aktiver und inaktiver Filter unterscheidbar
+### AK-7 Darstellung aktiver und inaktiver Filter
 - **Gegeben** die Filterleiste wird angezeigt
-- **Wenn** der aktive Filter mit einem inaktiven Filter verglichen wird
-- **Dann** unterscheiden sich Hintergrundfarbe und Schriftfarbe
-- **Und** inaktive Filter haben einen Rahmen
-- **Und** alle Farben stammen aus zentral definierten Farbrubriken
+- **Wenn** der aktive Filter und die inaktiven Filter betrachtet werden
+- **Dann** ist der Hintergrund des aktiven Filters in der Farbrubrik „Tertiär“ und seine Beschriftung in der Farbrubrik „Hintergrund“ dargestellt
+- **Und** der Hintergrund jedes inaktiven Filters ist in der Farbrubrik „Ghost“, sein Rahmen in der Farbrubrik „GhostFrame“ und seine Beschriftung in der Farbrubrik „Schrift tertiär“ dargestellt
 
 ### AK-8 Horizontal wischen
 - **Gegeben** die Filter sind zusammen breiter als der sichtbare Bereich der Filterleiste
@@ -110,19 +123,33 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 - **Dann** verschiebt sich nur der Inhalt der Filterleiste
 - **Und** die Überschrift, die Schaltflächen (REQ-005) und die übrigen Bereiche der Seite bleiben an ihrer Position
 
-### AK-10 Aktivieren eines Filters
+### AK-10 Antippen eines Filters
 - **Gegeben** „Für dich“ ist aktiv
-- **Wenn** der Filter „Gerade am Lesen“ aktiviert wird
+- **Wenn** der Nutzer den Filter „Gerade am Lesen“ antippt
 - **Dann** ist „Gerade am Lesen“ aktiv dargestellt und „Für dich“ inaktiv
 - **Und** die „Gerade am Lesen“ in der Filterkonfiguration zugeordnete Filterlogik wurde ausgelöst
+- **Und** außer der Darstellung der Filter ändert sich auf der Seite „Bücher“ nichts
 
-<!-- AK-10 wird nach Beantwortung von F6 präzisiert (Art der Aktivierung, sichtbare Wirkung). Farbrollen-AKs werden nach F3 ergänzt. -->
+### AK-11 „Für dich“ ist nach einem Seitenwechsel wieder aktiv
+- **Gegeben** auf der Seite „Bücher“ ist ein anderer Filter als „Für dich“ aktiv
+- **Wenn** der Nutzer zu einem anderen Menüpunkt wechselt und danach wieder den Menüpunkt „Bücher“ antippt
+- **Dann** ist der Filter „Für dich“ aktiv
+- **Und** alle anderen Filter sind inaktiv
+
+### AK-12 Neue Farbrubriken zentral definiert und wirksam
+- **Gegeben** der Wert einer der Farbrubriken „Ghost“, „GhostFrame“, „Schrift tertiär“, „Tertiär“ oder „Hintergrund“ wird an der zentralen Stelle geändert
+- **Wenn** die Filterleiste angezeigt wird
+- **Dann** sind alle Elemente dieses REQ, deren Farbrolle aus dieser Farbrubrik stammt (Tabelle im Abschnitt „Farben“), im geänderten Wert dargestellt
+- **Und** keines dieser Elemente hat einen eigenen, davon abweichenden Farbwert
+
+<!-- Nach Beantwortung von F11 wird AK-7 um die Aussage zum Rahmen des aktiven Filters ergänzt. -->
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Welche Bücher ein Filter auswählt und welchen Teil der Seite er beeinflusst (CEO: wird pro Filter separat ausgearbeitet).
-- Die horizontale Buchliste und alle übrigen Abschnitte unterhalb der Filterleiste.
+- Inhalte unterhalb der Filterleiste, einschließlich der horizontalen Buchliste (siehe REQ-005, F10).
 - Aufbau und Pflege der Filterkonfiguration (REQ-007).
+- Die Zahl, die im Referenzbild hinter einem Filter steht (CEO: „Die Zahl hinter dem Filter soll ignoriert werden.“).
 - Konkrete Farbwerte und Maße als Akzeptanzkriterium.
 
 ## Qualitätsanforderungen
@@ -131,22 +158,20 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 
 ## Abhängigkeiten
 
-- **REQ-005 (Kopfbereich Seite „Bücher“):** Überschrift, unter der die Leiste steht.
+- **REQ-005 (Kopfbereich Seite „Bücher“):** Überschrift, unter der die Leiste steht. Antippen der Schaltflächen dort ändert die Filterleiste nicht.
 - **REQ-007 (Filterkonfiguration):** Quelle für Filter, Namen, Reihenfolge und Filterlogik.
-- **REQ-002 (Implementiert):** Farbrubriken, Seitenhintergrund (unverändert).
+- **REQ-002 (Implementiert):** bestehende Farbrubriken, Seitenhintergrund (unverändert). Die neuen Farbrubriken ergänzen die bestehenden, ohne sie zu ändern.
 - **REQ-003 (Implementiert):** Beschriftungen in der App-Schrift.
 
 ## Offene Fragen
 
 <!-- Muss vor Status "Abgestimmt" leer sein. Nummern entsprechen der Fragenliste an den CEO vom 2026-11-09. -->
 
-- F1: Priorität (MoSCoW) dieses REQ?
-- F3: Aus welchen Farbrubriken sollen die Farben der Filter kommen, und soll es dafür neue Farbrubriken geben (wenn ja: wie heißen sie)? Betroffen hier: aktiver Filter (Hintergrund, Schrift); inaktiver Filter (Hintergrund, Rahmen, Schrift).
-- F5: Was soll im Grundgerüst unterhalb der Filterleiste zu sehen sein?
-- F6: Wie aktiviert der Nutzer einen Filter, was soll im Grundgerüst sichtbar passieren, wenn ein Filter aktiviert wird, und welcher Filter soll aktiv sein, wenn der Nutzer die Seite „Bücher“ verlässt und später wieder aufruft?
+- F11: Für die nicht aktiven Filter hast du einen Rahmen festgelegt („GhostFrame“). Soll der aktive Filter auch einen Rahmen haben? Wenn ja, in welcher Farbe?
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der Vorgabe des CEO zur Filterleiste der Seite „Bücher“, Punkte 4 bis 9 und Antworten zu Standardfilter). Orientierungswerte des Scrum Masters als Nicht-AK aufgenommen | Anforderungsmanager |
+| 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt, Vorläufigkeitsvermerk entfernt. F3: Farbzuordnungen eingetragen (aktiver Filter Tertiär / Schrift Hintergrund; inaktive Filter in den neuen Farbrubriken „Ghost“, „GhostFrame“, „Schrift tertiär“ mit Standardwerten aus dem Referenzbild). Die frühere Beschreibung „dunkelbraun mit heller Beschriftung“ bzw. „hellem, beigefarbenem Hintergrund, dezentem Rahmen, dunklerer Schrift“ und die gemessenen Werte des aktiven Filters entfallen zugunsten der Farbrubriken; Rahmenwert neu gemessen (`#DFD9CB`). AK-7 präzisiert, neu AK-12. F6: Aktivierung durch Antippen; außer der Darstellung passiert nichts, die Filterlogik bleibt als Anknüpfungspunkt (AK-10 präzisiert); „Für dich“ ist bei jedem Aufruf der Seite aktiv, auch nach Seitenwechsel (neu AK-11). F5 nach REQ-005 verschoben und dort als F10 neu formuliert; F5 blockiert diesen REQ nicht mehr. Zahl hinter Filtern in die Abgrenzung (CEO-Antwort 7). Neue offene Frage F11 (Rahmen des aktiven Filters) | Anforderungsmanager |

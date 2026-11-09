@@ -10,8 +10,6 @@ ersetzt_durch:
 freigegeben_in:
 ---
 
-<!-- Priorität "Must": vorläufig, Bestätigung durch den CEO ausstehend (MoSCoW ist CEO-Entscheidung, siehe Offene Fragen). -->
-
 ## Ziel / Nutzen
 
 Als **CEO** möchte ich, **dass die Filter der Seite „Bücher“ aus einer flexiblen, von der Darstellung unabhängigen Filterkonfiguration erzeugt werden**, damit **ich im Laufe der Entwicklung ohne größere Änderungen Filter hinzufügen, umbenennen, entfernen und neu sortieren kann**.
@@ -29,6 +27,10 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 - Das System muss die Reihenfolge der Filter über die Filterkonfiguration festlegen.
 - Das System muss es ermöglichen, Filter hinzuzufügen, umzubenennen, zu entfernen und neu zu sortieren, indem ausschließlich die Filterkonfiguration geändert wird.
 
+**Pflege der Filterkonfiguration**
+- Die Filterkonfiguration wird ausschließlich in der Entwicklung gepflegt: Der CEO gibt Änderungen im Chat vor, der Entwickler ändert die Filterkonfiguration (CEO: „Die Filter werden nur hier in der Entwicklung bearbeitet.“).
+- Das System darf dem Nutzer keine Möglichkeit bieten, die Filterkonfiguration in der App zu ändern (CEO: „Die App soll dafür keine Anpassungsmöglichkeiten bekommen.“).
+
 **Aktuelle Filterkonfiguration (vom CEO festgelegt)**
 
 | Position | Name | standardmäßig aktiv | Filterlogik |
@@ -41,6 +43,7 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 - Die Filterlogik je Filter arbeitet der CEO später pro Filter separat aus, einschließlich der Frage, welchen Teil der Seite der Filter beeinflusst (CEO: „ja, dies arbeiten wir aber pro Filter separat aus“).
 - Grundlage für die spätere Auswahl der Bücher ist laut CEO der Lesestatus, den der Nutzer später in den Buchdetails angibt (CEO: „In den Buchdetails kann ich später einen Status angeben.“). Vorgesehene Werte (CEO: „Diese werden vorerst sein“): ungelesen, am lesen, gelesen, abgebrochen, Wunschliste (siehe Glossar „Lesestatus“).
 - Welcher Filter welche Lesestatus auswählt, ist nicht festgelegt und nicht Teil dieses REQ.
+- Im Grundgerüst bewirkt die Filterlogik keines Filters etwas Sichtbares (CEO: „aktuell soll […] erstmal nichts passieren, außer, dass ein Filter aktiv angezeigt wird.“). Die Zuordnung je Filter besteht trotzdem als Anknüpfungspunkt für die spätere Ausarbeitung.
 
 ## Akzeptanzkriterien
 
@@ -87,11 +90,19 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 ### AK-8 Jeder Filter hat eine zugeordnete Filterlogik
 - **Gegeben** die Filterkonfiguration
 - **Wenn** ein beliebiger Filter darin betrachtet wird
-- **Dann** ist ihm eine Filterlogik zugeordnet, die beim Aktivieren des Filters ausgelöst wird (REQ-006, AK-10)
+- **Dann** ist ihm eine Filterlogik zugeordnet, die beim Antippen des Filters ausgelöst wird (REQ-006, AK-10)
+- **Und** im Grundgerüst bewirkt diese Filterlogik keine sichtbare Änderung der Seite „Bücher“
+
+### AK-9 Keine Bearbeitung der Filterkonfiguration in der App
+- **Gegeben** die App ist geöffnet
+- **Wenn** der Nutzer die gesamte App einschließlich der Seite „Bücher“ betrachtet
+- **Dann** gibt es keine Möglichkeit, Filter hinzuzufügen, umzubenennen, zu entfernen oder neu zu sortieren
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Inhalt der Filterlogik je Filter (welche Bücher, welcher Teil der Seite). Wird pro Filter separat ausgearbeitet.
+- Eine Bearbeitung der Filterkonfiguration durch den Nutzer in der App (CEO: „Die App soll dafür keine Anpassungsmöglichkeiten bekommen.“).
+- Die Zahl, die im Referenzbild hinter einem Filter steht. Sie ist kein Bestandteil eines Filters (CEO: „Die Zahl hinter dem Filter soll ignoriert werden.“).
 - Erfassung des Lesestatus in den Buchdetails (CEO: „später“).
 - Darstellung und Bedienung der Filterleiste (REQ-006).
 
@@ -109,11 +120,11 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 
 <!-- Muss vor Status "Abgestimmt" leer sein. Nummern entsprechen der Fragenliste an den CEO vom 2026-11-09. -->
 
-- F1: Priorität (MoSCoW) dieses REQ?
-- F7: Wer pflegt die Filterkonfiguration und wo (nur du über den Chat, wie bei den Farben, oder später auch der Nutzer in der App)? Und was gehört außer Name, Reihenfolge, Filterlogik und Standardfilter noch zu einem Filter? (Im Referenzbild steht hinter „Gerade am Lesen“ zusätzlich eine Zahl.)
+- Keine. Ausdrückliche Bestätigung des REQ durch den CEO steht aus; bis dahin bleibt der Status „Entwurf“.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der Vorgabe des CEO, Punkte 1 bis 3 und 10, flexible Datenstruktur, Antworten zu Filtern, Reihenfolge, Standardfilter und Lesestatus) | Anforderungsmanager |
+| 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt, Vorläufigkeitsvermerk entfernt. F7: Filterkonfiguration wird nur in der Entwicklung gepflegt, keine Bearbeitung in der App (neuer Abschnitt „Pflege der Filterkonfiguration“, neu AK-9, Abgrenzung ergänzt); Zahl hinter Filtern wird ignoriert (Abgrenzung). Filterlogik bewirkt im Grundgerüst nichts Sichtbares, Zuordnung bleibt als Anknüpfungspunkt (AK-8 ergänzt). Keine offenen Fragen mehr; Status bleibt „Entwurf“ bis zur ausdrücklichen Bestätigung durch den CEO | Anforderungsmanager |

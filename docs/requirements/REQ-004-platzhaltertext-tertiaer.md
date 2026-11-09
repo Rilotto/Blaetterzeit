@@ -1,7 +1,7 @@
 ---
 id: REQ-004
 titel: Platzhaltertext im Inhaltsbereich in Farbrubrik Tertiär
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -9,8 +9,6 @@ ersetzt: []
 ersetzt_durch:
 freigegeben_in:
 ---
-
-<!-- Priorität "Must": vorläufig, Bestätigung durch den CEO ausstehend (MoSCoW ist CEO-Entscheidung). -->
 
 ## Ziel / Nutzen
 
@@ -73,3 +71,4 @@ Vorgabe des CEO: Der Text bekommt „die Schriftfarbe der Navigationsleiste“. 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-09 | Erstellt aus CEO-Anweisung („die Schriftfarbe der Navigationsleiste“, auf Rückfrage: „tertiäre Farbe“). Status „Abgestimmt“, da der CEO die Umsetzung konkret angewiesen hat. Priorität vorläufig „Must“, Bestätigung durch den CEO ausstehend | Anforderungsmanager |
+| 2026-11-09 | Priorität „Must“ vom CEO bestätigt („alle auf MUST“), Vorläufigkeitsvermerk entfernt. Inhalt und AKs unverändert, Status unverändert „Abgestimmt“ | Anforderungsmanager |

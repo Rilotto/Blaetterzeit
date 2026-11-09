@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { rubrikFarbe } from '../theme/farben';
 
 const stil: CSSProperties = {
   minHeight: '100%',
@@ -12,7 +13,8 @@ const stil: CSSProperties = {
 export default function UnderConstruction() {
   return (
     <div style={stil}>
-      <p style={{ margin: 0 }}>under construction :)</p>
+      {/* Textfarbe aus der Farbrubrik Tertiär (REQ-004). */}
+      <p style={{ margin: 0, color: rubrikFarbe('tertiaer') }}>under construction :)</p>
     </div>
   );
 }

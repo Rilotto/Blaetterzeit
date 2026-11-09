@@ -13,3 +13,10 @@ Außerdem wird der Platzhaltertext „under construction :)“ in der Farbrubrik
 
 ## REQs
 _Werden vom Anforderungsmanager mit dem CEO abgestimmt. Erst danach beginnt die Umsetzung._
+
+## Schnittstellen-Absprache Entwickler ↔ Tester
+
+### REQ-004 (Platzhaltertext Tertiär)
+- Der Platzhaltertext „under construction :)“ steht in einem Element innerhalb von `<main>`.
+- Dieses Element setzt seine Textfarbe per Inline-Style über `var(--bz-farbe-tertiaer)`, also direkt aus der Farbrubrik Tertiär.
+- Die Farbe ist nur dort gesetzt und wird nicht über die App-Wurzel vererbt.
