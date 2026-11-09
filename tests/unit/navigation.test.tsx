@@ -37,7 +37,8 @@ describe('Menü-Konfiguration', () => {
   });
 
   it('verwendet unveränderte Kopien der CEO-Icons', () => {
-    expect(Object.keys(kopien).sort()).toEqual(Object.keys(originale).sort());
+    // Nur die fünf Navigations-Icons laut REQ-002 (Zuordnung aus menu.ts), nicht alle Referenzdateien.
+    expect(menuePunkte).toHaveLength(5);
     for (const p of menuePunkte) {
       expect(originale[p.iconDatei]).toMatch(/^data:image\/png;base64,/);
       expect(kopien[p.iconDatei]).toBe(originale[p.iconDatei]);
