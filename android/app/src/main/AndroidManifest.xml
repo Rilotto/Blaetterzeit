@@ -38,4 +38,8 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- REQ-016: Kameraansicht in der App (@capacitor-community/camera-preview). Galerie über den
+         Android Photo Picker (@capacitor/camera) braucht keine Medienberechtigung. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 </manifest>

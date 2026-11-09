@@ -97,6 +97,56 @@ export const buecherFarbrollen: Record<BuecherFarbrolle, FarbrubrikId> = {
   abschnittsplatzhalterText: 'primaer',
 };
 
+/** Farbrollen des Fensters „Buchdetails“ mit Auswahlmenü, Kamera und Zuschnitt (REQ-013 bis REQ-018). */
+export type BuchdetailsFarbrolle =
+  | 'kopfzeilenSymbol'
+  | 'coverflaeche'
+  | 'covertitel'
+  | 'bereichsflaeche'
+  | 'bereichsrahmen'
+  | 'bereichsbeschriftung'
+  | 'titel'
+  | 'auswahlmenueFlaeche'
+  | 'auswahlmenueSchrift'
+  | 'auswahlmenueIcon'
+  | 'kameraFlaeche'
+  | 'kameraHinweis'
+  | 'ausloeserFlaeche'
+  | 'ausloeserRahmen'
+  | 'zuschnittFlaeche'
+  | 'zuschnittEckpunkt'
+  | 'zuschnittRahmen'
+  | 'bestaetigenFlaeche'
+  | 'bestaetigenSchrift';
+
+/**
+ * Aus welcher Farbrubrik jede Farbrolle der Buchdetails ihre Farbe bezieht.
+ * Auswahlmenü (REQ-015): im Referenzbild gemessen Fläche ≈ #F6F2E7 (leicht durchscheinend),
+ * Schrift und Icons ≈ #271E15. Es gibt keine eigene Rubrik dafür; zugeordnet sind die
+ * nächstliegenden bestehenden Rubriken „Hintergrund“ bzw. „Dunkelbraun“.
+ */
+export const buchdetailsFarbrollen: Record<BuchdetailsFarbrolle, FarbrubrikId> = {
+  kopfzeilenSymbol: 'tertiaer',
+  coverflaeche: 'primaer',
+  covertitel: 'hintergrund',
+  bereichsflaeche: 'ghost',
+  bereichsrahmen: 'ghostframe',
+  bereichsbeschriftung: 'primaer',
+  titel: 'tertiaer',
+  auswahlmenueFlaeche: 'hintergrund',
+  auswahlmenueSchrift: 'dunkelbraun',
+  auswahlmenueIcon: 'dunkelbraun',
+  kameraFlaeche: 'hintergrund',
+  kameraHinweis: 'tertiaer',
+  ausloeserFlaeche: 'hintergrund',
+  ausloeserRahmen: 'primaer',
+  zuschnittFlaeche: 'hintergrund',
+  zuschnittEckpunkt: 'primaer',
+  zuschnittRahmen: 'primaer',
+  bestaetigenFlaeche: 'primaer',
+  bestaetigenSchrift: 'hintergrund',
+};
+
 /** Name der CSS-Variable einer Farbrubrik, z. B. `--bz-farbe-primaer`. */
 export const rubrikVariable = (id: FarbrubrikId): string => `--bz-farbe-${id}`;
 
@@ -105,6 +155,18 @@ export const rubrikFarbe = (id: FarbrubrikId): string => `var(${rubrikVariable(i
 
 /** CSS-Ausdruck einer Farbrolle der Seite „Bücher“, z. B. `var(--bz-farbe-tertiaer)`. */
 export const buecherFarbe = (rolle: BuecherFarbrolle): string => rubrikFarbe(buecherFarbrollen[rolle]);
+
+/** CSS-Ausdruck einer Farbrolle der Buchdetails, z. B. `var(--bz-farbe-tertiaer)`. */
+export const buchdetailsFarbe = (rolle: BuchdetailsFarbrolle): string => rubrikFarbe(buchdetailsFarbrollen[rolle]);
+
+/** Weicher Schatten der Coverfläche in den Buchdetails (Referenzbild), aus „Dunkelbraun“ abgeleitet. */
+export const buchdetailsCoverSchatten = `0 10px 24px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 22%, transparent)`;
+
+/** Schatten des Auswahlmenüs (REQ-015, Referenzbild), aus „Dunkelbraun“ abgeleitet. */
+export const auswahlmenueSchatten = `0 8px 28px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 20%, transparent)`;
+
+/** Leicht durchscheinende Fläche des Auswahlmenüs (Referenzbild: Inhalt darunter schimmert durch). */
+export const auswahlmenueFlaeche = `color-mix(in srgb, ${rubrikFarbe(buchdetailsFarbrollen.auswahlmenueFlaeche)} 92%, transparent)`;
 
 /**
  * Dezenter Schatten der Coverflächen (REQ-009). Die Schattenfarbe ist aus der

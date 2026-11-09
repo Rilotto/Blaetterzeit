@@ -1,7 +1,7 @@
 ---
 id: REQ-014
 titel: Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

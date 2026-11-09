@@ -1,7 +1,7 @@
 ---
 id: REQ-017
 titel: Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

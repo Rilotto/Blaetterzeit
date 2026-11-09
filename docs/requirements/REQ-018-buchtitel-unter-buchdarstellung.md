@@ -1,7 +1,7 @@
 ---
 id: REQ-018
 titel: Buchdetails – Buchtitel unter der Buchdarstellung
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

@@ -1,7 +1,7 @@
 ---
 id: REQ-020
 titel: Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

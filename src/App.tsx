@@ -31,14 +31,21 @@ const inhaltStil: CSSProperties = {
 
 export default function App() {
   const [aktiv, setAktiv] = useState<MenuePunktId>(startMenuePunkt);
+  // Jedes Antippen eines Menüpunkts ruft dessen Seite neu auf – auch den bereits aktiven
+  // (z. B. „Bücher“ aus den Buchdetails zurück zu „Deine Bücher“, REQ-013 AK-7).
+  const [aufruf, setAufruf] = useState(0);
   const Ansicht = ansichten[aktiv];
+  const auswaehlen = (id: MenuePunktId) => {
+    setAktiv(id);
+    setAufruf((n) => n + 1);
+  };
 
   return (
-    <div style={appStil}>
+    <div data-app-wurzel="" style={appStil}>
       <main style={inhaltStil}>
-        <Ansicht />
+        <Ansicht key={aufruf} />
       </main>
-      <Hauptnavigation aktiv={aktiv} onAuswahl={setAktiv} />
+      <Hauptnavigation aktiv={aktiv} onAuswahl={auswaehlen} />
     </div>
   );
 }

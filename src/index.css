@@ -8,3 +8,12 @@ body {
 body {
   margin: 0;
 }
+
+/* REQ-016: Solange die native Kameravorschau HINTER der WebView läuft, müssen die
+   Flächen darüber durchsichtig sein (gesetzt von src/bild/kamera.ts). */
+html[data-kamera-aktiv],
+html[data-kamera-aktiv] body,
+html[data-kamera-aktiv] [data-app-wurzel],
+html[data-kamera-aktiv] main {
+  background: transparent !important;
+}

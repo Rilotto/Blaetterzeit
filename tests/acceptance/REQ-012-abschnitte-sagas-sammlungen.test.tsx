@@ -8,11 +8,15 @@
  *  - Überschriften per var(--bz-farbe-tertiaer)
  * Runde 2 (Abschnitt „REQ-012, Runde 2“): unter dem data-cover-platzhalter ein Element mit
  * data-platzhaltertext, Farbe per var(--bz-farbe-primaer). AK-3 neu gefasst, AK-6 bis AK-9 neu.
+ * Sprint 03 (sprints/sprint-03/plan.md, Absprache Runde 1, „REQ-012 AK-10/11“): data-platzhaltertext hat
+ * dieselbe zentrale Typografie wie „Alle ansehen ›“ und höchstens 2 Zeilen. Die gemeinsame zentrale
+ * Definition ist `textformatAlleAnsehen` in src/theme/textformate.ts (Entwickler-Ergebnis); für AK-11
+ * wird sie per Modul-Ersatz geändert, um die Wirkung auf alle Nutzer nachzuweisen.
  */
 import '@testing-library/jest-dom/vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import type { CSSProperties } from 'react';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import App from '@/App';
 import BuecherAnsicht from '@/views/BuecherAnsicht';
 import type { Buch } from '@/domain/buch';
@@ -401,6 +405,68 @@ describe('REQ-012 Abschnitte „Sagas“ und „Sammlungen“', () => {
       expect(t.matches('a, button, [role="button"], [role="link"], [tabindex]')).toBe(false);
       expect(t.querySelectorAll('a[href], button, input, [role="button"], [role="link"], [tabindex]')).toHaveLength(0);
       expect(t.closest('a[href], button, [role="button"], [role="link"]')).toBeNull();
+    });
+  });
+
+  // ---------------------------------------------------------------- AK-10
+  describe('AK-10 Platzhaltertexte höchstens zweizeilig, weiterhin unter dem Platzhalter', () => {
+    it.each(BEIDE)('[REQ-012/AK-10] Text in „%s“: auf zwei Zeilen begrenzt, mit Auslassungspunkten bei Überlänge', (name) => {
+      zeige();
+      const cs = getComputedStyle(textIn(abschnitt(name)));
+      expect(cs.getPropertyValue('-webkit-line-clamp') || cs.getPropertyValue('line-clamp')).toMatch(/^2\b/);
+      expect(cs.display).toMatch(/-webkit-(inline-)?box/);
+      expect(cs.getPropertyValue('-webkit-box-orient')).toBe('vertical');
+      expect(cs.overflow === 'hidden' || cs.overflowY === 'hidden').toBe(true);
+      expect(cs.whiteSpace).not.toMatch(/nowrap|pre$/);
+    });
+
+    it.each(BEIDE)('[REQ-012/AK-10] Text in „%s“ bleibt unter dem Cover-Platzhalter an der Titelstelle, vollständig im DOM', (name) => {
+      zeige();
+      const s = abschnitt(name);
+      const p = platzhalterIn(s);
+      const t = textIn(s);
+      expect(p.contains(t)).toBe(false);
+      expect(p.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(t.parentElement).toBe(p.parentElement);
+      expect(t.textContent).toBe(TEXTE[name]);
+    });
+  });
+
+  // ---------------------------------------------------------------- AK-11
+  describe('AK-11 Schrift der Platzhaltertexte wie „Alle ansehen ›“', () => {
+    const schrift = (el: HTMLElement) => {
+      const cs = getComputedStyle(el);
+      return { groesse: cs.fontSize, art: cs.fontFamily, staerke: cs.fontWeight || '400' };
+    };
+
+    it.each(BEIDE)('[REQ-012/AK-11] Text in „%s“: Schriftgröße, -art und -stärke wie „Alle ansehen ›“', (name) => {
+      zeige();
+      const alle = within(abschnitt('Noch zu lesen')).getByRole('button', { name: 'Alle ansehen ›' });
+      expect(schrift(textIn(abschnitt(name)))).toEqual(schrift(alle));
+      expect(schrift(alle).groesse).not.toBe('');
+    });
+
+    it('[REQ-012/AK-11] Änderung der gemeinsamen zentralen Definition wirkt auf „Alle ansehen ›“ und beide Texte', async () => {
+      const echt = await import('@/theme/textformate');
+      const neu = { ...echt.textformatAlleAnsehen, fontSize: '23px', fontWeight: 800, fontFamily: 'Georgia, serif' };
+      vi.resetModules();
+      vi.doMock('@/theme/textformate', () => ({ ...echt, textformatAlleAnsehen: neu }));
+      try {
+        const { default: Ansicht } = await import('@/views/BuecherAnsicht');
+        const theme = await import('@/theme');
+        render(
+          <div style={theme.farbVariablen() as CSSProperties}>
+            <Ansicht buecher={[buch('Ohne Cover')]} />
+          </div>,
+        );
+        const alle = within(abschnitt('Noch zu lesen')).getByRole('button', { name: 'Alle ansehen ›' });
+        for (const el of [alle, ...BEIDE.map((n) => textIn(abschnitt(n)))]) {
+          expect(schrift(el)).toEqual({ groesse: '23px', art: 'Georgia, serif', staerke: '800' });
+        }
+      } finally {
+        vi.doUnmock('@/theme/textformate');
+        vi.resetModules();
+      }
     });
   });
 });

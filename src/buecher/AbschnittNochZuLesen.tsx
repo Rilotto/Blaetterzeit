@@ -4,7 +4,7 @@ import CoverPlatzhalter from '@/components/CoverPlatzhalter';
 import Icon from '@/components/Icon';
 import { coverBreite, coverFlaecheStil } from '@/components/coverFlaeche';
 import type { Buch } from '@/domain/buch';
-import { buecherFarbe } from '@/theme';
+import { buecherFarbe, textformatAlleAnsehen } from '@/theme';
 import { abschnittKonfiguration, buecherNochZuLesen } from './abschnittKonfiguration';
 import PlatzhalterText from './PlatzhalterText';
 import {
@@ -19,6 +19,10 @@ import {
 interface Props {
   /** Alle Bücher; `undefined`, solange sie noch geladen werden. */
   buecher: Buch[] | undefined;
+  /** Frontcover aus den Buchdetails je Buch-ID (REQ-020); haben Vorrang vor `buch.cover`. */
+  frontcover?: Record<string, string>;
+  /** Antippen von Cover oder Titel öffnet die Buchdetails (REQ-013). */
+  onBuchAntippen?: (buch: Buch) => void;
 }
 
 const alleAnsehenStil: CSSProperties = {
@@ -27,9 +31,8 @@ const alleAnsehenStil: CSSProperties = {
   padding: 0,
   border: 'none',
   background: 'none',
-  fontFamily: 'inherit',
-  fontSize: '14px',
-  fontStyle: 'italic',
+  // Zentrales Textformat, geteilt mit REQ-012 (AK-11) und REQ-014 (AK-3).
+  ...textformatAlleAnsehen,
   color: buecherFarbe('alleAnsehen'),
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
@@ -49,6 +52,8 @@ const eintragStil: CSSProperties = {
   flex: '0 0 auto',
   width: `${coverBreite}px`,
   minWidth: 0,
+  cursor: 'pointer',
+  WebkitTapHighlightColor: 'transparent',
 };
 
 const coverStil: CSSProperties = {
@@ -80,10 +85,11 @@ const leerFlaecheStil: CSSProperties = {
   backgroundColor: buecherFarbe('leerplatzhalterFlaeche'),
 };
 
-function Bucheintrag({ buch }: { buch: Buch }) {
+function Bucheintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: string; onAntippen?: (buch: Buch) => void }) {
+  // Cover und Titel öffnen die Buchdetails (REQ-013, AK-1 bis AK-3).
   return (
-    <li style={eintragStil}>
-      {buch.cover ? <img src={buch.cover} alt={buch.titel} style={coverStil} /> : <CoverPlatzhalter />}
+    <li style={eintragStil} onClick={onAntippen ? () => onAntippen(buch) : undefined}>
+      {cover ? <img src={cover} alt={buch.titel} style={coverStil} /> : <CoverPlatzhalter />}
       <p data-buchtitel="" style={titelStil}>
         {buch.titel}
       </p>
@@ -106,7 +112,7 @@ function LeereListePlatzhalter() {
 }
 
 /** Abschnitt „Noch zu lesen“ mit horizontal wischbarer Buchliste (REQ-009). */
-export default function AbschnittNochZuLesen({ buecher }: Props) {
+export default function AbschnittNochZuLesen({ buecher, frontcover, onBuchAntippen }: Props) {
   const { titel } = abschnittKonfiguration.nochZuLesen;
   const auswahl = buecher === undefined ? undefined : buecherNochZuLesen(buecher);
 
@@ -123,7 +129,7 @@ export default function AbschnittNochZuLesen({ buecher }: Props) {
       ) : (
         <ul aria-label={titel} style={listeStil}>
           {auswahl.map((b) => (
-            <Bucheintrag key={b.id} buch={b} />
+            <Bucheintrag key={b.id} buch={b} cover={frontcover?.[b.id] ?? b.cover} onAntippen={onBuchAntippen} />
           ))}
         </ul>
       )}
