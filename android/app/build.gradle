@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "de.rilotto.blaetterzeit"
+    namespace = "de.blaetterzeit"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "de.rilotto.blaetterzeit"
+        applicationId "de.blaetterzeit"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // Werden von der Release-Pipeline gesetzt. versionCode muss bei jedem

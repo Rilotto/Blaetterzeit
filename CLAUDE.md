@@ -55,7 +55,7 @@ Der CEO bekommt in dem Takt, den er in `docs/vision.md` unter „Prozessvorgaben
 
 ## Farben auf Zuruf
 
-Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Ort legt der Entwickler beim Theme-REQ fest). Sagt der CEO im Chat „Primärfarbe auf #… ändern“, lässt du die **Standardwerte** dort durch den Entwickler anpassen. Ab dem nächsten Prototyp ist die Änderung sichtbar. Konkrete Standard-Farbwerte sind deshalb keine eingefrorenen Akzeptanzkriterien. Eingefroren wird nur das Verhalten, also welche Farbrolle welches Element färbt und dass der Nutzer sie ändern kann.
+Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Ort legt der Entwickler bei REQ-002 „Farbrollen und Standard-Theme“ fest). Sagt der CEO im Chat „Primärfarbe auf #… ändern“, lässt du die **Standardwerte** dort durch den Entwickler anpassen. Ab dem nächsten Prototyp ist die Änderung sichtbar. Konkrete Standard-Farbwerte sind deshalb keine eingefrorenen Akzeptanzkriterien. Eingefroren wird nur das Verhalten, also welche Farbrolle welches Element färbt und dass der Nutzer sie ändern kann.
 
 ## Git-Workflow
 

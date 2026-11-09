@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Blätterzeit</string>
     <string name="title_activity_main">Blätterzeit</string>
-    <string name="package_name">de.rilotto.blaetterzeit</string>
-    <string name="custom_url_scheme">de.rilotto.blaetterzeit</string>
+    <string name="package_name">de.blaetterzeit</string>
+    <string name="custom_url_scheme">de.blaetterzeit</string>
 </resources>
