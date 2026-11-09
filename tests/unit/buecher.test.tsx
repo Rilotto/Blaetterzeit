@@ -92,10 +92,17 @@ describe('Seite „Bücher“', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Deine Bücher');
     expect(screen.getByRole('button', { name: 'Filter und Einstellungen' }).querySelector('[data-icon="icon-regler.png"]')).not.toBeNull();
     expect(screen.getByRole('button', { name: 'Buch hinzufügen' }).querySelector('[data-icon="icon-plus.png"]')).not.toBeNull();
-    for (const name of ['Sagas', 'Sammlungen']) {
+    for (const [name, text] of [
+      ['Sagas', 'Deine nächste Saga wartet auf dich!'],
+      ['Sammlungen', 'Wie wäre es mit einer neuen Sammlung?'],
+    ]) {
       const abschnitt = screen.getByRole('region', { name });
       expect(abschnitt.querySelectorAll('[data-cover-platzhalter]')).toHaveLength(1);
-      expect(abschnitt.textContent).toBe(name);
+      const texte = abschnitt.querySelectorAll<HTMLElement>('[data-platzhaltertext]');
+      expect(texte).toHaveLength(1);
+      expect(texte[0].textContent).toBe(text);
+      expect(texte[0].style.color).toBe('var(--bz-farbe-primaer)');
+      expect(abschnitt.textContent).toBe(name + text);
     }
   });
 

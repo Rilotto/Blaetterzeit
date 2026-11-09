@@ -70,7 +70,8 @@ export type BuecherFarbrolle =
   | 'leerplatzhalterFlaeche'
   | 'leerplatzhalterRahmen'
   | 'leerplatzhalterIcon'
-  | 'leerplatzhalterText';
+  | 'leerplatzhalterText'
+  | 'abschnittsplatzhalterText';
 
 /** Aus welcher Farbrubrik jede Farbrolle der Seite „Bücher“ ihre Farbe bezieht (Tabellen „Farben“ der REQs). */
 export const buecherFarbrollen: Record<BuecherFarbrolle, FarbrubrikId> = {
@@ -93,6 +94,7 @@ export const buecherFarbrollen: Record<BuecherFarbrolle, FarbrubrikId> = {
   leerplatzhalterRahmen: 'ghostframe',
   leerplatzhalterIcon: 'primaer',
   leerplatzhalterText: 'primaer',
+  abschnittsplatzhalterText: 'primaer',
 };
 
 /** Name der CSS-Variable einer Farbrubrik, z. B. `--bz-farbe-primaer`. */

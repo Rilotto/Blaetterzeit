@@ -1,7 +1,7 @@
 ---
 id: REQ-012
 titel: Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter
-status: Implementiert
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -16,6 +16,8 @@ Als **CEO** möchte ich **die Abschnitte „Sagas“ und „Sammlungen“ schon 
 
 Vorgabe des CEO (wörtlich, 2026-11-09): „Die Abschnitte mit ihren Überschriften sollen bitte jetzt schon erscheinen, auch mit Platzhaltern in der selben Größe wie die Buch-Platzhalter (kannst du hier einfach auch verwenden).“ Diese Aussage ist neuer als die Vorgabe „Die Rubrik ‚Sammlungen‘ selbst soll nicht umgesetzt werden“; beides ist vereinbar, weil hier nur Überschrift und Platzhalter erscheinen, keine Sammlungs- oder Saga-Funktion.
 
+Ergänzung des CEO (wörtlich, 2026-11-09): „Lass uns bei beiden Abschnitten einen Text unter den Platzhaltern machen. einmal: Wie wäre es mit einer neuen Sammlung? und einmal: Deine nächste Saga wartet auf dich!“ Zuordnung: „Sagas“ → „Deine nächste Saga wartet auf dich!“, „Sammlungen“ → „Wie wäre es mit einer neuen Sammlung?“. Darstellung wie der Text des Leere-Liste-Platzhalters (REQ-011): an der Titelstelle unter dem Platzhalter, Farbrubrik „Primär“ (vom Scrum Master so angekündigt, CEO hat nicht widersprochen; Prüfung im Prototyp).
+
 Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-002-referenz-hauptnavigation.png) (Überschriften „Sagas“ und „Sammlungen“). Optische Übereinstimmung prüft der CEO im Prototyp.
 
 ## Anforderung (Satzschablone)
@@ -25,8 +27,11 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - Das System muss beide Abschnittsüberschriften in der Farbrolle „Abschnittsüberschriftfarbe“ (Farbrubrik „Tertiär“, wie „Deine Bücher“, REQ-005) darstellen.
 - Das System muss unter jeder dieser Überschriften genau einen Cover-Platzhalter (REQ-010) ohne Buchtitel darstellen.
 - Das System muss diese Cover-Platzhalter in derselben Größe wie die Cover-Platzhalter der Bucheinträge im Abschnitt „Noch zu lesen“ darstellen.
+- Das System muss im Abschnitt „Sagas“ unter dem Cover-Platzhalter an der Titelstelle genau den Text „Deine nächste Saga wartet auf dich!“ darstellen.
+- Das System muss im Abschnitt „Sammlungen“ unter dem Cover-Platzhalter an der Titelstelle genau den Text „Wie wäre es mit einer neuen Sammlung?“ darstellen.
+- Das System muss diese beiden Texte in der Farbrolle „Abschnittsplatzhalter-Text“ (Farbrubrik „Primär“, wie der Text des Leere-Liste-Platzhalters, REQ-011) darstellen. Konkrete Farbwerte sind kein Akzeptanzkriterium.
 - Das System darf in diesen Abschnitten keine weiteren Elemente (z. B. „Alle ansehen ›“, Bücher, Sagas, Sammlungen) darstellen.
-- Wenn der Nutzer eine Überschrift oder einen Platzhalter dieser Abschnitte antippt, darf sich in der App nichts ändern.
+- Wenn der Nutzer eine Überschrift, einen Platzhalter oder einen Platzhaltertext dieser Abschnitte antippt, darf sich in der App nichts ändern.
 
 ## Akzeptanzkriterien
 
@@ -44,7 +49,7 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - **Gegeben** die Seite „Bücher“ wird angezeigt
 - **Wenn** die Abschnitte „Sagas“ und „Sammlungen“ betrachtet werden
 - **Dann** steht unter jeder Überschrift genau ein Cover-Platzhalter (REQ-010)
-- **Und** darunter kein Text
+- **Und** der Cover-Platzhalter selbst zeigt keinen Buchtitel (Text unter dem Platzhalter: AK-6, AK-7)
 
 ### AK-4 Gleiche Größe wie die Buch-Platzhalter
 - **Gegeben** im Abschnitt „Noch zu lesen“ steht ein Buch ohne Buchcover
@@ -54,6 +59,27 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 ### AK-5 Keine Funktion
 - **Gegeben** die Seite „Bücher“ wird angezeigt
 - **Wenn** der Nutzer eine Überschrift oder einen Platzhalter der Abschnitte „Sagas“ oder „Sammlungen“ antippt
+- **Dann** ändert sich in der App nichts
+
+### AK-6 Text unter dem Platzhalter „Sagas“
+- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Wenn** der Abschnitt „Sagas“ betrachtet wird
+- **Dann** steht unter dem Cover-Platzhalter an der Titelstelle genau der Text „Deine nächste Saga wartet auf dich!“
+
+### AK-7 Text unter dem Platzhalter „Sammlungen“
+- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Wenn** der Abschnitt „Sammlungen“ betrachtet wird
+- **Dann** steht unter dem Cover-Platzhalter an der Titelstelle genau der Text „Wie wäre es mit einer neuen Sammlung?“
+
+### AK-8 Platzhaltertexte in der Farbrubrik Primär
+- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Wenn** die Texte aus AK-6 und AK-7 betrachtet werden
+- **Dann** sind beide in der Farbe der Farbrubrik „Primär“ dargestellt
+- **Und** nach Änderung des Werts der Farbrubrik „Primär“ an der zentralen Stelle erscheinen beide im geänderten Wert
+
+### AK-9 Antippen der Platzhaltertexte bewirkt nichts
+- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Wenn** der Nutzer einen der Texte aus AK-6 oder AK-7 antippt
 - **Dann** ändert sich in der App nichts
 
 ## Abgrenzung (nicht Teil dieses REQ)
@@ -71,6 +97,7 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - **REQ-009:** Abschnitt „Noch zu lesen“, Abschnittsüberschriftfarbe, Covergröße.
 - **REQ-010:** wiederverwendbarer Cover-Platzhalter (ohne Titel einsetzbar).
 - **REQ-005:** Farbrubrik der Überschrift „Deine Bücher“.
+- **REQ-011:** Vorbild für Position (Titelstelle) und Farbrubrik „Primär“ der Platzhaltertexte.
 
 ## Offene Fragen
 
@@ -83,3 +110,4 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-09 | Erstellt aus CEO-Antwort F4. Eigener REQ statt Teil von REQ-009, weil es ein eigenständiges, unabhängig prüfbares Seitenelement ohne Buchlogik ist (atomar) und später durch echte Saga-/Sammlungs-REQs ersetzt werden kann, ohne REQ-009 zu berühren. Vom CEO bestätigt 2026-11-09, Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-09 | Ergänzung auf CEO-Wunsch (wörtlich): „Lass uns bei beiden Abschnitten einen Text unter den Platzhaltern machen. einmal: Wie wäre es mit einer neuen Sammlung? und einmal: Deine nächste Saga wartet auf dich!“ Neu: AK-6 (Text Sagas), AK-7 (Text Sammlungen), AK-8 (Farbrubrik Primär), AK-9 (Antippen der Texte ohne Wirkung). AK-3 angepasst: „darunter kein Text“ ersetzt durch „Cover-Platzhalter zeigt keinen Buchtitel“, da sonst Widerspruch zu AK-6/AK-7. Darstellung (Titelstelle, Primär) vom Scrum Master angekündigt, CEO hat nicht widersprochen; Prüfung im Prototyp. REQ war nicht eingefroren; Status von „Implementiert“ auf „In Umsetzung“ | Anforderungsmanager |

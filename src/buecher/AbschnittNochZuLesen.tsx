@@ -6,6 +6,7 @@ import { coverBreite, coverFlaecheStil } from '@/components/coverFlaeche';
 import type { Buch } from '@/domain/buch';
 import { buecherFarbe } from '@/theme';
 import { abschnittKonfiguration, buecherNochZuLesen } from './abschnittKonfiguration';
+import PlatzhalterText from './PlatzhalterText';
 import {
   abschnittKopfStil,
   abschnittStil,
@@ -79,11 +80,6 @@ const leerFlaecheStil: CSSProperties = {
   backgroundColor: buecherFarbe('leerplatzhalterFlaeche'),
 };
 
-const leerTextStil: CSSProperties = {
-  ...textUnterCoverStil,
-  color: buecherFarbe('leerplatzhalterText'),
-};
-
 function Bucheintrag({ buch }: { buch: Buch }) {
   return (
     <li style={eintragStil}>
@@ -103,7 +99,7 @@ function LeereListePlatzhalter() {
         <div style={leerFlaecheStil}>
           <Icon datei="icon-herz.png" url={iconHerz} farbe={buecherFarbe('leerplatzhalterIcon')} groesse={40} />
         </div>
-        <p style={leerTextStil}>Wie wäre es mit einem neuen Buch?</p>
+        <PlatzhalterText farbe={buecherFarbe('leerplatzhalterText')}>Wie wäre es mit einem neuen Buch?</PlatzhalterText>
       </div>
     </div>
   );

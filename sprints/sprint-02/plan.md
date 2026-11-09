@@ -85,3 +85,11 @@ Diese Absprache ist verbindlich. Der Entwickler darf intern frei bauen, muss abe
 - Die Werte stehen nur in `src/theme/farben.ts`.
 
 **Bestehende Tests:** Der Tester passt die strengeren REQ-002-Tests (AK-12 „Platzhalter für alle fünf Menüpunkte“ und AK-13 „kein Element in `<main>` mit eigenem Hintergrund“) auf das an, was REQ-002 tatsächlich verlangt, und begründet das im Testbericht.
+
+### REQ-012, Runde 2 (Texte unter den Platzhaltern)
+- In `<section aria-label="Sagas">` bzw. `<section aria-label="Sammlungen">` steht unter dem `data-cover-platzhalter` ein Text-Element mit `data-platzhaltertext`.
+- Die Texte lauten „Deine nächste Saga wartet auf dich!“ bzw. „Wie wäre es mit einer neuen Sammlung?“.
+- Die Texte stehen zentral (z. B. in `abschnittKonfiguration`), nicht fest in der Komponente.
+- Farbe: Inline-Style `var(--bz-farbe-primaer)`.
+- Typografie und Position wie der Text beim Leere-Liste-Platzhalter (REQ-011).
+- Antippen bewirkt nichts.

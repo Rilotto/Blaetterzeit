@@ -44,8 +44,8 @@ export default function BuecherAnsicht({ filter, buecher }: Props) {
       <Kopfbereich />
       <Filterleiste filter={filter ?? filterKonfiguration} buecher={alle ?? []} />
       <AbschnittNochZuLesen buecher={alle} />
-      <PlatzhalterAbschnitt titel={abschnittKonfiguration.sagas.titel} />
-      <PlatzhalterAbschnitt titel={abschnittKonfiguration.sammlungen.titel} />
+      <PlatzhalterAbschnitt {...abschnittKonfiguration.sagas} />
+      <PlatzhalterAbschnitt {...abschnittKonfiguration.sammlungen} />
     </div>
   );
 }

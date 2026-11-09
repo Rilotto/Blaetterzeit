@@ -6,6 +6,8 @@
  *  - <section aria-label="Sagas"> und <section aria-label="Sammlungen">, jeweils mit <h2> und
  *    einem data-cover-platzhalter ohne Titel
  *  - Überschriften per var(--bz-farbe-tertiaer)
+ * Runde 2 (Abschnitt „REQ-012, Runde 2“): unter dem data-cover-platzhalter ein Element mit
+ * data-platzhaltertext, Farbe per var(--bz-farbe-primaer). AK-3 neu gefasst, AK-6 bis AK-9 neu.
  */
 import '@testing-library/jest-dom/vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -42,6 +44,10 @@ function walk(dir: URL): URL[] {
 const SAGAS = 'Sagas';
 const SAMMLUNGEN = 'Sammlungen';
 const BEIDE = [SAGAS, SAMMLUNGEN] as const;
+const TEXTE: Record<(typeof BEIDE)[number], string> = {
+  Sagas: 'Deine nächste Saga wartet auf dich!',
+  Sammlungen: 'Wie wäre es mit einer neuen Sammlung?',
+};
 const rubriken = farbrubriken as unknown as Record<string, { wert: string } | undefined>;
 const buch = (titel: string): Buch => ({ id: `00000000-0000-4000-8000-${titel.padStart(12, '0').slice(-12)}`, titel, status: 'ungelesen' });
 
@@ -58,6 +64,11 @@ function platzhalterIn(s: HTMLElement) {
   const p = s.querySelectorAll<HTMLElement>('[data-cover-platzhalter]');
   expect(p, `"${s.getAttribute('aria-label')}": genau ein Cover-Platzhalter`).toHaveLength(1);
   return p[0];
+}
+function textIn(s: HTMLElement) {
+  const t = s.querySelectorAll<HTMLElement>('[data-platzhaltertext]');
+  expect(t, `"${s.getAttribute('aria-label')}": genau ein Platzhaltertext`).toHaveLength(1);
+  return t[0];
 }
 function px(v: string) {
   const m = /^(-?[\d.]+)(px|rem)$/.exec((v ?? '').trim());
@@ -173,10 +184,21 @@ describe('REQ-012 Abschnitte „Sagas“ und „Sammlungen“', () => {
       expect(within(s).getByRole('heading').compareDocumentPosition(p) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     });
 
-    it.each(BEIDE)('[REQ-012/AK-3] „%s“: kein Text außer der Überschrift, kein Titel, keine weiteren Elemente', (name) => {
-      zeige();
+    it.each(BEIDE)('[REQ-012/AK-3] „%s“: der Cover-Platzhalter selbst zeigt keinen Buchtitel und keinen Text', (name) => {
+      zeige([buch('Ein Titel')]);
+      const p = platzhalterIn(abschnitt(name));
+      expect(p.textContent?.trim()).toBe('');
+      expect(p.querySelectorAll('[data-buchtitel], [data-platzhaltertext]')).toHaveLength(0);
+      expect(p.contains(textIn(abschnitt(name)))).toBe(false);
+    });
+
+    it.each(BEIDE)('[REQ-012/AK-3] „%s“: außer Überschrift und Platzhaltertext kein Text, kein Buchtitel, keine weiteren Elemente', (name) => {
+      zeige([buch('Ein Titel')]);
       const s = abschnitt(name);
-      expect(s.textContent?.trim()).toBe(name);
+      const h = within(s).getByRole('heading');
+      const rest = (s.textContent ?? '').replace(h.textContent ?? '', '').replace(textIn(s).textContent ?? '', '').trim();
+      expect(rest).toBe('');
+      expect(within(s).queryByText('Ein Titel')).toBeNull();
       expect(s.querySelectorAll('[data-buchtitel], [data-leere-liste], img, ul, li, button, a')).toHaveLength(0);
       expect(within(s).queryByText(/Alle ansehen/)).toBeNull();
     });
@@ -246,6 +268,139 @@ describe('REQ-012 Abschnitte „Sagas“ und „Sammlungen“', () => {
         const s = abschnitt(name);
         expect(s.querySelectorAll('a[href], button, input, [role="button"], [role="link"], [tabindex]')).toHaveLength(0);
       }
+    });
+  });
+
+  // ---------------------------------------------------------------- AK-6 / AK-7
+  describe.each([
+    ['AK-6', SAGAS],
+    ['AK-7', SAMMLUNGEN],
+  ] as const)('%s Text unter dem Platzhalter „%s“', (ak, name) => {
+    const text = TEXTE[name];
+    const anderer = TEXTE[name === SAGAS ? SAMMLUNGEN : SAGAS];
+
+    it(`[REQ-012/${ak}] „${name}“ zeigt genau den Text „${text}“`, () => {
+      zeige();
+      const t = textIn(abschnitt(name));
+      expect(t.textContent).toBe(text);
+      expect(within(abschnitt(name)).getAllByText(text)).toHaveLength(1);
+    });
+
+    it(`[REQ-012/${ak}] „${name}“: der Text steht unter dem Cover-Platzhalter, nicht in ihm`, () => {
+      zeige();
+      const s = abschnitt(name);
+      const p = platzhalterIn(s);
+      const t = textIn(s);
+      expect(p.contains(t) || t.contains(p)).toBe(false);
+      expect(p.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(within(s).getByRole('heading').compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it(`[REQ-012/${ak}] „${name}“: der Text steht an der Titelstelle (nicht breiter als der Platzhalter)`, () => {
+      zeige();
+      const s = abschnitt(name);
+      const breite = masse(coverFlaeche(platzhalterIn(s), s)).breite;
+      let begrenzt = NaN;
+      for (let e: HTMLElement | null = textIn(s); e && e !== s.parentElement; e = e.parentElement) {
+        const w = px(getComputedStyle(e).width) || px(getComputedStyle(e).maxWidth);
+        if (Number.isFinite(w)) {
+          begrenzt = w;
+          break;
+        }
+      }
+      expect(begrenzt).toBeLessThanOrEqual(breite);
+    });
+
+    it(`[REQ-012/${ak}] Negativfall: der Text von „${name}“ erscheint nicht im jeweils anderen Abschnitt`, () => {
+      zeige();
+      expect(within(abschnitt(name)).queryByText(anderer)).toBeNull();
+      expect(screen.getAllByText(text)).toHaveLength(1);
+    });
+
+    it(`[REQ-012/${ak}] „${name}“: Text steht auch bei leerer Liste, bei vielen Büchern und in der App`, async () => {
+      zeige([]);
+      expect(textIn(abschnitt(name)).textContent).toBe(text);
+      cleanup();
+      zeige(Array.from({ length: 12 }, (_, i) => buch(`B${i}`)));
+      expect(textIn(abschnitt(name)).textContent).toBe(text);
+      cleanup();
+      render(<App />);
+      fireEvent.click(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
+      await within(abschnitt('Noch zu lesen')).findByRole('list');
+      expect(textIn(within(screen.getByRole('main')).getByRole('region', { name })).textContent).toBe(text);
+    });
+  });
+
+  // ---------------------------------------------------------------- AK-8
+  describe('AK-8 Platzhaltertexte in der Farbrubrik Primär', () => {
+    it.each(BEIDE)('[REQ-012/AK-8] Text in „%s“ ist per var(--bz-farbe-primaer) in „Primär“ dargestellt', (name) => {
+      const w = zeige();
+      const t = textIn(abschnitt(name));
+      expect(inlineFarbe(t, w)).toBe('var(--bz-farbe-primaer)');
+      expect(getComputedStyle(t).color).toBe(berechneteFarbe(w, rubriken.primaer!.wert));
+    });
+
+    it('[REQ-012/AK-8] Änderung von „Primär“ an zentraler Stelle wirkt auf beide Texte', () => {
+      const r = rubriken.primaer!;
+      const alt = r.wert;
+      const neu = Object.values(rubriken)
+        .map((x) => x!.wert)
+        .find((v) => berechneteFarbe(document.body, v) !== berechneteFarbe(document.body, alt))!;
+      r.wert = neu;
+      try {
+        const w = zeige();
+        for (const name of BEIDE) {
+          const farbe = getComputedStyle(textIn(abschnitt(name))).color;
+          expect(farbe, `${name}: neuer Wert`).toBe(berechneteFarbe(w, neu));
+          expect(farbe, `${name}: alter Wert`).not.toBe(berechneteFarbe(w, alt));
+        }
+      } finally {
+        r.wert = alt;
+      }
+    });
+
+    it('[REQ-012/AK-8] Gegenprobe: Änderung von „Tertiär“ lässt die Texte unverändert', () => {
+      const r = rubriken.tertiaer!;
+      const alt = r.wert;
+      r.wert = Object.values(rubriken)
+        .map((x) => x!.wert)
+        .find((v) => berechneteFarbe(document.body, v) !== berechneteFarbe(document.body, alt) && v !== rubriken.primaer!.wert)!;
+      try {
+        const w = zeige();
+        for (const name of BEIDE) {
+          expect(getComputedStyle(textIn(abschnitt(name))).color).toBe(berechneteFarbe(w, rubriken.primaer!.wert));
+        }
+      } finally {
+        r.wert = alt;
+      }
+    });
+  });
+
+  // ---------------------------------------------------------------- AK-9
+  describe('AK-9 Antippen der Platzhaltertexte bewirkt nichts', () => {
+    it('[REQ-012/AK-9] Antippen beider Texte ändert in der App nichts', async () => {
+      render(<App />);
+      fireEvent.click(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
+      await within(abschnitt('Noch zu lesen')).findByRole('list');
+      const vorher = document.body.innerHTML;
+      for (const name of BEIDE) {
+        const t = textIn(abschnitt(name));
+        for (const el of [t, ...Array.from(t.querySelectorAll<HTMLElement>('*'))]) {
+          fireEvent.pointerDown(el);
+          fireEvent.click(el);
+          fireEvent.doubleClick(el);
+          fireEvent.contextMenu(el);
+        }
+      }
+      expect(document.body.innerHTML).toBe(vorher);
+    });
+
+    it.each(BEIDE)('[REQ-012/AK-9] Text in „%s“ ist kein Link und keine Schaltfläche und liegt in keiner', (name) => {
+      zeige();
+      const t = textIn(abschnitt(name));
+      expect(t.matches('a, button, [role="button"], [role="link"], [tabindex]')).toBe(false);
+      expect(t.querySelectorAll('a[href], button, input, [role="button"], [role="link"], [tabindex]')).toHaveLength(0);
+      expect(t.closest('a[href], button, [role="button"], [role="link"]')).toBeNull();
     });
   });
 });

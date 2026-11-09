@@ -155,6 +155,23 @@ Im Prototyp zeigt „Noch zu lesen“ deshalb zwei Einträge mit Cover-Platzhalt
 
 ---
 
+## Nachtrag – REQ-012, Runde 2 (Texte unter den Platzhaltern)
+
+**Grundlage:** geänderter REQ-012 (AK-3 neu gefasst, AK-6 bis AK-9 neu) und `sprints/sprint-02/plan.md`, Abschnitt „REQ-012, Runde 2“. Die Testdatei `tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx` hat jetzt 35 statt 16 Tests. Die Sollfarbe kommt aus `@/theme` (`farbrubriken.primaer`), es steht kein Hexwert in den Tests.
+
+`npm run verify`: **grün**. Typecheck und Lint ohne Befund, 17 Testdateien mit 386 Tests bestanden, Traceability OK (12 REQs).
+
+| AK | Ergebnis | Testfälle (Kurzform) |
+|---|---|---|
+| AK-3 (neu) | **bestanden** | Der Cover-Platzhalter selbst enthält keinen Text, keinen `data-buchtitel` und nicht den Platzhaltertext. Im Abschnitt gibt es außer Überschrift und Platzhaltertext keinen Text, keinen Buchtitel und keine weiteren Elemente. |
+| AK-6 | **bestanden** | „Sagas“ hat genau ein `data-platzhaltertext` mit genau „Deine nächste Saga wartet auf dich!“. Der Text steht nach dem Platzhalter und nicht in ihm und ist nicht breiter als der Platzhalter (Titelstelle). Er erscheint nicht in „Sammlungen“. Geprüft bei leerer Liste, bei 12 Büchern und in der App. |
+| AK-7 | **bestanden** | wie AK-6, für „Sammlungen“ mit „Wie wäre es mit einer neuen Sammlung?“ |
+| AK-8 | **bestanden** | Inline-Style genau `var(--bz-farbe-primaer)`, berechnete Farbe = Rubrik „Primär“. Eine Änderung von „Primär“ an zentraler Stelle wirkt auf beide Texte. Gegenprobe: Eine Änderung von „Tertiär“ lässt sie unverändert. |
+| AK-9 | **bestanden** | Antippen (pointerdown, click, doubleclick, contextmenu) beider Texte in der App ändert das DOM nicht. Die Texte sind kein Link und keine Schaltfläche und liegen in keiner. |
+
+**Code-Review:** `PlatzhalterAbschnitt.tsx` nutzt die gemeinsame Komponente `PlatzhalterText`, die Farbrolle `abschnittsplatzhalterText` → `primaer` und die Texte aus `abschnittKonfiguration`. Das entspricht der Absprache. Ich habe keine Nebenwirkungen auf andere REQs gefunden.
+**Gefundene Fehler:** keine. **Manuell offen:** Typografie und Position „wie der Leere-Liste-Text (REQ-011)“ prüft der CEO im Prototyp (jsdom kann das nur eingeschränkt prüfen).
+
 ## Teil 1 – REQ-004 Platzhaltertext in Farbrubrik Tertiär (Stand der ersten Runde, unverändert)
 
 **Tester:** Subagent `tester` · **Datum:** 2026-11-09 · **Branch:** `sprint-02/buecher-grundgeruest`
