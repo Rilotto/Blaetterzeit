@@ -1,7 +1,7 @@
-import type { Book } from '../domain/book';
+import type { Buch } from '../domain/buch';
 
 /**
- * Speicher-Schnittstelle. UI und Fachlogik sprechen NUR mit dieser Schnittstelle.
+ * Speicher-Schnittstelle für Bücher. UI und Fachlogik sprechen NUR mit dieser Schnittstelle.
  *
  * Implementierungen:
  *  - InMemoryBookRepository  (Tests, Entwicklung im Browser)
@@ -11,9 +11,9 @@ import type { Book } from '../domain/book';
  * Jede Implementierung MUSS tests/contract/bookRepository.contract.ts bestehen.
  */
 export interface BookRepository {
-  list(): Promise<Book[]>;
-  get(id: string): Promise<Book | undefined>;
+  list(): Promise<Buch[]>;
+  get(id: string): Promise<Buch | undefined>;
   /** Legt an oder überschreibt (Upsert anhand der id). */
-  save(book: Book): Promise<void>;
+  save(buch: Buch): Promise<void>;
   remove(id: string): Promise<void>;
 }

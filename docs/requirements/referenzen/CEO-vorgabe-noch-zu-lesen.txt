@@ -1,0 +1,168 @@
+Abschnitt „Noch zu lesen“
+
+Unter der Filterleiste befindet sich der Abschnitt:
+
+„Noch zu lesen“
+
+Die Überschrift wird linksbündig in großer Schrift dargestellt.
+
+Rechts daneben befindet sich der dezente bordeauxfarbene Text:
+
+„Alle ansehen ›“
+
+Dynamische Buchauswahl
+
+Dieser Abschnitt soll später automatisch alle Bücher anzeigen, deren Status zu den von mir definierten Kriterien für „Noch zu lesen“ gehört.
+
+Beispielsweise könnte dies der Status „Ungelesen“ sein.
+
+Die möglichen Buchstatus darfst du nicht selbst endgültig festlegen.
+
+Frage mich zuerst, welche Buchstatus es in meiner App geben soll.
+
+Die Status sollen anschließend zentral definiert werden und nicht als verstreute Textvergleiche im Code stehen.
+
+Ich möchte später selbst bestimmen können, welche Status dazu führen, dass ein Buch in diesem Abschnitt erscheint.
+
+Buchdaten
+
+Jedes Buch sollte mindestens folgende Informationen unterstützen:
+
+Eindeutige ID
+
+Buchtitel
+
+Buchcover (optional)
+
+Buchstatus
+
+Die Datenstruktur soll später erweiterbar sein, beispielsweise um Autor, Saga, Bewertung oder andere Informationen, ohne dass diese Felder bereits jetzt angezeigt werden müssen.
+
+Darstellung der Bücher
+
+Die Bücher werden nebeneinander in einer horizontal scrollbaren Liste angezeigt.
+
+Orientiere dich dabei eng an der Darstellung im Referenzbild.
+
+Jeder Bucheintrag besteht aus:
+
+A. Buchcover
+
+Hochformatig.
+
+Seitenverhältnis ähnlich einem echten Buchcover.
+
+Leicht abgerundete Ecken.
+
+Dezenter Schatten.
+
+Bilder müssen passend skaliert werden und ihre Proportionen behalten.
+
+Das Cover darf nicht verzerrt werden.
+
+Alle Buchcover innerhalb dieser Liste besitzen eine einheitliche Darstellungsgröße.
+
+B. Buchtitel
+
+Der Buchtitel befindet sich direkt unterhalb des Covers.
+
+Dabei gelten diese Regeln:
+
+Linksbündige Ausrichtung.
+
+Maximal zwei Textzeilen.
+
+Die maximale Breite des Textes entspricht exakt der Breite des Covers.
+
+Lange Titel werden automatisch umgebrochen.
+
+Überschreitet ein Titel zwei Zeilen, wird er mit Auslassungspunkten abgeschnitten.
+
+Ein langer Titel darf keine benachbarten Bucheinträge verschieben oder überlagern.
+
+Schriftgröße, Schriftstärke und Abstand zum Cover orientieren sich am Referenzbild.
+
+Horizontales Scrollen
+
+Weitere Bücher erscheinen rechts neben dem ersten Buch.
+
+Die Liste muss mit einer horizontalen Wischgeste bedienbar sein.
+
+Achte auf:
+
+Gleichmäßige Abstände zwischen den Büchern.
+
+Harmonische äußere Seitenabstände.
+
+Natürliches und flüssiges Scrollverhalten.
+
+Keine abgeschnittenen Titel oder unerwünschten Layoutverschiebungen.
+
+Unabhängiges horizontales Scrollen gegenüber der Filterleiste.
+
+Die Anzahl der Bücher darf nicht begrenzt oder fest im Layout definiert sein.
+
+5. Darstellung bei Büchern ohne Cover
+
+Ein Buch kann angelegt sein, ohne dass ein eigenes Buchcover hinterlegt wurde.
+
+In diesem Fall soll nicht das Cover eines anderen Buches oder ein automatisch generiertes Ersatzbild angezeigt werden.
+
+Stattdessen erscheint ein von mir bereitgestelltes Buchcover-Platzhalter-Icon.
+
+Anforderungen
+
+Ich werde dir dieses Icon selbst zur Verfügung stellen.
+
+Frage mich ausdrücklich danach.
+
+Das Icon soll innerhalb einer passenden Cover-Platzhalterfläche dargestellt werden.
+
+Die äußeren Abmessungen entsprechen denen eines normalen Buchcovers.
+
+Der Buchtitel erscheint weiterhin wie gewohnt unterhalb des Platzhalters.
+
+Die Platzhalterdarstellung muss als wiederverwendbare Komponente umgesetzt werden.
+
+Erfinde kein endgültiges Buchcover-Icon und verwende keine beliebigen Icons aus externen Bibliotheken als finalen Ersatz.
+
+6. Darstellung bei leerer Buchliste
+
+Falls im Abschnitt „Noch zu lesen“ aktuell kein einziges Buch vorhanden ist, soll anstelle der Buchliste ein Platzhalter erscheinen.
+
+Dieser Platzhalter soll sich gestalterisch am Feld „Neue Sammlung“ im Referenzbild orientieren.
+
+Wichtig: Es geht ausschließlich um die Optik des Platzhalters. Die Rubrik „Sammlungen“ selbst soll nicht umgesetzt werden.
+
+Platzhalter-Design
+
+Helle, creme- beziehungsweise beigefarbene Fläche.
+
+Abgerundetes rechteckiges Format.
+
+Gestrichelter, dezenter beigefarbener Rahmen.
+
+Ein mittig ausgerichtetes Pluszeichen in Bordeauxrot.
+
+Darunter ein kurzer Text.
+
+Großzügige Innenabstände.
+
+Harmonische Ausrichtung innerhalb des Abschnitts.
+
+Der endgültige Platzhaltertext soll mit mir abgestimmt werden, beispielsweise „Buch hinzufügen“.
+
+Funktion
+
+Der Platzhalter soll später als Schaltfläche dienen, um ein neues Buch anzulegen.
+
+Die genaue Aktion wird mit mir abgestimmt.
+
+Unterscheide zwingend zwischen zwei Situationen:
+
+Keine Bücher vorhanden: Der gestrichelte Platzhalter wird angezeigt.
+
+Buch vorhanden, aber ohne Cover: Der Bucheintrag wird mit meinem Buchcover-Platzhalter-Icon und dem tatsächlichen Titel dargestellt.
+
+Diese beiden Zustände dürfen nicht miteinander verwechselt werden.
+

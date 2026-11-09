@@ -1,4 +1,4 @@
-package de.rilotto.blaetterzeit;
+package de.blaetterzeit;
 
 import com.getcapacitor.BridgeActivity;
 

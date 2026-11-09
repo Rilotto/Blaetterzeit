@@ -1,10 +1,19 @@
-:root {
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  color-scheme: light dark;
-  line-height: 1.5;
+/* Farben kommen ausschließlich aus src/theme/ (CSS-Variablen, in main.tsx an <html> gesetzt),
+   die Schrift aus src/theme/schrift.ts. */
+html,
+body {
+  background-color: var(--bz-farbe-hintergrund);
 }
 
 body {
   margin: 0;
-  padding: env(safe-area-inset-top) 1rem env(safe-area-inset-bottom);
+}
+
+/* REQ-016: Solange die native Kameravorschau HINTER der WebView läuft, müssen die
+   Flächen darüber durchsichtig sein (gesetzt von src/bild/kamera.ts). */
+html[data-kamera-aktiv],
+html[data-kamera-aktiv] body,
+html[data-kamera-aktiv] [data-app-wurzel],
+html[data-kamera-aktiv] main {
+  background: transparent !important;
 }

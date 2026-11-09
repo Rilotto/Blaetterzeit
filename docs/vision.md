@@ -18,7 +18,10 @@ Blätterzeit ist eine persönliche App, mit der ich meine Bücher erfasse und me
 
 ## Prozessvorgaben
 
-- **Prototyp-Takt:** _noch festzulegen_ (z. B. „am Ende jedes Sprints“, „wöchentlich“, „nach jedem fertigen REQ“). Zusätzlich jederzeit auf Zuruf.
+- **Prototyp-Takt:** am Ende jedes Sprints (CEO-Entscheidung 2026-11-09). Umfang und Länge jedes Sprints legt der CEO gemeinsam mit dem Scrum Master fest. Zusätzlich jederzeit auf Zuruf.
+- **Vorgehen:** iterativ. Der Umfang des ersten Releases wird bewusst noch nicht festgelegt, sondern ergibt sich aus den Prototypen.
+- **App-ID:** `de.blaetterzeit` (CEO-Entscheidung 2026-11-09, nach erstem Release unveränderlich).
+- **Stack:** gemäß ADR-0001/ADR-0002 vom CEO bestätigt (2026-11-09).
 - **Farben:** Der CEO kann die Standardfarben jederzeit im Chat ändern lassen. In der App gibt es später Themes mit vier Farbrollen.
 
 ## Grundanforderungen
