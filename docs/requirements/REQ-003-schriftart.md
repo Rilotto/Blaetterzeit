@@ -2,7 +2,7 @@
 id: REQ-003
 titel: Zentral definierte App-Schrift
 status: In Umsetzung
-prioritaet: 4
+prioritaet: Could
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -14,7 +14,7 @@ freigegeben_in:
 
 Als **CEO** möchte ich, **dass alle Texte der App eine einzige, zentral definierte App-Schrift verwenden**, damit **ich die endgültige Schrift später an einer Stelle festlegen kann, ohne einzelne Elemente der App anpassen zu müssen**.
 
-**Priorität:** Priorität 4 von CEO-Skala (1 = höchste), „nice to have“ (CEO, wörtlich: „Req-003 ist ein 'nice to have' – also eher Prio 4 (1 ist das höchste)“).
+**Priorität:** Could (MoSCoW, CEO-Entscheidung 2026-11-09).
 
 Vorgabe des CEO (wörtlich): „Dann lassen wir das mit der Schriftart. Wir nutzen eine eigene, noch nicht fest definierte. Verwende selbstständig eine Ersatzschrift. Wir kümmern uns darum später.“
 
@@ -76,3 +76,4 @@ Vorgabe des CEO (wörtlich): „Dann lassen wir das mit der Schriftart. Wir nutz
 | 2026-11-09 | Erstellt aus der Vorgabe des CEO. Status „Abgestimmt“, da der CEO die Umsetzung ausdrücklich angeordnet hat (Abstimmungsnachweis, wörtlich: „Implementiere als Schriftart bitte diese aus der zip“). Lizenzhinweis „Demo – PERSONAL USE ONLY“ als Randbedingung aufgenommen; Versionierung der Datei bis zur Entscheidung des CEO ausgesetzt | Anforderungsmanager |
 | 2026-11-09 | Umgeschrieben auf CEO-Anweisung (wörtlich: „Dann lassen wir das mit der Schriftart. Wir nutzen eine eigene, noch nicht fest definierte. Verwende selbstständig eine Ersatzschrift. Wir kümmern uns darum später.“). Die Schrift „Simple Handmade“ samt Schriftdatei und Lizenzfrage entfällt. Neu: zentral definierte, austauschbare App-Schrift; Ersatzschrift bis zur Festlegung durch den CEO ist die Systemschrift (Entscheidung Scrum Master auf Anweisung des CEO). AK-2 (Schrift aus Datei des CEO) und AK-3 (Ersatzschrift bei fehlender Datei) ersetzt durch AK-2 (genau eine Stelle) und AK-3 (generische Ersatzschrift am Ende). Priorität Must, Bestätigung durch den CEO ausstehend. Status bleibt „In Umsetzung“ | Anforderungsmanager |
 | 2026-11-09 | Priorität vom CEO festgelegt: 4 auf der CEO-Skala (1 = höchste), „nice to have“ (CEO, wörtlich: „Req-003 ist ein 'nice to have' – also eher Prio 4 (1 ist das höchste)“). Frontmatter `prioritaet: 4`, Vermerk „Bestätigung ausstehend“ entfernt. Anforderungstext und AKs unverändert. Status unverändert „In Umsetzung“ | Anforderungsmanager |
+| 2026-11-09 | Priorität auf MoSCoW umgestellt: Could (CEO, wörtlich: „wir nehmen deine Skala und halten uns an IREB. Req-003 bekommt entsprechend bitte 'could'“). Frontmatter `prioritaet: Could`, Prioritätsvermerk im Abschnitt „Ziel / Nutzen“ angepasst. Anforderungstext und AKs unverändert. Status unverändert „In Umsetzung“ | Anforderungsmanager |
