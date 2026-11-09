@@ -92,70 +92,70 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-2 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-3 | 8 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-6 | 5 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-7 | 5 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-8 | 4 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-9 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-10 | 4 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-11 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-2 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-3 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-5 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-6 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-7 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-8 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-9 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | In Umsetzung | AK-10 | 1 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | In Umsetzung | AK-1 | 4 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
-| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | In Umsetzung | AK-2 | 5 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
-| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | In Umsetzung | AK-3 | 2 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
-| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | In Umsetzung | AK-4 | 3 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
-| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
-| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | In Umsetzung | AK-6 | 3 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
-| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | In Umsetzung | AK-7 | 6 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
-| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | In Umsetzung | AK-8 | 4 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-2 | 4 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-3 | 4 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-4 | 3 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-6 | 4 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-7 | 3 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-8 | 3 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | In Umsetzung | AK-9 | 2 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
-| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | In Umsetzung | AK-1 | 4 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
-| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | In Umsetzung | AK-2 | 5 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
-| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | In Umsetzung | AK-3 | 3 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
-| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | In Umsetzung | AK-4 | 3 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
-| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | In Umsetzung | AK-5 | 5 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
-| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | In Umsetzung | AK-6 | 5 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-1 | 5 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-2 | 3 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-7 | 4 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-8 | 2 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-3 | 5 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-4 | 7 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-6 | 3 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | In Umsetzung | AK-9 | 2 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
-| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
-| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
-| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | In Umsetzung | AK-3 | 3 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
-| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
-| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | In Umsetzung | AK-5 | 1 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
-| REQ-019 | Buchdetails – Bilder dauerhaft speichern | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
-| REQ-019 | Buchdetails – Bilder dauerhaft speichern | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
-| REQ-019 | Buchdetails – Bilder dauerhaft speichern | In Umsetzung | AK-3 | 2 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
-| REQ-019 | Buchdetails – Bilder dauerhaft speichern | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
-| REQ-019 | Buchdetails – Bilder dauerhaft speichern | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
-| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | In Umsetzung | AK-1 | 4 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
-| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | In Umsetzung | AK-2 | 1 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
-| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | In Umsetzung | AK-3 | 2 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
-| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-3 | 8 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-10 | 4 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-7 | 6 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-6 | 4 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-015-auswahlmenue-bildquelle.test.tsx |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Implementiert | AK-5 | 5 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-016-bild-kamera-galerie.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-1 | 5 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-7 | 4 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-4 | 7 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-017-zuschnitt-vier-eckpunkte.test.tsx |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-018-buchtitel-unter-buchdarstellung.test.tsx |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-019-bilder-dauerhaft-speichern.test.tsx |
+| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
+| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
+| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
+| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |

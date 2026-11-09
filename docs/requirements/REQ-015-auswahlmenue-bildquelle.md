@@ -1,7 +1,7 @@
 ---
 id: REQ-015
 titel: Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

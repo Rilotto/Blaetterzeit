@@ -1,7 +1,7 @@
 ---
 id: REQ-016
 titel: Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

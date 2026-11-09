@@ -16,3 +16,10 @@
 
 ## Manuelle Prüfliste
 Siehe `testbericht.md`, getrennt nach „Artefakt“ und „Nur APK“. REQ-016 und REQ-019 werden erst nach der Geräteprüfung auf „Implementiert“ gesetzt.
+
+## Ergebnis der Abnahme durch den CEO (2026-11-09)
+„Ja, der Hinweis soll weiterhin bestehen. Der Prototyp passt. Ich nehme alles ab.“
+- Der Hinweis „Kamera nicht verfügbar“ bleibt, auch bei verweigertem Zugriff. Das ist eine CEO-Entscheidung, der Anforderungsmanager trägt sie in REQ-016 nach.
+- Die vom Team gewählten Gestaltungswerte sind abgenommen: Menüfarben, Button „Bestätigen“, Verbindungslinien und Maße.
+- REQ-012 bis REQ-020 stehen auf „Implementiert“.
+- Hinweis des Scrum Masters: Die Geräteprüfung (Kamera, Neustart) hat der CEO nicht ausdrücklich bestätigt. Sie bleibt auf der manuellen Prüfliste und muss vor dem Einfrieren erledigt sein.

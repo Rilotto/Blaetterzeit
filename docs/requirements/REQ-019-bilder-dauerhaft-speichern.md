@@ -1,7 +1,7 @@
 ---
 id: REQ-019
 titel: Buchdetails – Bilder dauerhaft speichern
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
