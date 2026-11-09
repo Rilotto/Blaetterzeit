@@ -1,7 +1,7 @@
 ---
 id: REQ-003
 titel: Zentral definierte App-Schrift
-status: In Umsetzung
+status: Implementiert
 prioritaet: Could
 art: funktional
 quelle: CEO

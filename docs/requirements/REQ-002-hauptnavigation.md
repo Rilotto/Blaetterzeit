@@ -1,7 +1,7 @@
 ---
 id: REQ-002
 titel: Untere Hauptnavigation mit fünf Menüpunkten
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

@@ -33,3 +33,8 @@ Manuelle Prüfliste aus `testbericht.md`:
 ## Danach
 - Feedback des CEO → Anforderungsmanager
 - Bei Abnahme: REQ-002 und REQ-003 auf „Implementiert“ setzen und einen Pull Request nach `main` anlegen. Ein Release (Einfrieren) gibt es nur nach ausdrücklicher Freigabe durch den CEO.
+
+## Ergebnis der Abnahme durch den CEO (2026-11-09)
+- **Punkte 1, 2, 3 und 5:** in Ordnung. Das betrifft Leiste, Icons, aktiven Menüpunkt, Schrift und oberen Abstand.
+- **Punkt 4:** Der Text „under construction :)“ ist vorhanden, war aber nicht lesbar, weil er dieselbe Farbe hatte wie der Hintergrund. Vermutliche Ursache: Für den Inhaltsbereich ist keine Textfarbe definiert, deshalb greift die Standardfarbe des Browsers, die im Dunkelmodus hell ist. Der CEO wünscht für den nächsten Prototyp die Schriftfarbe der Navigationsleiste. Das geht als neue Anforderung an den Anforderungsmanager und blockiert die Abnahme nicht.
+- **Gesamt:** vom CEO abgenommen („Damit ist alles meinerseits abgenommen.“). REQ-002 und REQ-003 stehen auf „Implementiert“. Das Einfrieren über ein Release erfolgt nur nach ausdrücklicher Freigabe.
