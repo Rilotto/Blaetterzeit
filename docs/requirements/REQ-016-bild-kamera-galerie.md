@@ -1,8 +1,8 @@
 ---
 id: REQ-016
 titel: Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -24,7 +24,7 @@ Antworten des CEO (wörtlich, 2026-11-09):
 
 **Kameraansicht**
 - Wenn der Nutzer im Auswahlmenü (REQ-015) „Scannen“ wählt, muss das System eine Kameraansicht innerhalb der App anzeigen, in der der Nutzer mit der Kamera des Smartphones ein Bild aufnehmen kann.
-- Das System muss in der Kameraansicht oben links denselben Zurück-Pfeil wie in den Buchdetails (REQ-013) darstellen.
+- Das System muss in der Kameraansicht oben links denselben Zurück-Pfeil wie in den Buchdetails (REQ-013) darstellen, in der Farbrubrik „Tertiär“ wie dort (CEO: „wie 'Deine Bücher'“).
 - Wenn der Nutzer in der Kameraansicht den Zurück-Pfeil antippt, muss das System zu den Buchdetails zurückkehren, ohne das Bild des Bereichs zu verändern.
 
 **Galerie**
@@ -54,7 +54,7 @@ Antworten des CEO (wörtlich, 2026-11-09):
 - **Gegeben** das Auswahlmenü eines Bereichs ist geöffnet (APK), der Kamerazugriff ist erlaubt
 - **Wenn** der Nutzer „Scannen“ wählt
 - **Dann** zeigt die App eine Kameraansicht mit dem Live-Bild der Kamera
-- **Und** oben links den Zurück-Pfeil wie in den Buchdetails
+- **Und** oben links den Zurück-Pfeil wie in den Buchdetails, in der Farbe der Farbrubrik „Tertiär“
 
 ### AK-2 Zurück aus der Kameraansicht ändert nichts
 - **Gegeben** die Kameraansicht wird angezeigt, für den Bereich ist ein Bild oder noch kein Bild hinterlegt
@@ -103,7 +103,7 @@ Antworten des CEO (wörtlich, 2026-11-09):
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- Priorität.
+- Keine.
 
 ## Änderungshistorie
 
@@ -111,3 +111,4 @@ Antworten des CEO (wörtlich, 2026-11-09):
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 3, 4 und 6 eingearbeitet: Kameraansicht in der App mit Zurück-Pfeil (AK-1, AK-2), Wortlaut „Aus Galerie auswählen“, verweigerter Zugriff (neu AK-6), dauerhafte Speicherung ausgelagert in REQ-019. Offen: Priorität | Anforderungsmanager |
+| 2026-11-09 | Farbe des Zurück-Pfeils Tertiär wie in REQ-013 (AK-1 ergänzt), Priorität Must (CEO). Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |

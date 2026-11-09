@@ -26,3 +26,13 @@
 
 ## REQs
 _Folgen nach der Beschreibung durch den CEO._
+
+## Stand 2026-11-09
+REQ-013 bis REQ-020 sind abgestimmt, Priorität Must. Machbarkeitsprüfung des Entwicklers: machbar, Aufwand grob 4–5 Entwicklertage.
+- **Kamera:** eigene Kameraansicht über `@capacitor-community/camera-preview` (Capacitor 8), mit Rückfall auf `getUserMedia`. Risiko: Während die Kamera läuft, muss der Hintergrund durchsichtig sein. Das ist nur auf dem Gerät prüfbar.
+- **Galerie:** `@capacitor/camera` mit dem Android Photo Picker. Dafür ist keine Berechtigung nötig, also kann sie auch nicht verweigert werden.
+- **Geradeziehen:** eigene 4-Punkt-Homographie auf einem Canvas, ohne OpenCV. Die Bildgröße wird auf ca. 2000 px begrenzt.
+- **Speicherung:** Bilddateien über `@capacitor/filesystem`, die Zuordnung in SQLite (erstes SQLite-Grundgerüst mit Migrationen). Neue Schnittstelle `ImageStore` mit Vertragstest.
+- **CI:** stellt eine Debug-APK als Download bereit. Die Signatur weicht von der späteren Release-APK ab, vor dem Wechsel muss die App deinstalliert werden (Datenverlust).
+
+**Umsetzung:** startet erst nach Freigabe durch den CEO.

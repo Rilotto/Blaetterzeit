@@ -1,8 +1,8 @@
 ---
 id: REQ-014
 titel: Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -132,7 +132,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- Priorität.
+- Keine.
 
 ## Änderungshistorie
 
@@ -140,3 +140,4 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 5 und 7 eingearbeitet: Seitenverhältnis wie ein Buch (Orientierung Referenzbild), normale Schreibweise, Bild ersetzt Beschriftung/Titel (AK-7), langer Titel vollständig im Cover-Rechteck (neu AK-5), Farben Primär / Ghost / GhostFrame (neu AK-6). Offen: Priorität | Anforderungsmanager |
+| 2026-11-09 | Priorität Must (CEO). Hinweis: Der CEO nennt den Bereich „Schnitt“ auch „Farbschnitt“ (Synonym, Glossar). Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |

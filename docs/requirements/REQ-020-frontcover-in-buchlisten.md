@@ -1,8 +1,8 @@
 ---
 id: REQ-020
 titel: Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -65,10 +65,11 @@ Antwort des CEO (wörtlich, Auszug, 2026-11-09): „Wenn ich ein Cover in den Bu
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- Priorität.
+- Keine.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-09 | Erstellt aus CEO-Antwort 6 (Sprint 03) | Anforderungsmanager |
+| 2026-11-09 | Priorität Must (CEO). Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |

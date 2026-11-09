@@ -1,8 +1,8 @@
 ---
 id: REQ-018
 titel: Buchdetails – Buchtitel unter der Buchdarstellung
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -25,6 +25,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 - Das System muss in den Buchdetails unterhalb der Buchdarstellung (REQ-014) den Buchtitel des angezeigten Buches darstellen.
 - Das System muss den Buchtitel dort unabhängig davon darstellen, ob Bilder hinterlegt sind.
 - Das System muss den Buchtitel dort bei Bedarf umbrechen und höchstens zweizeilig darstellen.
+- Wenn der Buchtitel dort mehr als zwei Zeilen benötigen würde, muss das System ihn nach der zweiten Zeile abschneiden und das Abschneiden mit „…“ kenntlich machen (CEO, 2026-11-09).
 - Das System muss den Buchtitel in der Farbrolle „Buchdetails-Titelfarbe“ darstellen, die ihren Wert aus der Farbrubrik „Tertiär“ bezieht (CEO: „wie 'Deine Bücher'“, REQ-005).
 
 ## Akzeptanzkriterien
@@ -43,6 +44,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 - **Gegeben** ein Buch, dessen Titel unter der Buchdarstellung mehr als zwei Zeilen benötigen würde
 - **Wenn** die Buchdetails angezeigt werden
 - **Dann** ist der Titel umgebrochen und auf höchstens zwei Zeilen begrenzt
+- **Und** das Ende der zweiten Zeile zeigt „…“
 
 ### AK-4 Farbe wie „Deine Bücher“
 - **Gegeben** die Buchdetails werden angezeigt
@@ -72,8 +74,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- Ein Titel, der mehr als zwei Zeilen bräuchte: nach der zweiten Zeile mit „…“ abschneiden wie in den Buchlisten (REQ-009)?
-- Priorität.
+- Keine.
 
 ## Änderungshistorie
 
@@ -81,3 +82,4 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 5 und 7 eingearbeitet: höchstens zweizeilig (neu AK-3), Farbe Tertiär wie „Deine Bücher“ (neu AK-4, AK-5). Offen: Kürzung nach Zeile 2, Priorität | Anforderungsmanager |
+| 2026-11-09 | CEO-Antworten eingearbeitet: nach zwei Zeilen mit „…“ abgeschnitten (AK-3 ergänzt), Priorität Must. Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |

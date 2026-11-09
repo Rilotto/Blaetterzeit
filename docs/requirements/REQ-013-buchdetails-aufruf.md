@@ -1,8 +1,8 @@
 ---
 id: REQ-013
 titel: Buchdetails – Aufruf, Kopfzeile und Rückweg
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -19,6 +19,8 @@ Vorgabe des CEO (wörtlich, Auszug, 2026-11-09): „Wenn ich auf ein Buch klicke
 Antworten des CEO (wörtlich, 2026-11-09):
 - „Ein Klick auf das Cover und den Titel. Später auch noch aus diversen Listen, das fügen wir aber nachträglich mit ein, wenn es relevant wird. Zurück komme ich auf die Seite, indem ich auf den dezenten Pfeil oben links klicke. Setze diesen bitte auch mit um (siehe Screenshots). Wenn ich aus der Buchdetailansicht auf den Reiter Bücher klicke, komme ich zurück auf die Bücher-Hauptseite 'Deine Bücher'.“
 - „Wir setzen nur den Zurück-Pfeil und die drei Punkte oben rechts um. Kaufen ist für mich nicht relevant.“
+- Funktion der drei Punkte: „erstmal nichts“.
+- Farbe von Zurück-Pfeil und drei Punkten: „dunkelbraun wie 'Deine Bücher'“. Maßgeblich ist „wie 'Deine Bücher'“, also die Farbrubrik „Tertiär“ (REQ-005), nicht die Farbrubrik „Dunkelbraun“ (REQ-009); so dem CEO vom Scrum Master erläutert.
 
 Sprintziel Sprint 03: Das Feature „Buchdetails“ wird schrittweise erweitert. Teil 1 = Aufruf, Darstellung des Buches, Kamera, Galerie-Import, Zuschnitt.
 
@@ -35,6 +37,8 @@ Referenzbilder: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-0
 - Das System muss in den Buchdetails oben links einen dezenten Zurück-Pfeil darstellen.
 - Das System muss in den Buchdetails oben rechts die Drei-Punkte-Schaltfläche („…“) darstellen.
 - Das System darf in den Buchdetails keine Funktion „Kaufen“ darstellen.
+- Wenn der Nutzer die Drei-Punkte-Schaltfläche antippt, darf das System nichts verändern (CEO: „erstmal nichts“).
+- Das System muss den Zurück-Pfeil und die Drei-Punkte-Schaltfläche in der Farbrolle „Kopfzeilen-Symbolfarbe“ darstellen, die ihren Wert aus der Farbrubrik „Tertiär“ bezieht (CEO: „wie 'Deine Bücher'“, REQ-005). Dies gilt auch für den Zurück-Pfeil in der Kameraansicht (REQ-016) und im Zuschnitt-Fenster (REQ-017). Konkrete Farbwerte sind kein Akzeptanzkriterium.
 
 **Rückweg**
 - Wenn der Nutzer in den Buchdetails den Zurück-Pfeil antippt, muss das System die Seite „Bücher“ („Deine Bücher“, REQ-005) anzeigen.
@@ -82,10 +86,27 @@ Referenzbilder: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-0
 - **Wenn** der Nutzer in der Hauptnavigation „Bücher“ antippt
 - **Dann** wird die Seite „Bücher“ mit der Überschrift „Deine Bücher“ angezeigt
 
+### AK-8 Drei Punkte ohne Funktion
+- **Gegeben** das Fenster „Buchdetails“ wird angezeigt
+- **Wenn** der Nutzer die Drei-Punkte-Schaltfläche antippt
+- **Dann** wird weiterhin das Fenster „Buchdetails“ desselben Buches angezeigt
+- **Und** es öffnet sich kein Menü und kein weiteres Fenster
+
+### AK-9 Zurück-Pfeil und drei Punkte in Tertiär
+- **Gegeben** das Fenster „Buchdetails“ wird angezeigt
+- **Wenn** Zurück-Pfeil und Drei-Punkte-Schaltfläche betrachtet werden
+- **Dann** sind beide in der Farbe der Farbrubrik „Tertiär“ dargestellt (dieselbe wie „Deine Bücher“, REQ-005)
+
+### AK-10 Farbe aus zentraler Farbrubrik
+- **Gegeben** der Wert der Farbrubrik „Tertiär“ wird an der zentralen Stelle geändert
+- **Wenn** die Buchdetails angezeigt werden
+- **Dann** sind Zurück-Pfeil und Drei-Punkte-Schaltfläche im geänderten Wert dargestellt
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Aufruf der Buchdetails aus weiteren Listen (CEO: „das fügen wir aber nachträglich mit ein, wenn es relevant wird“).
 - „Kaufen“ (CEO: „nicht relevant“).
+- Funktion der Drei-Punkte-Schaltfläche (CEO: „erstmal nichts“).
 - Inhalt des Fensters (REQ-014 bis REQ-018).
 - Bereiche des Referenzbilds unterhalb des Buchtitels (Lesestatus, Fortschritt, Statistik, Zitat).
 
@@ -106,9 +127,7 @@ Referenzbilder: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-0
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- Was soll beim Antippen der drei Punkte oben rechts passieren?
-- In welcher Farbe sollen Zurück-Pfeil und drei Punkte erscheinen?
-- Priorität.
+- Keine.
 
 ## Änderungshistorie
 
@@ -116,3 +135,4 @@ Referenzbilder: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-0
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 1 und 2 eingearbeitet: Aufruf auch über den Titel (neu AK-3), Zurück-Pfeil und Rückweg über Reiter „Bücher“ (neu AK-6, AK-7), Kopfzeile mit drei Punkten ohne „Kaufen“ (neu AK-5). Titel angepasst. Offen: Funktion der drei Punkte, Farbe, Priorität | Anforderungsmanager |
+| 2026-11-09 | CEO-Antworten eingearbeitet: drei Punkte ohne Funktion (neu AK-8), Zurück-Pfeil und drei Punkte in Tertiär wie „Deine Bücher“, auch in Kameraansicht und Zuschnitt (neu AK-9, AK-10), Priorität Must. Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |

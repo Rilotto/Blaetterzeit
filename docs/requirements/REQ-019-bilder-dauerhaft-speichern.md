@@ -1,7 +1,7 @@
 ---
 id: REQ-019
 titel: Buchdetails – Bilder dauerhaft speichern
-status: Entwurf
+status: Abgestimmt
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -84,3 +84,4 @@ Priorität „Must“ aus der Aussage des CEO „zwingend“.
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-09 | Erstellt aus CEO-Antwort 6 (Sprint 03) | Anforderungsmanager |
+| 2026-11-09 | Priorität Must vom CEO bestätigt. Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |

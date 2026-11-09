@@ -1,8 +1,8 @@
 ---
 id: REQ-017
 titel: Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -18,11 +18,18 @@ Vorgabe des CEO (wörtlich, Auszug, 2026-11-09): „Nachdem ich ein Bild aufgeno
 
 Antwort des CEO (wörtlich, 2026-11-09): „Durch das individuelle Ziehen der vier Punkte (Trapezfunktion) sollte ich ein schräg fotografiertes Cover ausgleichen können. Es wird sozusagen 'geradegezogen'. Die Ecken stehen zu Beginn in einem Rechteck wie ein Buch, die Ecken sind optisch rund und im Bordeauxton, damit man diese besser erkennt. Im Kamera-Modus und im Zuschnitt-Fenster gibt es ebenfalls den Zurück-Pfeil wie in den Buchdetails. Setze dies bitte auch mit um.“
 
+Weitere Antworten des CEO (2026-11-09):
+- Startrahmen (wörtlich): „Wenn ich einen Buchrücken oder einen Farbschnitt hochladen möchte, soll der Rahmen zum schmalen Rücken passen. Bei einem Frontcover soll es der breite Rahmen passend zu einem Cover-Format sein.“ („Farbschnitt“ = Bereich „Schnitt“, Glossar.)
+- Der Zurück-Pfeil im Zuschnitt-Fenster führt zurück zu den Buchdetails.
+- Farbe des Zurück-Pfeils: „wie 'Deine Bücher'“ = Farbrubrik „Tertiär“ (REQ-013).
+
 ## Anforderung (Satzschablone)
 
 **Eckpunkte**
 - Nachdem der Nutzer ein Bild aufgenommen oder ausgewählt hat (REQ-016), muss das System das Zuschnitt-Fenster mit dem Bild und genau vier Eckpunkten anzeigen, je einen pro Buchecke.
-- Das System muss die vier Eckpunkte zu Beginn in Form eines Rechtecks im Seitenverhältnis eines Buches anordnen (CEO: „in einem Rechteck wie ein Buch“).
+- Das System muss die vier Eckpunkte zu Beginn in Form eines Rechtecks anordnen (CEO: „in einem Rechteck wie ein Buch“), dessen Seitenverhältnis vom Zielbereich abhängt:
+  - Zielbereich „Buchrücken“ oder „Schnitt“: schmales, hochformatiges Rechteck im Seitenverhältnis dieser schmalen Bereiche (REQ-014) (CEO: „soll der Rahmen zum schmalen Rücken passen“).
+  - Zielbereich „Cover“: breites Rechteck im Seitenverhältnis des Bereichs „Cover“ (REQ-014) (CEO: „der breite Rahmen passend zu einem Cover-Format“).
 - Das System muss die Eckpunkte als runde Markierungen in der Farbrubrik „Primär“ darstellen (CEO: „optisch rund und im Bordeauxton“).
 - Das System muss dem Nutzer die Möglichkeit bieten, jeden der vier Eckpunkte einzeln und unabhängig von den anderen frei zu verschieben, sodass die Eckpunkte auch ein beliebiges Viereck (z. B. Trapez) bilden können.
 
@@ -33,8 +40,9 @@ Antwort des CEO (wörtlich, 2026-11-09): „Durch das individuelle Ziehen der vi
 - Das System muss ein zuvor hinterlegtes Bild dieses Bereichs dabei ersetzen.
 
 **Zurück-Pfeil**
-- Das System muss im Zuschnitt-Fenster oben links denselben Zurück-Pfeil wie in den Buchdetails (REQ-013) darstellen.
-- Wenn der Nutzer im Zuschnitt-Fenster den Zurück-Pfeil antippt, darf das System das Bild des Bereichs nicht verändern.
+- Das System muss im Zuschnitt-Fenster oben links denselben Zurück-Pfeil wie in den Buchdetails (REQ-013) darstellen, in der Farbrubrik „Tertiär“ wie dort.
+- Wenn der Nutzer im Zuschnitt-Fenster den Zurück-Pfeil antippt, muss das System die Buchdetails desselben Buches anzeigen.
+- Wenn der Nutzer im Zuschnitt-Fenster den Zurück-Pfeil antippt, darf das System das aufgenommene bzw. ausgewählte Bild nicht übernehmen und das Bild des Bereichs nicht verändern.
 
 **Farben**
 - Das System muss die Farbe der Eckpunkte über eine Farbrolle aus einer zentralen Farbrubrik beziehen (Farbrolle „Zuschnitt-Eckpunkt“ → Farbrubrik „Primär“). Konkrete Farbwerte sind kein Akzeptanzkriterium.
@@ -55,6 +63,17 @@ Antwort des CEO (wörtlich, 2026-11-09): „Durch das individuelle Ziehen der vi
 - **Gegeben** der Nutzer hat ein Bild aufgenommen oder ausgewählt
 - **Wenn** das Zuschnitt-Fenster erstmals angezeigt wird
 - **Dann** bilden die vier Eckpunkte ein Rechteck
+
+### AK-7 Schmaler Startrahmen für Buchrücken und Schnitt
+- **Gegeben** der Nutzer hat über das Auswahlmenü des Bereichs „Buchrücken“ bzw. „Schnitt“ ein Bild aufgenommen oder ausgewählt
+- **Wenn** das Zuschnitt-Fenster erstmals angezeigt wird
+- **Dann** bilden die vier Eckpunkte ein hochformatiges Rechteck im Seitenverhältnis des Bereichs „Buchrücken“ bzw. „Schnitt“ (REQ-014)
+
+### AK-8 Breiter Startrahmen für das Cover
+- **Gegeben** der Nutzer hat über das Auswahlmenü des Bereichs „Cover“ ein Bild aufgenommen oder ausgewählt
+- **Wenn** das Zuschnitt-Fenster erstmals angezeigt wird
+- **Dann** bilden die vier Eckpunkte ein Rechteck im Seitenverhältnis des Bereichs „Cover“ (REQ-014)
+- **Und** es ist breiter im Verhältnis zur Höhe als der Startrahmen für „Buchrücken“ und „Schnitt“
 
 ### AK-3 Eckpunkte einzeln frei verschiebbar
 - **Gegeben** das Zuschnitt-Fenster wird angezeigt
@@ -77,7 +96,13 @@ Antwort des CEO (wörtlich, 2026-11-09): „Durch das individuelle Ziehen der vi
 - **Gegeben** das Zuschnitt-Fenster wird angezeigt und für den Bereich ist ein Bild oder noch kein Bild hinterlegt
 - **Wenn** der Nutzer den Zurück-Pfeil oben links antippt
 - **Dann** ist das Zuschnitt-Fenster geschlossen
-- **Und** das Bild des Bereichs ist unverändert
+- **Und** die Buchdetails desselben Buches werden angezeigt
+- **Und** das Bild des Bereichs ist unverändert (das aufgenommene bzw. ausgewählte Bild wurde nicht übernommen)
+
+### AK-9 Zurück-Pfeil in Tertiär
+- **Gegeben** das Zuschnitt-Fenster wird angezeigt
+- **Wenn** der Zurück-Pfeil betrachtet wird
+- **Dann** ist er in der Farbe der Farbrubrik „Tertiär“ dargestellt (wie in den Buchdetails, REQ-013)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -97,9 +122,7 @@ Antwort des CEO (wörtlich, 2026-11-09): „Durch das individuelle Ziehen der vi
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- Wohin führt der Zurück-Pfeil im Zuschnitt-Fenster: zurück in die Kameraansicht bzw. Galerie oder direkt zu den Buchdetails?
-- Startrechteck „wie ein Buch“: Gilt beim Buchrücken und beim Schnitt das schmale Seitenverhältnis dieser Bereiche, oder ebenfalls das Cover-Format?
-- Priorität.
+- Keine.
 
 ## Änderungshistorie
 
@@ -107,3 +130,4 @@ Antwort des CEO (wörtlich, 2026-11-09): „Durch das individuelle Ziehen der vi
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 4 und 5 eingearbeitet: Trapezfunktion/Geradeziehen (neu AK-4), Startposition Rechteck (neu AK-2), runde Eckpunkte in Primär (AK-1), Zurück-Pfeil (neu AK-6). Titel angepasst. Offen: Ziel des Zurück-Pfeils, Startrechteck bei Buchrücken/Schnitt, Priorität | Anforderungsmanager |
+| 2026-11-09 | CEO-Antworten eingearbeitet: Startrahmen je Zielbereich schmal bzw. Cover-Format (neu AK-7, AK-8), Zurück-Pfeil führt zu den Buchdetails ohne Bildübernahme (AK-6 ergänzt), Farbe Tertiär (neu AK-9), Priorität Must. Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |

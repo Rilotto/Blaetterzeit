@@ -1,8 +1,8 @@
 ---
 id: REQ-015
 titel: Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -124,7 +124,7 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- Priorität.
+- Keine.
 
 ## Änderungshistorie
 
@@ -132,3 +132,4 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 3 und 7 eingearbeitet: Wortlaut „Aus Galerie auswählen“, „Cover online suchen“ sichtbar ohne Funktion (AK-5 geändert, Funktion in To-do), Schließen durch Tippen außerhalb (neu AK-7), „Foto entfernen“ mit X-Icon (neu AK-2/AK-6), Icons nachgebildet (neu AK-9), Farbe/Schrift wie Referenzbild. Offen: Priorität | Anforderungsmanager |
+| 2026-11-09 | Priorität Must (CEO). Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |
