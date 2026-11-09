@@ -9,3 +9,5 @@ Gepflegt vom Anforderungsmanager. Hier stehen Wünsche, die der CEO ausdrücklic
 | 2026-11-09 | Fenster der Filter-/Einstellungen-Schaltfläche | Soll später ein eigenes Fenster öffnen; Inhalt noch nicht definiert. | REQ-005 |
 | 2026-11-09 | Fenster der Plus-Schaltfläche | Soll später ein eigenes Fenster zum Hinzufügen eines Buches öffnen; Funktion noch nicht definiert. | REQ-005 |
 | 2026-11-09 | Themes | Auswahl eines Themes in den Einstellungen; Inhalt eines Themes noch offen. | REQ-001 (Entwurf) |
+| 2026-11-09 | Funktion „Cover online suchen“ | „Lass uns die Funktion 'Cover online suchen' umsetzen, aber ohne Funktion. Nimm das auf die To-Do-Liste bitte mit auf.“ Laut CEO auch der einzige Weg zu einem Bild, wenn der Zugriff auf Kamera/Galerie verweigert wurde. | REQ-015, REQ-016 |
+| 2026-11-09 | Buchdetails aus weiteren Listen öffnen | „Später auch noch aus diversen Listen, das fügen wir aber nachträglich mit ein, wenn es relevant wird.“ | REQ-013 |

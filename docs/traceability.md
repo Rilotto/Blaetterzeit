@@ -103,3 +103,53 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-9 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
 | REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-10 | 0 | 0 |  |
 | REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-11 | 0 | 0 |  |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Entwurf | AK-8 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-8 | 0 | 0 |  |
+| REQ-015 | Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung | Entwurf | AK-9 | 0 | 0 |  |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-016 | Buchdetails – Bild in der Kameraansicht aufnehmen oder aus der Galerie auswählen | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-017 | Buchdetails – Bild mit vier Eckpunkten zuschneiden und geradeziehen | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-018 | Buchdetails – Buchtitel unter der Buchdarstellung | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-019 | Buchdetails – Bilder dauerhaft speichern | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Entwurf | AK-4 | 0 | 0 |  |
