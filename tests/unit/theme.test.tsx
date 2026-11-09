@@ -19,7 +19,6 @@ describe('Farbrubriken', () => {
       'ghostframe',
       'hintergrund',
       'primaer',
-      'schrifttertiaer',
       'sekundaer',
       'tertiaer',
     ]);

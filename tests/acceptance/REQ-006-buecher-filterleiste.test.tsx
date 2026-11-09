@@ -9,7 +9,8 @@
  *  - Standardfilter („Für dich“) beim Rendern aktiv; Antippen ruft `logik` auf, ohne sichtbare Wirkung
  *  - Konfiguration: src/buecher/filterKonfiguration.ts → filterKonfiguration: FilterDefinition[]
  *  - BuecherAnsicht nimmt optional { filter, buecher }
- *  - Farben per var(--bz-farbe-<id>): tertiaer, hintergrund, ghost, ghostframe, schrifttertiaer
+ *  - Farben per var(--bz-farbe-<id>): tertiaer, hintergrund, ghost, ghostframe
+ *    (Rubrik „Schrift tertiär“ am 2026-11-09 mit „Tertiär“ zusammengelegt)
  *
  * Keine Hexwerte im Test. Echtes Wischen, Breiten und Pill-Optik: manuell (Testbericht).
  */
@@ -340,7 +341,7 @@ describe('REQ-006 Seite „Bücher“ – Filterleiste', () => {
       expect(hatKeinenRahmen(a), 'aktiver Filter hat einen Rahmen').toBe(true);
     });
 
-    it('[REQ-006/AK-7] inaktive Filter: Hintergrund „Ghost“, Rahmen „GhostFrame“, Schrift „Schrift tertiär“', () => {
+    it('[REQ-006/AK-7] inaktive Filter: Hintergrund „Ghost“, Rahmen „GhostFrame“, Schrift „Tertiär“', () => {
       const w = zeige();
       const inaktiv = filterButtons().filter((b) => b.getAttribute('aria-pressed') === 'false');
       expect(inaktiv.length).toBeGreaterThan(0);
@@ -349,7 +350,7 @@ describe('REQ-006 Seite „Bücher“ – Filterleiste', () => {
         pruefeFarbe(b, 'hintergrund', 'ghost', w, `"${n}" Hintergrund`);
         expect(hatKeinenRahmen(b), `"${n}" braucht einen Rahmen`).toBe(false);
         pruefeFarbe(b, 'rahmen', 'ghostframe', w, `"${n}" Rahmen`);
-        pruefeFarbe(textElement(b, n), 'text', 'schrifttertiaer', w, `"${n}" Schrift`);
+        pruefeFarbe(textElement(b, n), 'text', 'tertiaer', w, `"${n}" Schrift`);
       }
     });
 
@@ -363,12 +364,20 @@ describe('REQ-006 Seite „Bücher“ – Filterleiste', () => {
       const fd = within(leiste()).getByRole('button', { name: 'Für dich' });
       pruefeFarbe(fd, 'hintergrund', 'ghost', w, '„Für dich“ inaktiv');
       pruefeFarbe(fd, 'rahmen', 'ghostframe', w, '„Für dich“ inaktiv Rahmen');
-      pruefeFarbe(textElement(fd, 'Für dich'), 'text', 'schrifttertiaer', w, '„Für dich“ inaktiv Schrift');
+      pruefeFarbe(textElement(fd, 'Für dich'), 'text', 'tertiaer', w, '„Für dich“ inaktiv Schrift');
     });
 
-    it('[REQ-006/AK-7] die neuen Farbrubriken sind getrennte Rubriken (Schrift tertiär ≠ Tertiär als Rubrik)', () => {
-      for (const id of ['ghost', 'ghostframe', 'schrifttertiaer']) expect(rubriken[id], id).toBeTruthy();
-      expect(rubriken.schrifttertiaer).not.toBe(rubriken.tertiaer);
+    it('[REQ-006/AK-7] neue Rubriken „Ghost“/„GhostFrame“ vorhanden, „Schrift tertiär“ entfallen', () => {
+      for (const id of ['ghost', 'ghostframe', 'tertiaer']) expect(rubriken[id], id).toBeTruthy();
+      expect(rubriken.schrifttertiaer, 'Rubrik „Schrift tertiär“ muss entfallen sein').toBeUndefined();
+    });
+
+    it('[REQ-006/AK-7] Schrift inaktiver Filter = Hintergrund aktiver Filter (beide „Tertiär“)', () => {
+      const w = zeige();
+      const a = aktive()[0];
+      const i = filterButtons().find((b) => b.getAttribute('aria-pressed') === 'false')!;
+      expect(istFarbe(textElement(i, i.textContent!.trim()), 'text')).toBe(istFarbe(a, 'hintergrund'));
+      expect(istFarbe(a, 'hintergrund')).toBe(berechneteFarbe(w, rubriken.tertiaer!.wert));
     });
   });
 
@@ -516,7 +525,7 @@ describe('REQ-006 Seite „Bücher“ – Filterleiste', () => {
       ['hintergrund', 'Schrift aktiver Filter', () => textElement(aktiverF(), aktiverF().textContent!.trim()), 'text'],
       ['ghost', 'Hintergrund inaktiver Filter', inaktiverF, 'hintergrund'],
       ['ghostframe', 'Rahmen inaktiver Filter', inaktiverF, 'rahmen'],
-      ['schrifttertiaer', 'Schrift inaktiver Filter', () => textElement(inaktiverF(), inaktiverF().textContent!.trim()), 'text'],
+      ['tertiaer', 'Schrift inaktiver Filter', () => textElement(inaktiverF(), inaktiverF().textContent!.trim()), 'text'],
     ];
     it.each(FAELLE)('[REQ-006/AK-12] Änderung der Rubrik „%s“ wirkt auf: %s', (id, wo, finde, art) => {
       mitGeaenderterRubrik(id, (neu, alt) => {
