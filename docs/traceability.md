@@ -92,8 +92,14 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-3 | 6 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-2 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-3 | 8 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-6 | 5 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-7 | 5 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-8 | 4 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-9 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-10 | 0 | 0 |  |
+| REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | In Umsetzung | AK-11 | 0 | 0 |  |
