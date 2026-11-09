@@ -1,7 +1,7 @@
 ---
 id: REQ-005
 titel: Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen
-status: Entwurf
+status: Abgestimmt
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -35,20 +35,23 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 *Filter-/Einstellungen-Schaltfläche*
 - Das System muss die Filter-/Einstellungen-Schaltfläche kreisförmig mit einem Rahmen darstellen.
 - Das System muss den Hintergrund der Filter-/Einstellungen-Schaltfläche in der Farbrolle „Filterschaltfläche-Hintergrund“ darstellen (CEO: „Hintergrund wie Seitenhintergrund“).
-- Das System muss Rahmen und Icon der Filter-/Einstellungen-Schaltfläche in der Farbrolle „Filterschaltfläche-Vordergrund“ darstellen (CEO: „Rahmen und Icon wie Icons in Navigationsleiste“). Aus welcher Farbrubrik diese Farbrolle ihren Wert bezieht, ist offen (siehe Offene Fragen, F8).
+- Das System muss Rahmen und Icon der Filter-/Einstellungen-Schaltfläche in der Farbrolle „Filterschaltfläche-Vordergrund“ darstellen (CEO: „Rahmen und Icon wie Icons in Navigationsleiste“). Diese Farbrolle bezieht ihren Wert aus der Farbrubrik „Tertiär“, also der Farbe der nicht aktiven Menüpunkte der Hauptnavigation (CEO: „inaktiv braun teritär“).
 - Das System muss in der Filter-/Einstellungen-Schaltfläche das Regler-Icon darstellen (Abschnitt „Icons der Schaltflächen“).
-- Das spätere Verhalten der Schaltfläche wird geklärt, bevor die Funktion implementiert wird (CEO). Es ist nicht Teil dieses REQ.
+- Die Schaltfläche soll später ein eigenes Fenster öffnen (CEO). Inhalt und Verhalten dieses Fensters werden geklärt, bevor die Funktion implementiert wird. Sie sind nicht Teil dieses REQ.
 
 *Plus-Schaltfläche*
 - Das System muss die Plus-Schaltfläche kreisförmig darstellen.
 - Das System muss den Hintergrund der Plus-Schaltfläche in der Farbrolle „Plusschaltfläche-Hintergrund“ darstellen (CEO: „Hintergrund in bereits genutztem Bordeaux-Ton“).
 - Das System muss in der Plus-Schaltfläche mittig das Plus-Icon (Abschnitt „Icons der Schaltflächen“) in der Farbrolle „Plusschaltfläche-Vordergrund“ darstellen (CEO: „das Plus selbst in der Farbe vom Seitenhintergrund“). Diese Aussage ersetzt die frühere Beschreibung des CEO „weißes Pluszeichen“.
-- Die Plus-Schaltfläche soll später zum Hinzufügen eines neuen Buches dienen. Die konkrete Funktion bzw. Zielansicht wird später definiert (CEO). Sie ist nicht Teil dieses REQ.
+- Die Plus-Schaltfläche soll später zum Hinzufügen eines neuen Buches dienen und dafür ein eigenes Fenster öffnen (CEO). Die konkrete Funktion und das Fenster werden später definiert. Sie sind nicht Teil dieses REQ.
 
 *Antippen der Schaltflächen (Grundgerüst)*
-- Wenn der Nutzer eine der beiden Schaltflächen antippt, muss das System die angetippte Schaltfläche als aktiv darstellen (CEO: „der angetippte Button soll als aktiv dargestellt werden“).
-- Wenn der Nutzer eine der beiden Schaltflächen antippt, darf sich auf der Seite „Bücher“ außer der Darstellung der angetippten Schaltfläche nichts ändern (CEO: „auf der Seite ändert sich erstmal noch nichts“).
-- Wie eine aktive Schaltfläche aussieht und wann sie wieder als nicht aktiv dargestellt wird, ist offen (siehe Offene Fragen, F9).
+- Das System darf für keine der beiden Schaltflächen einen aktiven Zustand darstellen (CEO: „diese beiden Buttons haben keinen aktiven Status. Das entfällt bei beiden, da diese beide ein eigenes Fenster später öffnen werden.“).
+- Wenn der Nutzer eine der beiden Schaltflächen antippt, darf sich in der App nichts ändern, auch nicht die Darstellung der angetippten Schaltfläche (CEO: „auf der Seite ändert sich erstmal noch nichts“).
+
+**Bereich unterhalb der Filterleiste**
+- Das System muss den Bereich der Seite „Bücher“ unterhalb der Filterleiste (REQ-006) leer darstellen (CEO: „bleibt leer“).
+- Das System darf auf der Seite „Bücher“ den Platzhaltertext „under construction :)“ (REQ-002, REQ-004) nicht darstellen.
 
 **Icons der Schaltflächen**
 Vorgabe des CEO (wörtlich): „kopiere bitte die Icons aus dem Screenshot und setze diese so um im gleichen Style wie die Navigationsleiste“.
@@ -66,7 +69,7 @@ Vorgabe des CEO (wörtlich): „kopiere bitte die Icons aus dem Screenshot und s
 |---|---|---|---|
 | Überschriftfarbe | Überschrift „Deine Bücher“ | Tertiär | „selbe Farbe wie die nicht aktive Schrift in der Navigationsleiste“ |
 | Filterschaltfläche-Hintergrund | Hintergrund der Filter-/Einstellungen-Schaltfläche | Hintergrund | „Hintergrund wie Seitenhintergrund“ |
-| Filterschaltfläche-Vordergrund | Rahmen und Icon der Filter-/Einstellungen-Schaltfläche | **offen (F8)** | „Rahmen und Icon wie Icons in Navigationsleiste“ |
+| Filterschaltfläche-Vordergrund | Rahmen und Icon der Filter-/Einstellungen-Schaltfläche | Tertiär | „Rahmen und Icon wie Icons in Navigationsleiste“, „inaktiv braun teritär“ |
 | Plusschaltfläche-Hintergrund | Hintergrund der Plus-Schaltfläche | Primär | „bereits genutzter Bordeaux-Ton“ |
 | Plusschaltfläche-Vordergrund | Plus-Icon | Hintergrund | „in der Farbe vom Seitenhintergrund“ |
 
@@ -106,6 +109,7 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 - **Und** hat einen Rahmen
 - **Und** enthält das Regler-Icon
 - **Und** ihr Hintergrund ist in der Farbe der Farbrubrik „Hintergrund“ dargestellt
+- **Und** Rahmen und Regler-Icon sind in der Farbe der Farbrubrik „Tertiär“ dargestellt
 
 ### AK-5 Plus-Schaltfläche
 - **Gegeben** die Seite „Bücher“ wird angezeigt
@@ -137,20 +141,23 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 - **Dann** stammen beide nicht aus einer Icon-Bibliothek
 - **Und** beide sind einfarbige Linien-Icons auf transparentem Hintergrund, die von der App in der Farbe ihrer Farbrolle eingefärbt werden
 
-### AK-10 Antippen ändert sonst nichts auf der Seite
+### AK-10 Antippen bewirkt nichts, kein aktiver Zustand
 - **Gegeben** die Seite „Bücher“ wird angezeigt
 - **Wenn** der Nutzer die Filter-/Einstellungen-Schaltfläche oder die Plus-Schaltfläche antippt
-- **Dann** wird die angetippte Schaltfläche als aktiv dargestellt
-- **Und** außer der Darstellung der angetippten Schaltfläche ändert sich auf der Seite „Bücher“ nichts (keine neue Ansicht, kein Wechsel des Menüpunkts, keine Änderung der Filterleiste)
+- **Dann** sieht die angetippte Schaltfläche danach genauso aus wie vorher (kein aktiver Zustand)
+- **Und** in der App ändert sich nichts (kein neues Fenster, keine neue Ansicht, kein Wechsel des Menüpunkts, keine Änderung der Filterleiste)
 
-<!-- Nach Beantwortung von F8 wird AK-4 um die Farbe von Rahmen und Icon ergänzt.
-     Nach Beantwortung von F9 wird AK-10 um das Aussehen des aktiven Zustands und ein AK zum Ende des aktiven Zustands ergänzt.
-     Nach Beantwortung von F10 wird ggf. ein AK zum Bereich unterhalb der Filterleiste ergänzt. -->
+### AK-11 Bereich unterhalb der Filterleiste ist leer
+- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Wenn** der Bereich unterhalb der Filterleiste betrachtet wird
+- **Dann** enthält er keine Inhalte
+- **Und** auf der gesamten Seite „Bücher“ wird der Text „under construction :)“ nicht angezeigt
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Die Filterleiste unterhalb der Überschrift (REQ-006, REQ-007).
-- Das spätere Verhalten der Filter-/Einstellungen-Schaltfläche und die Funktion bzw. Zielansicht der Plus-Schaltfläche (CEO: werden später definiert).
+- Die eigenen Fenster, die beide Schaltflächen später öffnen sollen, und deren Inhalt (CEO: werden später definiert).
+- Inhalte im Bereich unterhalb der Filterleiste, z. B. die vom CEO erwähnte horizontale Buchliste oder die im Referenzbild sichtbaren Abschnitte (CEO: Bereich „bleibt leer“).
 - Konkrete Farbwerte, Maße und Schriftgrößen als Akzeptanzkriterium.
 - Optische Übereinstimmung der Icons mit dem Referenzbild als Akzeptanzkriterium (Prüfung durch den CEO im Prototyp).
 
@@ -160,18 +167,16 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 
 ## Abhängigkeiten
 
-- **REQ-002 (Hauptnavigation, Implementiert):** Menüpunkt „Bücher“, Inhaltsbereich, Farbrubriken, Seitenhintergrund = Farbrubrik „Hintergrund“ (AK-13, bleibt unverändert), technischer Stil der Icons. REQ-002 legt fest, dass „under construction :)“ angezeigt wird, *solange* die Zielansicht nicht definiert ist. Mit diesem REQ wird die Zielansicht „Bücher“ definiert. Ob und wo der Platzhaltertext auf der Seite „Bücher“ erhalten bleibt, hängt an F10.
+- **REQ-002 (Hauptnavigation, Implementiert):** Menüpunkt „Bücher“, Inhaltsbereich, Farbrubriken, Seitenhintergrund = Farbrubrik „Hintergrund“ (AK-13, bleibt unverändert), technischer Stil der Icons. REQ-002 legt fest, dass „under construction :)“ angezeigt wird, *solange* die Zielansicht nicht definiert ist. Mit diesem REQ wird die Zielansicht „Bücher“ definiert. Deshalb zeigt die Seite „Bücher“ den Platzhaltertext nicht mehr (AK-11). Für die übrigen Menüpunkte bleibt REQ-002 unverändert.
 - **REQ-003 (App-Schrift, Implementiert):** Überschrift wird in der App-Schrift dargestellt.
-- **REQ-004 (Platzhaltertext Tertiär, Abgestimmt):** nutzt dieselbe Farbrubrik „Tertiär“ wie die Überschrift.
+- **REQ-004 (Platzhaltertext Tertiär, Abgestimmt):** nutzt dieselbe Farbrubrik „Tertiär“ wie die Überschrift. Der Platzhaltertext erscheint auf der Seite „Bücher“ nicht mehr, auf den übrigen Seiten gilt REQ-004 weiter.
 - **REQ-006 (Filterleiste):** Antippen der Schaltflächen ändert die Filterleiste nicht.
 
 ## Offene Fragen
 
 <!-- Muss vor Status "Abgestimmt" leer sein. Nummern entsprechen der Fragenliste an den CEO vom 2026-11-09. -->
 
-- F8: Rahmen und Icon der Filter-/Einstellungen-Schaltfläche sollen aussehen „wie Icons in Navigationsleiste“. Die Icons der Navigationsleiste haben zwei Farben: nicht aktive Menüpunkte sind braun (Tertiär), der aktive Menüpunkt ist bordeauxrot (Primär). Welche der beiden Farben meinst du?
-- F9: Du möchtest, dass eine angetippte Schaltfläche als aktiv dargestellt wird. Wie soll eine aktive Schaltfläche aussehen? Und wann soll sie wieder als nicht aktiv dargestellt werden?
-- F10: Auf der Seite „Bücher“ gibt es unterhalb der Filter (Für dich, Gerade am Lesen, Noch zu lesen) noch freien Platz. Im Referenzbild stehen dort z. B. „Noch zu lesen“ mit Buchcovern, „Sagas“ und „Sammlungen“. Soll in diesem Bereich im aktuellen Grundgerüst schon etwas zu sehen sein? Wenn ja, was? Du hattest außerdem eine „darunterliegende horizontale Buchliste“ erwähnt. Gehört sie schon zu diesem Grundgerüst?
+- Keine.
 
 ## Änderungshistorie
 
@@ -179,3 +184,4 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der Vorgabe des CEO für die Seite „Bücher“, oberer Bereich). Orientierungswerte des Scrum Masters aus dem Referenzbild als Nicht-AK aufgenommen | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt („alle auf MUST“), Vorläufigkeitsvermerk entfernt. F2: Icons werden aus dem Referenzbild nachgebildet, im technischen Stil der Navigations-Icons, keine Bibliotheks-Icons (neu: Abschnitt „Icons der Schaltflächen“, AK-9). F3: Farbzuordnungen eingetragen (Überschrift Tertiär, Filterschaltfläche Hintergrund, Plus-Schaltfläche Primär / Plus in Hintergrund); „weißes Pluszeichen“ durch „Farbe vom Seitenhintergrund“ ersetzt; „dezenter, beigefarbener Rahmen“ entfällt zugunsten „wie Icons in Navigationsleiste“ (Farbrubrik offen, F8). AK-4 und AK-5 präzisiert, neu AK-7, AK-8. F4: Antippen stellt die Schaltfläche aktiv dar, sonst ändert sich nichts (neu AK-10; Aussehen und Dauer offen, F9). F5 vom CEO nicht verstanden, neu formuliert als F10; Abgrenzung „Abschnitte unterhalb der Filterleiste“ bis zur Antwort entfernt | Anforderungsmanager |
+| 2026-11-09 | Antworten des CEO eingearbeitet. F8: Rahmen und Icon der Filter-/Einstellungen-Schaltfläche in Farbrubrik „Tertiär“ (Farbtabelle, AK-4 ergänzt). F9: Beide Schaltflächen haben keinen aktiven Zustand; Antippen bewirkt derzeit nichts; beide öffnen später je ein eigenes Fenster (Anforderung und AK-10 neu gefasst, Abgrenzung ergänzt). Die frühere Anforderung „angetippte Schaltfläche wird als aktiv dargestellt“ entfällt. F10: Bereich unterhalb der Filterleiste bleibt leer, kein Platzhaltertext auf der Seite „Bücher“ (neuer Abschnitt, neu AK-11, Abgrenzung und Abhängigkeiten ergänzt). Vom CEO am 2026-11-09 bestätigt, Status „Abgestimmt“ | Anforderungsmanager |

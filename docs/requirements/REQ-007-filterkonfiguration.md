@@ -1,7 +1,7 @@
 ---
 id: REQ-007
 titel: Filterkonfiguration unabhängig von der Darstellung
-status: Entwurf
+status: Abgestimmt
 prioritaet: Must
 art: randbedingung
 quelle: CEO
@@ -120,7 +120,7 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 
 <!-- Muss vor Status "Abgestimmt" leer sein. Nummern entsprechen der Fragenliste an den CEO vom 2026-11-09. -->
 
-- Keine. Ausdrückliche Bestätigung des REQ durch den CEO steht aus; bis dahin bleibt der Status „Entwurf“.
+- Keine.
 
 ## Änderungshistorie
 
@@ -128,3 +128,4 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der Vorgabe des CEO, Punkte 1 bis 3 und 10, flexible Datenstruktur, Antworten zu Filtern, Reihenfolge, Standardfilter und Lesestatus) | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt, Vorläufigkeitsvermerk entfernt. F7: Filterkonfiguration wird nur in der Entwicklung gepflegt, keine Bearbeitung in der App (neuer Abschnitt „Pflege der Filterkonfiguration“, neu AK-9, Abgrenzung ergänzt); Zahl hinter Filtern wird ignoriert (Abgrenzung). Filterlogik bewirkt im Grundgerüst nichts Sichtbares, Zuordnung bleibt als Anknüpfungspunkt (AK-8 ergänzt). Keine offenen Fragen mehr; Status bleibt „Entwurf“ bis zur ausdrücklichen Bestätigung durch den CEO | Anforderungsmanager |
+| 2026-11-09 | Vom CEO bestätigt („ja“), Status „Abgestimmt“. Inhalt unverändert | Anforderungsmanager |

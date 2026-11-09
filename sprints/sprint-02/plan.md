@@ -12,7 +12,14 @@ Außerdem wird der Platzhaltertext „under construction :)“ in der Farbrubrik
 - Prioritäten werden nach MoSCoW vergeben, wie es IREB vorsieht.
 
 ## REQs
-_Werden vom Anforderungsmanager mit dem CEO abgestimmt. Erst danach beginnt die Umsetzung._
+| REQ | Titel | Status |
+|---|---|---|
+| REQ-004 | Platzhaltertext in Tertiär | In Umsetzung (umgesetzt und getestet, Sichtprüfung offen) |
+| REQ-005 | Seite „Bücher“: Kopfbereich | Abgestimmt 2026-11-09 |
+| REQ-006 | Seite „Bücher“: Filterleiste | Abgestimmt 2026-11-09 |
+| REQ-007 | Filterkonfiguration | Abgestimmt 2026-11-09 |
+
+**CEO-Vorgabe 2026-11-09:** Den Prototyp noch nicht bauen, um das Nutzungslimit zu schonen. Die Umsetzung von REQ-005 bis REQ-007 startet erst auf Zuruf des CEO.
 
 ## Schnittstellen-Absprache Entwickler ↔ Tester
 

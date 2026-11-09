@@ -1,7 +1,7 @@
 ---
 id: REQ-006
 titel: Seite „Bücher“ – horizontal wischbare Filterleiste
-status: Entwurf
+status: Abgestimmt
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -29,7 +29,7 @@ Welche Filter es gibt, wie sie heißen, in welcher Reihenfolge sie stehen und we
 
 **Wischen**
 - Das System muss dem Nutzer die Möglichkeit bieten, die gesamte Filterleiste horizontal nach links und rechts zu wischen.
-- Das System muss die Filterleiste unabhängig von anderen Bereichen der Seite scrollen. Das gilt auch gegenüber der vom CEO erwähnten darunterliegenden horizontalen Buchliste, sobald es sie gibt (CEO). Ob sie bereits zum Grundgerüst gehört, ist in REQ-005, F10 offen.
+- Das System muss die Filterleiste unabhängig von anderen Bereichen der Seite scrollen. Das gilt auch gegenüber der vom CEO erwähnten darunterliegenden horizontalen Buchliste, sobald es sie gibt (CEO). Sie gehört nicht zum Grundgerüst; der Bereich unterhalb der Filterleiste bleibt vorerst leer (REQ-005).
 
 **Form**
 - Das System muss jeden Filter als längliche, vollständig abgerundete Kapsel (Pill) darstellen.
@@ -53,6 +53,7 @@ Welche Filter es gibt, wie sie heißen, in welcher Reihenfolge sie stehen und we
 | Inaktiver Filter – Rahmen | Rahmen inaktiver Filter | GhostFrame (neu) | „Rahmen wie in Screenshot (zukünftig 'GhostFrame')“ |
 | Inaktiver Filter – Schrift | Beschriftung inaktiver Filter | Schrift tertiär (neu) | „Schrift wie in Screenshot (zukünftig 'Schrift teritär')“ |
 
+- Das System muss den aktiven Filter ohne Rahmen darstellen (CEO zu F11: aktiver Filter hat keinen Rahmen).
 - Das System muss die drei neuen Farbrubriken „Ghost“, „GhostFrame“ und „Schrift tertiär“ zusätzlich zu den bestehenden Farbrubriken (REQ-002) zentral definieren. Die Namen stammen vom CEO („teritär“ als „tertiär“ übernommen, wie bereits bei der Farbrubrik „Tertiär“).
 - Aktuelle Standardwerte der neuen Farbrubriken (aus dem Referenzbild gemessen, CEO: „wie in Screenshot“; kein Akzeptanzkriterium):
 
@@ -109,6 +110,7 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 - **Gegeben** die Filterleiste wird angezeigt
 - **Wenn** der aktive Filter und die inaktiven Filter betrachtet werden
 - **Dann** ist der Hintergrund des aktiven Filters in der Farbrubrik „Tertiär“ und seine Beschriftung in der Farbrubrik „Hintergrund“ dargestellt
+- **Und** der aktive Filter hat keinen Rahmen
 - **Und** der Hintergrund jedes inaktiven Filters ist in der Farbrubrik „Ghost“, sein Rahmen in der Farbrubrik „GhostFrame“ und seine Beschriftung in der Farbrubrik „Schrift tertiär“ dargestellt
 
 ### AK-8 Horizontal wischen
@@ -141,13 +143,10 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 - **Wenn** die Filterleiste angezeigt wird
 - **Dann** sind alle Elemente dieses REQ, deren Farbrolle aus dieser Farbrubrik stammt (Tabelle im Abschnitt „Farben“), im geänderten Wert dargestellt
 - **Und** keines dieser Elemente hat einen eigenen, davon abweichenden Farbwert
-
-<!-- Nach Beantwortung von F11 wird AK-7 um die Aussage zum Rahmen des aktiven Filters ergänzt. -->
-
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Welche Bücher ein Filter auswählt und welchen Teil der Seite er beeinflusst (CEO: wird pro Filter separat ausgearbeitet).
-- Inhalte unterhalb der Filterleiste, einschließlich der horizontalen Buchliste (siehe REQ-005, F10).
+- Inhalte unterhalb der Filterleiste, einschließlich der horizontalen Buchliste (der Bereich bleibt vorerst leer, REQ-005).
 - Aufbau und Pflege der Filterkonfiguration (REQ-007).
 - Die Zahl, die im Referenzbild hinter einem Filter steht (CEO: „Die Zahl hinter dem Filter soll ignoriert werden.“).
 - Konkrete Farbwerte und Maße als Akzeptanzkriterium.
@@ -167,7 +166,7 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 
 <!-- Muss vor Status "Abgestimmt" leer sein. Nummern entsprechen der Fragenliste an den CEO vom 2026-11-09. -->
 
-- F11: Für die nicht aktiven Filter hast du einen Rahmen festgelegt („GhostFrame“). Soll der aktive Filter auch einen Rahmen haben? Wenn ja, in welcher Farbe?
+- Keine.
 
 ## Änderungshistorie
 
@@ -175,3 +174,4 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der Vorgabe des CEO zur Filterleiste der Seite „Bücher“, Punkte 4 bis 9 und Antworten zu Standardfilter). Orientierungswerte des Scrum Masters als Nicht-AK aufgenommen | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt, Vorläufigkeitsvermerk entfernt. F3: Farbzuordnungen eingetragen (aktiver Filter Tertiär / Schrift Hintergrund; inaktive Filter in den neuen Farbrubriken „Ghost“, „GhostFrame“, „Schrift tertiär“ mit Standardwerten aus dem Referenzbild). Die frühere Beschreibung „dunkelbraun mit heller Beschriftung“ bzw. „hellem, beigefarbenem Hintergrund, dezentem Rahmen, dunklerer Schrift“ und die gemessenen Werte des aktiven Filters entfallen zugunsten der Farbrubriken; Rahmenwert neu gemessen (`#DFD9CB`). AK-7 präzisiert, neu AK-12. F6: Aktivierung durch Antippen; außer der Darstellung passiert nichts, die Filterlogik bleibt als Anknüpfungspunkt (AK-10 präzisiert); „Für dich“ ist bei jedem Aufruf der Seite aktiv, auch nach Seitenwechsel (neu AK-11). F5 nach REQ-005 verschoben und dort als F10 neu formuliert; F5 blockiert diesen REQ nicht mehr. Zahl hinter Filtern in die Abgrenzung (CEO-Antwort 7). Neue offene Frage F11 (Rahmen des aktiven Filters) | Anforderungsmanager |
+| 2026-11-09 | Antworten des CEO eingearbeitet. F11: Aktiver Filter hat keinen Rahmen (Anforderung im Abschnitt „Farben“, AK-7 ergänzt). F10 (REQ-005): Bereich unterhalb der Filterleiste bleibt leer, Verweise in „Wischen“ und Abgrenzung angepasst. Vom CEO am 2026-11-09 bestätigt, Status „Abgestimmt“ | Anforderungsmanager |
