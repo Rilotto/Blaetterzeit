@@ -1,7 +1,7 @@
 ---
 id: REQ-005
 titel: Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen
-status: Abgestimmt
+status: Entwurf
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -50,7 +50,7 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - Wenn der Nutzer eine der beiden Schaltflächen antippt, darf sich in der App nichts ändern, auch nicht die Darstellung der angetippten Schaltfläche (CEO: „auf der Seite ändert sich erstmal noch nichts“).
 
 **Bereich unterhalb der Filterleiste**
-- Das System muss den Bereich der Seite „Bücher“ unterhalb der Filterleiste (REQ-006) leer darstellen (CEO: „bleibt leer“).
+- Der Inhalt des Bereichs unterhalb der Filterleiste (REQ-006) wird durch REQ-009 bis REQ-011 festgelegt (CEO, 2026-11-09: „Ich möchte eine weitere Funktion einbinden …“). Die frühere Vorgabe „bleibt leer“ entfällt.
 - Das System darf auf der Seite „Bücher“ den Platzhaltertext „under construction :)“ (REQ-002, REQ-004) nicht darstellen.
 
 **Icons der Schaltflächen**
@@ -147,17 +147,16 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 - **Dann** sieht die angetippte Schaltfläche danach genauso aus wie vorher (kein aktiver Zustand)
 - **Und** in der App ändert sich nichts (kein neues Fenster, keine neue Ansicht, kein Wechsel des Menüpunkts, keine Änderung der Filterleiste)
 
-### AK-11 Bereich unterhalb der Filterleiste ist leer
+### AK-11 Kein Platzhaltertext „under construction :)“
 - **Gegeben** die Seite „Bücher“ wird angezeigt
-- **Wenn** der Bereich unterhalb der Filterleiste betrachtet wird
-- **Dann** enthält er keine Inhalte
-- **Und** auf der gesamten Seite „Bücher“ wird der Text „under construction :)“ nicht angezeigt
+- **Wenn** die gesamte Seite betrachtet wird
+- **Dann** wird der Text „under construction :)“ nicht angezeigt
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Die Filterleiste unterhalb der Überschrift (REQ-006, REQ-007).
 - Die eigenen Fenster, die beide Schaltflächen später öffnen sollen, und deren Inhalt (CEO: werden später definiert).
-- Inhalte im Bereich unterhalb der Filterleiste, z. B. die vom CEO erwähnte horizontale Buchliste oder die im Referenzbild sichtbaren Abschnitte (CEO: Bereich „bleibt leer“).
+- Inhalte im Bereich unterhalb der Filterleiste (REQ-009 bis REQ-011).
 - Konkrete Farbwerte, Maße und Schriftgrößen als Akzeptanzkriterium.
 - Optische Übereinstimmung der Icons mit dem Referenzbild als Akzeptanzkriterium (Prüfung durch den CEO im Prototyp).
 
@@ -176,7 +175,7 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 
 <!-- Muss vor Status "Abgestimmt" leer sein. Nummern entsprechen der Fragenliste an den CEO vom 2026-11-09. -->
 
-- Keine.
+- F7: Bestätigung der Änderung vom 2026-11-09 (Bereich unterhalb der Filterleiste nicht mehr leer; AK-11 auf „kein ‚under construction :)‘“ reduziert). Alle übrigen Anforderungen und AK-1 bis AK-10 sind unverändert.
 
 ## Änderungshistorie
 
@@ -185,3 +184,4 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 | 2026-11-09 | Erstellt (Entwurf aus der Vorgabe des CEO für die Seite „Bücher“, oberer Bereich). Orientierungswerte des Scrum Masters aus dem Referenzbild als Nicht-AK aufgenommen | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt („alle auf MUST“), Vorläufigkeitsvermerk entfernt. F2: Icons werden aus dem Referenzbild nachgebildet, im technischen Stil der Navigations-Icons, keine Bibliotheks-Icons (neu: Abschnitt „Icons der Schaltflächen“, AK-9). F3: Farbzuordnungen eingetragen (Überschrift Tertiär, Filterschaltfläche Hintergrund, Plus-Schaltfläche Primär / Plus in Hintergrund); „weißes Pluszeichen“ durch „Farbe vom Seitenhintergrund“ ersetzt; „dezenter, beigefarbener Rahmen“ entfällt zugunsten „wie Icons in Navigationsleiste“ (Farbrubrik offen, F8). AK-4 und AK-5 präzisiert, neu AK-7, AK-8. F4: Antippen stellt die Schaltfläche aktiv dar, sonst ändert sich nichts (neu AK-10; Aussehen und Dauer offen, F9). F5 vom CEO nicht verstanden, neu formuliert als F10; Abgrenzung „Abschnitte unterhalb der Filterleiste“ bis zur Antwort entfernt | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F8: Rahmen und Icon der Filter-/Einstellungen-Schaltfläche in Farbrubrik „Tertiär“ (Farbtabelle, AK-4 ergänzt). F9: Beide Schaltflächen haben keinen aktiven Zustand; Antippen bewirkt derzeit nichts; beide öffnen später je ein eigenes Fenster (Anforderung und AK-10 neu gefasst, Abgrenzung ergänzt). Die frühere Anforderung „angetippte Schaltfläche wird als aktiv dargestellt“ entfällt. F10: Bereich unterhalb der Filterleiste bleibt leer, kein Platzhaltertext auf der Seite „Bücher“ (neuer Abschnitt, neu AK-11, Abgrenzung und Abhängigkeiten ergänzt). Vom CEO am 2026-11-09 bestätigt, Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-09 | Neue CEO-Vorgabe „Noch zu lesen“: Bereich unterhalb der Filterleiste wird durch REQ-009 bis REQ-011 belegt. Anforderung „bleibt leer“ entfernt, AK-11 auf das Nichtanzeigen von „under construction :)“ reduziert, Abgrenzung angepasst. AK-1 bis AK-10 unverändert. Status zurück auf „Entwurf“ bis zur Bestätigung durch den CEO (F7). Begründung für Anpassung statt neuem REQ: REQ-005 ist nicht freigegeben; ein `ersetzt`-REQ ist nur für eingefrorene REQs vorgesehen und würde hier zwei widersprüchliche gültige Texte erzeugen | Anforderungsmanager |
