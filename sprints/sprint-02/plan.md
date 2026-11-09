@@ -18,8 +18,15 @@ Außerdem wird der Platzhaltertext „under construction :)“ in der Farbrubrik
 | REQ-005 | Seite „Bücher“: Kopfbereich | Abgestimmt 2026-11-09 |
 | REQ-006 | Seite „Bücher“: Filterleiste | Abgestimmt 2026-11-09 |
 | REQ-007 | Filterkonfiguration | Abgestimmt 2026-11-09 |
+| REQ-008 | Buchdaten und Lesestatus | Abgestimmt 2026-11-09 |
+| REQ-009 | Abschnitt „Noch zu lesen“ | Abgestimmt 2026-11-09 |
+| REQ-010 | Cover-Platzhalter (Herz) | Abgestimmt 2026-11-09 |
+| REQ-011 | Platzhalter bei leerer Liste | Abgestimmt 2026-11-09 |
+| REQ-012 | Abschnitte „Sagas“ und „Sammlungen“ | Abgestimmt 2026-11-09 |
 
-**CEO-Vorgabe 2026-11-09:** Den Prototyp noch nicht bauen, um das Nutzungslimit zu schonen. Die Umsetzung von REQ-005 bis REQ-007 startet erst auf Zuruf des CEO.
+Testbücher: Auf Wunsch des CEO recherchiert der Tester drei Fantasy-Bücher (nur Titel und Status). Ablage: `demo/testbuecher.json`, außerhalb von `src/`, damit die Rollentrennung erhalten bleibt. Der Entwickler bindet die Datei als Demodaten ein.
+
+**CEO-Vorgabe 2026-11-09:** Den Prototyp noch nicht bauen, um das Nutzungslimit zu schonen. Die Umsetzung von REQ-005 bis REQ-012 startet erst auf Zuruf des CEO.
 
 ## Schnittstellen-Absprache Entwickler ↔ Tester
 

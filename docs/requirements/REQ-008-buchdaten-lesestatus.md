@@ -1,8 +1,8 @@
 ---
 id: REQ-008
 titel: Buchdaten und zentrale Definition der Lesestatus
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -16,6 +16,8 @@ Als **CEO** möchte ich **Bücher mit einheitlichen Grunddaten und zentral defin
 
 Vorgabe des CEO (wörtlich, Auszug aus [referenzen/CEO-vorgabe-noch-zu-lesen.txt](referenzen/CEO-vorgabe-noch-zu-lesen.txt)): „Jedes Buch sollte mindestens folgende Informationen unterstützen: Eindeutige ID, Buchtitel, Buchcover (optional), Buchstatus. Die Datenstruktur soll später erweiterbar sein, beispielsweise um Autor, Saga, Bewertung oder andere Informationen, ohne dass diese Felder bereits jetzt angezeigt werden müssen.“ – „Die möglichen Buchstatus darfst du nicht selbst endgültig festlegen. Frage mich zuerst, welche Buchstatus es in meiner App geben soll. Die Status sollen anschließend zentral definiert werden und nicht als verstreute Textvergleiche im Code stehen.“
 
+Der Begriff „Buchstatus“ der Vorgabe ist gleichbedeutend mit „Lesestatus“ (Glossar).
+
 ## Anforderung (Satzschablone)
 
 **Buchdaten**
@@ -28,8 +30,12 @@ Vorgabe des CEO (wörtlich, Auszug aus [referenzen/CEO-vorgabe-noch-zu-lesen.txt
 
 **Lesestatus**
 - Das System muss die möglichen Lesestatus an genau einer zentralen Stelle definieren.
-- Das System muss als Lesestatus ausschließlich die vom CEO festgelegten Werte anbieten: *(Liste wird nach Bestätigung durch den CEO eingetragen, siehe Offene Fragen)*.
+- Das System muss als Lesestatus ausschließlich die vom CEO festgelegten Werte in genau dieser Schreibweise anbieten: *ungelesen*, *am lesen*, *gelesen*, *abgebrochen*, *Wunschliste* (CEO-Bestätigung 2026-11-09).
 - Das System darf an keiner anderen Stelle als der zentralen Definition Lesestatus über ihre Bezeichnungstexte vergleichen oder festlegen.
+
+## Randbedingungen
+
+- **Demodaten für den Prototyp (kein App-Feature):** Der Tester recherchiert drei Fantasy-Bücher und legt sie als Test-/Demodaten an, nur mit Buchtitel und Lesestatus, ohne Buchcover (es erscheint der Cover-Platzhalter, REQ-010). Mindestens eines hat den Lesestatus *ungelesen*. Die Demodaten sind nicht Teil der Anforderung an die App und kein Akzeptanzkriterium.
 
 ## Akzeptanzkriterien
 
@@ -52,7 +58,7 @@ Vorgabe des CEO (wörtlich, Auszug aus [referenzen/CEO-vorgabe-noch-zu-lesen.txt
 ### AK-4 Nur die festgelegten Lesestatus
 - **Gegeben** die zentrale Definition der Lesestatus
 - **Wenn** die verfügbaren Lesestatus abgefragt werden
-- **Dann** sind es genau die vom CEO festgelegten Werte, in der vom CEO genannten Schreibweise
+- **Dann** sind es genau die fünf Werte *ungelesen*, *am lesen*, *gelesen*, *abgebrochen*, *Wunschliste* in dieser Schreibweise
 
 ### AK-5 Lesestatus nur zentral definiert
 - **Gegeben** der Quellcode der App
@@ -61,7 +67,7 @@ Vorgabe des CEO (wörtlich, Auszug aus [referenzen/CEO-vorgabe-noch-zu-lesen.txt
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Anlegen, Bearbeiten und Löschen von Büchern durch den Nutzer (Plus-Schaltfläche, REQ-005: später).
+- Anlegen, Bearbeiten und Löschen von Büchern durch den Nutzer (Plus-Schaltfläche, REQ-005: später, siehe `docs/todo.md`).
 - Anzeige weiterer Angaben wie Autor, Saga oder Bewertung.
 - Ändern des Lesestatus in den Buchdetails.
 - Welche Lesestatus zum Abschnitt „Noch zu lesen“ gehören (REQ-009).
@@ -73,17 +79,18 @@ Vorgabe des CEO (wörtlich, Auszug aus [referenzen/CEO-vorgabe-noch-zu-lesen.txt
 ## Abhängigkeiten
 
 - **ADR-0002:** Speicherzugriff nur über Repository-Schnittstellen.
-- **Glossar „Lesestatus“:** vom CEO zuvor genannte Werte, deren Bestätigung offen ist.
 - **REQ-007 (Filterlogik):** soll später auf den Lesestatus aufbauen (Glossar).
 - **REQ-009, REQ-010:** nutzen Buchdaten und Lesestatus.
 
 ## Offene Fragen
 
-- F1: Bestätigung der Lesestatus-Liste und ob „Buchstatus“ (Vorgabe) dasselbe ist wie „Lesestatus“ (Glossar).
-- F7: Priorität.
+<!-- Muss vor Status "Abgestimmt" leer sein. -->
+
+- Keine.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Vorgabe „Noch zu lesen“, Abschnitt „Buchdaten“ und „Dynamische Buchauswahl“) | Anforderungsmanager |
+| 2026-11-09 | CEO-Antworten eingearbeitet: F1 Lesestatus-Liste bestätigt (ungelesen, am lesen, gelesen, abgebrochen, Wunschliste), „Buchstatus“ = „Lesestatus“; AK-4 konkretisiert. F5 Demodaten als Randbedingung. F7 Priorität Must. Vom CEO bestätigt 2026-11-09, Status „Abgestimmt“ | Anforderungsmanager |

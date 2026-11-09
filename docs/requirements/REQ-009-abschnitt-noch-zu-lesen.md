@@ -1,8 +1,8 @@
 ---
 id: REQ-009
 titel: Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -24,12 +24,13 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - Das System muss auf der Seite „Bücher“ unterhalb der Filterleiste (REQ-006) den Abschnitt „Noch zu lesen“ darstellen.
 - Das System muss die Abschnittsüberschrift „Noch zu lesen“ linksbündig in großer Schrift darstellen (Größe und Schriftstärke: Orientierung am Referenzbild).
 - Das System muss die Abschnittsüberschrift in der Farbrolle „Abschnittsüberschriftfarbe“ darstellen, die ihren Wert aus der Farbrubrik „Tertiär“ bezieht (CEO: „mit der Farbe wie der große Titel 'Deine Bücher'“, REQ-005).
-- Das System muss rechts neben der Abschnittsüberschrift den Text „Alle ansehen ›“ dezent darstellen (CEO: „dezenter bordeauxfarbener Text“; Farbrubrik offen, F6).
+- Das System muss rechts neben der Abschnittsüberschrift den Text „Alle ansehen ›“ dezent in der Farbrolle „Alle-ansehen-Farbe“ darstellen (CEO: „dezenter bordeauxfarbener Text“; Farbrubrik „Primär“).
+- Wenn der Nutzer „Alle ansehen ›“ antippt, darf sich in der App nichts ändern (CEO: „aktuell noch nichts.“). Die spätere Gesamtliste steht in der To-do-Liste (`docs/todo.md`).
 
 **Buchauswahl**
 - Das System muss im Abschnitt „Noch zu lesen“ alle Bücher anzeigen, deren Lesestatus (REQ-008) dem Abschnitt „Noch zu lesen“ zugeordnet ist.
 - Das System muss die Zuordnung „Lesestatus → Abschnitt ‚Noch zu lesen‘“ an genau einer zentralen Stelle festlegen, getrennt von der Darstellung.
-- Das System muss die Zuordnung ausschließlich mit den vom CEO festgelegten Lesestatus vorbelegen *(Werte werden nach Antwort des CEO eingetragen, F1)*.
+- Das System muss die Zuordnung mit genau dem Lesestatus *ungelesen* (REQ-008) vorbelegen (CEO: „Ein Buch soll unter 'Noch zu lesen' erscheinen, wenn es den Status ungelesen besitzt.“).
 - Die Zuordnung wird in der Entwicklung gepflegt (CEO über den Chat). Ob der Nutzer sie in der App ändern kann, ist nicht Teil dieses REQ.
 - Das System darf die Anzahl der angezeigten Bücher nicht begrenzen.
 
@@ -50,7 +51,8 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - Das System muss lange Buchtitel automatisch umbrechen und höchstens zwei Zeilen darstellen.
 - Wenn ein Buchtitel mehr als zwei Zeilen benötigt, muss das System ihn nach der zweiten Zeile mit Auslassungspunkten abschneiden.
 - Das System darf durch einen langen Buchtitel benachbarte Bucheinträge weder verschieben noch überlagern.
-- Das System muss den Buchtitel in der Farbrolle „Buchtitelfarbe“ darstellen (Farbrubrik offen, F6).
+- Das System muss den Buchtitel in der Farbrolle „Buchtitelfarbe“ darstellen (CEO: „dunkelbraun“; Farbrubrik „Dunkelbraun“).
+- Das System muss die Farbrubrik „Dunkelbraun“ als neue zentrale Farbrubrik bereitstellen (Name vom CEO-Wort, umbenennbar; Standardwert aus dem Referenzbild gemessen #392F25, kein Akzeptanzkriterium).
 
 **Leere Liste**
 - Wenn dem Abschnitt „Noch zu lesen“ kein Buch zugeordnet ist, muss das System anstelle der Buchliste den Leere-Liste-Platzhalter (REQ-011) darstellen.
@@ -61,8 +63,11 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 | Farbrolle | Element | Farbrubrik | Aussage des CEO |
 |---|---|---|---|
 | Abschnittsüberschriftfarbe | Überschrift „Noch zu lesen“ | Tertiär | „Farbe wie der große Titel 'Deine Bücher'“ |
-| Alle-ansehen-Farbe | Text „Alle ansehen ›“ | offen (F6) | „dezenter bordeauxfarbener Text“ |
-| Buchtitelfarbe | Buchtitel unter dem Cover | offen (F6) | – |
+| Alle-ansehen-Farbe | Text „Alle ansehen ›“ | Primär | „dezenter bordeauxfarbener Text“ |
+| Buchtitelfarbe | Buchtitel unter dem Cover | Dunkelbraun | „dunkelbraun“ |
+
+**Randbedingung: Demodaten für den Prototyp (kein App-Feature)**
+- Der Tester recherchiert drei Fantasy-Bücher und legt sie als Test-/Demodaten an, nur mit Buchtitel und Lesestatus, ohne Buchcover. Mindestens eines hat den Lesestatus *ungelesen*, sodass der Abschnitt im Prototyp mindestens einen Bucheintrag mit Cover-Platzhalter (REQ-010) zeigt. Kein Akzeptanzkriterium.
 
 **Orientierung am Referenzbild (kein Akzeptanzkriterium)**
 Schriftgröße und -stärke von Abschnittsüberschrift, „Alle ansehen ›“ und Buchtitel, Covergröße, Abstand Titel–Cover, Abstände zwischen den Büchern und äußere Seitenabstände orientieren sich am Referenzbild. Messwerte kann der Scrum Master hier ergänzen; sie bleiben Orientierung.
@@ -143,9 +148,26 @@ Schriftgröße und -stärke von Abschnittsüberschrift, „Alle ansehen ›“ u
 - **Wenn** die Seite „Bücher“ angezeigt wird
 - **Dann** sind alle Elemente mit dieser Farbrolle im geänderten Wert dargestellt
 
+### AK-14 „Alle ansehen ›“ bewirkt vorerst nichts
+- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Wenn** der Nutzer „Alle ansehen ›“ antippt
+- **Dann** ändert sich in der App nichts (kein neues Fenster, keine neue Ansicht, kein Wechsel des Menüpunkts, keine Änderung der Filterleiste oder der Buchliste)
+
+### AK-15 Buchtitel in Dunkelbraun, „Alle ansehen ›“ in Primär
+- **Gegeben** die Seite „Bücher“ zeigt mindestens einen Bucheintrag
+- **Wenn** Buchtitel und „Alle ansehen ›“ betrachtet werden
+- **Dann** ist der Buchtitel in der Farbe der Farbrubrik „Dunkelbraun“ dargestellt
+- **Und** „Alle ansehen ›“ in der Farbe der Farbrubrik „Primär“
+
+### AK-16 Vorbelegung: nur „ungelesen“
+- **Gegeben** je ein Buch mit jedem der Lesestatus *ungelesen*, *am lesen*, *gelesen*, *abgebrochen*, *Wunschliste* und die unveränderte Vorbelegung der Zuordnung
+- **Wenn** die Seite „Bücher“ angezeigt wird
+- **Dann** zeigt der Abschnitt „Noch zu lesen“ genau das Buch mit dem Lesestatus *ungelesen*
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Abschnitte „Saga“ und „Sammlung(en)“ aus dem Referenzbild (CEO: „Die Rubrik ‚Sammlungen‘ selbst soll nicht umgesetzt werden“; zu „Saga“ siehe F4).
+- Abschnitte „Sagas“ und „Sammlungen“ (Überschriften mit Platzhaltern: REQ-012; echte Saga-/Sammlungsfunktion nicht umgesetzt).
+- Die spätere Gesamtliste hinter „Alle ansehen ›“ (To-do, `docs/todo.md`).
 - Darstellung eines Buches ohne Cover im Detail (REQ-010) und der leeren Liste (REQ-011).
 - Anlegen von Büchern, Buchdetails, Antippen eines Bucheintrags.
 - Zusammenspiel mit der Filterlogik (REQ-007).
@@ -162,18 +184,17 @@ Schriftgröße und -stärke von Abschnittsüberschrift, „Alle ansehen ›“ u
 - **REQ-008:** Buchdaten und Lesestatus.
 - **REQ-010:** Cover-Platzhalter. **REQ-011:** Leere-Liste-Platzhalter.
 - **REQ-003:** Alle Texte in der App-Schrift.
+- **REQ-012:** Abschnitte „Sagas“ und „Sammlungen“ folgen unterhalb dieses Abschnitts.
 
 ## Offene Fragen
 
-- F1: Welche Lesestatus gehören zu „Noch zu lesen“?
-- F3: Was passiert vorerst beim Antippen von „Alle ansehen ›“?
-- F4: „Saga“ und „Sammlung“ jetzt schon anzeigen?
-- F5: Welche Bücher zeigt der Prototyp?
-- F6: Farbrubriken für „Alle ansehen ›“ und Buchtitel.
-- F7: Priorität.
+<!-- Muss vor Status "Abgestimmt" leer sein. -->
+
+- Keine.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Vorgabe „Noch zu lesen“ und der Chat-Aussage zu den Abschnittsüberschriften) | Anforderungsmanager |
+| 2026-11-09 | CEO-Antworten eingearbeitet: F1 Vorbelegung „ungelesen“ (neu AK-16). F3 „Alle ansehen ›“ bewirkt vorerst nichts (neu AK-14), Gesamtliste in To-do. F4 Sagas/Sammlungen ausgelagert in REQ-012. F5 Demodaten als Randbedingung. F6 „Alle ansehen ›“ = Primär, Buchtitel = neue Farbrubrik „Dunkelbraun“ (neu AK-15). F7 Must. Vom CEO bestätigt 2026-11-09, Status „Abgestimmt“ | Anforderungsmanager |
