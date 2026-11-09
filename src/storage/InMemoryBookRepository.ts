@@ -1,23 +1,23 @@
-import type { Book } from '../domain/book';
+import type { Buch } from '../domain/buch';
 import type { BookRepository } from './BookRepository';
 
 export class InMemoryBookRepository implements BookRepository {
-  private books = new Map<string, Book>();
+  private buecher = new Map<string, Buch>();
 
-  async list(): Promise<Book[]> {
-    return [...this.books.values()].map((b) => ({ ...b }));
+  async list(): Promise<Buch[]> {
+    return [...this.buecher.values()].map((b) => ({ ...b }));
   }
 
-  async get(id: string): Promise<Book | undefined> {
-    const b = this.books.get(id);
+  async get(id: string): Promise<Buch | undefined> {
+    const b = this.buecher.get(id);
     return b ? { ...b } : undefined;
   }
 
-  async save(book: Book): Promise<void> {
-    this.books.set(book.id, { ...book });
+  async save(buch: Buch): Promise<void> {
+    this.buecher.set(buch.id, { ...buch });
   }
 
   async remove(id: string): Promise<void> {
-    this.books.delete(id);
+    this.buecher.delete(id);
   }
 }

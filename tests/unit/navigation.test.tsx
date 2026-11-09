@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import Hauptnavigation from '@/navigation/Hauptnavigation';
 import { menuePunkte, startMenuePunkt, type MenuePunktId } from '@/navigation/menu';
 import { ansichten } from '@/views';
+import BuecherAnsicht from '@/views/BuecherAnsicht';
 import UnderConstruction from '@/views/UnderConstruction';
 
 // Inhalte als Data-URL (base64), um Kopie und Original byteweise zu vergleichen.
@@ -50,8 +51,10 @@ describe('Menü-Konfiguration', () => {
     expect(startMenuePunkt).toBe('start');
   });
 
-  it('hat für jeden Menüpunkt eine Ansicht, aktuell den Platzhalter', () => {
-    for (const p of menuePunkte) expect(ansichten[p.id]).toBe(UnderConstruction);
+  it('hat für jeden Menüpunkt eine Ansicht: „Bücher“ die Bücheransicht, sonst den Platzhalter', () => {
+    for (const p of menuePunkte) {
+      expect(ansichten[p.id]).toBe(p.id === 'buecher' ? BuecherAnsicht : UnderConstruction);
+    }
   });
 });
 

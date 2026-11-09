@@ -1,7 +1,7 @@
 ---
 id: REQ-008
 titel: Buchdaten und zentrale Definition der Lesestatus
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

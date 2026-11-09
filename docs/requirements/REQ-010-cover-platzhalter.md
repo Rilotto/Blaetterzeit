@@ -1,7 +1,7 @@
 ---
 id: REQ-010
 titel: Cover-Platzhalter für Bücher ohne Buchcover
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

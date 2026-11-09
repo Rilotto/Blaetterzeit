@@ -279,18 +279,34 @@ describe('REQ-002 Untere Hauptnavigation', () => {
       }
     });
 
-    it('[REQ-002/AK-5] unter src/ gibt es keine weiteren oder abweichenden Icon-Dateien', () => {
-      const refs = NAV_ITEMS.map(({ icon }) => fs.readFileSync(new URL(icon, REF_ICONS)));
-      const iconFiles = walk(SRC).filter(
-        (f) =>
-          /\.(png|svg|webp|jpe?g|gif|avif|ico)$/i.test(f.pathname) &&
-          (/\/icons?\//i.test(f.pathname) || /^icon/i.test(baseName(f))),
-      );
-      const foreign = iconFiles.filter((f) => {
-        const bytes = fs.readFileSync(f);
-        return !refs.some((r) => bytes.equals(r));
-      });
-      expect(foreign.map(relToSrc)).toEqual([]);
+    // Sprint 02: auf den Geltungsbereich von AK-5 zurückgeführt („Wenn die Hauptnavigation
+    // angezeigt wird … kein anderes Icon“). Icons anderer REQs (REQ-005 Regler/Plus, REQ-010
+    // Herz) dürfen unter src/ liegen, aber nicht in der Navigation verwendet werden.
+    // Begründung: sprints/sprint-02/testbericht.md, Abschnitt „Angepasste REQ-002-Tests“.
+    it('[REQ-002/AK-5] die Navigation verwendet keine weiteren oder abweichenden Icon-Dateien', () => {
+      const nav = renderApp();
+      const erlaubt = NAV_ITEMS.map(({ icon }) => icon.replace(/\.png$/, ''));
+      const quellen = [nav, ...Array.from(nav.querySelectorAll<HTMLElement>('*'))].flatMap((el) => [
+        ...(el.getAttribute('src') ? [el.getAttribute('src')!] : []),
+        ...[...(el.getAttribute('style') ?? '').matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)].map((m) => m[1]),
+      ]);
+      expect(quellen.length, 'Navigation ohne Bildquellen').toBeGreaterThanOrEqual(NAV_ITEMS.length);
+      const fremd = quellen
+        .map((q) => decodeURIComponent(q))
+        .filter((q) => !q.startsWith('data:') && !erlaubt.some((e) => q.includes(e)));
+      expect(fremd).toEqual([]);
+      const dataIcons = Array.from(nav.querySelectorAll('[data-icon]')).map((e) => e.getAttribute('data-icon'));
+      expect([...dataIcons].sort()).toEqual(NAV_ITEMS.map((i) => i.icon).sort());
+    });
+
+    it('[REQ-002/AK-5] Icon-Dateien unter src/ mit dem Namen eines CEO-Icons sind byte-identisch mit dem Original', () => {
+      // Schutz davor, dass ein CEO-Icon unter gleichem Namen verändert wird (gilt auch für icon-herz.png).
+      const refNamen = walk(REF_ICONS).map(baseName);
+      const abweichend = walk(SRC)
+        .filter((f) => refNamen.includes(baseName(f)))
+        .filter((f) => !fs.readFileSync(f).equals(fs.readFileSync(new URL(baseName(f), REF_ICONS))))
+        .map(relToSrc);
+      expect(abweichend).toEqual([]);
     });
   });
 
@@ -567,13 +583,17 @@ describe('REQ-002 Untere Hauptnavigation', () => {
       }
     });
 
-    it('[REQ-002/AK-13] kein Element im Inhaltsbereich überdeckt den Hintergrund mit einer eigenen Farbe (alle Ansichten)', () => {
+    // Sprint 02: auf AK-13 zurückgeführt. AK-13 verlangt den Hintergrund des Inhaltsbereichs
+    // selbst (= Rubrik „Hintergrund“), nicht dass kein Element darin eine Fläche hat (z. B. die
+    // Plus-Schaltfläche in „Primär“, REQ-005). Geprüft werden <main> und die Wurzel der Ansicht,
+    // die den Inhaltsbereich ausfüllt. Begründung: sprints/sprint-02/testbericht.md.
+    it('[REQ-002/AK-13] weder <main> noch die Wurzel der Ansicht überdecken den Hintergrund mit einer eigenen Farbe (alle Ansichten)', () => {
       render(<App />);
       const neutral = /^(transparent|none|inherit|initial|unset)$/i;
       for (const l of [...LABELS, 'Start']) {
         tap(l);
         const main = screen.getByRole('main');
-        const verstoesse = Array.from(main.querySelectorAll<HTMLElement>('*')).flatMap((el) =>
+        const verstoesse = [main, ...Array.from(main.children as HTMLCollectionOf<HTMLElement>)].flatMap((el) =>
           inlineDecls(el)
             .filter(([p]) => p === 'background' || p === 'background-color')
             .filter(([, v]) => !neutral.test(v) && !new RegExp(`^var\\(\\s*${RUBRIK_VAR_HINTERGRUND}\\s*\\)$`).test(v))
@@ -671,7 +691,18 @@ describe('REQ-002 Untere Hauptnavigation', () => {
       expect(screen.getByRole('main').textContent?.trim()).toBe(PLACEHOLDER);
     });
 
-    it.each(LABELS)('[REQ-002/AK-12] bei aktivem "%s" zeigt der Inhaltsbereich genau "under construction :)"', (label) => {
+    // Sprint 02: auf AK-12 zurückgeführt („Gegeben die Zielansicht des aktiven Menüpunkts ist
+    // noch nicht definiert“). „Bücher“ hat mit REQ-005 eine definierte Zielansicht und fällt
+    // heraus; dort prüft REQ-005/AK-11, dass der Platzhaltertext NICHT erscheint.
+    // Begründung: sprints/sprint-02/testbericht.md, Abschnitt „Angepasste REQ-002-Tests“.
+    const DEFINIERTE_ZIELANSICHTEN = ['Bücher']; // REQ-005
+    const OHNE_ZIELANSICHT = LABELS.filter((l) => !DEFINIERTE_ZIELANSICHTEN.includes(l));
+
+    it('[REQ-002/AK-12] Voraussetzung: es gibt weiterhin Menüpunkte ohne definierte Zielansicht', () => {
+      expect(OHNE_ZIELANSICHT).toEqual(['Start', 'Bibliothek', 'Statistik', 'Profil']);
+    });
+
+    it.each(OHNE_ZIELANSICHT)('[REQ-002/AK-12] bei aktivem "%s" (ohne definierte Zielansicht) zeigt der Inhaltsbereich genau "under construction :)"', (label) => {
       renderApp();
       tap(label);
       const main = screen.getByRole('main');

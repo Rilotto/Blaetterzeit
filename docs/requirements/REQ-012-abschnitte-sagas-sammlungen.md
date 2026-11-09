@@ -1,7 +1,7 @@
 ---
 id: REQ-012
 titel: Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

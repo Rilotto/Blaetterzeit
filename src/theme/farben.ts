@@ -5,7 +5,15 @@
 // Farbänderungen des CEO ("Primärfarbe auf #… ändern") werden nur hier
 // in `farbrubriken` eingetragen. Rubriknamen sind hier ebenfalls änderbar.
 
-export type FarbrubrikId = 'hintergrund' | 'primaer' | 'sekundaer' | 'tertiaer';
+export type FarbrubrikId =
+  | 'hintergrund'
+  | 'primaer'
+  | 'sekundaer'
+  | 'tertiaer'
+  | 'ghost'
+  | 'ghostframe'
+  | 'schrifttertiaer'
+  | 'dunkelbraun';
 
 export interface Farbrubrik {
   /** Anzeigename der Rubrik (vom CEO vergeben bzw. Arbeitsname). */
@@ -20,6 +28,12 @@ export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
   primaer: { name: 'Primär', wert: '#76312C' },
   sekundaer: { name: 'Sekundär', wert: '#D9C8AE' },
   tertiaer: { name: 'Tertiär', wert: '#6B5849' },
+  // REQ-006: neue Rubriken, Standardwerte aus dem Referenzbild.
+  ghost: { name: 'Ghost', wert: '#ECE8DC' },
+  ghostframe: { name: 'GhostFrame', wert: '#DFD9CB' },
+  schrifttertiaer: { name: 'Schrift tertiär', wert: '#685849' },
+  // REQ-009: Buchtitel.
+  dunkelbraun: { name: 'Dunkelbraun', wert: '#392F25' },
 };
 
 export type NavigationsFarbrolle =
@@ -36,11 +50,65 @@ export const navigationsFarbrollen: Record<NavigationsFarbrolle, FarbrubrikId> =
   inaktivfarbe: 'tertiaer',
 };
 
+/** Farbrollen der Seite „Bücher“ (REQ-005, REQ-006, REQ-009 bis REQ-012). */
+export type BuecherFarbrolle =
+  | 'ueberschrift'
+  | 'filterschaltflaecheHintergrund'
+  | 'filterschaltflaecheVordergrund'
+  | 'plusschaltflaecheHintergrund'
+  | 'plusschaltflaecheVordergrund'
+  | 'filterAktivHintergrund'
+  | 'filterAktivSchrift'
+  | 'filterInaktivHintergrund'
+  | 'filterInaktivRahmen'
+  | 'filterInaktivSchrift'
+  | 'abschnittsueberschrift'
+  | 'alleAnsehen'
+  | 'buchtitel'
+  | 'coverplatzhalterFlaeche'
+  | 'coverplatzhalterIcon'
+  | 'leerplatzhalterFlaeche'
+  | 'leerplatzhalterRahmen'
+  | 'leerplatzhalterIcon'
+  | 'leerplatzhalterText';
+
+/** Aus welcher Farbrubrik jede Farbrolle der Seite „Bücher“ ihre Farbe bezieht (Tabellen „Farben“ der REQs). */
+export const buecherFarbrollen: Record<BuecherFarbrolle, FarbrubrikId> = {
+  ueberschrift: 'tertiaer',
+  filterschaltflaecheHintergrund: 'hintergrund',
+  filterschaltflaecheVordergrund: 'tertiaer',
+  plusschaltflaecheHintergrund: 'primaer',
+  plusschaltflaecheVordergrund: 'hintergrund',
+  filterAktivHintergrund: 'tertiaer',
+  filterAktivSchrift: 'hintergrund',
+  filterInaktivHintergrund: 'ghost',
+  filterInaktivRahmen: 'ghostframe',
+  filterInaktivSchrift: 'schrifttertiaer',
+  abschnittsueberschrift: 'tertiaer',
+  alleAnsehen: 'primaer',
+  buchtitel: 'dunkelbraun',
+  coverplatzhalterFlaeche: 'ghost',
+  coverplatzhalterIcon: 'primaer',
+  leerplatzhalterFlaeche: 'ghost',
+  leerplatzhalterRahmen: 'ghostframe',
+  leerplatzhalterIcon: 'primaer',
+  leerplatzhalterText: 'primaer',
+};
+
 /** Name der CSS-Variable einer Farbrubrik, z. B. `--bz-farbe-primaer`. */
 export const rubrikVariable = (id: FarbrubrikId): string => `--bz-farbe-${id}`;
 
 /** CSS-Ausdruck, der die Farbe einer Farbrubrik liefert, z. B. `var(--bz-farbe-hintergrund)`. */
 export const rubrikFarbe = (id: FarbrubrikId): string => `var(${rubrikVariable(id)})`;
+
+/** CSS-Ausdruck einer Farbrolle der Seite „Bücher“, z. B. `var(--bz-farbe-tertiaer)`. */
+export const buecherFarbe = (rolle: BuecherFarbrolle): string => rubrikFarbe(buecherFarbrollen[rolle]);
+
+/**
+ * Dezenter Schatten der Coverflächen (REQ-009). Die Schattenfarbe ist aus der
+ * Rubrik „Dunkelbraun“ abgeleitet (abgeschwächt), damit kein eigener Farbwert entsteht.
+ */
+export const coverSchatten = `0 2px 6px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 25%, transparent)`;
 
 /**
  * Setzt alle Farb-CSS-Variablen auf ein Element (z. B. `<html>`), damit auch
