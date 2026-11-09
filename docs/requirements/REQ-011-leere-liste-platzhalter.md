@@ -1,7 +1,7 @@
 ---
 id: REQ-011
 titel: Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

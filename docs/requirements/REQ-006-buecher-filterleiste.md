@@ -1,7 +1,7 @@
 ---
 id: REQ-006
 titel: Seite „Bücher“ – horizontal wischbare Filterleiste
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

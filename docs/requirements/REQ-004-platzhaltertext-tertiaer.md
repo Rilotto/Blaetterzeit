@@ -1,7 +1,7 @@
 ---
 id: REQ-004
 titel: Platzhaltertext im Inhaltsbereich in Farbrubrik Tertiär
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

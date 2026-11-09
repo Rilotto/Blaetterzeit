@@ -27,3 +27,9 @@
 - **F-1:** Der Text von REQ-006 sagt noch „Bereich unterhalb bleibt leer“. Das muss vor dem Einfrieren bereinigt werden (Anforderungsmanager).
 - **F-4 und F-5:** Laden der Bücher ohne Fehlerbehandlung. Der Coverschatten auf älteren WebViews muss auf dem Gerät geprüft werden.
 - **Manuelle Prüfliste:** M-B1 bis M-B14 in `testbericht.md`.
+
+## Ergebnis der Abnahme durch den CEO (2026-11-09)
+- Horizontale Filterleiste: geprüft, „wie gewünscht umgesetzt“.
+- Punkte 1–4: abgenommen. Das betrifft Farben und Aufbau, die Icons für Regler und Plus, die Bücher unter „Noch zu lesen“ und die vom Team gewählten Werte.
+- REQ-004 bis REQ-012 stehen auf „Implementiert“.
+- **Neuer Wunsch:** Unter den Platzhaltern soll der Text „Wie wäre es mit einem neuen Buch?“ stehen. Welche Platzhalter gemeint sind, wird mit dem CEO geklärt, danach folgt ein neuer bzw. geänderter REQ.
