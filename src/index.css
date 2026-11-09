@@ -1,10 +1,10 @@
-:root {
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  color-scheme: light dark;
-  line-height: 1.5;
+/* Farben kommen ausschließlich aus src/theme/ (CSS-Variablen, in main.tsx an <html> gesetzt),
+   die Schrift aus src/theme/schrift.ts. */
+html,
+body {
+  background-color: var(--bz-farbe-hintergrund);
 }
 
 body {
   margin: 0;
-  padding: env(safe-area-inset-top) 1rem env(safe-area-inset-bottom);
 }

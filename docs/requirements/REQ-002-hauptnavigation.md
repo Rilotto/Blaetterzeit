@@ -1,7 +1,7 @@
 ---
 id: REQ-002
 titel: Untere Hauptnavigation mit fünf Menüpunkten
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -31,17 +31,18 @@ Laut CEO ist darauf **nur die untere Navigationsleiste** relevant. Das Bild dien
 - Das System muss für die Menüpunkte ausschließlich die vom CEO bereitgestellten Icon-Dateien verwenden. Es dürfen keine selbst ausgewählten Icons und keine Icons aus einer Icon-Bibliothek verwendet werden.
 - Der CEO stellt je Menüpunkt genau eine Icon-Datei bereit. Es gibt keine getrennten Dateien für den aktiven und den inaktiven Zustand.
 - Das System muss das Icon eines Menüpunkts selbst in der Farbe des jeweiligen Zustands (Aktivfarbe bzw. Inaktivfarbe) einfärben (CEO: „Du musst sie nur umfärben.“).
-- Das System muss die Icons den Menüpunkten gemäß folgender Tabelle zuordnen:
+- Das System muss die Icons den Menüpunkten gemäß folgender Tabelle zuordnen (vom CEO bestätigt: „Haus -> Start; offenes Buch -> Bücher; Bücherregal -> Bibliothek; Diagramm -> Statistik; Person -> Profil“):
 
-| Menüpunkt | Icon-Datei (unter `docs/requirements/referenzen/icons/`) | Status der Zuordnung |
-|---|---|---|
-| Start | `icon-haus.png` | eindeutig |
-| Bücher | `icon-offenes-buch.png` | **offen, Bestätigung CEO ausstehend (F1)** |
-| Bibliothek | `icon-buecherregal.png` | **offen, Bestätigung CEO ausstehend (F1)** |
-| Statistik | `icon-diagramm.png` | eindeutig |
-| Profil | `icon-person.png` | eindeutig |
+| Menüpunkt | Icon-Datei (unter `docs/requirements/referenzen/icons/`) |
+|---|---|
+| Start | `icon-haus.png` |
+| Bücher | `icon-offenes-buch.png` |
+| Bibliothek | `icon-buecherregal.png` |
+| Statistik | `icon-diagramm.png` |
+| Profil | `icon-person.png` |
 
 Eigenschaften der gelieferten Dateien: je 512 × 512 Pixel, PNG, schwarze Linien auf transparentem Hintergrund.
+Hinweis: Im Referenzbild steht das offene Buch unter „Bibliothek“. Maßgeblich ist die obige, vom CEO bestätigte Zuordnung.
 
 **Aktiver Menüpunkt**
 - Wenn die App geöffnet wird, muss das System den Menüpunkt „Start“ als aktiven Menüpunkt darstellen.
@@ -52,26 +53,30 @@ Eigenschaften der gelieferten Dateien: je 512 × 512 Pixel, PNG, schwarze Linien
 - Das System muss die übrigen Menüpunkte in der Inaktivfarbe darstellen.
 
 **Inhaltsbereich**
-- Solange die Zielansicht eines Menüpunkts nicht definiert ist, muss das System bei aktivem Menüpunkt im Inhaltsbereich mittig den Text „under construction :)“ darstellen. Das gilt für alle fünf Menüpunkte.
+- Solange die Zielansicht eines Menüpunkts nicht definiert ist, muss das System bei aktivem Menüpunkt im Inhaltsbereich horizontal und vertikal mittig den Text „under construction :)“ darstellen. Das gilt für alle fünf Menüpunkte.
+- Das System muss den Hintergrund des Inhaltsbereichs in allen Ansichten, einschließlich der Platzhalteransichten, in derselben Farbe darstellen wie den Hintergrund der Hauptnavigation. Beide beziehen ihre Farbe aus der zentral definierten Farbrubrik „Hintergrund“ (CEO, wörtlich: „Zum Seitenhintergrund: Gleiche Farbe verwenden wie in der Navigationsleiste. Auch bei den noch nicht festgelegten Platzhalter-Seiten.“).
 
 **Farben**
-- Das System muss die Farben der Hauptnavigation als benannte, zentral definierte Farben beziehen.
+- Das System muss die Farben der App als allgemeine, zentral definierte Farbrubriken führen (CEO: „Übernehme sie in die Rubriken Hintergrund, primär, sekundär etc.“).
+- Das System muss die vier Farbrollen der Hauptnavigation (Navigationshintergrund, Hervorhebungsfarbe, Aktivfarbe, Inaktivfarbe) aus diesen Farbrubriken beziehen, gemäß folgender Tabelle.
 - Die Farben sind aktuell ausschließlich durch den CEO über den Chat änderbar (CEO: „Aktuell sollen diese nur hier verwaltbar sein.“). Die App bietet dafür keine Einstellungsmöglichkeit.
-- Aktuelle Standardwerte (aus dem Referenzbild gemessen, **Bestätigung CEO ausstehend, F2**):
+- Aktuelle Standardwerte (aus dem Referenzbild gemessen, vom CEO bestätigt: „Ja das passt erstmal.“):
 
-| Farbe (vorläufiger Name) | Beschreibung des CEO | aktueller Standardwert |
-|---|---|---|
-| Navigationshintergrund | heller, cremefarbener Ton | `#FAF6EB` |
-| Hervorhebungsfarbe | beige | `#D9C8AE` |
-| Aktivfarbe | bordeauxrot | `#76312C` |
-| Inaktivfarbe | gedeckter Braunton | `#6B5849` |
+| Farbrubrik | Farbrolle in der Hauptnavigation | Beschreibung des CEO | aktueller Standardwert |
+|---|---|---|---|
+| Hintergrund | Navigationshintergrund | heller, cremefarbener Ton | `#FAF6EB` |
+| Primär | Aktivfarbe | bordeauxrot | `#76312C` |
+| Sekundär | Hervorhebungsfarbe | beige | `#D9C8AE` |
+| Tertiär | Inaktivfarbe | gedeckter Braunton | `#6B5849` |
 
-- Konkrete Farbwerte sind keine Akzeptanzkriterien (siehe CLAUDE.md, Abschnitt „Farben auf Zuruf“). Eingefroren wird nur, welche Farbe welches Element färbt.
+- Die vierte Farbrubrik heißt „Tertiär“ (CEO: „Die vierte Rubrik nennen wir teritär.“). Sie ersetzt den bisherigen Arbeitsnamen „Inaktiv“. Die Farbrolle „Inaktivfarbe“ der Hauptnavigation bleibt unverändert und bezieht ihren Wert weiterhin aus der vierten Farbrubrik.
+- Konkrete Farbwerte und Rubriknamen sind keine Akzeptanzkriterien (siehe CLAUDE.md, Abschnitt „Farben auf Zuruf“). Eingefroren wird nur, welche Farbrolle welches Element färbt.
 
 **Randbedingungen (technische Vorgaben des CEO)**
 - Das System muss den aktiven Menüpunkt dynamisch verwalten.
 - Das System muss die Zuordnung der Icons zu den Menüpunkten an einer zentralen Stelle festlegen.
 - Das System muss so aufgebaut sein, dass jeder der fünf Menüpunkte später eine eigene Ansicht öffnen kann.
+- Oberer Abstand zur Statusleiste (randlose Darstellung): Der vom Entwickler ergänzte obere Abstand des Inhalts zur Statusleiste des Geräts ist vom CEO vorläufig akzeptiert (CEO, wörtlich: „Das passt erstmal, ich schaue mir das im Prototypen an.“). Die Prüfung erfolgt durch den CEO im Prototyp. Er ist kein Akzeptanzkriterium dieses REQ.
 
 ## Akzeptanzkriterien
 
@@ -84,7 +89,7 @@ Eigenschaften der gelieferten Dateien: je 512 × 512 Pixel, PNG, schwarze Linien
 - **Gegeben** die App ist geöffnet
 - **Wenn** der Nutzer den Bildschirm betrachtet
 - **Dann** befindet sich die Hauptnavigation am unteren Bildschirmrand
-- **Und** ihr Hintergrund ist in der Farbe „Navigationshintergrund“ dargestellt
+- **Und** ihr Hintergrund ist in der Farbrolle „Navigationshintergrund“ dargestellt
 
 ### AK-3 Gleichmäßige Verteilung
 - **Gegeben** die Hauptnavigation wird angezeigt
@@ -141,15 +146,23 @@ Eigenschaften der gelieferten Dateien: je 512 × 512 Pixel, PNG, schwarze Linien
 ### AK-12 Platzhaltertext im Inhaltsbereich
 - **Gegeben** die Zielansicht des aktiven Menüpunkts ist noch nicht definiert
 - **Wenn** einer der fünf Menüpunkte aktiv ist
-- **Dann** zeigt der Inhaltsbereich mittig genau den Text „under construction :)“
+- **Dann** zeigt der Inhaltsbereich genau den Text „under construction :)“
+- **Und** der Text ist im Inhaltsbereich horizontal und vertikal mittig ausgerichtet
+
+### AK-13 Hintergrund des Inhaltsbereichs wie Hauptnavigation
+- **Gegeben** die App ist geöffnet
+- **Wenn** ein beliebiger der fünf Menüpunkte aktiv ist (auch wenn dessen Zielansicht noch eine Platzhalteransicht ist)
+- **Dann** ist der Hintergrund des Inhaltsbereichs in derselben Farbe dargestellt wie der Hintergrund der Hauptnavigation
+- **Und** beide beziehen ihre Farbe aus der zentral definierten Farbrubrik „Hintergrund“ (kein eigener, davon abweichender Farbwert)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Inhalte und Funktionen der Zielansichten der fünf Menüpunkte. Der CEO hat sie noch nicht definiert („Für noch nicht definierte Zielansichten sollen keine umfangreichen Funktionen erfunden werden.“).
 - Alle übrigen Elemente des Referenzbilds (Überschrift, Filter, Buchliste, Sagas, Sammlungen usw.). CEO: „Nein, bitte erstmal nur die Leiste.“
 - Auswahl oder Gestaltung der Icons. Die Icons stellt der CEO selbst bereit.
-- Konkrete Farbwerte als Akzeptanzkriterium (siehe „Farben auf Zuruf“).
+- Konkrete Farbwerte und Namen der Farbrubriken als Akzeptanzkriterium (siehe „Farben auf Zuruf“).
 - Eine Möglichkeit für den Nutzer, Farben in der App zu ändern (Einstellungen, Themes). Das ist Gegenstand von REQ-001 und für einen späteren Prototyp vorgesehen.
+- Änderungen am Standard-Fokusrahmen und an der Standard-Tap-Hervorhebung des Systems (Browser/WebView). Sie bleiben unverändert (CEO-Entscheidung, wörtlich: „Lass ihn erstmal drin und ich gebe ggf. die Entfernung in einem zukünftigen Prototypen in Auftrag.“). Eine Entfernung wäre ein späterer, eigener Auftrag des CEO.
 
 ## Qualitätsanforderungen
 
@@ -157,17 +170,16 @@ Eigenschaften der gelieferten Dateien: je 512 × 512 Pixel, PNG, schwarze Linien
 
 ## Abhängigkeiten
 
-- **Icon-Dateien:** Vom CEO geliefert unter `docs/requirements/referenzen/icons/`. Die Umsetzung von AK-5 setzt die bestätigte Zuordnungstabelle voraus (F1).
-- **Prozess „Farben auf Zuruf“:** Der CEO gibt Farbänderungen im Chat als Liste aus Name und Farbwert durch (CEO: „z. B. Hintergrund #FFFFFF, Primärfarbe: #FFFF22, …“). Die zentral definierten Standardwerte werden dann durch den Entwickler angepasst.
-- **REQ-001 (Themes, Entwurf, später):** Später sollen Themes das Aussehen der App ändern. Die zentrale Definition der Farben in diesem REQ ist die Grundlage dafür. Wie die vier Navigationsfarben in einem Theme abgebildet werden, wird erst bei REQ-001 geklärt.
+- **Icon-Dateien:** Vom CEO geliefert unter `docs/requirements/referenzen/icons/`, Zuordnung bestätigt (Abschnitt „Icons“).
+- **Prozess „Farben auf Zuruf“:** Der CEO gibt Farbänderungen im Chat als Liste aus Rubrikname und Farbwert durch (CEO: „z. B. Hintergrund #FFFFFF, Primärfarbe: #FFFF22, …“). Die zentral definierten Standardwerte werden dann durch den Entwickler angepasst.
+- **REQ-001 (Themes, Entwurf, später):** Später sollen Themes das Aussehen der App ändern. Die zentral definierten Farbrubriken in diesem REQ sind die Grundlage dafür. Wie die Farbrubriken in einem Theme abgebildet werden, wird erst bei REQ-001 geklärt.
 - **Glossar:** Der Begriff „Bibliothek“ ist bereits als „Gesamtheit aller erfassten Bücher“ definiert. Daneben gibt es jetzt die Menüpunkte „Bücher“ und „Bibliothek“. Die Abgrenzung wird erst bei der Definition der Zielansichten geklärt.
 
 ## Offene Fragen
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- F1: Icon-Zuordnung. Gehört `icon-offenes-buch.png` zu „Bücher“ und `icon-buecherregal.png` zu „Bibliothek“ (Reihenfolge der Lieferung)? Im Referenzbild steht das offene Buch unter „Bibliothek“.
-- F2: Farbwerte. Bestätigst du die aus dem Referenzbild gemessenen Standardwerte Navigationshintergrund `#FAF6EB`, Hervorhebungsfarbe `#D9C8AE`, Aktivfarbe `#76312C`, Inaktivfarbe `#6B5849`?
+- Keine.
 
 ## Änderungshistorie
 
@@ -175,3 +187,6 @@ Eigenschaften der gelieferten Dateien: je 512 × 512 Pixel, PNG, schwarze Linien
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf ausschließlich aus der Vorgabe des CEO zur unteren Hauptnavigation, mit Referenzbild) | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet: Priorität „Must“ und AK-8 bestätigt; Icons geliefert (eine Datei je Menüpunkt, Einfärben durch die App), Zuordnungstabelle ergänzt; Farben zentral und vorerst nur über den Chat änderbar, aktuelle Standardwerte aus Referenzbild eingetragen; Startzustand „Start“ (neu AK-11); Platzhaltertext „under construction :)“ (neu AK-12); Rolle des Referenzbilds präzisiert. Offene Fragen F1 bis F6 beantwortet, neu: F1 Icon-Zuordnung, F2 Bestätigung Farbwerte | Anforderungsmanager |
+| 2026-11-09 | Antworten des CEO eingearbeitet: F1 geschlossen (Icon-Zuordnung bestätigt: offenes Buch -> Bücher, Bücherregal -> Bibliothek); F2 geschlossen (Farbwerte bestätigt, Farben werden als allgemeine Farbrubriken Hintergrund, Primär, Sekundär sowie vierte Rubrik mit Arbeitsnamen „Inaktiv“ geführt, Navigation bezieht ihre Farbrollen daraus); „mittig“ beim Platzhaltertext als horizontal und vertikal mittig präzisiert (AK-12). Status auf „Abgestimmt“ gesetzt nach ausdrücklicher Bestätigung des CEO zur Umsetzung | Anforderungsmanager |
+| 2026-11-09 | Vierte Farbrubrik vom CEO benannt: „Tertiär“ (CEO: „Die vierte Rubrik nennen wir teritär.“) ersetzt den Arbeitsnamen „Inaktiv“. Reine Namensänderung, Farbwert `#6B5849` und Verhalten (Farbrolle Inaktivfarbe, alle AKs) unverändert; Hinweis zum Arbeitsnamen in „Offene Fragen“ entfernt. Status unverändert „In Umsetzung“ | Anforderungsmanager |
+| 2026-11-09 | CEO-Feedback eingearbeitet. (1) Neu: Hintergrund des Inhaltsbereichs aller Ansichten inkl. Platzhalteransichten in derselben Farbe wie die Hauptnavigation, Farbrubrik „Hintergrund“ (Anforderung im Abschnitt „Inhaltsbereich“, neu AK-13). Abstimmungsnachweis, wörtlich: „Zum Seitenhintergrund: Gleiche Farbe verwenden wie in der Navigationsleiste. Auch bei den noch nicht festgelegten Platzhalter-Seiten. Danke!“ (2) Abgrenzung ergänzt: Standard-Fokusrahmen und Tap-Hervorhebung des Systems bleiben unverändert (CEO-Entscheidung, ggf. späterer Auftrag). (3) Randbedingung ergänzt: oberer Abstand zur Statusleiste (randlose Darstellung) vom CEO vorläufig akzeptiert, Prüfung im Prototyp. AK-1 bis AK-12 unverändert. Status unverändert „In Umsetzung“ | Anforderungsmanager |
