@@ -1,7 +1,7 @@
 ---
 id: REQ-034
 titel: Buchdaten dauerhaft speichern
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

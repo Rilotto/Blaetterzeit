@@ -7,8 +7,11 @@
  *  - IDs: ungelesen, am_lesen, gelesen, abgebrochen, wunschliste
  *  - Speicherzugriff nur über die Repository-Schnittstelle (ADR-0002: createBookRepository aus @/storage)
  *  - Demodaten: demo/testbuecher.json, Array von { id, titel, status }
+ *  - AK-6 (Sprint 04): optionales Feld autor?: string; geprüft im Arbeitsspeicher und in der
+ *    dauerhaften Web-Variante (fake-indexeddb, neue Instanz nach neu geladenen Modulen)
  */
-import { describe, expect, it } from 'vitest';
+import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { LESESTATUS, type Buch } from '@/domain/buch';
 import { createBookRepository } from '@/storage';
 
@@ -187,6 +190,65 @@ describe('REQ-008 Buchdaten und Lesestatus', () => {
         .filter(({ text }) => /bezeichnung\s*:/.test(text))
         .map((q) => q.datei);
       expect(treffer).toEqual([]);
+    });
+  });
+
+  // ---------------------------------------------------------------- AK-6
+  describe('AK-6 Optionaler Autor', () => {
+    afterEach(() => vi.unstubAllGlobals());
+    const MIT: Buch = { id: '08000000-0000-4000-8000-000000000061', titel: 'Mit Autor', status: 'ungelesen', autor: 'Vorname Nachname' };
+    const OHNE: Buch = { id: '08000000-0000-4000-8000-000000000062', titel: 'Ohne Autor', status: 'gelesen', cover: COVER };
+    async function dauerhaft() {
+      vi.stubGlobal('indexedDB', new IDBFactory());
+      vi.stubGlobal('IDBKeyRange', IDBKeyRange);
+      vi.resetModules();
+      const a = ((await import('@/storage')) as typeof import('@/storage')).createBookRepository();
+      return {
+        a,
+        neu: async () => {
+          vi.resetModules();
+          return ((await import('@/storage')) as typeof import('@/storage')).createBookRepository();
+        },
+      };
+    }
+
+    it('[REQ-008/AK-6] Buch mit Autor „Vorname Nachname“ und Buch ohne Autor bleiben über das Repository unverändert', async () => {
+      const repo = createBookRepository();
+      await repo.save(MIT);
+      await repo.save(OHNE);
+      expect(await repo.get(MIT.id)).toEqual(MIT);
+      const o = await repo.get(OHNE.id);
+      expect(o).toEqual(OHNE);
+      expect(o).not.toHaveProperty('autor');
+    });
+
+    it('[REQ-008/AK-6] dauerhafte Web-Variante: Autor und fehlender Autor bleiben nach neuer Instanz erhalten', async () => {
+      const { a, neu } = await dauerhaft();
+      await a.save(MIT);
+      await a.save(OHNE);
+      const b = await neu();
+      expect(await b.get(MIT.id)).toEqual(MIT);
+      expect(await b.get(OHNE.id)).toEqual(OHNE);
+      expect(await b.get(OHNE.id)).not.toHaveProperty('autor');
+    });
+
+    it.each(['Alchemised', 'SenLinYu', 'Ödön von Horváth', 'J. R. R. Tolkien', 'A'.repeat(300)])(
+      '[REQ-008/AK-6] genau ein Autor, auch nur ein Name oder Sonderzeichen, bleibt unverändert: %s',
+      async (autor) => {
+        const { a, neu } = await dauerhaft();
+        const b: Buch = { id: uuid(), titel: 'T', status: 'ungelesen', autor };
+        await a.save(b);
+        expect((await (await neu()).get(b.id))?.autor).toBe(autor);
+        expect(typeof (await a.get(b.id))?.autor, 'genau ein Autor als Text, keine Liste').toBe('string');
+      },
+    );
+
+    it('[REQ-008/AK-6] Autor entfernen (Überschreiben ohne Autor) liefert danach ein Buch ohne Autor', async () => {
+      const repo = createBookRepository();
+      await repo.save(MIT);
+      const { autor: _weg, ...ohne } = MIT;
+      await repo.save(ohne);
+      expect(await repo.get(MIT.id)).not.toHaveProperty('autor');
     });
   });
 });

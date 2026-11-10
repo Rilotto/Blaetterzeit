@@ -26,6 +26,23 @@ export const MIGRATIONEN: readonly Migration[] = [
       )`,
     ],
   },
+  {
+    version: 2,
+    beschreibung: 'Bücher mit allen Angaben (REQ-034, REQ-008, REQ-033)',
+    anweisungen: [
+      `CREATE TABLE IF NOT EXISTS buch (
+        id TEXT NOT NULL PRIMARY KEY,
+        titel TEXT NOT NULL,
+        status TEXT NOT NULL,
+        autor TEXT,
+        erscheinungsjahr INTEGER,
+        erscheinungsdatum TEXT,
+        seitenanzahl INTEGER,
+        cover TEXT,
+        geaendert TEXT NOT NULL
+      )`,
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

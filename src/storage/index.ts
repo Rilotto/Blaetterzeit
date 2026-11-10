@@ -1,9 +1,11 @@
 import { Capacitor } from '@capacitor/core';
 import type { BookRepository } from './BookRepository';
+import { IndexedDbBookRepository } from './IndexedDbBookRepository';
 import { InMemoryBookRepository } from './InMemoryBookRepository';
 import type { ImageStore } from './ImageStore';
 import { InMemoryImageStore } from './InMemoryImageStore';
 import { IndexedDbImageStore } from './IndexedDbImageStore';
+import { RueckfallBookRepository } from './RueckfallBookRepository';
 import { RueckfallImageStore } from './RueckfallImageStore';
 
 export type { BookRepository, ImageStore };
@@ -12,11 +14,29 @@ export { BILDBEREICHE } from './ImageStore';
 
 /**
  * Einzige Stelle, an der entschieden wird, welche Speicher-Implementierung läuft.
- * Bücher: In-Memory (Demodaten, IDs aus demo/testbuecher.json sind stabil).
- * Persistenz der Bücher per SQLite ist bewusst ein eigener REQ.
+ * Bücher (REQ-034):
+ *  - Android-APK: SQLite (Tabelle `buch`, Migration 2)
+ *  - Web/Prototyp: IndexedDB
+ *  - ohne IndexedDB (Testumgebung): Arbeitsspeicher
+ * Lässt sich der dauerhafte Speicher nicht einrichten, wird im Arbeitsspeicher weitergearbeitet.
  */
 export function createBookRepository(): BookRepository {
-  return new InMemoryBookRepository();
+  const meldung = (fehler: unknown) => console.warn('Buchspeicher nicht dauerhaft verfügbar:', fehler);
+  if (Capacitor.isNativePlatform()) {
+    return new RueckfallBookRepository(async () => {
+      const [{ sqliteOeffnen }, { SqliteBookRepository }] = await Promise.all([
+        import('./sqlite/capacitorSqlite'),
+        import('./SqliteBookRepository'),
+      ]);
+      return new SqliteBookRepository(await sqliteOeffnen());
+    }, meldung);
+  }
+  if (typeof indexedDB === 'undefined') return new InMemoryBookRepository();
+  return new RueckfallBookRepository(async () => {
+    const repo = new IndexedDbBookRepository(indexedDB);
+    await repo.bereit();
+    return repo;
+  }, meldung);
 }
 
 /**

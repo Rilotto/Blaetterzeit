@@ -145,6 +145,64 @@ export const buchdetailsFarbrollen: Record<BuchdetailsFarbrolle, FarbrubrikId> =
   bestaetigenSchrift: 'hintergrund',
 };
 
+/** Farbrollen „Buch anlegen“: Menü „Buch hinzufügen“ (REQ-029) und Blatt „Manueller Eintrag“ (REQ-030 bis REQ-032). */
+export type BuchAnlegenFarbrolle =
+  | 'menueFlaeche'
+  | 'menueRahmen'
+  | 'menueIconKachel'
+  | 'menueIcon'
+  | 'menueOptionTitel'
+  | 'menueOptionUntertitel'
+  | 'blattFlaeche'
+  | 'ziehgriff'
+  | 'blattUeberschrift'
+  | 'schliessenFlaeche'
+  | 'schliessenRahmen'
+  | 'schliessenIcon'
+  | 'coverFeldFlaeche'
+  | 'coverFeldRahmen'
+  | 'coverFeldInhalt'
+  | 'formularFlaeche'
+  | 'formularRahmen'
+  | 'feldBeschriftung'
+  | 'platzhalter'
+  | 'eingabe'
+  | 'trennlinie'
+  | 'erscheinungsdatum'
+  | 'hinzufuegenFlaeche'
+  | 'hinzufuegenSchrift'
+  | 'fehler';
+
+/** Aus welcher Farbrubrik jede Farbrolle „Buch anlegen“ ihre Farbe bezieht (Tabellen „Farben“ in REQ-029/REQ-030/REQ-031). */
+export const buchAnlegenFarbrollen: Record<BuchAnlegenFarbrolle, FarbrubrikId> = {
+  menueFlaeche: 'hintergrund',
+  menueRahmen: 'ghostframe',
+  menueIconKachel: 'ghost',
+  menueIcon: 'primaer',
+  menueOptionTitel: 'dunkelbraun',
+  menueOptionUntertitel: 'tertiaer',
+  blattFlaeche: 'hintergrund',
+  ziehgriff: 'tertiaer',
+  blattUeberschrift: 'dunkelbraun',
+  schliessenFlaeche: 'ghost',
+  schliessenRahmen: 'ghostframe',
+  schliessenIcon: 'dunkelbraun',
+  coverFeldFlaeche: 'ghost',
+  coverFeldRahmen: 'ghostframe',
+  coverFeldInhalt: 'tertiaer',
+  formularFlaeche: 'ghost',
+  formularRahmen: 'ghostframe',
+  feldBeschriftung: 'dunkelbraun',
+  platzhalter: 'tertiaer',
+  eingabe: 'dunkelbraun',
+  trennlinie: 'ghostframe',
+  erscheinungsdatum: 'primaer',
+  hinzufuegenFlaeche: 'primaer',
+  hinzufuegenSchrift: 'hintergrund',
+  // Hinweis „Bitte gib einen Titel ein“ und Hervorhebung eines ungültigen Jahres (REQ-031).
+  fehler: 'primaer',
+};
+
 /** Name der CSS-Variable einer Farbrubrik, z. B. `--bz-farbe-primaer`. */
 export const rubrikVariable = (id: FarbrubrikId): string => `--bz-farbe-${id}`;
 
@@ -156,6 +214,18 @@ export const buecherFarbe = (rolle: BuecherFarbrolle): string => rubrikFarbe(bue
 
 /** CSS-Ausdruck einer Farbrolle der Buchdetails, z. B. `var(--bz-farbe-tertiaer)`. */
 export const buchdetailsFarbe = (rolle: BuchdetailsFarbrolle): string => rubrikFarbe(buchdetailsFarbrollen[rolle]);
+
+/** CSS-Ausdruck einer Farbrolle „Buch anlegen“, z. B. `var(--bz-farbe-ghost)`. */
+export const buchAnlegenFarbe = (rolle: BuchAnlegenFarbrolle): string => rubrikFarbe(buchAnlegenFarbrollen[rolle]);
+
+/**
+ * Abdunklung hinter Menüs (Menü „Buch hinzufügen“, REQ-029; Vorbild Menü „Aktuelle Seite“, REQ-024).
+ * Aus „Dunkelbraun“ abgeleitet, damit kein eigener Farbwert entsteht. Stärke prüft der CEO im Prototyp.
+ */
+export const abdunklung = `color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 28%, transparent)`;
+
+/** Schatten des Menüs „Buch hinzufügen“ (Referenzbild), aus „Dunkelbraun“ abgeleitet. */
+export const plusMenueSchatten = `0 10px 30px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 18%, transparent)`;
 
 /** Weicher Schatten der Coverfläche in den Buchdetails (Referenzbild), aus „Dunkelbraun“ abgeleitet. */
 export const buchdetailsCoverSchatten = `0 10px 24px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 22%, transparent)`;

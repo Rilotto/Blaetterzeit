@@ -1,35 +1,9 @@
 import type { Bildbereich, ImageStore } from './ImageStore';
+import { DB_NAME, STORE_BILDER, anfrage, oeffnen } from './indexedDb';
 
-const DB_NAME = 'blaetterzeit';
-/** Versionierte Schemaänderungen der IndexedDB (Index = Zielversion - 1). */
-const MIGRATIONEN: ((db: IDBDatabase) => void)[] = [
-  // Version 1: Bilder je Buch und Bereich.
-  (db) => {
-    db.createObjectStore('bilder');
-  },
-];
-const STORE = 'bilder';
+const STORE = STORE_BILDER;
 
 const schluessel = (buchId: string, bereich: Bildbereich) => `${buchId}|${bereich}`;
-
-function anfrage<T>(req: IDBRequest<T>): Promise<T> {
-  return new Promise((resolve, reject) => {
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error ?? new Error('IndexedDB-Fehler'));
-  });
-}
-
-function oeffnen(fabrik: IDBFactory, name: string): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const req = fabrik.open(name, MIGRATIONEN.length);
-    req.onupgradeneeded = (e) => {
-      for (let v = e.oldVersion; v < MIGRATIONEN.length; v++) MIGRATIONEN[v](req.result);
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error ?? new Error('IndexedDB lässt sich nicht öffnen'));
-    req.onblocked = () => reject(new Error('IndexedDB ist blockiert'));
-  });
-}
 
 /** Bilder dauerhaft im Browser (Web-Prototyp). */
 export class IndexedDbImageStore implements ImageStore {

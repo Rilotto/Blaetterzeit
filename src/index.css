@@ -17,3 +17,17 @@ html[data-kamera-aktiv] [data-app-wurzel],
 html[data-kamera-aktiv] main {
   background: transparent !important;
 }
+
+/* REQ-030: Platzhaltertexte der Eingabefelder in der Farbrolle des Feldes
+   (Variable inline gesetzt, Wert aus src/theme/farben.ts). */
+input[data-bz-eingabe]::placeholder {
+  color: var(--bz-platzhalterfarbe);
+  opacity: 1;
+}
+
+/* Bildschirmfüllende Blätter (REQ-030) halten Statusleiste und Gestenleiste frei
+   (--safe-area-inset-* setzt Capacitor auf Android, sonst env()). */
+[data-sicherer-bereich] {
+  padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+}

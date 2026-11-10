@@ -1,5 +1,6 @@
-// Bücher und Bilder für die Ansichten – ausschließlich über die Repository-Schnittstellen (ADR-0002, REQ-008, REQ-019).
-// Solange es keine Persistenz der Bücher gibt, wird das Repository beim ersten Zugriff mit den Demodaten befüllt.
+// Bücher und Bilder für die Ansichten – ausschließlich über die Repository-Schnittstellen (ADR-0002, REQ-008, REQ-019, REQ-034).
+// Die Bücher liegen dauerhaft im Repository. Demodaten werden nur eingespielt, wenn der Speicher leer ist,
+// und gar nicht, wenn der Build-Schalter VITE_DEMODATEN=aus gesetzt ist (Sprint 04, Teil A).
 import type { Buch } from '@/domain/buch';
 import { createBookRepository, createImageStore, type BookRepository, type ImageStore } from '@/storage';
 import { demoBuecher } from './demodaten';
@@ -8,21 +9,39 @@ let repository: BookRepository | undefined;
 let befuellt: Promise<void> | undefined;
 let bildspeicher: ImageStore | undefined;
 
-export function ladeBuecher(): Promise<Buch[]> {
+/** Ob Demodaten eingespielt werden (Build-Schalter `VITE_DEMODATEN=aus` schaltet sie ab). */
+export function demodatenAktiv(wert: string | undefined = import.meta.env.VITE_DEMODATEN): boolean {
+  return wert?.trim().toLowerCase() !== 'aus';
+}
+
+/** Spielt die Demodaten ein, sofern aktiv und der Speicher leer ist. */
+export async function demodatenEinspielen(repo: BookRepository, aktiv: boolean = demodatenAktiv()): Promise<void> {
+  if (!aktiv || demoBuecher.length === 0) return;
+  if ((await repo.list()).length > 0) return;
+  for (const buch of demoBuecher) await repo.save(buch);
+}
+
+/** Buch-Repository der App (eine Instanz für alle Ansichten), ggf. mit Demodaten befüllt. */
+export async function standardRepository(): Promise<BookRepository> {
   if (!repository || !befuellt) {
     const repo = createBookRepository();
     repository = repo;
-    befuellt = (async () => {
-      for (const buch of demoBuecher) await repo.save(buch);
-    })();
+    befuellt = demodatenEinspielen(repo).catch((fehler: unknown) => {
+      console.warn('Demodaten konnten nicht eingespielt werden:', fehler);
+    });
   }
   const repo = repository;
-  return befuellt.then(() => repo.list());
+  await befuellt;
+  return repo;
+}
+
+export async function ladeBuecher(): Promise<Buch[]> {
+  return (await standardRepository()).list();
 }
 
 /** Ein Buch anhand seiner ID (UUID). */
 export async function ladeBuch(id: string): Promise<Buch | undefined> {
-  return (await ladeBuecher()).find((b) => b.id === id);
+  return (await standardRepository()).get(id);
 }
 
 /** Bildspeicher der App (eine Instanz für alle Ansichten). */

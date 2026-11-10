@@ -22,6 +22,7 @@
     "@capacitor-community/camera-preview": "^8.0.2",
     "@capacitor-community/sqlite": "^8.1.1",
     "@capacitor/android": "^8.6.0",
+    "@capacitor/app": "^8.1.2",
     "@capacitor/camera": "^8.2.6",
     "@capacitor/core": "^8.6.0",
     "@capacitor/filesystem": "^8.1.5",
