@@ -1,7 +1,7 @@
 ---
 id: REQ-032
 titel: Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

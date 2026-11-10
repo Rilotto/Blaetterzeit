@@ -1,7 +1,7 @@
 ---
 id: REQ-029
 titel: Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
