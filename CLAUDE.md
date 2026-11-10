@@ -84,11 +84,7 @@ Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Or
 - **Ausgabe:** knapp halten, mit Punkt-Reporter. Eine Detailausgabe gibt es nur bei Fehlern.
 - **CI auf GitHub:** führt immer die vollständige feine Suite aus (`npm run verify`). Sie ist das Sicherheitsnetz gegen verlorene Funktionen und muss vor jedem Merge grün sein. Agenten prüfen dort nur den Status (grün oder rot) und lesen das Log erst bei Rot.
 - **Kleine Änderungen ohne neues Verhalten** (z. B. ein anderer Farbwert): kein eigener Tester-Durchlauf. Es reichen der Entwickler mit `verify:grob` und die CI.
-- **Tester bei neuen Funktionen:**
-  - Bisher: viele Varianten je AK.
-  - Jetzt: je AK ein aussagekräftiger Test, Grenzfälle nur dort, wo ein echtes Risiko besteht.
-  - Absichtlich eingebaute Fehler zur Gegenprobe nur auf Anweisung oder bei Verdacht.
-  - Berichte knapp.
+- **Tester bei neuen Funktionen (CEO-Vorgabe 2026-11-10: „wie bisher auch, auch mit den Gegenproben“):** Neue Funktionen werden weiterhin gründlich getestet: mehrere Varianten je AK, Grenz- und Fehlerfälle, dazu eine **Gegenprobe**. Für die Gegenprobe werden in einer Wegwerfkopie Fehler absichtlich eingebaut, und die Tests müssen sie erkennen. Gespart wird nur bei abgenommenen Funktionen (grobe Tests) und bei der Länge von Ausgaben und Berichten.
 - **Beim Abnehmen eines REQ** schreibt der Tester dessen groben Test. Die feinen Tests bleiben unverändert erhalten.
 
 ## Befehle
