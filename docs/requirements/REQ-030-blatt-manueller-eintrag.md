@@ -1,8 +1,8 @@
 ---
 id: REQ-030
 titel: Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder
-status: Entwurf
-prioritaet: offen
+status: Abgestimmt
+prioritaet: Must
 art: funktional
 quelle: CEO
 ersetzt: []
@@ -17,6 +17,8 @@ Als **Nutzer** möchte ich **in einem Blatt „Manueller Eintrag“ die Angaben 
 Vorgabe des CEO (wörtlich, 2026-11-10): „Kopiere dieses Menü, das Icon, und die darauffolgende Seite 'Manueller Eintrag'. Behandle alles gleich wie bislang auch, lege die Farben fest wie bisher auch.“
 
 Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/REF-buch-anlegen-02-manueller-eintrag.png). Die optische Übereinstimmung prüft der CEO im Prototyp; sie ist kein Akzeptanzkriterium.
+
+Priorität: Must (Bestätigung durch den CEO ausstehend).
 
 ## Anforderung (Satzschablone)
 
@@ -35,12 +37,43 @@ Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/
 
 **Eingabe**
 - Das System muss dem Nutzer die Möglichkeit bieten, Titel, Autor, Jahr und Seiten einzutragen.
-- Das System muss dem Nutzer die Möglichkeit bieten, über „+ Erscheinungsdatum hinzufügen“ ein Erscheinungsdatum einzutragen (Art der Eingabe offen, F2).
+- „JAHR“ ist das Erscheinungsjahr des Buches, „SEITEN“ die Seitenanzahl des Buches (REQ-025) (CEO 2026-11-10). Bedeutung und Speicherung: REQ-031, REQ-033.
+- Wenn der Nutzer „+ Erscheinungsdatum hinzufügen“ antippt, darf sich im Blatt nichts ändern (CEO: „'Erscheinungsdatum hinzufügen' bekommt noch keine Funktion.“). Die Funktion steht in der To-do-Liste (`docs/todo.md`).
 
-**Icons und Gestaltung**
+**Schließen**
+CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das X oder auf Hinzufügen. Bei X wird nichts gespeichert, bei Hinzufügen hingegen schon.“
+- Wenn der Nutzer die X-Schaltfläche antippt, muss das System das Blatt schließen, ohne ein Buch anzulegen und ohne eingetragene Angaben oder ein gewähltes Cover zu speichern; danach wird die Seite „Bücher“ angezeigt.
+- Das Schließen über „Hinzufügen“ legt REQ-031 fest.
+- Das System darf das Blatt auf keine andere Weise schließen (insbesondere nicht durch Tippen außerhalb oder über den Ziehgriff).
+
+**Icons**
 - Das System muss Kamera-Icon und X-Icon dem Referenzbild nachbilden, im technischen Stil der übrigen nachgebildeten Icons (REQ-005), ohne Icon-Bibliothek.
 - Das System muss Form, Schrift und Anordnung am Referenzbild ausrichten.
-- Das System muss alle Farben über Farbrollen aus zentralen Farbrubriken beziehen (REQ-002; „Farben auf Zuruf“). Zuordnung offen (F7).
+
+**Farben**
+- Das System muss alle Farben über Farbrollen aus zentralen Farbrubriken beziehen (REQ-002; „Farben auf Zuruf“). Zuordnung (CEO-bestätigter Vorschlag und CEO-Aussage zur Pille, 2026-11-10):
+
+| Element | Farbrubrik |
+|---|---|
+| Fläche des Blatts | Hintergrund |
+| Ziehgriff | Tertiär |
+| Überschrift „Manueller Eintrag“ | Dunkelbraun |
+| X-Schaltfläche | wie im Menü „Aktuelle Seite“ (REQ-024): Fläche Ghost, Rahmen GhostFrame, X Dunkelbraun |
+| Feld „Cover hinzufügen“: Fläche | Ghost |
+| Feld „Cover hinzufügen“: gestrichelter Rahmen | GhostFrame |
+| Feld „Cover hinzufügen“: Kamera-Icon und Text | Tertiär |
+| Formular-Karte: Fläche | Ghost |
+| Formular-Karte: Rahmen | GhostFrame |
+| Feldbeschriftungen (klein, Großbuchstaben) | Dunkelbraun |
+| Platzhaltertexte | Tertiär |
+| eingegebener Text | Dunkelbraun |
+| Trennlinien | GhostFrame |
+| „+ Erscheinungsdatum hinzufügen“ | Primär |
+| Pille „Hinzufügen“: Fläche | Primär (CEO: „in vollem Bordeaux, wie die 'Sichern'-Pille“) |
+| Pille „Hinzufügen“: Schrift | Hintergrund |
+
+- Die Pille „Hinzufügen“ wird immer in voller Farbe dargestellt und nie blass/deaktiviert (CEO: „'Hinzufügen' ist immer aktiv und daher immer antippbar.“). Die blasse Darstellung im Referenzbild wird nicht übernommen.
+- Konkrete Farbwerte sind kein Akzeptanzkriterium.
 
 ## Akzeptanzkriterien
 
@@ -66,16 +99,38 @@ Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/
 - **Dann** sind es im Projekt abgelegte, nachgebildete Icon-Dateien und keine Icons aus einer externen Icon-Bibliothek
 
 ### AK-5 Farben aus zentralen Farbrubriken
-- **Gegeben** der Wert einer im Blatt verwendeten Farbrubrik wird an der zentralen Stelle geändert
+- **Gegeben** der Wert einer Farbrubrik aus der Tabelle „Farben“ wird an der zentralen Stelle geändert
 - **Wenn** das Blatt geöffnet wird
 - **Dann** sind alle Elemente mit dieser Farbrubrik im geänderten Wert dargestellt
 - **Und** kein Element hat einen eigenen, davon abweichenden Farbwert
+
+### AK-6 „+ Erscheinungsdatum hinzufügen“ ohne Funktion
+- **Gegeben** das Blatt ist geöffnet
+- **Wenn** der Nutzer „+ Erscheinungsdatum hinzufügen“ antippt
+- **Dann** ändert sich im Blatt nichts und es öffnet sich keine Eingabe
+
+### AK-7 X schließt ohne Speichern
+- **Gegeben** im Blatt sind Titel und Autor eingetragen
+- **Wenn** der Nutzer die X-Schaltfläche antippt
+- **Dann** ist das Blatt geschlossen und die Seite „Bücher“ wird angezeigt
+- **Und** es wurde kein neues Buch angelegt
+
+### AK-8 Kein Schließen auf anderem Weg
+- **Gegeben** das Blatt ist geöffnet und Titel ist eingetragen
+- **Wenn** der Nutzer den Ziehgriff antippt oder nach unten zieht
+- **Dann** bleibt das Blatt geöffnet und der Titel eingetragen
+
+### AK-9 Pille „Hinzufügen“ immer aktiv dargestellt
+- **Gegeben** das Blatt ist neu geöffnet und kein Feld ist ausgefüllt
+- **Wenn** der Nutzer die Pille „Hinzufügen“ betrachtet
+- **Dann** ist sie antippbar und in Primär mit Schrift in Hintergrund dargestellt (nicht blass oder deaktiviert)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Speichern des Buches über „Hinzufügen“ (REQ-031).
 - Funktion von „Cover hinzufügen“ (REQ-032).
 - Speicherung von Jahr und Erscheinungsdatum in den Buchdaten (REQ-033).
+- Eingabe des Erscheinungsdatums (To-do-Liste).
 - Konkrete Farbwerte und Maße als Akzeptanzkriterium.
 
 ## Qualitätsanforderungen
@@ -85,18 +140,17 @@ Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/
 ## Abhängigkeiten
 
 - **REQ-029:** öffnet das Blatt.
+- **REQ-024:** Vorbild der X-Schaltfläche; „Sichern“-Pille als Vorbild der Pille „Hinzufügen“.
+- **REQ-025:** „SEITEN“ ist die Seitenanzahl.
 - **REQ-031, REQ-032, REQ-033.**
-- **REQ-025:** Feld „SEITEN“ – Verhältnis zur Seitenanzahl offen (F3).
 
 ## Offene Fragen
 
-- F2: Jahr und Erscheinungsdatum – Bedeutung, beide nötig, Eingabeart des Datums.
-- F3: Ist „SEITEN“ die Seitenanzahl des Buches (REQ-025)?
-- F5: Schließen des Blatts (X, Ziehgriff, Zurück-Taste, Tippen außerhalb) und Umgang mit bereits eingetragenen Angaben.
-- F7: Farbzuordnung und Priorität.
+<!-- Muss vor Status "Abgestimmt" leer sein. -->
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus der CEO-Vorgabe „Buch anlegen“, Referenzbild 02) | Anforderungsmanager |
+| 2026-11-10 | CEO-Antworten eingearbeitet. F1: Pille „Hinzufügen“ immer aktiv, volles Bordeaux (AK-9). F2: Jahr = Erscheinungsjahr; „+ Erscheinungsdatum hinzufügen“ ohne Funktion, auf To-do-Liste (AK-6; frühere Anforderung „Erscheinungsdatum eintragen“ entfällt). F3: SEITEN = Seitenanzahl. F5: Schließen nur über X (ohne Speichern) oder „Hinzufügen“ (AK-7, AK-8). F7: Farbzuordnung. Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
