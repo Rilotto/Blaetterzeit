@@ -93,7 +93,8 @@ Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Or
 npm run verify        # Typecheck + Lint + alle Tests + Traceability – muss immer grün sein
 npm test              # Tests (schreibt test-results.json)
 npm run trace         # Traceability-Check allein
-npm run trace:write   # + docs/traceability.md aktualisieren
+npm run trace:write   # + docs/traceability.md aktualisieren – NUR nach `npm test` (volle Suite), nie nach verify:grob
+npm run verify:grob   # Alltag der Agenten: grob + Neues fein, bei Fehlschlag automatisch fein nach
 npm run dev           # App im Browser
 npm run android:sync  # Web-Build in das Android-Projekt übernehmen
 ```
