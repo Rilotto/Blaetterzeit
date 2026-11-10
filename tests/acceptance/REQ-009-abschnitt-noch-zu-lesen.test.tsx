@@ -232,8 +232,12 @@ describe('REQ-009 Abschnitt „Noch zu lesen“', () => {
       const ist = within(ul)
         .getAllByRole('listitem')
         .map((li) => titelVon(li).textContent?.trim());
-      expect(ist).toEqual(demo.filter((d) => d.status === 'ungelesen').map((d) => d.titel));
-      expect(ist).not.toContain('When The Moon Hatched');
+      const erwartet = demo.filter((d) => d.status === 'ungelesen').map((d) => d.titel);
+      expect(ist).toEqual(erwartet);
+      // Alle Demobücher mit anderem Status dürfen nicht erscheinen (dynamisch aus den Demodaten abgeleitet).
+      for (const d of demo.filter((x) => x.status !== 'ungelesen')) {
+        if (!erwartet.includes(d.titel)) expect(ist, d.titel).not.toContain(d.titel);
+      }
     });
   });
 

@@ -36,6 +36,7 @@ Der Begriff „Buchstatus“ der Vorgabe ist gleichbedeutend mit „Lesestatus�
 ## Randbedingungen
 
 - **Demodaten für den Prototyp (kein App-Feature):** Der Tester recherchiert drei Fantasy-Bücher und legt sie als Test-/Demodaten an, nur mit Buchtitel und Lesestatus, ohne Buchcover (es erscheint der Cover-Platzhalter, REQ-010). Mindestens eines hat den Lesestatus *ungelesen*. Die Demodaten sind nicht Teil der Anforderung an die App und kein Akzeptanzkriterium.
+- **Demodaten, Vorgabe CEO 2026-11-10:** „setze alle Testbücher auf den Status 'ungelesen'“. Alle Demobücher haben damit den Lesestatus *ungelesen* (verschärft die bisherige Vorgabe „mindestens eines“, kein Widerspruch).
 
 ## Akzeptanzkriterien
 
@@ -94,3 +95,4 @@ Der Begriff „Buchstatus“ der Vorgabe ist gleichbedeutend mit „Lesestatus�
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Vorgabe „Noch zu lesen“, Abschnitt „Buchdaten“ und „Dynamische Buchauswahl“) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten eingearbeitet: F1 Lesestatus-Liste bestätigt (ungelesen, am lesen, gelesen, abgebrochen, Wunschliste), „Buchstatus“ = „Lesestatus“; AK-4 konkretisiert. F5 Demodaten als Randbedingung. F7 Priorität Must. Vom CEO bestätigt 2026-11-09, Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-10 | Randbedingung Demodaten ergänzt: CEO-Vorgabe „alle Testbücher auf 'ungelesen'“ (keine Änderung an Anforderung oder AK) | Anforderungsmanager |

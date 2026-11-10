@@ -20,6 +20,7 @@ Antworten des CEO (wörtlich, 2026-11-10):
 - „Die Statusnamen passen, nimm statt 'Noch zu lesen' den Status 'ungelesen' auch als Standardeinstellung im Status. Reihenfolge: ungelesen, am lesen, gelesen, abgebrochen, Wunschliste.“
 - „Ja, der Status bleibt immer gespeichert, ja er wirkt sich immer direkt auf die Listen aus, der Standardstatus 'ungelesen' gilt für alle Bücher, deren Status nicht manuell selbst geändert wurde.“
 - Farben: Pfeile in der Pille in Farbrubrik „Hintergrund“.
+- Farbe Herz-Icon in der Pille: Farbrubrik „Hintergrund“ (CEO 2026-11-10; genannt nur für die Pille, das Statusmenü bleibt „wie Auswahlmenü Bildimport“, REQ-022).
 
 Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.png). Die optische Übereinstimmung prüft der CEO im Prototyp; sie ist kein Akzeptanzkriterium.
 
@@ -28,6 +29,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 - Das System muss in den Buchdetails unterhalb des Buchtitels (REQ-018) eine Pille (Statuspille) darstellen, die den Lesestatus des angezeigten Buches mit seinem Namen aus der zentralen Definition (REQ-008) nennt.
 - Das System muss die Statuspille mit Hintergrund in Farbrubrik „Primär“ und Schrift in Farbrubrik „Hintergrund“ darstellen; die Schrift steht zentriert in der Pille.
 - Das System muss in der Statuspille links ein Icon für den angezeigten Status darstellen; bis eigene Icons vorliegen, ist es für jeden Status das Herz-Icon.
+- Das System muss das Status-Icon in der Statuspille in Farbrubrik „Hintergrund“ darstellen.
 - Das System muss die Zuordnung „Status → Icon“ zentral führen, sodass später je Status ein eigenes Icon hinterlegt werden kann, ohne die Statuspille zu ändern.
 - Das System muss in der Statuspille die kleinen Auf- und Ab-Pfeile wie im Referenzbild in Farbrubrik „Hintergrund“ darstellen.
 - Das System muss für jedes Buch, dessen Lesestatus der Nutzer nicht selbst geändert hat, den Standardstatus *ungelesen* führen und anzeigen.
@@ -55,6 +57,12 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 - **Wenn** die Statuspille angezeigt wird
 - **Dann** steht links in der Pille das Herz-Icon
 
+### AK-8 Farbe des Icons in der Statuspille
+- **Gegeben** die Statuspille wird angezeigt
+- **Wenn** die Farbe des Status-Icons geprüft wird
+- **Dann** ist es in Farbrubrik „Hintergrund“ eingefärbt
+- **Und** eine Änderung der Farbrubrik „Hintergrund“ an der zentralen Stelle wirkt auf das Icon
+
 ### AK-5 Icon je Status zentral austauschbar
 - **Gegeben** in der zentralen Zuordnung wird für einen Status ein anderes Icon hinterlegt
 - **Wenn** die Statuspille eines Buches mit diesem Status angezeigt wird
@@ -74,7 +82,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 
 - Öffnen des Statusmenüs, Ändern und Speichern des Status, Wirkung auf Buchlisten (REQ-022).
 - Eigene Icons je Status (später).
-- Farbe des Herz-Icons in der Pille: nicht vom CEO festgelegt; das Icon wird über eine eigene Farbrolle eingefärbt, der Standardwert ist „Farbe auf Zuruf“ und kein Akzeptanzkriterium.
+- Farbe des Icons im Statusmenü (REQ-022; dort „wie Auswahlmenü Bildimport“).
 
 ## Qualitätsanforderungen
 
@@ -96,3 +104,4 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus CEO-Beschreibung „Unter dem Titel geht es weiter“, Erweiterung 1) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet: F1 Statusnamen aus REQ-008, Standardstatus *ungelesen* (AK-1, AK-7 konkretisiert); F2 Standardstatus gilt für alle nicht manuell geänderten Bücher; F8 Pfeile in Hintergrund (AK-2). Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
+| 2026-11-10 | CEO-Vorgabe: Herz-/Status-Icon in der Pille in Farbrubrik „Hintergrund“; Anforderungssatz und AK-8 ergänzt, Abgrenzungsnotiz zur Icon-Farbe entfernt (Statusmenü unverändert, REQ-022) | Anforderungsmanager |
