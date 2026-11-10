@@ -15,7 +15,8 @@
     "verify": "npm run typecheck && npm run lint && npm test && npm run trace",
     "release:freeze": "node scripts/release-freeze.mjs",
     "android:sync": "npm run build && npx cap sync android",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "verify:grob": "tsc -b && oxlint --quiet && node scripts/test-grob.mjs && node scripts/check-traceability.mjs --grob"
   },
   "dependencies": {
     "@capacitor-community/camera-preview": "^8.0.2",

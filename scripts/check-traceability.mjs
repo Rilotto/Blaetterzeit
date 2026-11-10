@@ -12,8 +12,10 @@
 //     und ist "Freigegeben" oder sauber "Ersetzt" (mit Nachfolger).
 //  6. Das Release-Ledger wurde gegenüber dem letzten Git-Tag nur ergänzt.
 //
-// Aufruf:  node scripts/check-traceability.mjs [--results test-results.json] [--write]
+// Aufruf:  node scripts/check-traceability.mjs [--results test-results.json] [--write] [--grob]
 //   --write  erzeugt zusätzlich docs/traceability.md
+//   --grob   für abgenommene REQs (Implementiert/Freigegeben) genügt statt Punkt 2
+//            ein bestandener [REQ-xxx/GROB]-Test; fehlt er, gibt es nur eine Warnung.
 import { execSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -26,6 +28,8 @@ const args = process.argv.slice(2);
 const resultsPath = join(ROOT, args.includes('--results') ? args[args.indexOf('--results') + 1] : 'test-results.json');
 const errors = [];
 const err = (m) => errors.push(m);
+const grob = args.includes('--grob');
+const warnings = [];
 
 // ---------- Testergebnisse einlesen ----------
 const results = readJson(resultsPath, null);
@@ -37,7 +41,7 @@ if (!results) {
 const byTag = new Map();
 for (const file of results.testResults ?? []) {
   for (const t of file.assertionResults ?? []) {
-    for (const m of (t.fullName ?? t.title ?? '').matchAll(/\[(REQ-\d{3,})\/(AK-\d+)\]/g)) {
+    for (const m of (t.fullName ?? t.title ?? '').matchAll(/\[(REQ-\d{3,})\/(AK-\d+|GROB)\]/g)) {
       const tag = `${m[1]}/${m[2]}`;
       if (!byTag.has(tag)) byTag.set(tag, []);
       byTag.get(tag).push({ file: rel(file.name), status: t.status, name: t.fullName });
@@ -60,7 +64,14 @@ for (const r of reqs) {
     err(`${meta.id}: Status "${meta.status}", aber keine Akzeptanzkriterien (### AK-n)`);
   }
 
-  const mustBeTested = ['Implementiert', 'Freigegeben'].includes(meta.status);
+  const abgenommen = ['Implementiert', 'Freigegeben'].includes(meta.status);
+  const mustBeTested = abgenommen && !grob;
+  if (abgenommen && grob) {
+    const tests = byTag.get(`${meta.id}/GROB`) ?? [];
+    const bad = tests.filter((t) => t.status !== 'passed');
+    if (tests.length === 0) warnings.push(`${meta.id}: noch kein grober Test [${meta.id}/GROB]`);
+    else if (bad.length) err(`${meta.id}/GROB: ${bad.length} Test(s) nicht bestanden: ${bad.map((b) => b.name).join('; ')}`);
+  }
   for (const ak of r.aks) {
     const tests = byTag.get(`${meta.id}/${ak}`) ?? [];
     const passed = tests.filter((t) => t.status === 'passed');
@@ -127,10 +138,14 @@ if (args.includes('--write')) {
   writeFileSync(join(ROOT, 'docs/traceability.md'), lines.join('\n') + '\n');
 }
 
+if (warnings.length) {
+  console.warn(`! ${warnings.length} Warnung(en):`);
+  for (const w of warnings) console.warn('  - ' + w);
+}
 const released = reqs.filter((r) => r.meta.status === 'Freigegeben').length;
 if (errors.length) {
   console.error(`✗ Traceability-Check fehlgeschlagen (${errors.length} Fehler):`);
   for (const e of errors) console.error('  - ' + e);
   process.exit(1);
 }
-console.log(`✓ Traceability OK – ${reqs.length} REQs, davon ${released} freigegeben, ${Object.keys(manifest.files).length} eingefrorene Testdateien.`);
+console.log(`✓ Traceability OK${grob ? ' (grob)' : ''} – ${reqs.length} REQs, davon ${released} freigegeben, ${Object.keys(manifest.files).length} eingefrorene Testdateien.`);
