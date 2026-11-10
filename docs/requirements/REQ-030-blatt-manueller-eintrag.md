@@ -39,6 +39,7 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 - Das System muss dem Nutzer die Möglichkeit bieten, Titel, Autor, Jahr und Seiten einzutragen.
 - „JAHR“ ist das Erscheinungsjahr des Buches, „SEITEN“ die Seitenanzahl des Buches (REQ-025) (CEO 2026-11-10). Bedeutung und Speicherung: REQ-031, REQ-033.
 - Das System darf im Feld „JAHR“ nur Ziffern annehmen, höchstens vier (vom CEO bestätigt, 2026-11-10).
+- Eine Eingabe mit nur einer bis drei Ziffern ist ungültig; Hervorhebung des Feldes in Primär beim Antippen von „Hinzufügen“ und Verhalten beim Anlegen: REQ-031 (CEO, 2026-11-10).
 - Wenn der Nutzer „+ Erscheinungsdatum hinzufügen“ antippt, darf sich im Blatt nichts ändern (CEO: „'Erscheinungsdatum hinzufügen' bekommt noch keine Funktion.“). Die Funktion steht in der To-do-Liste (`docs/todo.md`).
 
 **Schließen**
@@ -173,3 +174,4 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 | 2026-11-10 | Erstellt (Entwurf aus der CEO-Vorgabe „Buch anlegen“, Referenzbild 02) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F1: Pille „Hinzufügen“ immer aktiv, volles Bordeaux (AK-9). F2: Jahr = Erscheinungsjahr; „+ Erscheinungsdatum hinzufügen“ ohne Funktion, auf To-do-Liste (AK-6; frühere Anforderung „Erscheinungsdatum eintragen“ entfällt). F3: SEITEN = Seitenanzahl. F5: Schließen nur über X (ohne Speichern) oder „Hinzufügen“ (AK-7, AK-8). F7: Farbzuordnung. Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
 | 2026-11-10 | CEO-Ergänzung: Schließen auch per Android-Zurück-Taste und Herunterziehen am Ziehgriff, jeweils ohne Speichern (neu AK-10, AK-11; AK-8 auf bloßes Antippen des Ziehgriffs reduziert). Platzhaltertexte verschwinden bei allen Feldern (AK-3 erweitert). Vom CEO mit „Ja“ bestätigt: nach X Seite „Bücher“, Jahr nur Ziffern, höchstens vier (neu AK-12). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-10 | Verweis ergänzt: 1–3 Ziffern im Feld „JAHR“ sind ungültig, Hervorhebung in Primär und Verhalten beim Anlegen in REQ-031 (AK-12, AK-13). Status bleibt „Abgestimmt“ | Anforderungsmanager |

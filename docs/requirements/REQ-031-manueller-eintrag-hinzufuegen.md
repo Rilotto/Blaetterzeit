@@ -29,6 +29,13 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 - Sobald der Nutzer danach im Feld „TITEL“ etwas eingibt, muss das System den Hinweis ausblenden (vom CEO bestätigt, 2026-11-10).
 - Ein Titel, der nur aus Leerzeichen besteht, gilt als leer (vom CEO bestätigt, 2026-11-10).
 
+**Ungültiges Jahr**
+CEO (wörtlich, 2026-11-10, zur Frage, was bei „Hinzufügen“ mit nur 1–3 Ziffern im Feld „JAHR“ passiert): „Das Feld soll einfach nur in Bordeauxrot aufleuchten, um zu signalisieren, dass hier die Eingabe falsch ist. Mehr erstmal nicht.“
+- Eine Eingabe im Feld „JAHR“ ist ungültig, wenn sie aus einer bis drei Ziffern besteht. Ein leeres Feld „JAHR“ ist gültig (optional).
+- Wenn der Nutzer „Hinzufügen“ antippt und die Eingabe im Feld „JAHR“ ungültig ist, muss das System das Feld „JAHR“ in der Farbrubrik „Primär“ hervorheben.
+- Das System darf in diesem Fall keinen Hinweistext anzeigen.
+- **Annahme (folgt aus „Eingabe falsch“, Bestätigung durch den CEO ausstehend):** Solange die Eingabe im Feld „JAHR“ ungültig ist, darf das System beim Antippen von „Hinzufügen“ kein Buch anlegen und muss das Blatt geöffnet lassen, ohne Eingaben zu verändern.
+
 **Anlegen**
 - Wenn der Nutzer „Hinzufügen“ antippt und ein Titel eingetragen ist, muss das System ein neues Buch mit neuer eindeutiger ID (REQ-008) anlegen.
 - Das System muss dabei die eingetragenen Angaben zu diesem Buch speichern: Titel, Autor (REQ-008), Jahr als Erscheinungsjahr (REQ-033), Seiten als Seitenanzahl (REQ-025) und ein gewähltes Cover als Frontcover (REQ-032).
@@ -105,6 +112,18 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 - **Wenn** der Nutzer in dessen Buchdetails den Lesefortschritt öffnet
 - **Dann** erscheint das Menü „Buchlänge“ (REQ-025)
 
+### AK-12 Ungültiges Jahr wird hervorgehoben
+- **Gegeben** im Blatt ist der Titel „Testbuch“ eingetragen, im Feld „JAHR“ steht „199“
+- **Wenn** der Nutzer „Hinzufügen“ antippt
+- **Dann** ist das Feld „JAHR“ in der Farbrubrik „Primär“ hervorgehoben
+- **Und** es wird kein Hinweistext angezeigt
+
+### AK-13 Bei ungültigem Jahr wird kein Buch angelegt (Annahme)
+- **Gegeben** im Blatt ist der Titel „Testbuch“ eingetragen, im Feld „JAHR“ steht „19“
+- **Wenn** der Nutzer „Hinzufügen“ antippt
+- **Dann** wird kein Buch angelegt
+- **Und** das Blatt bleibt geöffnet, Titel und Jahr bleiben unverändert eingetragen
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Aufbau und Farben des Blatts (REQ-030), Cover (REQ-032), Datenfelder Jahr/Erscheinungsdatum (REQ-033).
@@ -130,3 +149,4 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 | 2026-11-10 | Erstellt (Entwurf aus der CEO-Vorgabe „Buch anlegen“) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F1: Titel einzige Pflichtangabe, „Hinzufügen“ immer antippbar, ohne Titel Hinweis in Primär (AK-4, AK-5). F3: SEITEN = Seitenanzahl, optional, „Buchlänge“ bleibt aktiv; Standardstatus *ungelesen* (AK-6, AK-8, AK-9). F4: danach Buchdetails des neuen Buches (AK-7). Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
 | 2026-11-10 | Vom CEO mit „Ja“ bestätigt: Hinweis verschwindet bei Eingabe im Titel (neu AK-10), Titel nur aus Leerzeichen gilt als leer (neu AK-11). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-10 | CEO-Antwort zu „JAHR“ mit 1–3 Ziffern eingearbeitet: Feld „JAHR“ wird bei „Hinzufügen“ in Primär hervorgehoben, kein Hinweistext (neu AK-12). Annahme „kein Buch anlegen, solange ungültig“ gekennzeichnet (neu AK-13), Bestätigung durch den CEO ausstehend. Frage geschlossen. Status bleibt „Abgestimmt“ | Anforderungsmanager |
