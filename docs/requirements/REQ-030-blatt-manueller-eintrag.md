@@ -18,7 +18,7 @@ Vorgabe des CEO (wörtlich, 2026-11-10): „Kopiere dieses Menü, das Icon, und 
 
 Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/REF-buch-anlegen-02-manueller-eintrag.png). Die optische Übereinstimmung prüft der CEO im Prototyp; sie ist kein Akzeptanzkriterium.
 
-Priorität: Must (Bestätigung durch den CEO ausstehend).
+Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
 ## Anforderung (Satzschablone)
 
@@ -33,18 +33,19 @@ Priorität: Must (Bestätigung durch den CEO ausstehend).
   - in einer Zeile nebeneinander „JAHR“ mit Platzhaltertext „2024“ und „SEITEN“ mit Platzhaltertext „496“,
   - „ERSCHEINUNGSDATUM“ mit dem Eintrag „+ Erscheinungsdatum hinzufügen“.
 - Das System muss unter der Formular-Karte die Pille „Hinzufügen“ darstellen (Wirkung: REQ-031).
-- Das System muss Platzhaltertexte nur anzeigen, solange das jeweilige Feld leer ist; ein Platzhaltertext ist kein eingetragener Wert.
+- Das System muss Platzhaltertexte nur anzeigen, solange das jeweilige Feld leer ist; ein Platzhaltertext ist kein eingetragener Wert. Das gilt für alle Felder: Titel, Autor, Jahr und Seiten (CEO, wörtlich: „Ja, bei allen Feldern verschwinden die 'Vorbefüllungen'.“).
 
 **Eingabe**
 - Das System muss dem Nutzer die Möglichkeit bieten, Titel, Autor, Jahr und Seiten einzutragen.
 - „JAHR“ ist das Erscheinungsjahr des Buches, „SEITEN“ die Seitenanzahl des Buches (REQ-025) (CEO 2026-11-10). Bedeutung und Speicherung: REQ-031, REQ-033.
+- Das System darf im Feld „JAHR“ nur Ziffern annehmen, höchstens vier (vom CEO bestätigt, 2026-11-10).
 - Wenn der Nutzer „+ Erscheinungsdatum hinzufügen“ antippt, darf sich im Blatt nichts ändern (CEO: „'Erscheinungsdatum hinzufügen' bekommt noch keine Funktion.“). Die Funktion steht in der To-do-Liste (`docs/todo.md`).
 
 **Schließen**
-CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das X oder auf Hinzufügen. Bei X wird nichts gespeichert, bei Hinzufügen hingegen schon.“
-- Wenn der Nutzer die X-Schaltfläche antippt, muss das System das Blatt schließen, ohne ein Buch anzulegen und ohne eingetragene Angaben oder ein gewähltes Cover zu speichern; danach wird die Seite „Bücher“ angezeigt.
-- Das Schließen über „Hinzufügen“ legt REQ-031 fest.
-- Das System darf das Blatt auf keine andere Weise schließen (insbesondere nicht durch Tippen außerhalb oder über den Ziehgriff).
+CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das X oder auf Hinzufügen. Bei X wird nichts gespeichert, bei Hinzufügen hingegen schon.“ Ergänzung (wörtlich, 2026-11-10): „Doch, die Android-Zurück-Taste kann das auch schließen, aber ohne zu speichern, sowie das Herunterziehen am Griff.“
+- Wenn der Nutzer die X-Schaltfläche antippt, die Android-Zurück-Taste betätigt oder das Blatt am Ziehgriff nach unten zieht, muss das System das Blatt schließen, ohne ein Buch anzulegen und ohne eingetragene Angaben oder ein vorgemerktes Cover zu speichern; danach wird die Seite „Bücher“ angezeigt.
+- Das Schließen über „Hinzufügen“ (mit Speichern) legt REQ-031 fest.
+- Das System darf das Blatt auf keine andere Weise schließen (insbesondere nicht durch bloßes Antippen des Ziehgriffs).
 
 **Icons**
 - Das System muss Kamera-Icon und X-Icon dem Referenzbild nachbilden, im technischen Stil der übrigen nachgebildeten Icons (REQ-005), ohne Icon-Bibliothek.
@@ -89,9 +90,9 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 
 ### AK-3 Platzhaltertext verschwindet bei Eingabe
 - **Gegeben** das Blatt ist geöffnet
-- **Wenn** der Nutzer in das Feld „TITEL“ einen Text eingibt
-- **Dann** wird der eingegebene Text statt „Buchtitel“ angezeigt
-- **Und** wenn der Nutzer den Text wieder vollständig löscht, erscheint wieder „Buchtitel“
+- **Wenn** der Nutzer in eines der Felder „TITEL“, „AUTOR“, „JAHR“ oder „SEITEN“ etwas eingibt
+- **Dann** wird in diesem Feld die Eingabe statt des Platzhaltertexts („Buchtitel“, „Autor“, „2024“ bzw. „496“) angezeigt
+- **Und** wenn der Nutzer die Eingabe wieder vollständig löscht, erscheint dort wieder der Platzhaltertext
 
 ### AK-4 Icons nachgebildet
 - **Gegeben** das Blatt ist geöffnet
@@ -115,10 +116,27 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 - **Dann** ist das Blatt geschlossen und die Seite „Bücher“ wird angezeigt
 - **Und** es wurde kein neues Buch angelegt
 
-### AK-8 Kein Schließen auf anderem Weg
+### AK-8 Antippen des Ziehgriffs schließt nicht
 - **Gegeben** das Blatt ist geöffnet und Titel ist eingetragen
-- **Wenn** der Nutzer den Ziehgriff antippt oder nach unten zieht
+- **Wenn** der Nutzer den Ziehgriff nur antippt
 - **Dann** bleibt das Blatt geöffnet und der Titel eingetragen
+
+### AK-10 Android-Zurück-Taste schließt ohne Speichern
+- **Gegeben** im Blatt sind Titel und Autor eingetragen
+- **Wenn** der Nutzer die Android-Zurück-Taste betätigt
+- **Dann** ist das Blatt geschlossen und die Seite „Bücher“ wird angezeigt
+- **Und** es wurde kein neues Buch angelegt
+
+### AK-11 Herunterziehen am Ziehgriff schließt ohne Speichern
+- **Gegeben** im Blatt sind Titel und Autor eingetragen
+- **Wenn** der Nutzer das Blatt am Ziehgriff nach unten zieht
+- **Dann** ist das Blatt geschlossen und die Seite „Bücher“ wird angezeigt
+- **Und** es wurde kein neues Buch angelegt
+
+### AK-12 Jahr nur vier Ziffern
+- **Gegeben** das Blatt ist geöffnet
+- **Wenn** der Nutzer in das Feld „JAHR“ „20a245“ eingibt
+- **Dann** zeigt das Feld höchstens vier Ziffern und keine anderen Zeichen
 
 ### AK-9 Pille „Hinzufügen“ immer aktiv dargestellt
 - **Gegeben** das Blatt ist neu geöffnet und kein Feld ist ausgefüllt
@@ -154,3 +172,4 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus der CEO-Vorgabe „Buch anlegen“, Referenzbild 02) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F1: Pille „Hinzufügen“ immer aktiv, volles Bordeaux (AK-9). F2: Jahr = Erscheinungsjahr; „+ Erscheinungsdatum hinzufügen“ ohne Funktion, auf To-do-Liste (AK-6; frühere Anforderung „Erscheinungsdatum eintragen“ entfällt). F3: SEITEN = Seitenanzahl. F5: Schließen nur über X (ohne Speichern) oder „Hinzufügen“ (AK-7, AK-8). F7: Farbzuordnung. Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
+| 2026-11-10 | CEO-Ergänzung: Schließen auch per Android-Zurück-Taste und Herunterziehen am Ziehgriff, jeweils ohne Speichern (neu AK-10, AK-11; AK-8 auf bloßes Antippen des Ziehgriffs reduziert). Platzhaltertexte verschwinden bei allen Feldern (AK-3 erweitert). Vom CEO mit „Ja“ bestätigt: nach X Seite „Bücher“, Jahr nur Ziffern, höchstens vier (neu AK-12). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |

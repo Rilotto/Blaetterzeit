@@ -18,7 +18,7 @@ Grundlage: CEO-Vorgabe 2026-11-10 „Kopiere … die darauffolgende Seite 'Manue
 
 CEO (wörtlich, 2026-11-10): „Das Jahr ist das Erscheinungsjahr. Das Erscheinungsdatum ist das exakte Datum in TT.MM.JJJJ. 'Erscheinungsdatum hinzufügen' bekommt noch keine Funktion.“
 
-Priorität: Must (Bestätigung durch den CEO ausstehend).
+Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
 ## Anforderung (Satzschablone)
 
@@ -68,3 +68,4 @@ Priorität: Must (Bestätigung durch den CEO ausstehend).
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf, Erweiterung der Buchdaten aus REQ-008) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F2: Jahr = Erscheinungsjahr, Erscheinungsdatum = exaktes Datum TT.MM.JJJJ, noch ohne Eingabe (neu AK-3, AK-1 präzisiert, Titel angepasst). Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
+| 2026-11-10 | Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |

@@ -10,6 +10,8 @@ Gepflegt vom Anforderungsmanager. Hier stehen Wünsche, die der CEO ausdrücklic
 | 2026-11-09 | ~~Fenster der Plus-Schaltfläche~~ | Erledigt am 2026-11-10: festgelegt in REQ-029 bis REQ-033 („Buch anlegen“). | REQ-005, REQ-029 |
 | 2026-11-10 | Funktion „+ Erscheinungsdatum hinzufügen“ | „'Erscheinungsdatum hinzufügen' bekommt noch keine Funktion. Nimm dies bitte auf die To-do-Liste mit auf.“ Format laut CEO: TT.MM.JJJJ. | REQ-030, REQ-033 |
 | 2026-11-10 | Weitere Optionen im Menü „Buch hinzufügen“ | „weitere Optionen im Menü werden später ergänzt“ (im Referenzbild: „Online suchen“, „Barcode scannen“, „Deine Bücher importieren“). | REQ-029 |
+| 2026-11-10 | APK-Updates ohne Datenverlust | Fester Signaturschlüssel für alle APKs, alle Buchdaten dauerhaft in SQLite mit Migrationen, Update-Test in der CI – als eigener kleiner Sprint; Zeitpunkt entscheidet der CEO später. | – |
+| 2026-11-10 | Testbücher in der echten App | Immer / nur bei leerer App / gar nicht – entscheidet der CEO später. | REQ-008 (Demodaten) |
 | 2026-11-09 | Themes | Auswahl eines Themes in den Einstellungen; Inhalt eines Themes noch offen. | REQ-001 (Entwurf) |
 | 2026-11-09 | Funktion „Cover online suchen“ | „Lass uns die Funktion 'Cover online suchen' umsetzen, aber ohne Funktion. Nimm das auf die To-Do-Liste bitte mit auf.“ Laut CEO auch der einzige Weg zu einem Bild, wenn der Zugriff auf Kamera/Galerie verweigert wurde. | REQ-015, REQ-016 |
 | 2026-11-09 | Buchdetails aus weiteren Listen öffnen | „Später auch noch aus diversen Listen, das fügen wir aber nachträglich mit ein, wenn es relevant wird.“ | REQ-013 |

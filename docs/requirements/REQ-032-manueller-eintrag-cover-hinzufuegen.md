@@ -16,7 +16,7 @@ Als **Nutzer** möchte ich **beim manuellen Eintrag ein Cover per Kamera oder au
 
 Vorgabe des CEO (wörtlich, 2026-11-10): „Ein Klick auf 'Cover hinzufügen' öffnet wieder das Menü mit der Möglichkeit von Bildimporten per Kamera oder Galerie.“
 
-Priorität: Must (Bestätigung durch den CEO ausstehend).
+Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
 ## Anforderung (Satzschablone)
 
@@ -33,7 +33,7 @@ Priorität: Must (Bestätigung durch den CEO ausstehend).
 
 **Nach dem Anlegen**
 - Wird das Buch mit „Hinzufügen“ angelegt (REQ-031), muss das System das vorgemerkte Bild als Frontcover des Buches speichern (REQ-019). Es erscheint damit im Bereich „Cover“ der Buchdetails und als Buchcover in allen Buchlisten (REQ-020).
-- Wird das Blatt über X geschlossen (REQ-030), darf das System das vorgemerkte Bild nicht speichern.
+- Wird das Blatt ohne „Hinzufügen“ geschlossen (X, Android-Zurück-Taste oder Herunterziehen am Ziehgriff, REQ-030), darf das System das vorgemerkte Bild nicht speichern.
 
 ## Akzeptanzkriterien
 
@@ -77,9 +77,9 @@ Priorität: Must (Bestätigung durch den CEO ausstehend).
 - **Und** im Abschnitt „Noch zu lesen“ erscheint dieses Bild statt des Cover-Platzhalters
 - **Und** nach einem Neustart der App ist das Bild weiterhin vorhanden
 
-### AK-8 X verwirft das Bild
+### AK-8 Schließen ohne „Hinzufügen“ verwirft das Bild
 - **Gegeben** im Feld ist ein Bild vorgemerkt
-- **Wenn** der Nutzer das Blatt über X schließt
+- **Wenn** der Nutzer das Blatt über X, die Android-Zurück-Taste oder Herunterziehen am Ziehgriff schließt
 - **Dann** wird weder ein Buch noch das Bild gespeichert
 
 ## Abgrenzung (nicht Teil dieses REQ)
@@ -107,3 +107,4 @@ Priorität: Must (Bestätigung durch den CEO ausstehend).
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus der CEO-Vorgabe „Cover hinzufügen“) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F6: gleiches Auswahlmenü wie in den Buchdetails inkl. „Cover online suchen“ (ohne Funktion) und „Foto entfernen“; Bild wird Frontcover; Zuschnitt beginnt im Cover-Format (AK-1 präzisiert, neu AK-4 bis AK-8). F7: Farben des Felds in REQ-030. Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
+| 2026-11-10 | Vom CEO mit „Ja“ bestätigt: „Foto entfernen“ verwirft das vorgemerkte Bild (AK-5). Folgeänderung aus REQ-030: Bild wird auch beim Schließen per Android-Zurück-Taste oder Herunterziehen nicht gespeichert (AK-8 erweitert). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |

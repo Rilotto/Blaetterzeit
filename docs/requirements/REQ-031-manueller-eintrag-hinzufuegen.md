@@ -18,7 +18,7 @@ Vorgabe des CEO (wörtlich, 2026-11-10): „Ich möchte über das '+' in der Üb
 
 Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/REF-buch-anlegen-02-manueller-eintrag.png). Die dort blasse Pille „Hinzufügen“ wird nicht übernommen (CEO: „'Hinzufügen' ist immer aktiv und daher immer antippbar.“; Darstellung: REQ-030).
 
-Priorität: Must (Bestätigung durch den CEO ausstehend).
+Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
 ## Anforderung (Satzschablone)
 
@@ -26,6 +26,8 @@ Priorität: Must (Bestätigung durch den CEO ausstehend).
 - Der Titel ist die einzige Pflichtangabe (CEO: „Pflicht: der Titel.“). Autor, Jahr, Seiten und Cover sind optional.
 - Wenn der Nutzer „Hinzufügen“ antippt und das Feld „TITEL“ leer ist, darf das System kein Buch anlegen und muss das Blatt geöffnet lassen, ohne Eingaben zu verändern.
 - In diesem Fall muss das System unter dem Feld „TITEL“ den Hinweis „Bitte gib einen Titel ein“ in der Farbrubrik „Primär“ anzeigen (CEO-bestätigter Vorschlag).
+- Sobald der Nutzer danach im Feld „TITEL“ etwas eingibt, muss das System den Hinweis ausblenden (vom CEO bestätigt, 2026-11-10).
+- Ein Titel, der nur aus Leerzeichen besteht, gilt als leer (vom CEO bestätigt, 2026-11-10).
 
 **Anlegen**
 - Wenn der Nutzer „Hinzufügen“ antippt und ein Titel eingetragen ist, muss das System ein neues Buch mit neuer eindeutiger ID (REQ-008) anlegen.
@@ -63,6 +65,17 @@ Priorität: Must (Bestätigung durch den CEO ausstehend).
 - **Dann** wird kein Buch angelegt
 - **Und** das Blatt bleibt geöffnet, der Autor bleibt eingetragen
 - **Und** unter dem Feld „TITEL“ steht „Bitte gib einen Titel ein“ in der Farbrubrik „Primär“
+
+### AK-10 Hinweis verschwindet bei Eingabe
+- **Gegeben** unter dem Feld „TITEL“ steht „Bitte gib einen Titel ein“
+- **Wenn** der Nutzer im Feld „TITEL“ etwas eingibt
+- **Dann** wird der Hinweis nicht mehr angezeigt
+
+### AK-11 Titel nur aus Leerzeichen gilt als leer
+- **Gegeben** im Feld „TITEL“ stehen nur Leerzeichen
+- **Wenn** der Nutzer „Hinzufügen“ antippt
+- **Dann** wird kein Buch angelegt, das Blatt bleibt geöffnet
+- **Und** unter dem Feld „TITEL“ steht „Bitte gib einen Titel ein“
 
 ### AK-5 Nur Titel genügt
 - **Gegeben** nur das Feld „TITEL“ ist ausgefüllt
@@ -116,3 +129,4 @@ Priorität: Must (Bestätigung durch den CEO ausstehend).
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus der CEO-Vorgabe „Buch anlegen“) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F1: Titel einzige Pflichtangabe, „Hinzufügen“ immer antippbar, ohne Titel Hinweis in Primär (AK-4, AK-5). F3: SEITEN = Seitenanzahl, optional, „Buchlänge“ bleibt aktiv; Standardstatus *ungelesen* (AK-6, AK-8, AK-9). F4: danach Buchdetails des neuen Buches (AK-7). Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
+| 2026-11-10 | Vom CEO mit „Ja“ bestätigt: Hinweis verschwindet bei Eingabe im Titel (neu AK-10), Titel nur aus Leerzeichen gilt als leer (neu AK-11). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
