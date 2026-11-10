@@ -1,6 +1,6 @@
 ---
 id: REQ-025
-titel: Buchdetails – Seitenanzahl im Menü „Aktuelle Seite“ abfragen, wenn keine hinterlegt ist
+titel: Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl
 status: Abgestimmt
 prioritaet: Must
 art: funktional
@@ -12,63 +12,89 @@ freigegeben_in:
 
 ## Ziel / Nutzen
 
-Als **Nutzer** möchte ich **beim ersten Eintragen meines Fortschritts nach Seiten nach der Seitenanzahl gefragt werden**, damit **der Fortschritt berechnet und angezeigt werden kann**.
+Als **Nutzer** möchte ich **vor dem ersten Eintragen meines Fortschritts einmalig die Seitenanzahl des Buches festlegen**, damit **der Fortschritt berechnet und angezeigt werden kann**.
 
 Vorgabe des CEO (wörtlich, 2026-11-10): „WICHTIG: Rufe ich dieses Menü auf, ohne dass eine Seitenanzahl für das Buch hinterlegt ist, werde ich in einem kleinen Zusatzfeld danach gefragt. Die Zahl kann ich nur in den späteren Buchdetails ändern (ist eine weitere Erweiterung, kommt später noch dazu).“
 
-Vom CEO bestätigter Vorschlag (2026-11-10): Im Fortschrittsmodus „Seite“ erscheint ohne Seitenanzahl über dem Eingabefeld ein Zusatzfeld „Seitenanzahl des Buches“ (Ghost, Rahmen GhostFrame). Sichern ist erst möglich, wenn beide Felder gefüllt sind (sonst kurzer Hinweis darunter). Danach ist die Seitenanzahl fest gespeichert. Im Modus „%“ ist keine Seitenanzahl nötig. „Man kann nicht über die festgelegte Seitenanzahl gehen“.
+Präzisierung des CEO (wörtlich, 2026-11-10, ersetzt das frühere Zusatzfeld im Menü „Aktuelle Seite“): „[…] wie sich das Menü öffnen soll, zur einmaligen Eingabe der Seitenanzahlen. Setze dies bitte genauso um. Sichern, das X, die Überschrift etc. kannst du dir von bisher besprochenen ableiten. Erst wenn ich hier auf Sichern klicke, geht dieses Menü weg und genau darunter erscheint das 'Aktuelle Seite'-Menü.“
+
+Antworten des CEO (2026-11-10):
+- „Ja, auch beim %-Modus muss ich die Seitenanzahl angeben.“
+- Schließen über X oder Tippen außerhalb: „richtig“ – alles schließt, das Menü „Aktuelle Seite“ erscheint nicht, nichts wird gespeichert.
+
+Referenzbild: [referenzen/REF-buchdetails-04-buchlaenge.png](referenzen/REF-buchdetails-04-buchlaenge.png). Der Hintergrund des Referenzbilds (fremde App) ist nicht Teil der Vorgabe. Die optische Übereinstimmung prüft der CEO im Prototyp; sie ist kein Akzeptanzkriterium.
 
 ## Anforderung (Satzschablone)
 
+**Seitenanzahl als Voraussetzung**
 - Das System muss zu jedem Buch optional eine Seitenanzahl speichern können (Erweiterung der Buchdaten aus REQ-008).
-- Wenn das Menü „Aktuelle Seite“ (REQ-024) für ein Buch ohne Seitenanzahl im Fortschrittsmodus „Seite“ angezeigt wird, muss das System über dem Eingabefeld der aktuellen Seite ein Zusatzfeld mit der Beschriftung „Seitenanzahl des Buches“ anzeigen (Hintergrund „Ghost“, Rahmen „GhostFrame“).
-- Im Fortschrittsmodus „%“ darf das System das Zusatzfeld nicht anzeigen.
+- Wenn der Nutzer den Lesefortschritt (Herz-Icon, REQ-023) eines Buches ohne Seitenanzahl antippt, muss das System statt des Menüs „Aktuelle Seite“ zuerst das Menü „Buchlänge“ öffnen – unabhängig vom Fortschrittsmodus.
+- Das System darf das Menü „Aktuelle Seite“ (REQ-024) für ein Buch ohne Seitenanzahl nicht öffnen.
+
+**Aufbau des Menüs „Buchlänge“**
+- Das System muss das Menü „Buchlänge“ von unten einblenden und die Buchdetails dahinter mit der Abdunklung überdecken (wie REQ-024).
+- Das System muss die Grundfläche des Menüs in Farbrubrik „Hintergrund“ darstellen (wie REQ-024).
+- Das System muss oben mittig im Menü einen Ziehgriff darstellen.
+- Das System muss die Überschrift „Buchlänge“ in Farbrubrik „Dunkelbraun“ darstellen.
+- Das System muss oben rechts eine X-Schaltfläche mit Hintergrund „Ghost“, Rahmen „GhostFrame“ und X in „Dunkelbraun“ darstellen.
+- Das System muss unter der Überschrift den Untertitel „Leg die Länge dieses Buches fest“ darstellen.
+- Das System muss darunter ein Eingabefeld für die Seitenanzahl mit Hintergrund „Ghost“, Rahmen „GhostFrame“ und zentrierter Schrift in „Dunkelbraun“ darstellen.
+- Das System muss darunter eine Pille „Sichern“ mit Hintergrund in Farbrubrik „Primär“ und Schrift in Farbrubrik „Hintergrund“ darstellen.
+
+**Werte, Sichern, Schließen**
 - Das System muss als Seitenanzahl nur ganze Zahlen ab 1 annehmen.
-- Solange Zusatzfeld oder Eingabefeld der aktuellen Seite leer ist, darf das System nicht sichern und muss darunter einen kurzen Hinweis anzeigen.
-- Das System darf keine aktuelle Seite speichern, die größer als die eingegebene Seitenanzahl ist.
-- Wenn der Nutzer „Sichern“ antippt und beide Felder gültig gefüllt sind, muss das System die Seitenanzahl dauerhaft als Seitenanzahl des Buches speichern (ADR-0002).
-- Wenn das Menü ohne „Sichern“ geschlossen wird, darf das System die eingegebene Seitenanzahl nicht speichern.
-- Wenn für das Buch eine Seitenanzahl hinterlegt ist, darf das System das Zusatzfeld nicht anzeigen; die Seitenanzahl ist im Menü „Aktuelle Seite“ nicht änderbar.
+- Ist das Eingabefeld leer oder ungültig, darf das System nicht sichern; bei leerem Feld muss es unter dem Eingabefeld einen kurzen Hinweis anzeigen.
+- Wenn der Nutzer „Sichern“ mit gültiger Seitenanzahl antippt, muss das System die Seitenanzahl dauerhaft als Seitenanzahl des Buches speichern (ADR-0002), das Menü „Buchlänge“ schließen und unmittelbar an seiner Stelle das Menü „Aktuelle Seite“ (REQ-024) für dieses Buch anzeigen.
+- Wenn der Nutzer im Menü „Buchlänge“ die X-Schaltfläche antippt oder außerhalb des Menüs tippt, muss das System das Menü schließen, ohne die Seitenanzahl zu speichern, und darf das Menü „Aktuelle Seite“ nicht anzeigen.
+- Wenn für das Buch eine Seitenanzahl hinterlegt ist, darf das System das Menü „Buchlänge“ nicht anzeigen; die Seitenanzahl ist im Menü „Aktuelle Seite“ nicht änderbar.
+
+**Annahmen (nicht blockierend, vom CEO im Prototyp zu prüfen)**
+- Untertitel in Farbrubrik „Tertiär“ (aus den bestehenden Farbrubriken nach dem Referenzbild abgeleitet).
+- Ziehgriff nur als optisches Element, Farbe nach dem Referenzbild; Ziehen bewirkt nichts.
+- Eingabefeld beim Öffnen leer.
 
 ## Akzeptanzkriterien
 
-### AK-1 Zusatzfeld ohne Seitenanzahl im Modus „Seite“
-- **Gegeben** ein Buch ohne Seitenanzahl
-- **Wenn** das Menü „Aktuelle Seite“ im Modus „Seite“ angezeigt wird
-- **Dann** steht über dem Eingabefeld ein Zusatzfeld „Seitenanzahl des Buches“ mit Hintergrund „Ghost“ und Rahmen „GhostFrame“
-- **Und** nach Wechsel auf „%“ ist das Zusatzfeld nicht sichtbar
+### AK-1 Ohne Seitenanzahl öffnet „Buchlänge“
+- **Gegeben** ein Buch ohne Seitenanzahl (Fortschrittsmodus „Seite“ bzw. in einem zweiten Durchlauf „%“)
+- **Wenn** der Nutzer in den Buchdetails das Herz-Icon antippt
+- **Dann** wird das Menü „Buchlänge“ von unten eingeblendet, die Buchdetails dahinter sind abgedunkelt
+- **Und** das Menü „Aktuelle Seite“ ist nicht sichtbar
 
-### AK-2 Eingegebene Seitenanzahl wird gespeichert
-- **Gegeben** ein Buch ohne Seitenanzahl, das Menü „Aktuelle Seite“ ist im Modus „Seite“ geöffnet
-- **Wenn** der Nutzer im Zusatzfeld 400 und als aktuelle Seite 42 eingibt und „Sichern“ antippt
-- **Dann** hat das Buch die Seitenanzahl 400, auch nach Neustart
-- **Und** die Buchdetails zeigen den Lesefortschrittsbalken mit „42 / 400“ statt des Herz-Icons (REQ-023)
+### AK-2 Aufbau und Farben
+- **Gegeben** das Menü „Buchlänge“ ist geöffnet
+- **Wenn** es betrachtet wird
+- **Dann** gibt es einen Ziehgriff, die Überschrift „Buchlänge“ in „Dunkelbraun“, oben rechts eine X-Schaltfläche (Hintergrund „Ghost“, Rahmen „GhostFrame“, X „Dunkelbraun“) und den Untertitel „Leg die Länge dieses Buches fest“
+- **Und** die Grundfläche ist „Hintergrund“, das Eingabefeld „Ghost“ mit Rahmen „GhostFrame“ und zentrierter Schrift in „Dunkelbraun“, die Pille „Sichern“ „Primär“ mit Schrift „Hintergrund“
 
-### AK-3 Sichern nur mit beiden Feldern
-- **Gegeben** ein Buch ohne Seitenanzahl, das Menü ist im Modus „Seite“ geöffnet
-- **Wenn** der Nutzer nur eines der beiden Felder füllt und „Sichern“ antippt
-- **Dann** wird nichts gespeichert und das Menü bleibt offen
-- **Und** darunter erscheint ein kurzer Hinweis
+### AK-3 Sichern speichert und öffnet „Aktuelle Seite“
+- **Gegeben** ein Buch ohne Seitenanzahl, das Menü „Buchlänge“ ist geöffnet
+- **Wenn** der Nutzer 400 eingibt und „Sichern“ antippt
+- **Dann** ist das Menü „Buchlänge“ geschlossen und das Menü „Aktuelle Seite“ wird angezeigt
+- **Und** das Buch hat die Seitenanzahl 400, auch nach Neustart
 
-### AK-4 Aktuelle Seite nicht über der Seitenanzahl
-- **Gegeben** ein Buch ohne Seitenanzahl, das Menü ist im Modus „Seite“ geöffnet
-- **Wenn** der Nutzer Seitenanzahl 300 und aktuelle Seite 301 eingibt und sichern will
-- **Dann** wird weder Seitenanzahl noch aktuelle Seite gespeichert
+### AK-4 Ungültige oder leere Eingabe
+- **Gegeben** ein Buch ohne Seitenanzahl, das Menü „Buchlänge“ ist geöffnet
+- **Wenn** der Nutzer bei leerem Feld bzw. mit 0 „Sichern“ antippt
+- **Dann** wird nichts gespeichert, das Menü „Buchlänge“ bleibt offen und „Aktuelle Seite“ erscheint nicht
+- **Und** bei leerem Feld erscheint unter dem Eingabefeld ein kurzer Hinweis
 
-### AK-5 Schließen ohne Sichern verwirft die Seitenanzahl
-- **Gegeben** ein Buch ohne Seitenanzahl, der Nutzer hat im Zusatzfeld 400 eingegeben
-- **Wenn** er das Menü über X oder Tippen außerhalb schließt
-- **Dann** hat das Buch weiterhin keine Seitenanzahl
+### AK-5 Schließen ohne Sichern
+- **Gegeben** ein Buch ohne Seitenanzahl, der Nutzer hat im Menü „Buchlänge“ 400 eingegeben
+- **Wenn** er die X-Schaltfläche antippt bzw. (in einem zweiten Durchlauf) außerhalb des Menüs tippt
+- **Dann** sind alle Menüs geschlossen und das Menü „Aktuelle Seite“ erscheint nicht
+- **Und** das Buch hat weiterhin keine Seitenanzahl, die Buchdetails zeigen weiterhin das Herz-Icon
 
-### AK-6 Kein Zusatzfeld bei vorhandener Seitenanzahl
+### AK-6 Kein Menü „Buchlänge“ bei vorhandener Seitenanzahl
 - **Gegeben** ein Buch mit Seitenanzahl
-- **Wenn** das Menü „Aktuelle Seite“ geöffnet wird
-- **Dann** gibt es kein Zusatzfeld für die Seitenanzahl
-- **Und** die Seitenanzahl ist im Menü nicht änderbar
+- **Wenn** der Nutzer den Lesefortschritt antippt
+- **Dann** öffnet sich direkt das Menü „Aktuelle Seite“ ohne Menü „Buchlänge“
+- **Und** die Seitenanzahl ist dort nicht änderbar
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Ändern der Seitenanzahl in den Buchdetails (spätere Erweiterung laut CEO).
+- Inhalt und Verhalten des Menüs „Aktuelle Seite“ (REQ-024).
 - Wortlaut des kurzen Hinweises (kein Akzeptanzkriterium; prüft der CEO im Prototyp).
 
 ## Qualitätsanforderungen
@@ -91,3 +117,4 @@ Vom CEO bestätigter Vorschlag (2026-11-10): Im Fortschrittsmodus „Seite“ er
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus CEO-Beschreibung, Erweiterung 2) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet: F4 Zusatzfeld „Seitenanzahl des Buches“ über dem Eingabefeld, nur im Modus „Seite“, Farben, Sichern nur mit beiden Feldern, Speicherung erst mit „Sichern“ (AK-1, AK-2 geändert, neu AK-3, AK-4, AK-5; AK-3 alt → AK-6). Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
+| 2026-11-10 | Umgestellt auf eigenes Menü „Buchlänge“ vor „Aktuelle Seite“ (CEO: „Erst wenn ich hier auf Sichern klicke, geht dieses Menü weg und genau darunter erscheint das 'Aktuelle Seite'-Menü.“; „Ja, auch beim %-Modus muss ich die Seitenanzahl angeben.“; X/außerhalb: „richtig“). Zusatzfeld und Ausnahme für Modus „%“ entfallen. Alle AKs neu gefasst: AK-1 bis AK-6 geändert (AK-4 alt „aktuelle Seite nicht über Seitenanzahl“ entfällt, abgedeckt durch REQ-024 AK-6). Annahmen: Untertitel Tertiär, Ziehgriff nur optisch, Feld leer. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |

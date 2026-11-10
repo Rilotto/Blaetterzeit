@@ -12,13 +12,13 @@ freigegeben_in:
 
 ## Ziel / Nutzen
 
-Als **Nutzer** möchte ich **in einem Menü meine aktuelle Seite oder meinen Fortschritt in Prozent eingeben und sichern**, damit **mein Lesefortschritt festgehalten wird – auch bei Büchern ohne Seitenzahlen (z. B. Kindle)**.
+Als **Nutzer** möchte ich **in einem Menü meine aktuelle Seite oder meinen Fortschritt in Prozent eingeben und sichern**, damit **mein Lesefortschritt festgehalten wird – nach Seiten oder, z. B. bei Kindle-Büchern, in Prozent**.
 
 Vorgabe des CEO (wörtlich, Auszug, 2026-11-10): „[…] erscheint von unten ein kleines Menü (siehe neuem Screenshot). Die Überschrift "Aktuelle Seite" bleibt gleich (Schriftfarbe Dunkelbraun), es gibt die Seiten- oder Prozentauswahl (Standardauswahl ist Seite), darunter kann ich dann die aktuelle Seite aktualisieren. […] Die Pille "Sichern" setzen wir auch um, diese speichert den Fortschritt. Auch hier: Schriftfarbe: Hintergrund, Hintergrund: Primär.“ – „Eine Sitzung == ein Eintrag in "aktuelle Seite".“
 
 Antworten des CEO (wörtlich bzw. bestätigte Vorschläge, 2026-11-10):
 - „Bei der %-Auswahl gebe ich z. B. 5 % von 100 % ein statt 42 von 400 Seiten. + und − sollen nicht umgesetzt werden. Man kann nicht über die festgelegte Seitenanzahl gehen oder über 100 %. Der Hinweis soll nicht übernommen werden.“
-- Bestätigter Vorschlag: Fortschrittsmodus „%“ braucht keine Seitenanzahl, Eingabe 0–100, gespeichert als Prozentwert (für Kindle-Bücher). Der gewählte Modus wird pro Buch gespeichert (Kindle-Buch öffnet direkt in „%“). Beim Moduswechsel wird der Fortschritt umgerechnet, wenn die Seitenanzahl bekannt ist, sonst ist die Eingabe leer.
+- Bestätigter Vorschlag (Teil „braucht keine Seitenanzahl“ am 2026-11-10 aufgehoben, CEO: „Ja, auch beim %-Modus muss ich die Seitenanzahl angeben.“): Fortschrittsmodus „%“ braucht keine Seitenanzahl, Eingabe 0–100, gespeichert als Prozentwert (für Kindle-Bücher). Der gewählte Modus wird pro Buch gespeichert (Kindle-Buch öffnet direkt in „%“). Beim Moduswechsel wird der Fortschritt umgerechnet, wenn die Seitenanzahl bekannt ist, sonst ist die Eingabe leer.
 - „Schließen auch wieder durch 'Sichern' oder durch einen Klick außerhalb des Menüs (dann wird die Eingabe nicht gespeichert) oder durch das X oben rechts → bitte auch übernehmen. Hintergrund Ghost, Rahmen GhostFrame, das X: Farbe Dunkelbraun.“
 - „Bitte lege eine Schattierung wie im Screenshot über die im Hintergrund liegende Buchdetailseite, damit die Abgrenzung besser klar ist.“
 - „Eine Sitzung zählt nur dann, wenn die Seitenanzahl oder die Prozentanzahl im Menü 'Aktuelle Seite' erhöht wurde. Auch mehrere Sitzungen an einem Tag sind möglich (zählt dann aber nur als ein Tag für den Streak).“
@@ -29,6 +29,7 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 ## Anforderung (Satzschablone)
 
 **Öffnen und Aufbau**
+- Das System muss das Menü „Aktuelle Seite“ nur für ein Buch mit hinterlegter Seitenanzahl öffnen; ohne Seitenanzahl erscheint zuerst das Menü „Buchlänge“ (REQ-025), unabhängig vom Fortschrittsmodus.
 - Das System muss das Menü „Aktuelle Seite“ von unten einblenden.
 - Solange das Menü geöffnet ist, muss das System die dahinterliegenden Buchdetails mit einer Abdunklung (Schattierung) überdecken.
 - Das System muss im Menü die Überschrift „Aktuelle Seite“ in Farbrubrik „Dunkelbraun“ darstellen.
@@ -42,24 +43,23 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 
 **Erlaubte Werte**
 - Im Modus „Seite“ muss das System als aktuelle Seite nur ganze Zahlen von 0 bis zur Seitenanzahl des Buches annehmen.
-- Im Modus „%“ muss das System als Prozentwert nur ganze Zahlen von 0 bis 100 annehmen; eine Seitenanzahl ist nicht nötig.
+- Im Modus „%“ muss das System als Prozentwert nur ganze Zahlen von 0 bis 100 annehmen (Prozent-Eingabe z. B. für Kindle-Bücher); auch hier ist die Seitenanzahl des Buches hinterlegt.
 - Das System darf einen Wert über der Seitenanzahl bzw. über 100 nicht speichern.
-- Ist das Eingabefeld leer, darf das System nicht sichern und muss unter dem Eingabefeld einen kurzen Hinweis anzeigen (Seitenanzahl-Zusatzfeld: REQ-025).
+- Ist das Eingabefeld leer, darf das System nicht sichern und muss unter dem Eingabefeld einen kurzen Hinweis anzeigen.
 
 **Moduswechsel**
-- Wenn der Nutzer den Modus wechselt und die Seitenanzahl bekannt ist, muss das System den eingegebenen Fortschritt in den neuen Modus umrechnen (Seite → % und % → Seite), kaufmännisch auf eine ganze Zahl gerundet.
-- Wenn der Nutzer den Modus wechselt und keine Seitenanzahl bekannt ist, muss das System das Eingabefeld leer anzeigen.
+- Wenn der Nutzer den Modus wechselt, muss das System den eingegebenen Fortschritt anhand der Seitenanzahl in den neuen Modus umrechnen (Seite → % und % → Seite), kaufmännisch auf eine ganze Zahl gerundet; ein leeres Eingabefeld bleibt leer.
 
 **Sichern und Schließen**
 - Wenn der Nutzer „Sichern“ antippt, muss das System den eingegebenen Fortschritt (aktuelle Seite bzw. Prozentwert) und den gewählten Fortschrittsmodus für das Buch über die Repository-Schnittstelle speichern (ADR-0002), das Menü schließen und den Lesefortschritt (REQ-023) aktualisiert darstellen.
 - Wenn der Nutzer „Sichern“ antippt und der Fortschritt gegenüber dem zuletzt gespeicherten Stand erhöht wurde, muss das System für das Buch eine Sitzung mit Datum und Uhrzeit speichern (Grundlage für REQ-026, REQ-027). Verglichen wird der Fortschrittsanteil (aktuelle Seite / Seitenanzahl bzw. Prozentwert / 100); ohne bisher gespeicherten Fortschritt gilt der Anteil 0.
 - Wenn der Fortschritt beim Sichern gleich bleibt oder sinkt, muss das System ihn speichern, darf aber keine Sitzung anlegen.
-- Wenn der Nutzer außerhalb des Menüs tippt oder die X-Schaltfläche antippt, muss das System das Menü schließen, ohne Eingaben (Fortschritt, Modus, Seitenanzahl) zu speichern.
+- Wenn der Nutzer außerhalb des Menüs tippt oder die X-Schaltfläche antippt, muss das System das Menü schließen, ohne Eingaben (Fortschritt, Modus) zu speichern. Eine zuvor im Menü „Buchlänge“ gesicherte Seitenanzahl bleibt gespeichert (REQ-025).
 
 ## Akzeptanzkriterien
 
 ### AK-1 Menü erscheint von unten, Buchdetails abgedunkelt
-- **Gegeben** die Buchdetails werden angezeigt
+- **Gegeben** die Buchdetails eines Buches mit Seitenanzahl werden angezeigt
 - **Wenn** der Nutzer den Lesefortschritt antippt (REQ-023)
 - **Dann** wird das Menü „Aktuelle Seite“ von unten eingeblendet
 - **Und** die Buchdetails dahinter sind abgedunkelt
@@ -83,8 +83,8 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 - **Dann** ist das Menü geschlossen und die Buchdetails zeigen „42 / 400“
 - **Und** nach erneutem Öffnen der Buchdetails (auch nach Neustart) ist die aktuelle Seite 42
 
-### AK-5 Sichern im Modus „%“ ohne Seitenanzahl
-- **Gegeben** ein Buch ohne Seitenanzahl, das Menü ist geöffnet
+### AK-5 Sichern im Modus „%“
+- **Gegeben** ein Buch mit Seitenanzahl 400 ohne gespeicherten Fortschritt, das Menü ist geöffnet
 - **Wenn** der Nutzer „%“ wählt, 5 eingibt und „Sichern“ antippt
 - **Dann** zeigen die Buchdetails den Balken und „5 %“
 - **Und** beim nächsten Öffnen des Menüs (auch nach Neustart) ist „%“ ausgewählt und 5 eingetragen
@@ -112,10 +112,10 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 - **Dann** steht im Eingabefeld 11 (42/400 = 10,5 %, kaufmännisch gerundet)
 - **Und** beim Zurückwechseln auf „Seite“ mit 25 % steht dort 100
 
-### AK-10 Moduswechsel ohne Seitenanzahl
-- **Gegeben** ein Buch ohne Seitenanzahl mit gespeichertem Prozentwert 5, das Menü ist im Modus „%“ geöffnet
-- **Wenn** der Nutzer auf „Seite“ wechselt
-- **Dann** ist das Eingabefeld leer
+### AK-10 Kein Menü „Aktuelle Seite“ ohne Seitenanzahl
+- **Gegeben** ein Buch ohne Seitenanzahl mit gespeichertem Fortschrittsmodus „Seite“ bzw. (zweiter Durchlauf) „%“
+- **Wenn** der Nutzer in den Buchdetails das Herz-Icon antippt
+- **Dann** erscheint nicht das Menü „Aktuelle Seite“, sondern das Menü „Buchlänge“ (REQ-025)
 
 ### AK-11 Schließen ohne Speichern
 - **Gegeben** ein Buch mit aktueller Seite 10, das Menü ist geöffnet und der Nutzer hat 50 eingegeben
@@ -141,7 +141,7 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Zusatzfeld für die Seitenanzahl, falls keine hinterlegt ist (REQ-025).
+- Menü „Buchlänge“ zur Eingabe der Seitenanzahl, falls keine hinterlegt ist (REQ-025).
 - Ändern der Seitenanzahl (spätere Erweiterung der Buchdetails, laut CEO).
 - Zählung der Sitzungen je Tag für den Streak (REQ-027).
 
@@ -165,3 +165,4 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus CEO-Beschreibung, Erweiterung 2 und 3) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet: F3 Modus „%“, Obergrenzen, kein −/+, keine Hinweiszeile, Modus je Buch, Umrechnung (neu AK-5, AK-6, AK-7, AK-9, AK-10; AK-3 geändert); F5 Schließen durch Sichern/X/außerhalb, Abdunklung (AK-1, AK-2, neu AK-11); F6 Sitzung nur bei Erhöhung (AK-5 alt → AK-12, neu AK-13); F8 Farben. Leeres Feld (neu AK-8). Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
+| 2026-11-10 | Seitenanzahl ist jetzt immer Voraussetzung (CEO: „Ja, auch beim %-Modus muss ich die Seitenanzahl angeben.“); ohne Seitenanzahl zuerst Menü „Buchlänge“ (REQ-025). Entfallen: „%-Modus braucht keine Seitenanzahl“, Moduswechsel ohne Seitenanzahl, Seitenanzahl beim Schließen. Geändert: AK-1 (Gegeben mit Seitenanzahl), AK-5 (Modus „%“ mit Seitenanzahl 400), AK-10 neu gefasst (kein Menü „Aktuelle Seite“ ohne Seitenanzahl). Prozent-Eingabe bleibt. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |

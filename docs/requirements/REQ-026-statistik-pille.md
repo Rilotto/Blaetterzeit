@@ -29,7 +29,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 - Das System muss die Statistik-Pille mit Hintergrund in Farbrubrik „Ghost“, durchgehendem (nicht gestricheltem) Rahmen und Trennlinien in Farbrubrik „GhostFrame“ sowie allen Zahlen und Texten in Farbrubrik „Dunkelbraun“ darstellen (Ausnahme: Zahl in der Flamme, REQ-027).
 - Das System muss im linken Teil die Flamme mit der Streak-Zahl (REQ-027) und darunter den Text „Tage in Folge“ darstellen.
 - Das System muss im mittleren Teil den Lesefortschritt des Buches als ganze Prozentzahl mit „%“ und darunter den Text „gelesen“ darstellen (statt der Lesezeit aus dem Referenzbild).
-- Das System muss den Prozentwert im Fortschrittsmodus „Seite“ als aktuelle Seite / Seitenanzahl × 100, kaufmännisch auf eine ganze Zahl gerundet, und im Fortschrittsmodus „%“ als gespeicherten Prozentwert ermitteln; ohne Seitenanzahl und ohne Prozentwert zeigt es „0 %“.
+- Das System muss den Prozentwert im Fortschrittsmodus „Seite“ als aktuelle Seite / Seitenanzahl × 100, kaufmännisch auf eine ganze Zahl gerundet, und im Fortschrittsmodus „%“ als gespeicherten Prozentwert ermitteln; ohne Seitenanzahl oder ohne gespeicherten Fortschritt zeigt es „0 %“.
 - Das System muss im rechten Teil die Anzahl der Sitzungen des Buches (REQ-024) und darunter den Text „Sitzungen“ darstellen.
 - Das System darf unter der Statistik-Pille kein Zitat darstellen.
 
@@ -54,12 +54,12 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 - **Und** bei aktueller Seite 41 (10,25 %) „10 %“
 
 ### AK-4 Fortschritt im Modus „%“
-- **Gegeben** ein Buch ohne Seitenanzahl im Modus „%“ mit Prozentwert 5
+- **Gegeben** ein Buch mit Seitenanzahl 400 im Modus „%“ mit Prozentwert 5
 - **Wenn** der mittlere Teil betrachtet wird
 - **Dann** zeigt er „5 %“
 
 ### AK-5 Ohne Fortschrittsangaben 0 %
-- **Gegeben** ein Buch ohne Seitenanzahl und ohne Prozentwert
+- **Gegeben** ein Buch ohne Seitenanzahl bzw. (zweiter Durchlauf) ein Buch mit Seitenanzahl 400 ohne gespeicherten Fortschritt
 - **Wenn** der mittlere Teil betrachtet wird
 - **Dann** zeigt er „0 %“ und darunter „gelesen“
 
@@ -99,3 +99,4 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus CEO-Beschreibung, Erweiterung 3) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet: F6 Sitzung nur bei Erhöhung (AK-6); F7 kaufmännische Rundung, „0 %“ ohne Angaben, Modus „%“, Text „gelesen“ (AK-3 konkretisiert, neu AK-4, AK-5); F8 Farben (AK-2). Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
+| 2026-11-10 | Konsistenz mit REQ-023/024/025 (CEO: „Ja, auch beim %-Modus muss ich die Seitenanzahl angeben.“): Modus „%“ ohne Seitenanzahl kommt nicht mehr vor. Geändert: AK-4 (mit Seitenanzahl 400), AK-5 (zusätzlich Seitenanzahl ohne Fortschritt). Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
