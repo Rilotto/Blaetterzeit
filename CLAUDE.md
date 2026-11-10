@@ -68,6 +68,29 @@ Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Or
 3. Abwarten, bis die CI für den Branch grün ist, und das Ergebnis tatsächlich prüfen.
 4. Dem CEO den Link zum Erstellen des Pull Requests geben (`https://github.com/Rilotto/Blaetterzeit/compare/main...<branch>?expand=1`) und kurz zusammenfassen, was drinsteckt. Der CEO führt den Merge durch.
 
+## Token sparen beim Testen (CEO-Vorgabe 2026-11-10)
+
+„Nur neu entwickelte Funktionen sollen so genau getestet werden. Alles bislang Abgenommene soll in groben Tests abgedeckt sein und nur bei Fehlschlag genauer untersucht werden.“
+
+- **Zwei Teststufen:**
+  - **Fein:** die bisherigen Akzeptanztests `tests/acceptance/`. Jedes AK hat mindestens einen Test mit Tag `[REQ-xxx/AK-n]`.
+  - **Grob:** je abgenommenem REQ (Status „Implementiert“ oder „Freigegeben“) mindestens ein Test in `tests/grob/` mit Tag `[REQ-xxx/GROB]`. Er prüft den Kern des REQ. Schreiben darf ihn nur der Tester.
+- **Lokaler Lauf der Agenten:** `npm run verify:grob`. Dieser Lauf führt aus:
+  - alle groben Tests,
+  - die feinen Tests aller REQs, die noch nicht abgenommen sind,
+  - Unit- und Vertragstests.
+
+  Schlägt ein grober Test fehl, laufen automatisch die feinen Tests genau dieses REQ.
+- **Ausgabe:** knapp halten, mit Punkt-Reporter. Eine Detailausgabe gibt es nur bei Fehlern.
+- **CI auf GitHub:** führt immer die vollständige feine Suite aus (`npm run verify`). Sie ist das Sicherheitsnetz gegen verlorene Funktionen und muss vor jedem Merge grün sein. Agenten prüfen dort nur den Status (grün oder rot) und lesen das Log erst bei Rot.
+- **Kleine Änderungen ohne neues Verhalten** (z. B. ein anderer Farbwert): kein eigener Tester-Durchlauf. Es reichen der Entwickler mit `verify:grob` und die CI.
+- **Tester bei neuen Funktionen:**
+  - Bisher: viele Varianten je AK.
+  - Jetzt: je AK ein aussagekräftiger Test, Grenzfälle nur dort, wo ein echtes Risiko besteht.
+  - Absichtlich eingebaute Fehler zur Gegenprobe nur auf Anweisung oder bei Verdacht.
+  - Berichte knapp.
+- **Beim Abnehmen eines REQ** schreibt der Tester dessen groben Test. Die feinen Tests bleiben unverändert erhalten.
+
 ## Befehle
 
 ```bash
