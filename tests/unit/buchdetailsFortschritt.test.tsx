@@ -72,7 +72,9 @@ describe('Statuspille und Statusmenü', () => {
     await tippe(screen.getByRole('menuitem', { name: 'am lesen' }));
     await tippe(screen.getByRole('button', { name: 'Zurück' }));
     await act(async () => {});
-    expect(screen.queryByText('Momo')).toBeNull();
+    // Nur „Noch zu lesen“ prüfen: Im Abschnitt „Alle Bücher“ (REQ-035) steht das Buch unabhängig vom Status.
+    const abschnitt = screen.getByRole('region', { name: 'Noch zu lesen' });
+    expect(within(abschnitt).queryByText('Momo')).toBeNull();
   });
 });
 
