@@ -35,14 +35,16 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 
 | Position | Name | standardmäßig aktiv | Filterlogik |
 |---|---|---|---|
-| 1 | Für dich | ja | noch nicht ausgearbeitet |
-| 2 | Gerade am Lesen | nein | noch nicht ausgearbeitet |
-| 3 | Noch zu lesen | nein | noch nicht ausgearbeitet |
+| 1 | Alle | nein | alle Bücher, unabhängig vom Lesestatus (REQ-039) |
+| 2 | Für dich | ja | vorerst: Seite „Bücher“ mit ihren Abschnitten; Personalisierung später (To-do) |
+| 3 | Gerade am Lesen | nein | Bücher mit Lesestatus *am lesen* (REQ-042) |
+| 4 | Noch zu lesen | nein | Bücher gemäß Abschnittszuordnung „Noch zu lesen“ (REQ-009, REQ-040) |
 
 **Filterlogik (Rahmen, noch nicht ausgearbeitet)**
 - Die Filterlogik je Filter arbeitet der CEO später pro Filter separat aus, einschließlich der Frage, welchen Teil der Seite der Filter beeinflusst (CEO: „ja, dies arbeiten wir aber pro Filter separat aus“).
 - Grundlage für die spätere Auswahl der Bücher ist laut CEO der Lesestatus, den der Nutzer später in den Buchdetails angibt (CEO: „In den Buchdetails kann ich später einen Status angeben.“). Vorgesehene Werte (CEO: „Diese werden vorerst sein“): ungelesen, am lesen, gelesen, abgebrochen, Wunschliste (siehe Glossar „Lesestatus“).
 - Welcher Filter welche Lesestatus auswählt, ist nicht festgelegt und nicht Teil dieses REQ.
+- Ausnahme seit 2026-11-12: Die Filterlogik von „Alle“ und „Noch zu lesen“ bestimmt die Bücher der Übersichten (REQ-036, REQ-039, REQ-040). Auf der Seite „Bücher“ selbst gilt weiterhin:
 - Im Grundgerüst bewirkt die Filterlogik keines Filters etwas Sichtbares (CEO: „aktuell soll […] erstmal nichts passieren, außer, dass ein Filter aktiv angezeigt wird.“). Die Zuordnung je Filter besteht trotzdem als Anknüpfungspunkt für die spätere Ausarbeitung.
 
 ## Akzeptanzkriterien
@@ -91,7 +93,7 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 - **Gegeben** die Filterkonfiguration
 - **Wenn** ein beliebiger Filter darin betrachtet wird
 - **Dann** ist ihm eine Filterlogik zugeordnet, die beim Antippen des Filters ausgelöst wird (REQ-006, AK-10)
-- **Und** im Grundgerüst bewirkt diese Filterlogik keine sichtbare Änderung der Seite „Bücher“
+- **Und** im Grundgerüst bewirkt diese Filterlogik keine sichtbare Änderung der Seite „Bücher“ (Ausnahme „Alle“: öffnet die Übersicht, REQ-039)
 
 ### AK-9 Keine Bearbeitung der Filterkonfiguration in der App
 - **Gegeben** die App ist geöffnet
@@ -129,3 +131,5 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 | 2026-11-09 | Erstellt (Entwurf aus der Vorgabe des CEO, Punkte 1 bis 3 und 10, flexible Datenstruktur, Antworten zu Filtern, Reihenfolge, Standardfilter und Lesestatus) | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt, Vorläufigkeitsvermerk entfernt. F7: Filterkonfiguration wird nur in der Entwicklung gepflegt, keine Bearbeitung in der App (neuer Abschnitt „Pflege der Filterkonfiguration“, neu AK-9, Abgrenzung ergänzt); Zahl hinter Filtern wird ignoriert (Abgrenzung). Filterlogik bewirkt im Grundgerüst nichts Sichtbares, Zuordnung bleibt als Anknüpfungspunkt (AK-8 ergänzt). Keine offenen Fragen mehr; Status bleibt „Entwurf“ bis zur ausdrücklichen Bestätigung durch den CEO | Anforderungsmanager |
 | 2026-11-09 | Vom CEO bestätigt („ja“), Status „Abgestimmt“. Inhalt unverändert | Anforderungsmanager |
+| 2026-11-12 | CEO-Antworten zu REQ-039/REQ-040: neuer Filter „Alle“ an Position 1 („an erster Stelle vor "Für Dich"“), Filterlogik „alle Bücher“; Filterlogik „Noch zu lesen“ = Abschnittszuordnung (wirkt in den Übersichten). Tabelle, Filterlogik-Rahmen und AK-8 angepasst. REQ nicht eingefroren; Statuswechsel durch den Scrum Master | Anforderungsmanager |
+| 2026-11-12 | CEO-Antwort Runde 3: „Für dich“ = Seite „Bücher“ wie gehabt, „Gerade am Lesen“ = Status *am lesen* (REQ-042). Tabelle angepasst | Anforderungsmanager |

@@ -31,6 +31,7 @@ Referenzbilder: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-0
 **Aufruf**
 - Wenn der Nutzer im Abschnitt „Noch zu lesen“ (REQ-009) das Cover eines Bucheintrags antippt, muss das System das Fenster „Buchdetails“ zu genau diesem Buch anzeigen.
 - Wenn der Nutzer im Abschnitt „Noch zu lesen“ den Buchtitel eines Bucheintrags antippt, muss das System das Fenster „Buchdetails“ zu genau diesem Buch anzeigen.
+- Dasselbe gilt für Cover und Titel im Abschnitt „Alle Bücher“ (REQ-035) und in den Übersichten (REQ-036).
 - Während das Fenster „Buchdetails“ angezeigt wird, muss das System die Hauptnavigation (REQ-002) weiterhin anzeigen und den Menüpunkt „Bücher“ als aktiven Menüpunkt darstellen.
 
 **Kopfzeile**
@@ -41,7 +42,7 @@ Referenzbilder: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-0
 - Das System muss den Zurück-Pfeil und die Drei-Punkte-Schaltfläche in der Farbrolle „Kopfzeilen-Symbolfarbe“ darstellen, die ihren Wert aus der Farbrubrik „Tertiär“ bezieht (CEO: „wie 'Deine Bücher'“, REQ-005). Dies gilt auch für den Zurück-Pfeil in der Kameraansicht (REQ-016) und im Zuschnitt-Fenster (REQ-017). Konkrete Farbwerte sind kein Akzeptanzkriterium.
 
 **Rückweg**
-- Wenn der Nutzer in den Buchdetails den Zurück-Pfeil antippt, muss das System die Seite „Bücher“ („Deine Bücher“, REQ-005) anzeigen.
+- Wenn der Nutzer in den Buchdetails den Zurück-Pfeil antippt, muss das System die Seite „Bücher“ („Deine Bücher“, REQ-005) anzeigen. Ausnahme: Wurden die Buchdetails aus einer Übersicht (REQ-036, REQ-040) geöffnet, muss das System wieder diese Übersicht anzeigen (CEO 2026-11-12: „der Zurückpfeil in den Buchdetails geht dann aber zurück auf die Übersichtsliste davor“).
 - Wenn der Nutzer in den Buchdetails den Menüpunkt „Bücher“ der Hauptnavigation antippt, muss das System die Seite „Bücher“ („Deine Bücher“) anzeigen.
 
 ## Akzeptanzkriterien
@@ -102,9 +103,14 @@ Referenzbilder: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-0
 - **Wenn** die Buchdetails angezeigt werden
 - **Dann** sind Zurück-Pfeil und Drei-Punkte-Schaltfläche im geänderten Wert dargestellt
 
+### AK-11 Zurück-Pfeil führt in die Übersicht zurück
+- **Gegeben** das Fenster „Buchdetails“ wurde aus einer Übersicht (REQ-036, REQ-040) geöffnet
+- **Wenn** der Nutzer den Zurück-Pfeil antippt
+- **Dann** wird wieder diese Übersicht angezeigt
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Aufruf der Buchdetails aus weiteren Listen (CEO: „das fügen wir aber nachträglich mit ein, wenn es relevant wird“).
+- Aufruf der Buchdetails aus den Übersichten (REQ-036). Aufruf aus weiteren Listen (CEO: „das fügen wir aber nachträglich mit ein, wenn es relevant wird“).
 - „Kaufen“ (CEO: „nicht relevant“).
 - Funktion der Drei-Punkte-Schaltfläche (CEO: „erstmal nichts“).
 - Inhalt des Fensters (REQ-014 bis REQ-018).
@@ -136,3 +142,5 @@ Referenzbilder: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-0
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 1 und 2 eingearbeitet: Aufruf auch über den Titel (neu AK-3), Zurück-Pfeil und Rückweg über Reiter „Bücher“ (neu AK-6, AK-7), Kopfzeile mit drei Punkten ohne „Kaufen“ (neu AK-5). Titel angepasst. Offen: Funktion der drei Punkte, Farbe, Priorität | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten eingearbeitet: drei Punkte ohne Funktion (neu AK-8), Zurück-Pfeil und drei Punkte in Tertiär wie „Deine Bücher“, auch in Kameraansicht und Zuschnitt (neu AK-9, AK-10), Priorität Must. Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |
+| 2026-11-12 | CEO-Antwort F7 zu REQ-036 („der Zurückpfeil in den Buchdetails geht dann aber zurück auf die Übersichtsliste davor“): Ausnahme im Rückweg, neu AK-11. REQ nicht eingefroren; Statuswechsel durch den Scrum Master | Anforderungsmanager |
+| 2026-11-12 | CEO-Antwort Runde 3, F3: Aufruf auch aus Abschnitt „Alle Bücher“ (Rückweg zur Seite „Bücher“) | Anforderungsmanager |

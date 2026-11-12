@@ -86,6 +86,7 @@ Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Or
 - **Kleine Änderungen ohne neues Verhalten** (z. B. ein anderer Farbwert): kein eigener Tester-Durchlauf. Es reichen der Entwickler mit `verify:grob` und die CI.
 - **Tester bei neuen Funktionen (CEO-Vorgabe 2026-11-10: „wie bisher auch, auch mit den Gegenproben“):** Neue Funktionen werden weiterhin gründlich getestet: mehrere Varianten je AK, Grenz- und Fehlerfälle, dazu eine **Gegenprobe**. Für die Gegenprobe werden in einer Wegwerfkopie Fehler absichtlich eingebaut, und die Tests müssen sie erkennen. Gespart wird nur bei abgenommenen Funktionen (grobe Tests) und bei der Länge von Ausgaben und Berichten.
 - **Beim Abnehmen eines REQ** schreibt der Tester dessen groben Test. Die feinen Tests bleiben unverändert erhalten.
+- **Verschärfung (CEO-Vorgabe 2026-11-12: „teste nachfolgend nur noch die jetzt zu implementierenden Funktionen und nicht mehr das bereits umgesetzte! … zwingend Token sparen“):** Entwickler und Tester führen lokal nur die Tests der REQs des laufenden Auftrags aus (`npx vitest run <Dateien/Filter> --reporter=dot`), dazu Typecheck und Lint. Bereits Umgesetztes wird lokal nicht mehr geprüft. Das Sicherheitsnetz ist allein die CI (`npm run verify`, volle Suite). Der Agent liest dort nur grün/rot und das Log erst bei Rot. Berichte bleiben kurz.
 
 ## Befehle
 

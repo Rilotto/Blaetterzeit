@@ -14,6 +14,8 @@ Gepflegt vom Anforderungsmanager. Hier stehen Wünsche, die der CEO ausdrücklic
 | 2026-11-10 | Testbücher in der echten App | Immer / nur bei leerer App / gar nicht – entscheidet der CEO später. | REQ-008 (Demodaten) |
 | 2026-11-09 | Themes | Auswahl eines Themes in den Einstellungen; Inhalt eines Themes noch offen. | REQ-001 (Entwurf) |
 | 2026-11-09 | Funktion „Cover online suchen“ | „Lass uns die Funktion 'Cover online suchen' umsetzen, aber ohne Funktion. Nimm das auf die To-Do-Liste bitte mit auf.“ Laut CEO auch der einzige Weg zu einem Bild, wenn der Zugriff auf Kamera/Galerie verweigert wurde. | REQ-015, REQ-016 |
+| 2026-11-12 | Sortierknopf „Zuletzt“ in der Übersicht | Sortierknopf ‚Zuletzt‘ in der Übersicht: Funktion nachrüsten, insbesondere nach Eintragungsdatum filtern/sortieren können. CEO: „bitte umsetzten, aber ohne Funktion (aufnehmen auf die To-Do liste mit Hinweis: hier auch nach Eintragungsdatum filtern zu können!)“ | REQ-036, REQ-041 |
+| 2026-11-12 | Filterpille „Für dich“ personalisierbar | „Die Pille für dich soll später einmal personalisierbar sein (über das Icon neben dem + oben rechts). Hier soll einfach erstmal die Übersicht wie gehabt bleiben.“ | REQ-005, REQ-007 |
 | 2026-11-09 | Buchdetails aus weiteren Listen öffnen | „Später auch noch aus diversen Listen, das fügen wir aber nachträglich mit ein, wenn es relevant wird.“ | REQ-013 |
 
 - 2026-11-09 (Scrum Master): REQ-016 um die CEO-Entscheidung ergänzen, dass der Hinweis „Kamera nicht verfügbar“ auch bei verweigertem Zugriff erscheint. Zitat: „Ja, der Hinweis soll weiterhin bestehen.“
