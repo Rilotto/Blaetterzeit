@@ -25,9 +25,9 @@ export const jahrUngueltig = (e: Eingaben): boolean => e.jahr !== '' && !/^\d{4}
 /**
  * Baut aus gültigen Eingaben ein neues Buch mit neuer UUID und Lesestatus „ungelesen“ (REQ-031).
  * Leere optionale Felder fehlen im Buch – Platzhaltertexte werden nie gespeichert (AK-2).
- * Ein Erscheinungsdatum gibt es noch nicht (REQ-033, AK-3).
+ * Ein Erscheinungsdatum gibt es noch nicht (REQ-033, AK-3). Das Eintragungsdatum ist `jetzt` (REQ-041).
  */
-export function buchAusEingaben(e: Eingaben): Buch {
+export function buchAusEingaben(e: Eingaben, jetzt: Date = new Date()): Buch {
   if (titelFehlt(e)) throw new Error('Titel fehlt');
   if (jahrUngueltig(e)) throw new Error('Jahr ungültig');
   const autor = e.autor.trim();
@@ -39,5 +39,7 @@ export function buchAusEingaben(e: Eingaben): Buch {
     ...(e.jahr ? { erscheinungsjahr: Number(e.jahr) } : {}),
     // Eine Seitenanzahl von 0 ist keine Angabe (Annahme des Entwicklers).
     ...(seiten !== undefined && seiten > 0 ? { seitenanzahl: seiten } : {}),
+    // Eintragungsdatum = Zeitpunkt des Anlegens (REQ-041, AK-1).
+    eingetragenAm: jetzt.toISOString(),
   });
 }

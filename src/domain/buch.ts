@@ -53,6 +53,11 @@ export interface Buch {
   fortschrittsmodus?: Fortschrittsmodus;
   /** Lesesitzungen: je Erhöhung des Fortschritts eine, Zeitpunkt als ISO-Zeichenkette (REQ-024, REQ-026, REQ-027). */
   sitzungen?: Sitzung[];
+  /**
+   * Eintragungsdatum: Zeitpunkt des Anlegens als ISO-Zeichenkette (REQ-041). Wird nur beim Anlegen gesetzt.
+   * Optional, damit ältere Datensätze ohne Datum gelesen werden können (sie gelten als älter als alle datierten).
+   */
+  eingetragenAm?: string;
 }
 
 export type Fortschrittsmodus = 'seite' | 'prozent';
@@ -74,6 +79,7 @@ export const OPTIONALE_BUCHFELDER = [
   'fortschrittProzent',
   'fortschrittsmodus',
   'sitzungen',
+  'eingetragenAm',
 ] as const;
 
 export interface NeuesBuch {
@@ -84,7 +90,12 @@ export interface NeuesBuch {
   erscheinungsjahr?: number;
   erscheinungsdatum?: string;
   seitenanzahl?: number;
+  /** Eintragungsdatum (ISO), REQ-041. */
+  eingetragenAm?: string;
 }
+
+/** Prüft, ob ein Wert ein gültiger ISO-Zeitpunkt ist (Eintragungsdatum, REQ-041). */
+export const istZeitpunkt = (wert: unknown): wert is string => typeof wert === 'string' && !Number.isNaN(Date.parse(wert));
 
 /** Legt ein Buch mit neuer UUID an. Nicht gesetzte optionale Angaben fehlen im Ergebnis. */
 export function neuesBuch(eingabe: NeuesBuch): Buch {
@@ -95,6 +106,7 @@ export function neuesBuch(eingabe: NeuesBuch): Buch {
   if (eingabe.erscheinungsjahr !== undefined) buch.erscheinungsjahr = eingabe.erscheinungsjahr;
   if (eingabe.erscheinungsdatum !== undefined) buch.erscheinungsdatum = eingabe.erscheinungsdatum;
   if (eingabe.seitenanzahl !== undefined) buch.seitenanzahl = eingabe.seitenanzahl;
+  if (eingabe.eingetragenAm !== undefined) buch.eingetragenAm = eingabe.eingetragenAm;
   return buch;
 }
 
@@ -133,5 +145,7 @@ export function buchAusDaten(daten: unknown): Buch {
       .filter((s): s is { zeitpunkt: string } => typeof (s as { zeitpunkt?: unknown })?.zeitpunkt === 'string')
       .map((s) => ({ zeitpunkt: s.zeitpunkt }));
   }
+  // Fehlt das Eintragungsdatum oder ist es ungültig, fehlt es im Ergebnis (robust für ältere Datensätze, REQ-041).
+  if (istZeitpunkt(e.eingetragenAm)) buch.eingetragenAm = e.eingetragenAm;
   return buch;
 }

@@ -25,6 +25,14 @@ input[data-bz-eingabe]::placeholder {
   opacity: 1;
 }
 
+/* REQ-038: Suchfeld der Übersichten – Platzhalter kursiv wie im Referenzbild, ohne Browser-Löschkreuz. */
+input[data-suchfeld]::placeholder {
+  font-style: italic;
+}
+input[data-suchfeld]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
 /* Bildschirmfüllende Blätter (REQ-030) halten Statusleiste und Gestenleiste frei
    (--safe-area-inset-* setzt Capacitor auf Android, sonst env()). */
 [data-sicherer-bereich] {

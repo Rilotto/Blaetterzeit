@@ -1,7 +1,7 @@
 ---
 id: REQ-007
 titel: Filterkonfiguration unabhängig von der Darstellung
-status: Implementiert
+status: In Umsetzung
 prioritaet: Must
 art: randbedingung
 quelle: CEO

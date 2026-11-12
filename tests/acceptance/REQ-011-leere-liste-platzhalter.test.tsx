@@ -205,8 +205,12 @@ describe('REQ-011 Platzhalter bei leerer Liste', () => {
     });
 
     it('[REQ-011/AK-1] der Platzhalter steht nur im Abschnitt „Noch zu lesen“, nicht in „Sagas“/„Sammlungen“', () => {
+      // Seit 2026-11-12 hat auch „Alle Bücher“ (REQ-035, AK-9) einen eigenen Leere-Liste-Platzhalter; hier nur REQ-011.
       zeige([]);
-      expect(document.querySelectorAll('[data-leere-liste]')).toHaveLength(1);
+      expect(abschnitt().querySelectorAll('[data-leere-liste]')).toHaveLength(1);
+      for (const name of ['Sagas', 'Sammlungen']) {
+        expect(screen.getByRole('region', { name }).querySelectorAll('[data-leere-liste]'), name).toHaveLength(0);
+      }
     });
   });
 

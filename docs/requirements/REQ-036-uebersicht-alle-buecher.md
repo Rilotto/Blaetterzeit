@@ -1,7 +1,7 @@
 ---
 id: REQ-036
 titel: Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

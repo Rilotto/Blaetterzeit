@@ -1,7 +1,7 @@
 ---
 id: REQ-035
 titel: Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

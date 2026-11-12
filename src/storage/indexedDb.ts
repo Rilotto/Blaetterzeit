@@ -8,7 +8,7 @@ export const STORE_BILDER = 'bilder';
 export const STORE_BUECHER = 'buecher';
 
 /** Versionierte Schemaänderungen (Index = Zielversion - 1). */
-const MIGRATIONEN: ((db: IDBDatabase) => void)[] = [
+const MIGRATIONEN: ((db: IDBDatabase, tx: IDBTransaction) => void)[] = [
   // Version 1: Bilder je Buch und Bereich (REQ-019).
   (db) => {
     db.createObjectStore(STORE_BILDER);
@@ -16,6 +16,21 @@ const MIGRATIONEN: ((db: IDBDatabase) => void)[] = [
   // Version 2: Bücher mit allen Angaben, Schlüssel = Buch-ID (REQ-034).
   (db) => {
     db.createObjectStore(STORE_BUECHER, { keyPath: 'buch.id' });
+  },
+  // Version 3: Eintragungsdatum (REQ-041). Vorhandene Bücher ohne Datum erhalten den Zeitpunkt ihrer
+  // ersten Speicherung (Feld `nr` = Millisekunden * 1000 + Zähler); Bücher mit Datum bleiben unverändert.
+  (_db, tx) => {
+    const req = tx.objectStore(STORE_BUECHER).openCursor();
+    req.onsuccess = () => {
+      const cursor = req.result;
+      if (!cursor) return;
+      const satz = cursor.value as { buch: Record<string, unknown>; nr?: unknown };
+      if (satz.buch.eingetragenAm === undefined && typeof satz.nr === 'number') {
+        const ms = Math.floor(satz.nr / 1000);
+        if (Number.isFinite(ms) && ms > 0) cursor.update({ ...satz, buch: { ...satz.buch, eingetragenAm: new Date(ms).toISOString() } });
+      }
+      cursor.continue();
+    };
   },
 ];
 
@@ -42,7 +57,8 @@ export function oeffnen(fabrik: IDBFactory, name: string = DB_NAME): Promise<IDB
   return new Promise((resolve, reject) => {
     const req = fabrik.open(name, SCHEMA_VERSION);
     req.onupgradeneeded = (e) => {
-      for (let v = e.oldVersion; v < MIGRATIONEN.length; v++) MIGRATIONEN[v](req.result);
+      const tx = req.transaction!;
+      for (let v = e.oldVersion; v < MIGRATIONEN.length; v++) MIGRATIONEN[v](req.result, tx);
     };
     req.onsuccess = () => {
       const db = req.result;

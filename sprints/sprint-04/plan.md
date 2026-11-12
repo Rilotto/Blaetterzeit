@@ -106,3 +106,10 @@ _Folgen nach der Abstimmung mit dem CEO._
 
 **Farben**
 - Nur über `var(--bz-farbe-<id>)`. Neue Rubrik-IDs: `flammerot` und `flammeorange`.
+
+## Freigabe CEO 2026-11-12 (Teil C – Übersichten)
+CEO: „alles klar, alles bestätigt. baue den neuen prototypen bitte“.
+REQs: REQ-035 bis REQ-042 (neu), REQ-006, REQ-007, REQ-009, REQ-013 (angepasst) → „In Umsetzung“.
+Testvorgabe (CLAUDE.md, Verschärfung 2026-11-12): lokal nur Tests der Teil-C-REQs + Typecheck/Lint; Sicherheitsnetz ist die CI.
+Offen beim CEO: Öffnet die Pille „Noch zu lesen“ auf der Seite „Bücher“ die Übersicht? Bis zur Antwort gilt der REQ-007-Text.
+Risiko: REQ-041 Eintragungsdatum braucht eine Datenmigration (SQLite/IndexedDB), vorhandene Bücher im Prototyp erhalten ein Ersatzdatum.

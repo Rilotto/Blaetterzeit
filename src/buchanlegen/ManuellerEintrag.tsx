@@ -35,6 +35,8 @@ export interface ManuellerEintragProps {
   onZurueck: () => void;
   /** Das Buch wurde angelegt (REQ-031). */
   onAngelegt: (buch: Buch) => void;
+  /** Aktuelle Zeit für das Eintragungsdatum (REQ-041); ohne Angabe die Systemzeit. In Tests ersetzbar. */
+  jetzt?: () => Date;
 }
 
 type Schritt = { art: 'blatt' } | { art: 'kamera' } | { art: 'zuschnitt'; bild: string };
@@ -293,7 +295,14 @@ function Feld({ name, platzhalter, wert, onWert, ziffern = false, fehler = false
 }
 
 /** Blatt „Manueller Eintrag“ (REQ-030) mit Anlegen (REQ-031) und Cover (REQ-032). */
-export default function ManuellerEintrag({ repository, bildspeicher, bildquelle, onZurueck, onAngelegt }: ManuellerEintragProps) {
+export default function ManuellerEintrag({
+  repository,
+  bildspeicher,
+  bildquelle,
+  onZurueck,
+  onAngelegt,
+  jetzt,
+}: ManuellerEintragProps) {
   const [eingaben, setEingaben] = useState<Eingaben>(LEERE_EINGABEN);
   const [titelHinweis, setTitelHinweis] = useState(false);
   const [jahrFehler, setJahrFehler] = useState(false);
@@ -357,7 +366,7 @@ export default function ManuellerEintrag({ repository, bildspeicher, bildquelle,
     if (ohneTitel || falschesJahr) return;
     speichert.current = true;
     try {
-      const buch = buchAusEingaben(eingaben);
+      const buch = buchAusEingaben(eingaben, jetzt ? jetzt() : new Date());
       const repo = repository ?? (await standardRepository());
       await repo.save(buch);
       if (cover) {

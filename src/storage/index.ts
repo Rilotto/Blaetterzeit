@@ -7,8 +7,13 @@ import { InMemoryImageStore } from './InMemoryImageStore';
 import { IndexedDbImageStore } from './IndexedDbImageStore';
 import { RueckfallBookRepository } from './RueckfallBookRepository';
 import { RueckfallImageStore } from './RueckfallImageStore';
+import type { AnsichtRepository } from './AnsichtRepository';
+import { InMemoryAnsichtRepository } from './InMemoryAnsichtRepository';
+import { RueckfallAnsichtRepository, WebAnsichtRepository } from './WebAnsichtRepository';
 
-export type { BookRepository, ImageStore };
+export type { BookRepository, ImageStore, AnsichtRepository };
+export type { Uebersichtsansicht } from './AnsichtRepository';
+export { InMemoryAnsichtRepository } from './InMemoryAnsichtRepository';
 export type { Bildbereich } from './ImageStore';
 export { BILDBEREICHE } from './ImageStore';
 
@@ -64,4 +69,18 @@ export function createImageStore(): ImageStore {
     await store.bereit();
     return store;
   }, meldung);
+}
+
+/**
+ * Gemerkte Ansicht je Liste (REQ-037): dauerhaft im Schlüssel-Wert-Speicher der WebView bzw. des Browsers
+ * (bleibt im Web-Prototyp und in der APK über Neustarts erhalten). Ohne nutzbaren Speicher: Arbeitsspeicher.
+ */
+export function createAnsichtRepository(): AnsichtRepository {
+  let dauerhaft: AnsichtRepository | undefined;
+  try {
+    if (typeof localStorage !== 'undefined') dauerhaft = new WebAnsichtRepository(localStorage);
+  } catch (fehler) {
+    console.warn('Ansichtsspeicher nicht dauerhaft verfügbar:', fehler);
+  }
+  return new RueckfallAnsichtRepository(dauerhaft, new InMemoryAnsichtRepository());
 }

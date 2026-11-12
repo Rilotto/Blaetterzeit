@@ -8,6 +8,7 @@ afterEach(() => cleanup());
 
 it('[REQ-007/GROB] Leiste folgt der Konfiguration (Name, Reihenfolge, Standard), jeder Filter löst seine Logik aus', () => {
   expect([...filterKonfiguration].sort((a, b) => a.reihenfolge - b.reihenfolge).map((f) => [f.name, !!f.standard])).toEqual([
+    ['Alle', false],
     ['Für dich', true],
     ['Gerade am Lesen', false],
     ['Noch zu lesen', false],

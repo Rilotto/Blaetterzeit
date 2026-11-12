@@ -130,7 +130,10 @@ describe('REQ-034 Buchdaten dauerhaft speichern', () => {
         erscheinungsjahr: 2019,
         seitenanzahl: 350,
         status: 'ungelesen',
+        // Seit 2026-11-12 automatisch gesetzt (REQ-041), bleibt unverändert.
+        eingetragenAm: vorher.eingetragenAm,
       });
+      expect(typeof vorher.eingetragenAm).toBe('string');
     });
 
     it('[REQ-034/AK-1] nach Neustart zeigen Buchliste und Buchdetails das Buch', async () => {
@@ -162,7 +165,10 @@ describe('REQ-034 Buchdaten dauerhaft speichern', () => {
         fireEvent.click(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
         await screen.findByRole('heading', { name: 'Deine Bücher' });
         await vi.waitFor(() => expect(eintrag('App-Dauerbuch')).toBeDefined());
-        const titel = Array.from(document.querySelectorAll('[data-buchtitel]')).map((e) => e.textContent?.trim());
+        // Nur im Abschnitt „Noch zu lesen“ zählen; „Alle Bücher“ (REQ-035) zeigt dasselbe Buch zusätzlich.
+        const titel = Array.from(
+          screen.getByRole('region', { name: 'Noch zu lesen' }).querySelectorAll('[data-buchtitel]'),
+        ).map((e) => e.textContent?.trim());
         expect(titel.filter((t) => t === 'App-Dauerbuch'), `Neustart ${i + 1}`).toHaveLength(1);
         cleanup();
       }
@@ -178,7 +184,8 @@ describe('REQ-034 Buchdaten dauerhaft speichern', () => {
       const s2 = await starte();
       const [b] = await finde(s2.repo, 'Nur Titel');
       expect(b).toBeDefined();
-      expect(Object.keys(b).sort()).toEqual(['id', 'status', 'titel']);
+      // Eintragungsdatum wird seit 2026-11-12 automatisch gesetzt (REQ-041), ist keine Ersatzangabe des Nutzers.
+      expect(Object.keys(b).sort()).toEqual(['eingetragenAm', 'id', 'status', 'titel']);
       expect(b.status).toBe('ungelesen');
       expect(await s2.bilder.get(b.id, 'cover')).toBeUndefined();
     });
@@ -236,7 +243,7 @@ describe('REQ-034 Buchdaten dauerhaft speichern', () => {
       for (const [titel, felder] of Object.entries(erwartet)) {
         const b = alle.filter((x) => x.titel === titel);
         expect(b, titel).toHaveLength(1);
-        const { id, titel: _t, status, ...rest } = b[0];
+        const { id, titel: _t, status, eingetragenAm: _e, ...rest } = b[0];
         expect(rest, titel).toEqual(felder);
         expect(status).toBe('ungelesen');
         expect(await s2.bilder.get(id, 'cover'), `Cover ${titel}`).toBe(covers[titel] ?? undefined);

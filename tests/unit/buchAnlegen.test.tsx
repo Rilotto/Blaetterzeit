@@ -34,8 +34,9 @@ describe('Eingaberegeln Manueller Eintrag', () => {
   });
 
   it('baut ein Buch ohne Platzhalterwerte und mit Status „ungelesen“', () => {
-    const b = buchAusEingaben({ titel: ' Testbuch ', autor: '', jahr: '', seiten: '' });
-    expect(Object.keys(b).sort()).toEqual(['id', 'status', 'titel']);
+    const b = buchAusEingaben({ titel: ' Testbuch ', autor: '', jahr: '', seiten: '' }, new Date('2026-11-12T10:00:00.000Z'));
+    expect(Object.keys(b).sort()).toEqual(['eingetragenAm', 'id', 'status', 'titel']);
+    expect(b.eingetragenAm).toBe('2026-11-12T10:00:00.000Z');
     expect(b).toMatchObject({ titel: 'Testbuch', status: 'ungelesen' });
     const v = buchAusEingaben({ titel: 'T', autor: 'A B', jahr: '2019', seiten: '350' });
     expect(v).toMatchObject({ autor: 'A B', erscheinungsjahr: 2019, seitenanzahl: 350 });

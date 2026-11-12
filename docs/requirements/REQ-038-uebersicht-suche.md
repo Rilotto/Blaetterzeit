@@ -1,7 +1,7 @@
 ---
 id: REQ-038
 titel: Übersichten – Suche nach Titel oder Autor
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

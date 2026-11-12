@@ -291,6 +291,64 @@ export const buchAnlegenFarbrollen: Record<BuchAnlegenFarbrolle, FarbrubrikId> =
   fehler: 'primaer',
 };
 
+/** Farbrollen der Übersichten (REQ-036 bis REQ-038, REQ-040, REQ-042), Zuordnung nach den Referenzbildern. */
+export type UebersichtFarbrolle =
+  | 'suchfeldFlaeche'
+  | 'suchfeldRahmen'
+  | 'suchfeldIcon'
+  | 'suchfeldText'
+  | 'suchfeldPlatzhalter'
+  | 'anzahl'
+  | 'umschalterFlaeche'
+  | 'umschalterRahmen'
+  | 'umschalterAktivFlaeche'
+  | 'umschalterAktivIcon'
+  | 'umschalterInaktivIcon'
+  | 'sortierFlaeche'
+  | 'sortierRahmen'
+  | 'sortierSchrift'
+  | 'kartenFlaeche'
+  | 'kartenRahmen'
+  | 'buchtitel'
+  | 'autor'
+  | 'autorIcon'
+  | 'balkenLeer'
+  | 'balkenFuellung'
+  | 'fortschrittText'
+  | 'statuschipFlaeche'
+  | 'statuschipSchrift';
+
+/** Aus welcher Farbrubrik jede Farbrolle der Übersichten ihre Farbe bezieht (nur bestehende Rubriken). */
+export const uebersichtFarbrollen: Record<UebersichtFarbrolle, FarbrubrikId> = {
+  suchfeldFlaeche: 'hintergrund',
+  suchfeldRahmen: 'ghostframe',
+  suchfeldIcon: 'dunkelbraun',
+  suchfeldText: 'dunkelbraun',
+  suchfeldPlatzhalter: 'tertiaer',
+  anzahl: 'tertiaer',
+  umschalterFlaeche: 'hintergrund',
+  umschalterRahmen: 'ghostframe',
+  umschalterAktivFlaeche: 'dunkelbraun',
+  umschalterAktivIcon: 'hintergrund',
+  umschalterInaktivIcon: 'tertiaer',
+  sortierFlaeche: 'hintergrund',
+  sortierRahmen: 'ghostframe',
+  sortierSchrift: 'dunkelbraun',
+  kartenFlaeche: 'hintergrund',
+  kartenRahmen: 'ghostframe',
+  buchtitel: 'dunkelbraun',
+  autor: 'tertiaer',
+  autorIcon: 'primaer',
+  balkenLeer: 'ghostframe',
+  balkenFuellung: 'primaer',
+  fortschrittText: 'tertiaer',
+  statuschipFlaeche: 'ghost',
+  statuschipSchrift: 'primaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle der Übersichten, z. B. `var(--bz-farbe-ghostframe)`. */
+export const uebersichtFarbe = (rolle: UebersichtFarbrolle): string => rubrikFarbe(uebersichtFarbrollen[rolle]);
+
 /** Name der CSS-Variable einer Farbrubrik, z. B. `--bz-farbe-primaer`. */
 export const rubrikVariable = (id: FarbrubrikId): string => `--bz-farbe-${id}`;
 

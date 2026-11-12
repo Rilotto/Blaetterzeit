@@ -3,7 +3,7 @@ import type { BookRepository } from './BookRepository';
 import type { SqlVerbindung, SqlWert } from './sqlite/SqlVerbindung';
 
 const SPALTEN =
-  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen';
+  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen, eingetragen_am';
 
 /** Spaltenwerte eines Buches; fehlende optionale Angaben werden als NULL gespeichert. */
 function werte(b: Buch): SqlWert[] {
@@ -19,6 +19,7 @@ function werte(b: Buch): SqlWert[] {
     b.fortschrittProzent ?? null,
     b.fortschrittsmodus ?? null,
     b.sitzungen ? JSON.stringify(b.sitzungen) : null,
+    b.eingetragenAm ?? null,
   ];
 }
 
@@ -46,11 +47,12 @@ function ausZeile(z: Record<string, unknown>): Buch {
     fortschrittProzent: zahl(z.fortschritt_prozent),
     fortschrittsmodus: z.fortschrittsmodus ?? undefined,
     sitzungen: typeof z.sitzungen === 'string' ? sitzungenLesen(z.sitzungen) : undefined,
+    eingetragenAm: z.eingetragen_am ?? undefined,
   });
 }
 
 /**
- * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 und 3, REQ-034, REQ-024).
+ * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 bis 4, REQ-034, REQ-024, REQ-041).
  * Reihenfolge = Reihenfolge des Anlegens (rowid bleibt beim Überschreiben erhalten).
  */
 export class SqliteBookRepository implements BookRepository {
@@ -77,11 +79,11 @@ export class SqliteBookRepository implements BookRepository {
       await this.db.ausfuehren(
         `UPDATE buch SET titel = ?, status = ?, autor = ?, erscheinungsjahr = ?, erscheinungsdatum = ?,
          seitenanzahl = ?, cover = ?, aktuelle_seite = ?, fortschritt_prozent = ?, fortschrittsmodus = ?,
-         sitzungen = ?, geaendert = ? WHERE id = ?`,
+         sitzungen = ?, eingetragen_am = ?, geaendert = ? WHERE id = ?`,
         [...werte(b), new Date().toISOString(), b.id],
       );
     } else {
-      await this.db.ausfuehren(`INSERT INTO buch (${SPALTEN}, geaendert) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+      await this.db.ausfuehren(`INSERT INTO buch (${SPALTEN}, geaendert) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
         b.id,
         ...werte(b),
         new Date().toISOString(),

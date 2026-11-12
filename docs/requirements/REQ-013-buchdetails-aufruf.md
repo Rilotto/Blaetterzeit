@@ -1,7 +1,7 @@
 ---
 id: REQ-013
 titel: Buchdetails – Aufruf, Kopfzeile und Rückweg
-status: Implementiert
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

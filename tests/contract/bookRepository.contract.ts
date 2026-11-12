@@ -124,6 +124,21 @@ export function runBookRepositoryContract(name: string, factory: Fabrik) {
       expect((await repo.list()).map((x) => x.titel)).toEqual(['A2', 'B', 'C']);
     });
 
+    it('speichert das Eintragungsdatum (REQ-041), auch nach einem Neustart; Überschreiben behält es', async () => {
+      const buch = neuesBuch({ titel: 'Datiert', status: 'ungelesen', eingetragenAm: '2026-11-12T09:30:00.000Z' });
+      await repo.save(buch);
+      expect(await repo.get(buch.id)).toEqual(buch);
+      await repo.save({ ...buch, status: 'gelesen' });
+      const nachher = neustart ? await neustart() : repo;
+      expect((await nachher.get(buch.id))?.eingetragenAm).toBe('2026-11-12T09:30:00.000Z');
+    });
+
+    it('liest Bücher ohne Eintragungsdatum (ältere Datensätze) ohne Ersatzwert', async () => {
+      const buch = neuesBuch({ titel: 'Alt', status: 'ungelesen' });
+      await repo.save(buch);
+      expect((await repo.get(buch.id))?.eingetragenAm).toBeUndefined();
+    });
+
     it('entfernt beim Überschreiben weggefallene optionale Angaben', async () => {
       const buch = neuesBuch({ titel: 'X', status: 'ungelesen', autor: 'Y', seitenanzahl: 10 });
       await repo.save(buch);

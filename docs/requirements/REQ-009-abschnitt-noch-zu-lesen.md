@@ -1,7 +1,7 @@
 ---
 id: REQ-009
 titel: Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste
-status: Implementiert
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

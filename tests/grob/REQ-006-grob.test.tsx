@@ -13,7 +13,7 @@ const aktiv = () => filter().filter((b) => b.getAttribute('aria-pressed') === 't
 it('[REQ-006/GROB] Filterleiste: „Für dich“ aktiv, genau ein aktiver Filter, Wechsel per Klick, nach Seitenwechsel zurückgesetzt', () => {
   render(<App />);
   tap('Bücher');
-  expect(filter().map((b) => b.textContent?.trim())).toEqual(['Für dich', 'Gerade am Lesen', 'Noch zu lesen']);
+  expect(filter().map((b) => b.textContent?.trim())).toEqual(['Alle', 'Für dich', 'Gerade am Lesen', 'Noch zu lesen']);
   expect(aktiv()).toEqual(['Für dich']);
   fireEvent.click(within(screen.getByRole('group', { name: 'Filter' })).getByRole('button', { name: 'Noch zu lesen' }));
   expect(aktiv()).toEqual(['Noch zu lesen']);

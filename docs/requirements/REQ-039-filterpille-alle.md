@@ -1,7 +1,7 @@
 ---
 id: REQ-039
 titel: Filterleiste – neue Filterpille „Alle“ öffnet die Übersicht „Alle Bücher“
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

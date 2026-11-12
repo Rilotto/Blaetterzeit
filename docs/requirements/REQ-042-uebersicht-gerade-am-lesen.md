@@ -1,7 +1,7 @@
 ---
 id: REQ-042
 titel: Übersicht „Gerade am Lesen“ über die Filterpille
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

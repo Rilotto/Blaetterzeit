@@ -564,17 +564,23 @@ describe('REQ-009 Abschnitt „Noch zu lesen“', () => {
   });
 
   // ---------------------------------------------------------------- AK-14
-  describe('AK-14 „Alle ansehen ›“ bewirkt vorerst nichts', () => {
-    it('[REQ-009/AK-14] Antippen ändert in der App nichts (Ansicht, Menüpunkt, Filterleiste, Buchliste)', async () => {
+  describe('AK-14 „Alle ansehen ›“ öffnet die Übersicht „Noch zu lesen“ (Fassung 2026-11-12)', () => {
+    it('[REQ-009/AK-14] Antippen in der App öffnet die Übersicht „Noch zu lesen“, Menüpunkt „Bücher“ bleibt aktiv', async () => {
       render(<App />);
       tapMenue('Bücher');
       await within(abschnitt()).findByRole('list', { name: ABSCHNITT });
-      fireEvent.click(within(screen.getByRole('group', { name: 'Filter' })).getByRole('button', { name: 'Noch zu lesen' }));
-      const vorher = document.body.innerHTML;
-      const alle = within(abschnitt()).getByRole('button', { name: ALLE });
-      fireEvent.click(alle);
-      fireEvent.click(alle);
-      expect(document.body.innerHTML).toBe(vorher);
+      fireEvent.click(within(abschnitt()).getByRole('button', { name: ALLE }));
+      const u = document.querySelector('[data-uebersicht]');
+      expect(u?.getAttribute('data-uebersicht')).toBe('noch_zu_lesen');
+      expect(document.querySelector('[data-seite="buecher"]')).toBeNull();
+      const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
+      expect(within(nav).getByRole('button', { name: 'Bücher' })).toHaveAttribute('aria-current', 'page');
+    });
+
+    it('[REQ-009/AK-14] Negativfall: „Alle ansehen ›“ im Abschnitt „Noch zu lesen“ öffnet nicht die Übersicht „Alle Bücher“', () => {
+      zeige([buch('A'), buch('B', 'gelesen')]);
+      fireEvent.click(within(abschnitt()).getByRole('button', { name: ALLE }));
+      expect(document.querySelector('[data-uebersicht]')?.getAttribute('data-uebersicht')).toBe('noch_zu_lesen');
     });
 
     it('[REQ-009/AK-14] „Alle ansehen ›“ hat keinen Umschalt- oder Linkzustand', () => {

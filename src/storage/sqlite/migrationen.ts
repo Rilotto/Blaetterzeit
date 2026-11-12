@@ -54,6 +54,14 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN sitzungen TEXT',
     ],
   },
+  {
+    version: 4,
+    beschreibung: 'Eintragungsdatum (REQ-041)',
+    anweisungen: [
+      // ISO-Zeitpunkt des Anlegens; NULL bei vorhandenen Büchern (gelten als älter, Reihenfolge des Anlegens).
+      'ALTER TABLE buch ADD COLUMN eingetragen_am TEXT',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */
