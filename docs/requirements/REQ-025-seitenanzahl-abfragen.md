@@ -1,7 +1,7 @@
 ---
 id: REQ-025
 titel: Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

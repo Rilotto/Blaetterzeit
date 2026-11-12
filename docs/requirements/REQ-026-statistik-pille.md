@@ -1,7 +1,7 @@
 ---
 id: REQ-026
 titel: Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

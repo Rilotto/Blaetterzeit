@@ -31,3 +31,34 @@ input[data-bz-eingabe]::placeholder {
   padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
   padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
 }
+
+/* REQ-024/REQ-025: Blätter „Aktuelle Seite“ und „Buchlänge“ werden von unten eingeblendet. */
+@keyframes bz-blatt-ein {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes bz-abdunklung-ein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-blatt-unten],
+  [data-blatt-hintergrund] {
+    animation: none !important;
+  }
+}
+
+/* Blätter von unten halten die Gestenleiste frei (REQ-024, REQ-025). */
+[data-blatt-unten] {
+  padding-bottom: calc(24px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+}

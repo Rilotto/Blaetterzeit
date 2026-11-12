@@ -1,7 +1,7 @@
 ---
 id: REQ-033
 titel: Buchdaten – Erscheinungsjahr und Erscheinungsdatum
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

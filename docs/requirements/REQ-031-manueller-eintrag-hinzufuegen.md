@@ -1,7 +1,7 @@
 ---
 id: REQ-031
 titel: Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

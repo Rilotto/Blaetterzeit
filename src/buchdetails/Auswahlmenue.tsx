@@ -32,11 +32,23 @@ const ENTFERNEN: Eintrag = { aktion: 'entfernen', text: 'Foto entfernen', datei:
 
 // Maße aus REF-buchdetails-02-auswahlmenue.png: Breite ≈ 250 dp, Zeilen ≈ 48 dp,
 // Schrift ≈ 17 dp normal, Icons ≈ 20 dp rechtsbündig, Ecken ≈ 16 dp.
-const hintergrundStil: CSSProperties = {
+/** Unsichtbare Fläche hinter dem Menü: Tippen außerhalb schließt (auch Statusmenü, REQ-022). */
+export const hintergrundStil: CSSProperties = {
   position: 'fixed',
   inset: 0,
   zIndex: 10,
   background: 'transparent',
+};
+
+/** Fläche, Ecken und Schatten des Menüs (auch Statusmenü, REQ-022). */
+export const menueFlaecheStil: CSSProperties = {
+  boxSizing: 'border-box',
+  width: '250px',
+  maxWidth: 'calc(100% - 32px)',
+  padding: '10px 0',
+  borderRadius: '16px',
+  backgroundColor: auswahlmenueFlaeche,
+  boxShadow: auswahlmenueSchatten,
 };
 
 const menueStil = (oben: number): CSSProperties => ({
@@ -45,16 +57,11 @@ const menueStil = (oben: number): CSSProperties => ({
   top: `${oben}px`,
   left: '50%',
   transform: 'translateX(-50%)',
-  boxSizing: 'border-box',
-  width: '250px',
-  maxWidth: 'calc(100% - 32px)',
-  padding: '10px 0',
-  borderRadius: '16px',
-  backgroundColor: auswahlmenueFlaeche,
-  boxShadow: auswahlmenueSchatten,
+  ...menueFlaecheStil,
 });
 
-const eintragStil: CSSProperties = {
+/** Eine Zeile des Menüs (auch Statusmenü, REQ-022). */
+export const eintragStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',

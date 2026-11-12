@@ -23,6 +23,8 @@ interface Props {
   bildquelle?: Bildquelle;
   /** Bildspeicher (Frontcover in der Liste, Bilder der Buchdetails); in Tests ersetzbar. */
   bildspeicher?: ImageStore;
+  /** Aktuelle Zeit für Sitzungen und Streak in den Buchdetails (REQ-024, REQ-027); in Tests ersetzbar. */
+  jetzt?: () => Date;
 }
 
 const seiteStil: CSSProperties = {
@@ -88,7 +90,7 @@ type Ansicht = { art: 'liste' } | { art: 'eintrag' } | { art: 'details'; buch: B
  * Seite „Bücher“ (REQ-005, REQ-006, REQ-009 bis REQ-012) mit Zugang zu den Buchdetails (REQ-013)
  * und zum Anlegen eines Buches über das Plus-Menü (REQ-029 bis REQ-032).
  */
-export default function BuecherAnsicht({ filter, buecher, repository, bildquelle, bildspeicher }: Props) {
+export default function BuecherAnsicht({ filter, buecher, repository, bildquelle, bildspeicher, jetzt }: Props) {
   const [stand, setStand] = useState(0);
   const alle = useBuecher(buecher, repository, stand);
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
@@ -112,6 +114,8 @@ export default function BuecherAnsicht({ filter, buecher, repository, bildquelle
         buch={ansicht.buch}
         bildquelle={bildquelle}
         bildspeicher={speicher}
+        repository={repository}
+        jetzt={jetzt}
         onZurueck={zurListe}
       />
     );

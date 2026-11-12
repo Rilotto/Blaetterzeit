@@ -12,7 +12,9 @@ export type FarbrubrikId =
   | 'tertiaer'
   | 'ghost'
   | 'ghostframe'
-  | 'dunkelbraun';
+  | 'dunkelbraun'
+  | 'flammerot'
+  | 'flammeorange';
 
 export interface Farbrubrik {
   /** Anzeigename der Rubrik (vom CEO vergeben bzw. Arbeitsname). */
@@ -32,6 +34,9 @@ export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
   ghostframe: { name: 'GhostFrame', wert: '#DFD9CB' },
   // REQ-009: Buchtitel.
   dunkelbraun: { name: 'Dunkelbraun', wert: '#392F25' },
+  // REQ-027: Verlauf der Streak-Flamme (unten Rot, oben Orange).
+  flammerot: { name: 'Flamme Rot', wert: '#B5452F' },
+  flammeorange: { name: 'Flamme Orange', wert: '#E0904A' },
 };
 
 export type NavigationsFarbrolle =
@@ -145,6 +150,89 @@ export const buchdetailsFarbrollen: Record<BuchdetailsFarbrolle, FarbrubrikId> =
   bestaetigenSchrift: 'hintergrund',
 };
 
+/** Farbrollen „Lesestatus und Fortschritt“ in den Buchdetails (REQ-021 bis REQ-028). */
+export type FortschrittFarbrolle =
+  | 'autor'
+  | 'statuspilleFlaeche'
+  | 'statuspilleSchrift'
+  | 'statuspilleIcon'
+  | 'statuspillePfeile'
+  | 'statusmenueFlaeche'
+  | 'statusmenueSchrift'
+  | 'statusmenueIcon'
+  | 'balkenLeer'
+  | 'balkenFuellung'
+  | 'fortschrittText'
+  | 'fortschrittHerz'
+  | 'statistikFlaeche'
+  | 'statistikRahmen'
+  | 'statistikTrennlinie'
+  | 'statistikText'
+  | 'flammeUmriss'
+  | 'flammeUnten'
+  | 'flammeOben'
+  | 'flammeZahlAktiv'
+  | 'flammeZahlInaktiv'
+  | 'blattFlaeche'
+  | 'ziehgriff'
+  | 'blattUeberschrift'
+  | 'blattUntertitel'
+  | 'schliessenFlaeche'
+  | 'schliessenRahmen'
+  | 'schliessenIcon'
+  | 'umschalterAktiv'
+  | 'umschalterInaktiv'
+  | 'umschalterSchrift'
+  | 'eingabeFlaeche'
+  | 'eingabeRahmen'
+  | 'eingabeSchrift'
+  | 'sichernFlaeche'
+  | 'sichernSchrift'
+  | 'hinweis';
+
+/** Aus welcher Farbrubrik jede Farbrolle „Lesestatus und Fortschritt“ ihre Farbe bezieht (Farbangaben der REQs 021–028). */
+export const fortschrittFarbrollen: Record<FortschrittFarbrolle, FarbrubrikId> = {
+  autor: 'tertiaer',
+  statuspilleFlaeche: 'primaer',
+  statuspilleSchrift: 'hintergrund',
+  statuspilleIcon: 'hintergrund',
+  statuspillePfeile: 'hintergrund',
+  // Statusmenü wie das Auswahlmenü der Buchdarstellung (REQ-022, AK-8).
+  statusmenueFlaeche: buchdetailsFarbrollen.auswahlmenueFlaeche,
+  statusmenueSchrift: buchdetailsFarbrollen.auswahlmenueSchrift,
+  statusmenueIcon: buchdetailsFarbrollen.auswahlmenueIcon,
+  balkenLeer: 'ghostframe',
+  balkenFuellung: 'primaer',
+  fortschrittText: 'dunkelbraun',
+  fortschrittHerz: 'primaer',
+  statistikFlaeche: 'ghost',
+  statistikRahmen: 'ghostframe',
+  statistikTrennlinie: 'ghostframe',
+  statistikText: 'dunkelbraun',
+  flammeUmriss: 'ghostframe',
+  flammeUnten: 'flammerot',
+  flammeOben: 'flammeorange',
+  flammeZahlAktiv: 'hintergrund',
+  // „gedeckt“ (REQ-027): abgeschwächt dargestellt, siehe flammeZahlInaktiv unten.
+  flammeZahlInaktiv: 'tertiaer',
+  blattFlaeche: 'hintergrund',
+  ziehgriff: 'tertiaer',
+  blattUeberschrift: 'dunkelbraun',
+  blattUntertitel: 'tertiaer',
+  schliessenFlaeche: 'ghost',
+  schliessenRahmen: 'ghostframe',
+  schliessenIcon: 'dunkelbraun',
+  umschalterAktiv: 'ghost',
+  umschalterInaktiv: 'ghostframe',
+  umschalterSchrift: 'dunkelbraun',
+  eingabeFlaeche: 'ghost',
+  eingabeRahmen: 'ghostframe',
+  eingabeSchrift: 'dunkelbraun',
+  sichernFlaeche: 'primaer',
+  sichernSchrift: 'hintergrund',
+  hinweis: 'primaer',
+};
+
 /** Farbrollen „Buch anlegen“: Menü „Buch hinzufügen“ (REQ-029) und Blatt „Manueller Eintrag“ (REQ-030 bis REQ-032). */
 export type BuchAnlegenFarbrolle =
   | 'menueFlaeche'
@@ -214,6 +302,15 @@ export const buecherFarbe = (rolle: BuecherFarbrolle): string => rubrikFarbe(bue
 
 /** CSS-Ausdruck einer Farbrolle der Buchdetails, z. B. `var(--bz-farbe-tertiaer)`. */
 export const buchdetailsFarbe = (rolle: BuchdetailsFarbrolle): string => rubrikFarbe(buchdetailsFarbrollen[rolle]);
+
+/** CSS-Ausdruck einer Farbrolle „Lesestatus und Fortschritt“, z. B. `var(--bz-farbe-primaer)`. */
+export const fortschrittFarbe = (rolle: FortschrittFarbrolle): string => rubrikFarbe(fortschrittFarbrollen[rolle]);
+
+/** Gedeckte Zahl „0“ in der Flamme bei Streak 0 (REQ-027), aus der Rolle `flammeZahlInaktiv` abgeschwächt. */
+export const flammeZahlGedeckt = `color-mix(in srgb, ${rubrikFarbe(fortschrittFarbrollen.flammeZahlInaktiv)} 55%, transparent)`;
+
+/** Untere Kante der Pille „Sichern“ (Referenzbild REQ-024/REQ-025), aus „Primär“ und „Dunkelbraun“ abgeleitet. */
+export const sichernKante = `0 4px 0 color-mix(in srgb, ${rubrikFarbe('primaer')} 70%, ${rubrikFarbe('dunkelbraun')})`;
 
 /** CSS-Ausdruck einer Farbrolle „Buch anlegen“, z. B. `var(--bz-farbe-ghost)`. */
 export const buchAnlegenFarbe = (rolle: BuchAnlegenFarbrolle): string => rubrikFarbe(buchAnlegenFarbrollen[rolle]);

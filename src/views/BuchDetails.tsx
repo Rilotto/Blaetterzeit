@@ -3,18 +3,24 @@ import iconMehr from '@/assets/icons/icon-mehr.png';
 import { zuschneiden } from '@/bild/bildverarbeitung';
 import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
 import type { Ecken } from '@/bild/entzerren';
-import { ladeBuch, standardBildspeicher } from '@/buecher/buchQuelle';
+import { standardBildspeicher, standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
+import BlattAktuelleSeite from '@/buchdetails/BlattAktuelleSeite';
+import BlattBuchlaenge from '@/buchdetails/BlattBuchlaenge';
 import Buchdarstellung, { type Bilder } from '@/buchdetails/Buchdarstellung';
+import Fortschritt from '@/buchdetails/Fortschritt';
 import KameraAnsicht from '@/buchdetails/KameraAnsicht';
 import Kopfzeile from '@/buchdetails/Kopfzeile';
+import Statistik from '@/buchdetails/Statistik';
+import Statuspille from '@/buchdetails/Statuspille';
 import { kopfSchaltflaecheStil } from '@/buchdetails/stile';
 import { BUCH_HOEHE, KOPF_ICON, KOPF_SCHALTFLAECHE, RAND, seitenverhaeltnis } from '@/buchdetails/masse';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
-import type { Buch } from '@/domain/buch';
-import { BILDBEREICHE, type Bildbereich, type ImageStore } from '@/storage';
-import { buchdetailsFarbe } from '@/theme';
+import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
+import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
+import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore } from '@/storage';
+import { buchdetailsFarbe, fortschrittFarbe } from '@/theme';
 
 export interface BuchDetailsProps {
   buchId: string;
@@ -24,9 +30,17 @@ export interface BuchDetailsProps {
   bildquelle?: Bildquelle;
   /** Bildspeicher (REQ-019); in Tests ersetzbar. */
   bildspeicher?: ImageStore;
+  /** Buchspeicher für Status, Seitenanzahl und Fortschritt (REQ-022, REQ-024, REQ-025); ohne Angabe das Repository der App. */
+  repository?: BookRepository;
+  /** Aktuelle Zeit für Sitzungen und Streak (REQ-024, REQ-027); ohne Angabe die Systemzeit. In Tests ersetzbar. */
+  jetzt?: () => Date;
   /** Zurück zur Seite „Bücher“. */
   onZurueck: () => void;
 }
+
+type Blatt = 'buchlaenge' | 'aktuelleSeite' | null;
+
+const systemzeit = () => new Date();
 
 type Schritt =
   | { art: 'details' }
@@ -56,6 +70,25 @@ const titelStil: CSSProperties = {
   color: buchdetailsFarbe('titel'),
 };
 
+// Autor unter dem Titel (REQ-028): eine Zeile mit „…“, kleiner als der Titel, Tertiär.
+const autorStil: CSSProperties = {
+  margin: `4px ${RAND}px 0`,
+  fontSize: '17px',
+  fontWeight: 400,
+  lineHeight: 1.3,
+  textAlign: 'center',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  color: fortschrittFarbe('autor'),
+};
+
+const pillenBereichStil: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  margin: `20px ${RAND}px 0`,
+};
+
 /** Bilder aller Bereiche eines Buches aus dem Bildspeicher. */
 async function ladeBilder(speicher: ImageStore, buchId: string): Promise<Bilder> {
   const werte = await Promise.all(BILDBEREICHE.map((b) => speicher.get(buchId, b)));
@@ -68,10 +101,23 @@ async function ladeBilder(speicher: ImageStore, buchId: string): Promise<Bilder>
 }
 
 /** Fenster „Buchdetails“ (REQ-013 bis REQ-019). */
-export default function BuchDetails({ buchId, buch: vorgegeben, bildquelle, bildspeicher, onZurueck }: BuchDetailsProps) {
+export default function BuchDetails({
+  buchId,
+  buch: vorgegeben,
+  bildquelle,
+  bildspeicher,
+  repository,
+  jetzt = systemzeit,
+  onZurueck,
+}: BuchDetailsProps) {
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
   const [geladen, setGeladen] = useState<Buch | undefined>(undefined);
-  const buch = vorgegeben && vorgegeben.id === buchId ? vorgegeben : geladen;
+  // In den Buchdetails geänderter Stand (Status, Seitenanzahl, Fortschritt); hat Vorrang vor dem übergebenen Buch.
+  const [geaendert, setGeaendert] = useState<Buch | undefined>(undefined);
+  const basis = vorgegeben && vorgegeben.id === buchId ? vorgegeben : geladen;
+  const buch = geaendert && geaendert.id === buchId ? geaendert : basis;
+  const [blatt, setBlatt] = useState<Blatt>(null);
+  const ausstehend = useRef<Promise<void> | null>(null);
   const [bilder, setBilder] = useState<Bilder>({});
   const [menue, setMenue] = useState<Bildbereich | null>(null);
   const [schritt, setSchritt] = useState<Schritt>({ art: 'details' });
@@ -89,13 +135,14 @@ export default function BuchDetails({ buchId, buch: vorgegeben, bildquelle, bild
   useEffect(() => {
     if (vorgegeben && vorgegeben.id === buchId) return;
     let laeuft = true;
-    void ladeBuch(buchId).then((b) => {
+    const repo = repository ? Promise.resolve(repository) : standardRepository();
+    void repo.then((r) => r.get(buchId)).then((b) => {
       if (laeuft) setGeladen(b);
     });
     return () => {
       laeuft = false;
     };
-  }, [buchId, vorgegeben]);
+  }, [buchId, vorgegeben, repository]);
 
   useEffect(() => {
     let laeuft = true;
@@ -106,6 +153,54 @@ export default function BuchDetails({ buchId, buch: vorgegeben, bildquelle, bild
       laeuft = false;
     };
   }, [speicher, buchId]);
+
+  /** Speichert das geänderte Buch über die Repository-Schnittstelle (ADR-0002); Speichervorgänge laufen nacheinander. */
+  const speichern = (neu: Buch) => {
+    setGeaendert(neu);
+    const vorher = ausstehend.current ?? Promise.resolve();
+    const lauf = vorher
+      .then(async () => (repository ?? (await standardRepository())).save(neu))
+      .catch((fehler: unknown) => console.warn('Buch konnte nicht gespeichert werden:', fehler));
+    ausstehend.current = lauf;
+    void lauf.then(() => {
+      if (ausstehend.current === lauf) ausstehend.current = null;
+    });
+  };
+
+  // Zurück erst, wenn alle Änderungen gespeichert sind: Die Buchlisten lesen danach neu (REQ-022, AK-7).
+  const zurueck = () => {
+    const lauf = ausstehend.current;
+    if (!lauf) {
+      onZurueck();
+      return;
+    }
+    void lauf.then(() => {
+      if (aktiv.current) onZurueck();
+    });
+  };
+
+  const statusWaehlen = (status: LesestatusId) => {
+    if (!buch || buch.status === status) return;
+    speichern({ ...buch, status });
+  };
+
+  // Herz bzw. Fortschritt antippen: ohne Seitenanzahl zuerst „Buchlänge“ (REQ-025), sonst „Aktuelle Seite“ (REQ-024).
+  const fortschrittOeffnen = () => {
+    if (!buch) return;
+    setBlatt(hatSeitenanzahl(buch) ? 'aktuelleSeite' : 'buchlaenge');
+  };
+
+  const buchlaengeSichern = (seitenanzahl: number) => {
+    if (!buch) return;
+    speichern({ ...buch, seitenanzahl });
+    setBlatt('aktuelleSeite');
+  };
+
+  const fortschrittSpeichern = (modus: Fortschrittsmodus, wert: number) => {
+    if (!buch) return;
+    speichern(fortschrittSichern(buch, modus, wert, jetzt()));
+    setBlatt(null);
+  };
 
   // Standard-Bildquelle: „Scannen“ zeigt die Kameraansicht der App und liefert deren Foto bzw. null (Zurück).
   const kameraAnzeigen = (bereich: Bildbereich) => () =>
@@ -188,7 +283,7 @@ export default function BuchDetails({ buchId, buch: vorgegeben, bildquelle, bild
   return (
     <section aria-label="Buchdetails" style={ansichtStil}>
       <Kopfzeile
-        onZurueck={onZurueck}
+        onZurueck={zurueck}
         rechts={
           // Drei Punkte: vorerst ohne Funktion (REQ-013, AK-8).
           <button type="button" aria-label="Weitere Optionen" style={kopfSchaltflaecheStil}>
@@ -202,7 +297,29 @@ export default function BuchDetails({ buchId, buch: vorgegeben, bildquelle, bild
           <h1 data-buchdetails-titel="" style={titelStil}>
             {buch.titel}
           </h1>
+          {buch.autor ? (
+            <p data-buchdetails-autor="" style={autorStil}>
+              {buch.autor}
+            </p>
+          ) : null}
+          <div style={pillenBereichStil}>
+            <Statuspille status={buch.status} onWaehlen={statusWaehlen} />
+          </div>
+          <Fortschritt buch={buch} onAktuelleSeite={fortschrittOeffnen} onBuchlaenge={fortschrittOeffnen} />
+          <Statistik buch={buch} jetzt={jetzt()} />
         </>
+      ) : null}
+      {buch && blatt === 'buchlaenge' ? (
+        <BlattBuchlaenge onSichern={buchlaengeSichern} onSchliessen={() => setBlatt(null)} />
+      ) : null}
+      {buch && blatt === 'aktuelleSeite' && hatSeitenanzahl(buch) ? (
+        <BlattAktuelleSeite
+          seitenanzahl={buch.seitenanzahl!}
+          startModus={modusVon(buch)}
+          startWert={gespeicherteEingabe(buch)}
+          onSichern={fortschrittSpeichern}
+          onSchliessen={() => setBlatt(null)}
+        />
       ) : null}
       {menue !== null ? (
         <Auswahlmenue

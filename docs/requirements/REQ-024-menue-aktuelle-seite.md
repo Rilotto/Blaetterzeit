@@ -1,7 +1,7 @@
 ---
 id: REQ-024
 titel: Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

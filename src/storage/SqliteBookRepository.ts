@@ -2,7 +2,8 @@ import { buchAusDaten, type Buch } from '../domain/buch';
 import type { BookRepository } from './BookRepository';
 import type { SqlVerbindung, SqlWert } from './sqlite/SqlVerbindung';
 
-const SPALTEN = 'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover';
+const SPALTEN =
+  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen';
 
 /** Spaltenwerte eines Buches; fehlende optionale Angaben werden als NULL gespeichert. */
 function werte(b: Buch): SqlWert[] {
@@ -14,7 +15,19 @@ function werte(b: Buch): SqlWert[] {
     b.erscheinungsdatum ?? null,
     b.seitenanzahl ?? null,
     b.cover ?? null,
+    b.aktuelleSeite ?? null,
+    b.fortschrittProzent ?? null,
+    b.fortschrittsmodus ?? null,
+    b.sitzungen ? JSON.stringify(b.sitzungen) : null,
   ];
+}
+
+function sitzungenLesen(json: string): unknown {
+  try {
+    return JSON.parse(json);
+  } catch {
+    return undefined;
+  }
 }
 
 /** Zeile → Buch; NULL-Spalten fehlen im Ergebnis (keine Ersatzwerte). */
@@ -29,11 +42,15 @@ function ausZeile(z: Record<string, unknown>): Buch {
     erscheinungsdatum: z.erscheinungsdatum ?? undefined,
     seitenanzahl: zahl(z.seitenanzahl),
     cover: z.cover ?? undefined,
+    aktuelleSeite: zahl(z.aktuelle_seite),
+    fortschrittProzent: zahl(z.fortschritt_prozent),
+    fortschrittsmodus: z.fortschrittsmodus ?? undefined,
+    sitzungen: typeof z.sitzungen === 'string' ? sitzungenLesen(z.sitzungen) : undefined,
   });
 }
 
 /**
- * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migration 2, REQ-034).
+ * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 und 3, REQ-034, REQ-024).
  * Reihenfolge = Reihenfolge des Anlegens (rowid bleibt beim Überschreiben erhalten).
  */
 export class SqliteBookRepository implements BookRepository {
@@ -59,11 +76,12 @@ export class SqliteBookRepository implements BookRepository {
     if (vorhanden.length > 0) {
       await this.db.ausfuehren(
         `UPDATE buch SET titel = ?, status = ?, autor = ?, erscheinungsjahr = ?, erscheinungsdatum = ?,
-         seitenanzahl = ?, cover = ?, geaendert = ? WHERE id = ?`,
+         seitenanzahl = ?, cover = ?, aktuelle_seite = ?, fortschritt_prozent = ?, fortschrittsmodus = ?,
+         sitzungen = ?, geaendert = ? WHERE id = ?`,
         [...werte(b), new Date().toISOString(), b.id],
       );
     } else {
-      await this.db.ausfuehren(`INSERT INTO buch (${SPALTEN}, geaendert) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+      await this.db.ausfuehren(`INSERT INTO buch (${SPALTEN}, geaendert) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
         b.id,
         ...werte(b),
         new Date().toISOString(),

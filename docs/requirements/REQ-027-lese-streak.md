@@ -1,7 +1,7 @@
 ---
 id: REQ-027
 titel: Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

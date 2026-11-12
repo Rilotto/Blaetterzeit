@@ -96,6 +96,25 @@ export function runBookRepositoryContract(name: string, factory: Fabrik) {
       expect(Object.keys(k!).sort()).toEqual(['id', 'status', 'titel']);
     });
 
+    it('speichert Lesefortschritt, Fortschrittsmodus und Sitzungen (REQ-024), auch nach einem Neustart', async () => {
+      const buch = {
+        ...neuesBuch({ titel: 'Fortschritt', status: 'am_lesen', seitenanzahl: 400 }),
+        aktuelleSeite: 42,
+        fortschrittsmodus: 'seite' as const,
+        sitzungen: [{ zeitpunkt: '2026-11-11T21:59:00.000Z' }, { zeitpunkt: '2026-11-12T06:01:00.000Z' }],
+      };
+      const prozent = { ...neuesBuch({ titel: 'Kindle', status: 'ungelesen', seitenanzahl: 300 }), fortschrittProzent: 5, fortschrittsmodus: 'prozent' as const };
+      await repo.save(buch);
+      await repo.save(prozent);
+      expect(await repo.get(buch.id)).toEqual(buch);
+      expect(await repo.get(prozent.id)).toEqual(prozent);
+      await repo.save({ ...buch, aktuelleSeite: 50, sitzungen: [...buch.sitzungen, { zeitpunkt: '2026-11-12T07:00:00.000Z' }] });
+      const nachher = neustart ? await neustart() : repo;
+      expect((await nachher.get(buch.id))?.aktuelleSeite).toBe(50);
+      expect((await nachher.get(buch.id))?.sitzungen).toHaveLength(3);
+      expect(await nachher.get(prozent.id)).toEqual(prozent);
+    });
+
     it('liefert die Bücher in der Reihenfolge des Anlegens, auch nach dem Überschreiben', async () => {
       const a = neuesBuch({ titel: 'A', status: 'ungelesen' });
       const b = neuesBuch({ titel: 'B', status: 'ungelesen' });

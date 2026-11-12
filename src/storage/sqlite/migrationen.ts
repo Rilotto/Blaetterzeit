@@ -43,6 +43,17 @@ export const MIGRATIONEN: readonly Migration[] = [
       )`,
     ],
   },
+  {
+    version: 3,
+    beschreibung: 'Lesefortschritt, Fortschrittsmodus und Sitzungen (REQ-024, REQ-026, REQ-027)',
+    anweisungen: [
+      'ALTER TABLE buch ADD COLUMN aktuelle_seite INTEGER',
+      'ALTER TABLE buch ADD COLUMN fortschritt_prozent INTEGER',
+      'ALTER TABLE buch ADD COLUMN fortschrittsmodus TEXT',
+      // Sitzungen als JSON-Liste [{ "zeitpunkt": "<ISO>" }]; NULL = keine.
+      'ALTER TABLE buch ADD COLUMN sitzungen TEXT',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

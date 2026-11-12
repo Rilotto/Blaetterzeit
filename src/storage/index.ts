@@ -15,7 +15,7 @@ export { BILDBEREICHE } from './ImageStore';
 /**
  * Einzige Stelle, an der entschieden wird, welche Speicher-Implementierung läuft.
  * Bücher (REQ-034):
- *  - Android-APK: SQLite (Tabelle `buch`, Migration 2)
+ *  - Android-APK: SQLite (Tabelle `buch`, Migrationen 2 und 3)
  *  - Web/Prototyp: IndexedDB
  *  - ohne IndexedDB (Testumgebung): Arbeitsspeicher
  * Lässt sich der dauerhafte Speicher nicht einrichten, wird im Arbeitsspeicher weitergearbeitet.

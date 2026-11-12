@@ -45,10 +45,36 @@ export interface Buch {
   erscheinungsdatum?: string;
   /** Optionale Seitenanzahl (REQ-025, REQ-031). */
   seitenanzahl?: number;
+  /** Aktuelle Seite im Fortschrittsmodus „Seite“ (REQ-024). */
+  aktuelleSeite?: number;
+  /** Fortschritt in ganzen Prozent im Fortschrittsmodus „%“ (REQ-024). */
+  fortschrittProzent?: number;
+  /** Zuletzt gesicherter Fortschrittsmodus; ohne Angabe gilt „seite“ (REQ-024). */
+  fortschrittsmodus?: Fortschrittsmodus;
+  /** Lesesitzungen: je Erhöhung des Fortschritts eine, Zeitpunkt als ISO-Zeichenkette (REQ-024, REQ-026, REQ-027). */
+  sitzungen?: Sitzung[];
 }
 
+export type Fortschrittsmodus = 'seite' | 'prozent';
+
+export interface Sitzung {
+  /** Zeitpunkt des Sicherns (ISO 8601). */
+  zeitpunkt: string;
+}
+
+export const istFortschrittsmodus = (wert: unknown): wert is Fortschrittsmodus => wert === 'seite' || wert === 'prozent';
+
 /** Die optionalen Angaben eines Buches (ohne Cover). */
-export const OPTIONALE_BUCHFELDER = ['autor', 'erscheinungsjahr', 'erscheinungsdatum', 'seitenanzahl'] as const;
+export const OPTIONALE_BUCHFELDER = [
+  'autor',
+  'erscheinungsjahr',
+  'erscheinungsdatum',
+  'seitenanzahl',
+  'aktuelleSeite',
+  'fortschrittProzent',
+  'fortschrittsmodus',
+  'sitzungen',
+] as const;
 
 export interface NeuesBuch {
   titel: string;
@@ -97,5 +123,15 @@ export function buchAusDaten(daten: unknown): Buch {
   if (typeof e.erscheinungsjahr === 'number' && Number.isInteger(e.erscheinungsjahr)) buch.erscheinungsjahr = e.erscheinungsjahr;
   if (typeof e.erscheinungsdatum === 'string') buch.erscheinungsdatum = e.erscheinungsdatum;
   if (typeof e.seitenanzahl === 'number' && Number.isInteger(e.seitenanzahl)) buch.seitenanzahl = e.seitenanzahl;
+  if (typeof e.aktuelleSeite === 'number' && Number.isInteger(e.aktuelleSeite)) buch.aktuelleSeite = e.aktuelleSeite;
+  if (typeof e.fortschrittProzent === 'number' && Number.isInteger(e.fortschrittProzent)) {
+    buch.fortschrittProzent = e.fortschrittProzent;
+  }
+  if (istFortschrittsmodus(e.fortschrittsmodus)) buch.fortschrittsmodus = e.fortschrittsmodus;
+  if (Array.isArray(e.sitzungen)) {
+    buch.sitzungen = e.sitzungen
+      .filter((s): s is { zeitpunkt: string } => typeof (s as { zeitpunkt?: unknown })?.zeitpunkt === 'string')
+      .map((s) => ({ zeitpunkt: s.zeitpunkt }));
+  }
   return buch;
 }

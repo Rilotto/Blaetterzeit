@@ -1,7 +1,7 @@
 ---
 id: REQ-023
 titel: Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO

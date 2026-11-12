@@ -1,7 +1,7 @@
 ---
 id: REQ-030
 titel: Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

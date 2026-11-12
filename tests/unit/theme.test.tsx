@@ -15,6 +15,8 @@ describe('Farbrubriken', () => {
   it('führt die Rubriken mit Namen und Wert', () => {
     expect(Object.keys(farbrubriken).sort()).toEqual([
       'dunkelbraun',
+      'flammeorange',
+      'flammerot',
       'ghost',
       'ghostframe',
       'hintergrund',
