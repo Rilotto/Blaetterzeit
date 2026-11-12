@@ -13,9 +13,12 @@ interface Props {
 }
 
 // Maße nach REF-buchdetails-01.png (≈ 2,26 px je dp): Pille ≈ 202 × 35 dp, Icon ≈ 18 dp, Pfeile ≈ 16 dp.
-// Orientierungswerte, kein Akzeptanzkriterium.
+// Orientierungswerte, kein Akzeptanzkriterium. Höhe bewusst großzügiger (40 px), damit Unterlängen
+// (g, j, p …) sicher Platz haben.
 const PILLE_BREITE = 202;
-const PILLE_HOEHE = 36;
+const PILLE_HOEHE = 40;
+/** Zeilenhöhe des Pillentexts: deutlich über der Schriftgröße, damit Unterlängen nicht abgeschnitten werden. */
+const TEXT_ZEILENHOEHE = 24;
 const MENUE_ABSTAND = 8;
 /** Höhe des Statusmenüs: fünf Zeilen à 48 px + 2 × 10 px Innenabstand (wie Auswahlmenü). */
 const MENUE_HOEHE = LESESTATUS.length * 48 + 20;
@@ -36,6 +39,7 @@ const pilleStil: CSSProperties = {
   display: 'grid',
   gridTemplateColumns: '20px 1fr 20px',
   alignItems: 'center',
+  justifyItems: 'center',
   columnGap: '8px',
   boxSizing: 'border-box',
   width: `${PILLE_BREITE}px`,
@@ -50,12 +54,17 @@ const pilleStil: CSSProperties = {
   fontFamily: 'inherit',
   fontSize: '17px',
   fontWeight: 600,
-  lineHeight: 1,
+  lineHeight: `${TEXT_ZEILENHOEHE}px`,
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
 };
 
+// overflow: hidden nur für die Ellipse in der Breite; die Zeilenhöhe lässt Unterlängen genug Raum.
 const textStil: CSSProperties = {
+  display: 'block',
+  justifySelf: 'stretch',
+  minWidth: 0,
+  lineHeight: `${TEXT_ZEILENHOEHE}px`,
   textAlign: 'center',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
@@ -80,6 +89,7 @@ const menueStil = (lage: MenueLage, pille: DOMRect | null): CSSProperties => {
 const statusEintragStil: CSSProperties = {
   ...eintragStil,
   justifyContent: 'flex-start',
+  lineHeight: 1.3,
   color: fortschrittFarbe('statusmenueSchrift'),
 };
 
