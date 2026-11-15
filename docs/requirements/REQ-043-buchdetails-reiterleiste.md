@@ -22,7 +22,7 @@ Antworten des CEO (wörtlich, 2026-11-15):
 - Farben: „wie im Screenshot“
 - Inhalt der übrigen Reiter (2026-11-15): „auch "unter construction :)"“
 
-Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezension-01-bewertung.png), [referenzen/REF-rezension-02-details.png](referenzen/REF-rezension-02-details.png). Aussehen, Farben und die Weichheit der Bewegung prüft der CEO im Prototyp; sie sind kein Akzeptanzkriterium.
+Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezension-01-bewertung.png), [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-01-uebersicht.png). Aussehen, Farben und die Weichheit der Bewegung prüft der CEO im Prototyp; sie sind kein Akzeptanzkriterium.
 
 ## Anforderung (Satzschablone)
 
@@ -31,7 +31,7 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 - Das System muss den aktiven Reiter durch eine innenliegende Pille („rote Pille“) mit Icon und Bezeichnung kennzeichnen; nicht aktive Reiter zeigen nur ihr Icon.
 - Wenn die Buchdetails geöffnet werden, muss das System den Reiter „Rezension“ als aktiv darstellen.
 - Wenn der Nutzer das Icon eines nicht aktiven Reiters antippt, muss das System die innenliegende Pille in einer fließenden Bewegung zu diesem Reiter wandern lassen und den zugehörigen Bereich anzeigen.
-- Wenn der Reiter „Notizbuch“, „Figuren & Orte“ oder „Details“ aktiv ist, muss das System in dessen Bereich den Platzhaltertext „under construction :)“ in der Platzhalter-Textfarbe (REQ-002, REQ-004) anzeigen.
+- Wenn der Reiter „Notizbuch“ oder „Figuren & Orte“ aktiv ist, muss das System in dessen Bereich den Platzhaltertext „under construction :)“ in der Platzhalter-Textfarbe (REQ-002, REQ-004) anzeigen.
 - Die Breite der Reiterleiste darf sich beim Reiterwechsel nicht ändern.
 - Das System muss Leiste, Pille, Icons und Schrift farblich wie im Referenzbild darstellen, mit Farben aus zentralen Farbrubriken.
 
@@ -74,15 +74,16 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 - **Wenn** der Nutzer einen anderen Reiter antippt
 - **Dann** bewegt sich die innenliegende Pille über einen Übergang zur neuen Stelle und springt nicht
 
-### AK-8 Übrige Reiter zeigen „under construction :)“
+### AK-8 Notizbuch und Figuren & Orte zeigen „under construction :)“
 - **Gegeben** die Buchdetails werden angezeigt
-- **Wenn** der Nutzer nacheinander „Notizbuch“, „Figuren & Orte“ und „Details“ antippt
+- **Wenn** der Nutzer nacheinander „Notizbuch“ und „Figuren & Orte“ antippt
 - **Dann** zeigt der Bereich jeweils „under construction :)“ in der Farbrubrik „Tertiär“ (REQ-004)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Inhalt des Reiters „Rezension“ (REQ-044 bis REQ-049).
-- Echte Inhalte der Reiter „Notizbuch“, „Figuren & Orte“, „Details“.
+- Echte Inhalte der Reiter „Notizbuch“, „Figuren & Orte“.
+- Inhalt des Reiters „Details“ (REQ-051 ff.).
 
 ## Qualitätsanforderungen
 
@@ -103,3 +104,4 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 | 2026-11-13 | Erstellt (Entwurf aus CEO-Vorgabe „Pille Rezension“) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten 1, 2, 3, 8 eingearbeitet: vier Reiter, Lage, Startreiter, fließende Bewegung, Bezeichnung nur aktiv, Farben wie Screenshot, Must (neu AK-2 bis AK-4, AK-7) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antwort: übrige Reiter zeigen „under construction :)“ (neu AK-8) | Anforderungsmanager |
+| 2026-11-15 | Reiter „Details“ erhält Inhalt (REQ-051 ff.) und zeigt kein „under construction :)“ mehr (AK-8 angepasst); Referenzbild REF-rezension-02-details.png (vom CEO gelöscht) durch REF-details-01-uebersicht.png ersetzt | Anforderungsmanager |
