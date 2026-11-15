@@ -187,14 +187,14 @@ function Pillen({ id, namen, leerText }: { id: string; namen: string[] | undefin
 
 function Zeile({
   id,
-  bezeichnung,
+  beschriftung,
   wert,
   letzte = false,
   hervorgehoben = false,
   onAntippen,
 }: {
   id: AusgabeZeile;
-  bezeichnung: string;
+  beschriftung: string;
   wert: string;
   letzte?: boolean;
   hervorgehoben?: boolean;
@@ -204,7 +204,7 @@ function Zeile({
   return (
     <button type="button" data-ausgabe-zeile={id} onClick={onAntippen} style={zeileStil(letzte, Boolean(onAntippen))}>
       <span data-zeile-bezeichnung="" style={bezeichnungStil}>
-        {bezeichnung}
+        {beschriftung}
       </span>
       <span data-zeile-wert="" style={wertStil(hervorgehoben)}>
         {wert}
@@ -249,22 +249,22 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis }: Pr
       </Abschnitt>
       <Abschnitt id="ausgabe" titel="Ausgabe">
         <div data-ausgabe-karte="" style={karteDetails}>
-          <Zeile id="seiten" bezeichnung="Seiten" wert={buch.seitenanzahl !== undefined ? String(buch.seitenanzahl) : ''} onAntippen={onSeiten} />
-          <Zeile id="format" bezeichnung="Format" wert={formatText(buch)} onAntippen={onFormat} />
-          <Zeile id="exemplar" bezeichnung="Exemplar" wert={exemplarText(buch)} onAntippen={onFormat} />
-          <Zeile id="sonderausgabe" bezeichnung="Sonderausgabe" wert={sonderausgabeText(buch)} onAntippen={onFormat} />
-          <Zeile id="fotos" bezeichnung="Fotos" wert="Cover" />
+          <Zeile id="seiten" beschriftung="Seiten" wert={buch.seitenanzahl !== undefined ? String(buch.seitenanzahl) : ''} onAntippen={onSeiten} />
+          <Zeile id="format" beschriftung="Format" wert={formatText(buch)} onAntippen={onFormat} />
+          <Zeile id="exemplar" beschriftung="Exemplar" wert={exemplarText(buch)} onAntippen={onFormat} />
+          <Zeile id="sonderausgabe" beschriftung="Sonderausgabe" wert={sonderausgabeText(buch)} onAntippen={onFormat} />
+          <Zeile id="fotos" beschriftung="Fotos" wert="Cover" />
           <Zeile
             id="preis"
-            bezeichnung="Preis"
+            beschriftung="Preis"
             wert={buch.preisCent !== undefined ? preisText(buch.preisCent) : PREIS_LEER}
             hervorgehoben={buch.preisCent === undefined}
             onAntippen={onPreis}
           />
-          <Zeile id="verlag" bezeichnung="Verlag" wert="" />
-          <Zeile id="erschienen" bezeichnung="Erschienen" wert={erschienen !== undefined && !Number.isNaN(erschienen) ? String(erschienen) : ''} />
-          <Zeile id="isbn" bezeichnung="ISBN" wert="" />
-          <Zeile id="hinzugefuegt" bezeichnung="Hinzugefügt" wert={hinzugefuegtText(buch.eingetragenAm)} letzte />
+          <Zeile id="verlag" beschriftung="Verlag" wert="" />
+          <Zeile id="erschienen" beschriftung="Erschienen" wert={erschienen !== undefined && !Number.isNaN(erschienen) ? String(erschienen) : ''} />
+          <Zeile id="isbn" beschriftung="ISBN" wert="" />
+          <Zeile id="hinzugefuegt" beschriftung="Hinzugefügt" wert={hinzugefuegtText(buch.eingetragenAm)} letzte />
         </div>
       </Abschnitt>
     </div>
