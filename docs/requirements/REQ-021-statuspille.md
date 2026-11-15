@@ -1,7 +1,7 @@
 ---
 id: REQ-021
 titel: Buchdetails – Statuspille unter dem Buchtitel
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

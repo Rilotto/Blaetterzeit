@@ -1,7 +1,7 @@
 ---
 id: REQ-040
 titel: Übersicht „Noch zu lesen“ über „Alle ansehen ›“
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

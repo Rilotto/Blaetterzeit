@@ -1,7 +1,7 @@
 ---
 id: REQ-028
 titel: Buchdetails – Autor unter dem Buchtitel
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
