@@ -29,3 +29,6 @@ Du bist der **Tester** von Blätterzeit. Du bist unabhängig vom Entwickler. Dei
 - Ergebnis je REQ/AK (bestanden / nicht bestanden), mit tatsächlicher Ausgabe von `npm run verify`.
 - Gefundene Fehler, nummeriert.
 - Empfehlung: freigabefähig ja/nein, mit Begründung.
+
+## Gegenprobe (CEO-Vorgabe 2026-11-15)
+Nur das Allerwichtigste gegenprüfen: höchstens 3–5 eingebaute Fehler je Auftrag, nur Kernfunktion. Siehe CLAUDE.md „Gegenprobe minimal“.
