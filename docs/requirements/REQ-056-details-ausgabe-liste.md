@@ -16,20 +16,30 @@ Als **Nutzer** möchte ich **die Angaben zu meiner Ausgabe des Buches gesammelt 
 
 Vorgabe des CEO (wörtlich, 2026-11-15): „Bei der Ausgabe gibt es mehrere Funktionen, diese möchte ich auch mit umsetzen (siehe weiterer Screenshot). Setze dies bitte entsprechend dem Screenshot ebenfalls so um.“ „Adaptiere die bisher festgelegten Regeln, was bei Sichern passiert etc., wie bisher auch, um Nachfragen zu sparen. Icons baust du bitte selbst nach.“
 
+Antworten des CEO (wörtlich, 2026-11-15):
+- „signiert und fotos bleiben erstmal ohne Funktion (To-Do Liste)“
+- Verlag, ISBN: „aktuell leer, bitte ohne Eingabe und setze beides auf die To-Do Liste“
+- Preis: „In €, Es öffnet sich ein Menü wie bei der Auswahl der Seitenanzahl und die Vorbefüllung ist 0,00 Euro“ (REQ-059)
+
 Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-ausgabe.png). Die optische Übereinstimmung prüft der CEO im Prototyp; sie ist kein Akzeptanzkriterium.
 
 ## Anforderung (Satzschablone)
 
 - Das System muss unter „Ausgabe“ eine Karte mit genau diesen Zeilen in dieser Reihenfolge darstellen, je links Bezeichnung, rechts Wert: Seiten, Format, Exemplar, Signiert, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt.
-- Das System muss die Zeilen Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis rechts mit einem Pfeil „›“ darstellen; die übrigen ohne Pfeil.
+- Das System muss die Zeilen Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis rechts mit einem Pfeil „›“ darstellen, die übrigen ohne Pfeil.
 - Werte:
-  - Seiten: Seitenanzahl des Buches (REQ-025).
-  - Format: gewähltes Format und ggf. Unterformat, getrennt durch „ · “ (z. B. „Print · Taschenbuch“) (REQ-058).
-  - Exemplar: gewählter Eigentumsstatus (z. B. „Meins“) (REQ-058).
-  - Sonderausgabe: gewählte Sonderausgabe, ohne Auswahl „Keins“ (REQ-058).
+  - Seiten: Seitenanzahl des Buches (REQ-025); Antippen: REQ-057.
+  - Format: gewähltes Format, bei Print mit gewähltem Unterformat getrennt durch „ · “ (z. B. „Print · Taschenbuch“); Antippen: REQ-058.
+  - Exemplar: gewählter Eigentumsstatus (z. B. „Meins“); Antippen: REQ-058.
+  - Signiert: rechts ein Schloss-Symbol und „Premium“ wie im Referenzbild, nur als Anzeige (**Auslegung**).
+  - Sonderausgabe: gewählte Sonderausgabe, ohne Auswahl „Keins“; Antippen: REQ-058.
+  - Fotos: „Cover“ wie im Referenzbild (**Auslegung**).
+  - Preis: gespeicherter Preis im Format „12,99 €“; ohne gespeicherten Preis der Text „Trag ein, was du bezahlt hast“ wie im Referenzbild (**Auslegung**); Antippen: REQ-059.
+  - Verlag, ISBN: derzeit leer, ohne Eingabemöglichkeit.
   - Erschienen: Erscheinungsjahr (REQ-033).
   - Hinzugefügt: Eintragungsdatum (REQ-041) als abgekürzter Monat mit Punkt und Jahr (z. B. „Okt. 2026“).
-  - Signiert, Fotos, Preis, Verlag, ISBN: siehe Offene Fragen.
+- Wenn eine Zeile keinen Wert hat (Seiten, Format, Exemplar, Erschienen, Verlag, ISBN), muss das System die rechte Seite leer lassen (**Auslegung**).
+- Wenn der Nutzer „Signiert“, „Fotos“, „Verlag“, „Erschienen“, „ISBN“ oder „Hinzugefügt“ antippt, darf das System nichts verändern.
 - Das System muss Karte, Trennlinien, Bezeichnungen, Werte und Pfeile farblich wie im Referenzbild darstellen, mit Farben aus zentralen Farbrubriken.
 
 ## Akzeptanzkriterien
@@ -54,14 +64,26 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 - **Wenn** die Karte „Ausgabe“ betrachtet wird
 - **Dann** zeigen die Zeilen „Print · Taschenbuch“, „Meins“ und „Keins“
 
-### AK-5 Hinzugefügt
+### AK-5 Neues Buch
+- **Gegeben** ein neu angelegtes Buch nur mit Titel
+- **Wenn** die Karte „Ausgabe“ betrachtet wird
+- **Dann** sind Seiten, Format, Exemplar, Erschienen, Verlag und ISBN rechts leer
+- **Und** Sonderausgabe zeigt „Keins“, Preis „Trag ein, was du bezahlt hast“, Signiert Schloss und „Premium“, Fotos „Cover“
+
+### AK-6 Hinzugefügt
 - **Gegeben** ein Buch mit Eintragungsdatum 14.10.2026
 - **Wenn** die Karte „Ausgabe“ betrachtet wird
 - **Dann** zeigt „Hinzugefügt“ den Wert „Okt. 2026“
 
+### AK-7 Zeilen ohne Funktion
+- **Gegeben** die Karte „Ausgabe“ wird angezeigt
+- **Wenn** der Nutzer „Signiert“, „Fotos“, „Verlag“, „Erschienen“, „ISBN“ bzw. „Hinzugefügt“ antippt
+- **Dann** öffnet sich kein Menü und kein Fenster, und nichts ändert sich
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Ändern der Seitenanzahl (REQ-057). Fenster „Format“ (REQ-058).
+- Seitenanzahl ändern (REQ-057), Fenster „Format“ (REQ-058), Preis eingeben (REQ-059).
+- Funktionen von Signiert, Fotos, Eingabe von Verlag und ISBN (To-do-Liste, Could).
 
 ## Qualitätsanforderungen
 
@@ -69,15 +91,15 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ## Abhängigkeiten
 
-- **REQ-025, REQ-033, REQ-041, REQ-051, REQ-057, REQ-058.**
+- **REQ-025, REQ-033, REQ-041, REQ-051, REQ-057, REQ-058, REQ-059.**
 
 ## Offene Fragen
 
-- Signiert („Premium“ mit Schloss), Fotos („Cover“), Preis („Trag ein, was du bezahlt hast“): Anzeige und Wirkung beim Antippen? (Frage 2)
-- Verlag und ISBN: eingebbar und wo? Was zeigt eine Zeile ohne Wert (z. B. Seiten, Erschienen, Verlag, ISBN)? (Frage 3)
+- Keine.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Vorgabe „Reiter Details“ | Anforderungsmanager |
+| 2026-11-15 | CEO-Antworten 2, 3 eingearbeitet; Auslegungen: Signiert/Fotos nur Anzeige wie Screenshot, leere Werte rechts leer, Preisanzeige (neu AK-5, AK-7) | Anforderungsmanager |

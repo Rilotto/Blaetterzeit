@@ -21,6 +21,7 @@ Vorgabe des CEO (wörtlich, 2026-11-15): „Wenn ich auf "Seiten" klicke, öffne
 - Wenn der Nutzer die Zeile „Seiten“ (REQ-056) antippt, muss das System das Menü „Buchlänge“ (REQ-025) über abgedunkelten Buchdetails öffnen; ist eine Seitenanzahl hinterlegt, steht sie im Eingabefeld.
 - Wenn der Nutzer „Sichern“ mit einer gültigen Seitenanzahl (ganze Zahl ≥ 1, wie REQ-025) antippt, muss das System sie dauerhaft speichern und das Menü schließen (übertragen aus REQ-025; anders als dort folgt kein Menü „Aktuelle Seite“).
 - Wenn der Nutzer das Menü über X oder Tippen außerhalb schließt, darf das System nichts speichern (wie REQ-025).
+- Wenn die eingegebene Seitenanzahl kleiner ist als die gespeicherte aktuelle Seite (REQ-024), darf das System nicht sichern (CEO 2026-11-15: „sollte nicht möglich sein“). **Auslegung:** „Sichern“ bewirkt dann nichts, das Menü bleibt offen. Das Menü „Buchlänge“ (REQ-025) kennt bisher nur die Regel „ganze Zahl ≥ 1“; diese Prüfung kommt hinzu.
 - Nach dem Sichern muss das System die neue Seitenanzahl überall verwenden: Zeile „Seiten“, Lesefortschrittsbalken (REQ-023), Prozentwert der Statistik-Pille (REQ-026).
 
 ## Akzeptanzkriterien
@@ -46,6 +47,12 @@ Vorgabe des CEO (wörtlich, 2026-11-15): „Wenn ich auf "Seiten" klicke, öffne
 - **Wenn** die Seitenanzahl auf 200 geändert wird
 - **Dann** zeigt der Lesefortschritt „100 / 200“ und die Statistik-Pille „50 %“
 
+### AK-5 Kleiner als aktuelle Seite nicht möglich
+- **Gegeben** ein Buch mit Seitenanzahl 400 und gespeicherter aktueller Seite 250
+- **Wenn** der Nutzer über „Seiten“ 200 eingibt und „Sichern“ antippt
+- **Dann** bleibt das Menü offen und die Seitenanzahl bleibt 400
+- **Und** mit 250 eingegeben ist Sichern möglich
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Erstmalige Eingabe der Seitenanzahl (REQ-025).
@@ -60,10 +67,11 @@ Vorgabe des CEO (wörtlich, 2026-11-15): „Wenn ich auf "Seiten" klicke, öffne
 
 ## Offene Fragen
 
-- Was soll passieren, wenn die neue Seitenanzahl kleiner ist als die bereits gespeicherte aktuelle Seite? (Frage 6)
+- Keine.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Vorgabe „Reiter Details“ | Anforderungsmanager |
+| 2026-11-15 | CEO-Antwort 6: Seitenanzahl kleiner als aktuelle Seite nicht sicherbar (Auslegung: Sichern ohne Wirkung), neu AK-5 | Anforderungsmanager |

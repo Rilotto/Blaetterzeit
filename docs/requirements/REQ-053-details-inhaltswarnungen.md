@@ -58,7 +58,7 @@ Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-
 
 ## Offene Fragen
 
-- „Bearbeiten“: siehe Frage 5.
+- Keine. („Bearbeiten“: REQ-051.)
 
 ## Änderungshistorie
 

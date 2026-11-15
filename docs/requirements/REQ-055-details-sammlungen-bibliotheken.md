@@ -1,6 +1,6 @@
 ---
 id: REQ-055
-titel: Reiter „Details“ – Inhalt des Abschnitts „Sammlungen und Bibliotheken“
+titel: Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion
 status: Entwurf
 prioritaet: Must
 art: funktional
@@ -12,23 +12,33 @@ freigegeben_in:
 
 ## Ziel / Nutzen
 
-Als **Nutzer** möchte ich **sehen, in welchen Sammlungen und Bibliotheken ein Buch ist**, damit **[Nutzen vom CEO noch nicht genannt]**.
+Als **Nutzer** möchte ich **den Abschnitt „Sammlungen und Bibliotheken“ schon sehen**, damit **der Reiter „Details“ vollständig wie im Referenzbild aussieht, bevor die Funktion kommt**.
 
-Vorgabe des CEO (wörtlich, 2026-11-15): Überschrift „Sammlung und Bibliotheken“ umsetzen (REQ-051). Zum Inhalt (Referenzbild: Pille „Zu einer Sammlung hinzufügen“, Karte „In Bibliotheken“ mit Namen und Pfeil) hat der CEO noch nichts gesagt.
+Antwort des CEO (wörtlich, 2026-11-15): „keine Funktion aktuell, bitte auf die To-Do Liste“.
 
-Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-01-uebersicht.png).
+Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-01-uebersicht.png). Die optische Übereinstimmung prüft der CEO im Prototyp; sie ist kein Akzeptanzkriterium.
 
 ## Anforderung (Satzschablone)
 
-- [Wird nach der Antwort auf Frage 4 formuliert.]
+- Das System muss unter „Sammlungen und Bibliotheken“ die umrandete Pille „Zu einer Sammlung hinzufügen“ und darunter die Karte „In Bibliotheken“ mit Pfeil „›“ wie im Referenzbild darstellen (**Auslegung**: „keine Funktion“ = sichtbar, ohne Funktion).
+- Das System darf in der Karte „In Bibliotheken“ keinen Bibliotheksnamen darstellen (**Auslegung**: der Name im Referenzbild ist ein fremdes Beispiel).
+- Wenn der Nutzer die Pille oder die Karte antippt, darf das System nichts verändern.
 
 ## Akzeptanzkriterien
 
-- Werden nach der Antwort auf Frage 4 formuliert.
+### AK-1 Elemente vorhanden
+- **Gegeben** der Reiter „Details“ ist aktiv
+- **Wenn** der Abschnitt „Sammlungen und Bibliotheken“ betrachtet wird
+- **Dann** stehen dort „Zu einer Sammlung hinzufügen“ und die Karte „In Bibliotheken“ ohne Namen
+
+### AK-2 Ohne Funktion
+- **Gegeben** der Abschnitt wird angezeigt
+- **Wenn** der Nutzer „Zu einer Sammlung hinzufügen“ bzw. „In Bibliotheken“ antippt
+- **Dann** öffnet sich kein Menü und kein Fenster, und nichts ändert sich
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Überschrift (REQ-051). Abschnitt „Sammlungen“ der Seite „Bücher“ (REQ-012).
+- Funktion von Sammlungen und Bibliotheken (To-do-Liste, Could). Abschnitt „Sammlungen“ der Seite „Bücher“ (REQ-012).
 
 ## Qualitätsanforderungen
 
@@ -36,14 +46,15 @@ Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-
 
 ## Abhängigkeiten
 
-- **REQ-051.** **REQ-012:** Abschnitt „Sammlungen“ (derzeit ohne Funktion).
+- **REQ-051, REQ-012.**
 
 ## Offene Fragen
 
-- Was soll unter der Überschrift stehen, und was sollen „Zu einer Sammlung hinzufügen“ und „In Bibliotheken“ tun? (Frage 4)
+- Keine.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-15 | Erstellt (Platzhalter für offenen Inhalt) | Anforderungsmanager |
+| 2026-11-15 | CEO-Antwort 4: sichtbar ohne Funktion (Auslegung), kein Bibliotheksname; AKs ergänzt | Anforderungsmanager |
