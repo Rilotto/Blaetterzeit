@@ -22,7 +22,7 @@ Gepflegt vom Anforderungsmanager. Hier stehen Wünsche, die der CEO ausdrücklic
 | 2026-11-15 | Auswahlfenster Tropes | wie Genres (gleiche CEO-Aussage), Prio Could | REQ-052, REQ-054 |
 | 2026-11-15 | Auswahlfenster Inhaltswarnungen | „Das selbe gilt auch für die Inhaltswarnungen.“ Prio Could | REQ-053, REQ-054 |
 | 2026-11-15 | Unterauswahl für E-Book und Hörbuch im Fenster „Format“ | „Noch keine Funktion (auf To-Do Liste bitte -> Could)“ | REQ-058 |
-| 2026-11-15 | Funktion „Signiert“ und „Fotos“ | „signiert und fotos bleiben erstmal ohne Funktion (To-Do Liste)“; Prio Could | REQ-056 |
+| 2026-11-15 | Funktion „Fotos“ | „signiert und fotos bleiben erstmal ohne Funktion (To-Do Liste)“; Prio Could. „Signiert“ entfällt (CEO 2026-11-15: „Signiert soll bitte nicht umgesetzt werden.“) | REQ-056 |
 | 2026-11-15 | Eingabe von Verlag und ISBN | „aktuell leer, bitte ohne Eingabe und setze beides auf die To-Do Liste“; Prio Could | REQ-056 |
 | 2026-11-15 | Funktion „Sammlungen und Bibliotheken“ (Reiter Details) | „keine Funktion aktuell, bitte auf die To-Do Liste“; Prio Could | REQ-055 |
 | 2026-11-15 | Funktion „Bearbeiten“ bei Genres, Tropes, Inhaltswarnungen | „ja, aber aktuell ohne Funktion (To-Do Liste -> Could)“ | REQ-051 |

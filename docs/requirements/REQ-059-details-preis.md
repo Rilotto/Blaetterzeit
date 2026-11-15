@@ -1,7 +1,7 @@
 ---
 id: REQ-059
 titel: Reiter „Details“ – Preis über ein Menü eingeben
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -68,3 +68,4 @@ Antwort des CEO (wörtlich, 2026-11-15): „In €, Es öffnet sich ein Menü wi
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Antwort 2.3 | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

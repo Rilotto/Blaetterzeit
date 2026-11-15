@@ -1,7 +1,7 @@
 ---
 id: REQ-048
 titel: Reiter „Rezension“ – Stufentext unter dem Kriteriennamen
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -85,3 +85,4 @@ Referenzbild: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezensi
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Antwort 5 | Anforderungsmanager |
 | 2026-11-15 | CEO-bestätigte Stufentexte der 13 übrigen Kriterien und „ohne Bewertung kein Text“ eingearbeitet (AK-3 ausformuliert, neu AK-4) | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

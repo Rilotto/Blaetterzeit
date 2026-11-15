@@ -1,7 +1,7 @@
 ---
 id: REQ-045
 titel: Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -94,3 +94,4 @@ Referenzbild: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezensi
 |---|---|---|
 | 2026-11-13 | Erstellt (Entwurf aus CEO-Vorgabe „Pille Rezension“) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten 4.1–4.5, 8 eingearbeitet: Setzen, Zurücksetzen, keine halben Werte, dauerhafte Speicherung, Must (neu AK-2 bis AK-6) | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

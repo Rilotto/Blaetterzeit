@@ -1,7 +1,7 @@
 ---
 id: REQ-051
 titel: Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -67,3 +67,4 @@ Referenzbilder: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-detail
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Vorgabe „Reiter Details“ | Anforderungsmanager |
 | 2026-11-15 | CEO-Antwort 5: „Bearbeiten“ sichtbar ohne Funktion (neu AK-3); Funktion auf To-do-Liste (Could) | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

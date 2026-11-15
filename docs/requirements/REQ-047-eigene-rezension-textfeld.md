@@ -1,7 +1,7 @@
 ---
 id: REQ-047
 titel: Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -92,3 +92,4 @@ Referenzbild: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezensi
 |---|---|---|
 | 2026-11-13 | Erstellt (Entwurf aus CEO-Vorgabe „Pille Rezension“) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten 3, 6, 8: Überschrift, Teilen-Symbol ohne Funktion (statt „keine Teilen-Schaltfläche“), Schreibfeld mit Platzhalter und Stift öffnet Schreibfenster, kein Kreis / „Noch nicht geschrieben“, keine Längenbegrenzung, volle Länge nach Sichern; Must. AKs neu gefasst | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

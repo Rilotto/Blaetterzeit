@@ -1,7 +1,7 @@
 ---
 id: REQ-046
 titel: Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass)
-status: Entwurf
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -91,3 +91,4 @@ CEO (wörtlich, 2026-11-13): „Jede Kategorie hat ihr eigenes Symbol. Dies ist 
 |---|---|---|
 | 2026-11-13 | Erstellt (Entwurf aus CEO-Vorgaben zu Icons und Farben) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten 7, 8: Material Symbols, eigenes Icon nur ersatzweise, Romantik = Material-Herz; Must | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |
