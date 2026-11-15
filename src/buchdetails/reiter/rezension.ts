@@ -6,11 +6,11 @@ import { RAND } from '../masse';
 
 /** Die vier Reiter der Buchdetails in fester Reihenfolge (REQ-043, AK-2). */
 export const REITER = [
-  { id: 'rezension', bezeichnung: 'Rezension', symbol: 'stern' },
-  { id: 'notizbuch', bezeichnung: 'Notizbuch', symbol: 'notizbuch' },
-  { id: 'figuren', bezeichnung: 'Figuren & Orte', symbol: 'gruppe' },
-  { id: 'details', bezeichnung: 'Details', symbol: 'info' },
-] as const satisfies readonly { id: string; bezeichnung: string; symbol: SymbolName }[];
+  { id: 'rezension', name: 'Rezension', symbol: 'stern' },
+  { id: 'notizbuch', name: 'Notizbuch', symbol: 'notizbuch' },
+  { id: 'figuren', name: 'Figuren & Orte', symbol: 'gruppe' },
+  { id: 'details', name: 'Details', symbol: 'info' },
+] as const satisfies readonly { id: string; name: string; symbol: SymbolName }[];
 
 export type ReiterId = (typeof REITER)[number]['id'];
 

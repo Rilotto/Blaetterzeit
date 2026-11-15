@@ -78,7 +78,7 @@ export default function Reiterleiste({ aktiv, onWaehlen }: Props) {
             type="button"
             role="tab"
             aria-selected={istAktiv}
-            aria-label={r.bezeichnung}
+            aria-label={r.name}
             data-reiter={r.id}
             data-aktiv={istAktiv ? 'true' : 'false'}
             onClick={() => {
@@ -91,7 +91,7 @@ export default function Reiterleiste({ aktiv, onWaehlen }: Props) {
               farbe={istAktiv ? rezensionFarbe('reiterAktivSchrift') : rezensionFarbe('reiterInaktivIcon')}
               groesse={22}
             />
-            {istAktiv ? <span data-reiter-bezeichnung="">{r.bezeichnung}</span> : null}
+            {istAktiv ? <span data-reiter-bezeichnung="">{r.name}</span> : null}
           </button>
         );
       })}

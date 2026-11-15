@@ -67,9 +67,15 @@ const anzeige = (d: HTMLElement) => feld(d).querySelector('[data-rezension-text]
 const platzhalter = (d: HTMLElement) => feld(d).querySelector('[data-schreibfeld-platzhalter]')?.textContent?.trim() ?? null;
 const schreibe = (t: string) => fireEvent.change(eingabe(), { target: { value: t } });
 const sichern = () => tippe(f('[data-rezension-sichern]')!);
+/** Schreibfeld antippen und warten, bis das Schreibfenster sichtbar ist (robust gegen langsame Umgebungen). */
+async function oeffne(d: HTMLElement) {
+  await tippe(feld(d));
+  await vi.waitFor(() => expect(fenster()).not.toBeNull(), { timeout: 3000 });
+}
 
 type Weg = 'X' | 'Ziehen' | 'Außen' | 'Zurück';
 async function schliesse(weg: Weg) {
+  await vi.waitFor(() => expect(fenster()).not.toBeNull(), { timeout: 3000 });
   if (weg === 'X') await tippe(f('[data-schreibfenster-schliessen]')!);
   else if (weg === 'Außen') await tippe(document.querySelector('[data-schreibfenster-hintergrund]')!);
   else if (weg === 'Zurück')
@@ -87,12 +93,16 @@ async function schliesse(weg: Weg) {
       await new Promise((r) => setTimeout(r, 10));
     });
   }
+  await vi.waitFor(() => expect(fenster()).toBeNull(), { timeout: 3000 });
+  // Schließen über X/Ziehen/Außen ruft history.back() auf; das popstate kommt asynchron. Erst abwarten,
+  // sonst schließt es ein sofort wieder geöffnetes Fenster (siehe Testbericht H4).
+  await warte(100);
 }
 
 describe('REQ-049 Schreibfenster', () => {
   it('[REQ-049/AK-1] Öffnen: Ziehgriff, Titel, Autor, X, Eingabefeld mit Platzhalter, „Sichern“', async () => {
     const { d } = await mitBuch();
-    await tippe(feld(d));
+    await oeffne(d);
     expect(fenster()).not.toBeNull();
     expect(f('[data-ziehgriff]')).not.toBeNull();
     expect(f('[data-schreibfenster-titel]')!.textContent?.trim()).toBe('Der Testroman');
@@ -107,14 +117,14 @@ describe('REQ-049 Schreibfenster', () => {
 
   it('[REQ-049/AK-1] Grenzfall: ohne Autor entfällt die Autorzeile', async () => {
     const { d } = await mitBuch(buch({ autor: undefined }));
-    await tippe(feld(d));
+    await oeffne(d);
     expect(f('[data-schreibfenster-titel]')!.textContent?.trim()).toBe('Der Testroman');
     expect(f('[data-schreibfenster-autor]')).toBeNull();
   });
 
   it('[REQ-049/AK-2] Sterne = 4: vier volle, ein blasser Stern; Antippen ändert nichts', async () => {
     const { d, id } = await mitBuch(buch({ bewertungen: { sterne: 4 } } as Partial<Buch>));
-    await tippe(feld(d));
+    await oeffne(d);
     const sterne = f('[data-schreibfenster-sterne]')!;
     const voll = () => [...sterne.querySelectorAll('[data-symbol-nr]')].map((s) => s.getAttribute('data-voll'));
     expect(voll()).toEqual(['true', 'true', 'true', 'true', 'false']);
@@ -129,7 +139,7 @@ describe('REQ-049 Schreibfenster', () => {
 
   it('[REQ-049/AK-3] ohne Sterne-Bewertung keine Sterne (auch wenn andere Kriterien bewertet sind)', async () => {
     const { d } = await mitBuch(buch({ bewertungen: { tempo: 5 } } as Partial<Buch>));
-    await tippe(feld(d));
+    await oeffne(d);
     expect(f('[data-schreibfenster-sterne]')).toBeNull();
     expect(fenster()!.querySelector('[data-symbol="stern"]')).toBeNull();
   });
@@ -141,7 +151,7 @@ describe('REQ-049 Schreibfenster', () => {
     while (t.length < 10000) t += zeile + '\n';
     t = t.slice(0, 9999) + '!';
     expect(t.length).toBe(10000);
-    await tippe(feld(d));
+    await oeffne(d);
     schreibe(t);
     await sichern();
     expect(anzeige(d)).toBe(t);
@@ -153,27 +163,27 @@ describe('REQ-049 Schreibfenster', () => {
 
   it('[REQ-049/AK-5] Sichern schließt das Fenster; Schreibfeld zeigt den vollständigen Text', async () => {
     const { d } = await mitBuch();
-    await tippe(feld(d));
+    await oeffne(d);
     schreibe('Erste Zeile\n\nZweiter Absatz');
     await sichern();
-    expect(fenster()).toBeNull();
+    await vi.waitFor(() => expect(fenster()).toBeNull(), { timeout: 3000 });
     expect(anzeige(d)).toBe('Erste Zeile\n\nZweiter Absatz');
     expect(platzhalter(d)).toBeNull();
   });
 
   it('[REQ-049/AK-5] Grenzfall: ein einzelnes Zeichen wird gesichert', async () => {
     const { d, id } = await mitBuch();
-    await tippe(feld(d));
+    await oeffne(d);
     schreibe('x');
     await sichern();
-    expect(fenster()).toBeNull();
+    await vi.waitFor(() => expect(fenster()).toBeNull(), { timeout: 3000 });
     await warte();
     expect((await gespeichert(id))?.rezension).toBe('x');
   });
 
   it('[REQ-049/AK-6] gesicherte Rezension erscheint nach Neustart vollständig im Schreibfeld', async () => {
     const { d, id } = await mitBuch();
-    await tippe(feld(d));
+    await oeffne(d);
     schreibe('Dauerhaft\nüber Neustart');
     await sichern();
     await warte();
@@ -186,7 +196,7 @@ describe('REQ-049 Schreibfenster', () => {
 
   it('[REQ-049/AK-7] Bearbeiten: bisheriger Text steht im Eingabefeld; danach geänderter Text angezeigt und gespeichert', async () => {
     const { d, id } = await mitBuch(buch({ rezension: 'Alter Text' } as Partial<Buch>));
-    await tippe(feld(d));
+    await oeffne(d);
     expect(eingabe().value).toBe('Alter Text');
     schreibe('Alter Text, ergänzt');
     await sichern();
@@ -198,7 +208,7 @@ describe('REQ-049 Schreibfenster', () => {
   it('[REQ-049/AK-8] leeres Eingabefeld: Sichern lässt das Fenster offen und speichert nichts', async () => {
     const { w, d, id } = await mitBuch();
     const spy = vi.spyOn(w.repo, 'save');
-    await tippe(feld(d));
+    await oeffne(d);
     await sichern();
     expect(fenster()).not.toBeNull();
     await warte();
@@ -208,7 +218,7 @@ describe('REQ-049 Schreibfenster', () => {
 
   it('[REQ-049/AK-8] gesicherte Rezension vollständig gelöscht: Sichern bewirkt nichts, alte Rezension bleibt', async () => {
     const { d, id } = await mitBuch(buch({ rezension: 'Bleibt erhalten' } as Partial<Buch>));
-    await tippe(feld(d));
+    await oeffne(d);
     schreibe('');
     await sichern();
     expect(fenster()).not.toBeNull();
@@ -228,13 +238,13 @@ describe('REQ-049 Schreibfenster', () => {
   for (const weg of ['X', 'Ziehen', 'Außen', 'Zurück'] as const) {
     it(`[REQ-049/AK-9] Schließen über ${weg} ohne Sichern: ohne Rezension bleibt „Wie fandest du es?“, nichts gespeichert`, async () => {
       const { d, id } = await mitBuch();
-      await tippe(feld(d));
+      await oeffne(d);
       schreibe('Verworfener Entwurf');
       await schliesse(weg);
       expect(fenster()).toBeNull();
       expect(platzhalter(d)).toBe('Wie fandest du es?');
       // Wiederöffnen: der Text ist verloren.
-      await tippe(feld(d));
+      await oeffne(d);
       expect(eingabe().value).toBe('');
       await schliesse('X');
       await warte();
@@ -243,12 +253,12 @@ describe('REQ-049 Schreibfenster', () => {
 
     it(`[REQ-049/AK-9] Schließen über ${weg} ohne Sichern: zuvor gesicherte Rezension bleibt unverändert`, async () => {
       const { d, id } = await mitBuch(buch({ rezension: 'Gesichert' } as Partial<Buch>));
-      await tippe(feld(d));
+      await oeffne(d);
       schreibe('Gesichert plus Änderung');
       await schliesse(weg);
       expect(fenster()).toBeNull();
       expect(anzeige(d)).toBe('Gesichert');
-      await tippe(feld(d));
+      await oeffne(d);
       expect(eingabe().value).toBe('Gesichert');
       await schliesse('X');
       await warte();
@@ -258,7 +268,7 @@ describe('REQ-049 Schreibfenster', () => {
 
   it('[REQ-049/AK-9] Grenzfall: kurzes Ziehen am Griff (unter Schwelle) schließt nicht', async () => {
     const { d } = await mitBuch();
-    await tippe(feld(d));
+    await oeffne(d);
     const g = f('[data-ziehgriff]')!;
     await act(async () => {
       fireEvent.pointerDown(g, { clientY: 100, pointerId: 1 });
@@ -270,7 +280,7 @@ describe('REQ-049 Schreibfenster', () => {
 
   it('[REQ-049/AK-10] im Schreibfenster weder Kreis noch „Noch nicht geschrieben“, „Enthält Spoiler“, „Öffentlich“', async () => {
     const { d } = await mitBuch(buch({ bewertungen: { sterne: 2 }, rezension: 'R' } as Partial<Buch>));
-    await tippe(feld(d));
+    await oeffne(d);
     const t = (fenster()!.textContent ?? '').toLowerCase();
     for (const v of ['noch nicht geschrieben', 'enthält spoiler', 'öffentlich']) expect(t).not.toContain(v);
     expect(fenster()!.querySelector('circle, input[type="checkbox"], [role="switch"], [role="checkbox"]')).toBeNull();

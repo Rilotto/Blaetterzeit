@@ -6,4 +6,6 @@
 - Befund B1 (Hinweis, nicht im REQ): Der Entwickler wertet Text aus reinem Leerraum als „leer“ (`rezensionLeer` = `trim() === ''`). Ein solcher Text wird nicht gesichert, und `buchAusDaten` verwirft ihn beim Laden. Diese Regel ist nicht als Erwartung festgeschrieben. Klärung durch den Anforderungsmanager/CEO.
 - Hinweis H1: Bei REQ-046 AK-3/AK-4 ist nur geprüft, dass das Symbol die CSS-Variable der Rubrik bzw. ein `color-mix` aus Rubrik und „Hintergrund“ nutzt. jsdom berechnet `color-mix` nicht. Die Optik prüft der CEO im Prototyp.
 - Hinweis H2: Bei REQ-043 AK-1 hat die Leiste seitlich den Standardrand (RAND), sie läuft also nicht randlos über die volle Breite. Breite und „smooth“ prüft der CEO im Prototyp.
+- CI-Nachbesserung: REQ-049 AK-9 wartet jetzt auf das Öffnen und Schließen sowie auf das asynchrone `popstate` nach `history.back()`. Bei REQ-026 AK-7 sind Reiterleiste und Reiterbereich (REQ-043, bestätigt) aus der Zitat-Prüfung ausgenommen. Lokal ist beides 3× grün.
+- Risiko H4 (nicht reproduziert): Wird nach Schließen per X/Ziehen/Außen sofort wieder geöffnet, kann das verspätete `popstate` das neue Fenster schließen. Das ist die vermutete Ursache des CI-Fehlers. Der Entwickler sollte das prüfen.
 - Hinweis H3: Der Reiter „Details“ zeigt derzeit „under construction :)“. Das ist laut REQ-043 kein AK-8-Fall, der Inhalt folgt mit REQ-051 ff. (Teil B).
