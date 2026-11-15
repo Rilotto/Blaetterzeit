@@ -1,7 +1,7 @@
 ---
 id: REQ-037
 titel: Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

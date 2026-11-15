@@ -1,7 +1,7 @@
 ---
 id: REQ-022
 titel: Buchdetails – Statusmenü zum Ändern des Lesestatus
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

@@ -1,7 +1,7 @@
 ---
 id: REQ-041
 titel: Buchdaten – Eintragungsdatum speichern
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
