@@ -7,6 +7,7 @@ import { standardBildspeicher, standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattAktuelleSeite from '@/buchdetails/BlattAktuelleSeite';
 import BlattBuchlaenge from '@/buchdetails/BlattBuchlaenge';
+import BlattPreis from '@/buchdetails/BlattPreis';
 import Buchdarstellung, { type Bilder } from '@/buchdetails/Buchdarstellung';
 import Fortschritt from '@/buchdetails/Fortschritt';
 import KameraAnsicht from '@/buchdetails/KameraAnsicht';
@@ -18,9 +19,11 @@ import { BUCH_HOEHE, KOPF_ICON, KOPF_SCHALTFLAECHE, RAND, seitenverhaeltnis } fr
 import ReiterBereich from '@/buchdetails/reiter/ReiterBereich';
 import Reiterleiste from '@/buchdetails/reiter/Reiterleiste';
 import { START_REITER, type ReiterId } from '@/buchdetails/reiter/rezension';
+import FensterFormat from '@/buchdetails/reiter/FensterFormat';
 import Schreibfenster from '@/buchdetails/reiter/Schreibfenster';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
+import type { Formatangaben } from '@/domain/ausgabe';
 import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
 import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
 import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
@@ -43,7 +46,7 @@ export interface BuchDetailsProps {
   onZurueck: () => void;
 }
 
-type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | null;
+type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | null;
 
 const systemzeit = () => new Date();
 
@@ -105,7 +108,7 @@ async function ladeBilder(speicher: ImageStore, buchId: string): Promise<Bilder>
   return bilder;
 }
 
-/** Fenster „Buchdetails“ (REQ-013 bis REQ-028) mit Reiterleiste und Reiter „Rezension“ (REQ-043 bis REQ-049). */
+/** Fenster „Buchdetails“ (REQ-013 bis REQ-028) mit Reiterleiste, Reiter „Rezension“ (REQ-043 bis REQ-049) und „Details“ (REQ-051 bis REQ-059). */
 export default function BuchDetails({
   buchId,
   buch: vorgegeben,
@@ -223,6 +226,32 @@ export default function BuchDetails({
     setBlatt(null);
   };
 
+  // Seitenanzahl über die Zeile „Seiten“ ändern: kein Menü „Aktuelle Seite“ danach (REQ-057).
+  const seitenSichern = (seitenanzahl: number) => {
+    if (!buch) return;
+    speichern({ ...buch, seitenanzahl });
+    setBlatt(null);
+  };
+
+  // Fenster „Format“ sichern (REQ-058): nicht gewählte Angaben fehlen im Buch.
+  const formatSpeichern = (a: Formatangaben) => {
+    if (!buch) return;
+    const neu: Buch = { ...buch };
+    delete neu.format;
+    delete neu.unterformat;
+    delete neu.sonderausgabe;
+    delete neu.exemplar;
+    speichern({ ...neu, ...a });
+    setBlatt(null);
+  };
+
+  // Preis sichern (REQ-059).
+  const preisSpeichern = (preisCent: number) => {
+    if (!buch) return;
+    speichern({ ...buch, preisCent });
+    setBlatt(null);
+  };
+
   // Standard-Bildquelle: „Scannen“ zeigt die Kameraansicht der App und liefert deren Foto bzw. null (Zurück).
   const kameraAnzeigen = (bereich: Bildbereich) => () =>
     new Promise<string | null>((resolve) => {
@@ -329,7 +358,15 @@ export default function BuchDetails({
           <Fortschritt buch={buch} onAktuelleSeite={fortschrittOeffnen} onBuchlaenge={fortschrittOeffnen} />
           <Statistik buch={buch} jetzt={jetzt()} />
           <Reiterleiste aktiv={reiter} onWaehlen={setReiter} />
-          <ReiterBereich reiter={reiter} buch={buch} onBewertungAntippen={bewerten} onSchreiben={() => setBlatt('rezension')} />
+          <ReiterBereich
+            reiter={reiter}
+            buch={buch}
+            onBewertungAntippen={bewerten}
+            onSchreiben={() => setBlatt('rezension')}
+            onSeiten={() => setBlatt('seiten')}
+            onFormat={() => setBlatt('format')}
+            onPreis={() => setBlatt('preis')}
+          />
         </>
       ) : null}
       {buch && blatt === 'buchlaenge' ? (
@@ -354,6 +391,22 @@ export default function BuchDetails({
           onSchliessen={() => setBlatt(null)}
         />
       ) : null}
+      {buch && blatt === 'seiten' ? (
+        <BlattBuchlaenge
+          startWert={buch.seitenanzahl}
+          aktuelleSeite={buch.aktuelleSeite}
+          onSichern={seitenSichern}
+          onSchliessen={() => setBlatt(null)}
+        />
+      ) : null}
+      {buch && blatt === 'format' ? (
+        <FensterFormat
+          start={{ format: buch.format, unterformat: buch.unterformat, sonderausgabe: buch.sonderausgabe, exemplar: buch.exemplar }}
+          onSichern={formatSpeichern}
+          onSchliessen={() => setBlatt(null)}
+        />
+      ) : null}
+      {buch && blatt === 'preis' ? <BlattPreis preisCent={buch.preisCent} onSichern={preisSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {menue !== null ? (
         <Auswahlmenue
           oben={MENUE_OBEN}

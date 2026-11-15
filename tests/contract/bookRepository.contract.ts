@@ -132,6 +132,32 @@ export function runBookRepositoryContract(name: string, factory: Fabrik) {
       expect(await nachher.get(buch.id)).toEqual({ id: buch.id, titel: 'Bewertet', status: 'gelesen' });
     });
 
+    it('speichert Genres, Tropes, Inhaltswarnungen und Ausgabe (REQ-052–059), auch nach einem Neustart; Überschreiben entfernt sie', async () => {
+      const buch = {
+        ...neuesBuch({ titel: 'Ausgabe', status: 'gelesen' }),
+        genres: ['Fantasy', 'Romance'],
+        tropes: ['Found Family'],
+        inhaltswarnungen: ['Gewalt', 'Tod'],
+        format: 'print' as const,
+        unterformat: 'hardcover' as const,
+        sonderausgabe: 'erstausgabe' as const,
+        exemplar: 'geliehen' as const,
+        preisCent: 0,
+      };
+      const ebook = { ...neuesBuch({ titel: 'E', status: 'gelesen' }), format: 'ebook' as const, exemplar: 'meins' as const, preisCent: 1299 };
+      await repo.save(buch);
+      await repo.save(ebook);
+      expect(await repo.get(buch.id)).toEqual(buch);
+      const nachher = neustart ? await neustart() : repo;
+      expect(await nachher.get(buch.id)).toEqual(buch);
+      expect(await nachher.get(ebook.id)).toEqual(ebook);
+      const kopie = (await nachher.get(buch.id))!;
+      kopie.genres!.push('X');
+      expect((await nachher.get(buch.id))?.genres).toEqual(['Fantasy', 'Romance']);
+      await nachher.save({ id: buch.id, titel: 'Ausgabe', status: 'gelesen' });
+      expect(await nachher.get(buch.id)).toEqual({ id: buch.id, titel: 'Ausgabe', status: 'gelesen' });
+    });
+
     it('liefert die Bücher in der Reihenfolge des Anlegens, auch nach dem Überschreiben', async () => {
       const a = neuesBuch({ titel: 'A', status: 'ungelesen' });
       const b = neuesBuch({ titel: 'B', status: 'ungelesen' });

@@ -9,3 +9,12 @@
 - CI-Nachbesserung: REQ-049 AK-9 wartet jetzt auf das Öffnen und Schließen sowie auf das asynchrone `popstate` nach `history.back()`. Bei REQ-026 AK-7 sind Reiterleiste und Reiterbereich (REQ-043, bestätigt) aus der Zitat-Prüfung ausgenommen. Lokal ist beides 3× grün.
 - Risiko H4 (nicht reproduziert): Wird nach Schließen per X/Ziehen/Außen sofort wieder geöffnet, kann das verspätete `popstate` das neue Fenster schließen. Das ist die vermutete Ursache des CI-Fehlers. Der Entwickler sollte das prüfen.
 - Hinweis H3: Der Reiter „Details“ zeigt derzeit „under construction :)“. Das ist laut REQ-043 kein AK-8-Fall, der Inhalt folgt mit REQ-051 ff. (Teil B).
+
+## Teil B (REQ-051 bis REQ-053, REQ-055 bis REQ-059, Tester, 2026-11-15)
+- Ergebnis: Alle AKs grün (8 Dateien, 78 Tests). REQ-043 und REQ-049 bleiben grün (zusammen 109 Tests, 2 Läufe). `tsc -b` und oxlint sind sauber. Die volle Suite lief lokal nicht (Token-Vorgabe), das Sicherheitsnetz ist die CI.
+- Gegenprobe (4 Fehler): Exemplar nicht gespeichert, Sonderausgabe nicht abwählbar, Seitenzahl unter aktueller Seite gesichert, Preis nicht gespeichert. Alle 4 wurden erkannt (1, 2, 1 bzw. 3 rote Tests).
+- B2 (Annahme Entwickler, nicht im REQ, nicht festgeschrieben): Bei E-Book/Hörbuch werden Unterformat und Sonderausgabe verworfen. Klärung durch AM/CEO.
+- B3 (Annahme Entwickler, nicht im REQ, nicht festgeschrieben): Erneutes Antippen hebt Unterformat und Exemplar nicht auf. REQ-058 regelt das Abwählen nur für die Sonderausgabe.
+- B4 (Annahme Entwickler, nicht im REQ, nicht festgeschrieben): Monatsabkürzungen außer „Okt.“ (z. B. „März“, „Juni“, „Sept.“).
+- B5 (Hinweis): Der Preis nimmt auch „.“ als Dezimaltrennzeichen an, und „0,00 €“ lässt sich sichern. Die Zeile zeigt dann „0,00 €“ statt des Hinweistexts. Beides regelt der REQ nicht.
+- Risiko R1: Bei REQ-057 AK-5 blockiert auch eine aktuelle Seite, die aus dem Modus „Seite“ übrig geblieben ist, wenn inzwischen der Modus „%“ aktiv ist. Das ist nicht geprüft.

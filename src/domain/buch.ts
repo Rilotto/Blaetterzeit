@@ -2,6 +2,17 @@
  * Fachliches Kernmodell „Buch“ (REQ-008). Keine Abhängigkeit zu UI oder Speicher.
  * Begriffe siehe docs/glossary.md.
  */
+import {
+  istExemplarId,
+  istFormatId,
+  istSonderausgabeId,
+  istUnterformatId,
+  namenListeAusDaten,
+  type ExemplarId,
+  type FormatId,
+  type SonderausgabeId,
+  type UnterformatId,
+} from './ausgabe';
 import { bewertungenAusDaten, type Bewertungen } from './bewertung';
 
 /**
@@ -63,6 +74,17 @@ export interface Buch {
   bewertungen?: Bewertungen;
   /** Eigene Rezension, ungekürzt und ohne Längenbegrenzung (REQ-047, REQ-049). */
   rezension?: string;
+  /** Festgelegte Genres, Tropes, markierte Inhaltswarnungen (REQ-052, REQ-053); fehlend = keine. */
+  genres?: string[];
+  tropes?: string[];
+  inhaltswarnungen?: string[];
+  /** Ausgabe (REQ-058): Format, Unterformat (nur Print), Sonderausgabe (nur Print), Exemplar; fehlend = nicht gewählt. */
+  format?: FormatId;
+  unterformat?: UnterformatId;
+  sonderausgabe?: SonderausgabeId;
+  exemplar?: ExemplarId;
+  /** Bezahlter Preis in Euro-Cent, ganzzahlig ≥ 0 (REQ-059); fehlend = kein Preis gespeichert. */
+  preisCent?: number;
 }
 
 export type Fortschrittsmodus = 'seite' | 'prozent';
@@ -87,6 +109,14 @@ export const OPTIONALE_BUCHFELDER = [
   'eingetragenAm',
   'bewertungen',
   'rezension',
+  'genres',
+  'tropes',
+  'inhaltswarnungen',
+  'format',
+  'unterformat',
+  'sonderausgabe',
+  'exemplar',
+  'preisCent',
 ] as const;
 
 export interface NeuesBuch {
@@ -158,5 +188,16 @@ export function buchAusDaten(daten: unknown): Buch {
   if (bewertungen) buch.bewertungen = bewertungen;
   // Rezension: nur nicht leerer Text (REQ-049, AK-8).
   if (typeof e.rezension === 'string' && e.rezension.trim() !== '') buch.rezension = e.rezension;
+  const genres = namenListeAusDaten(e.genres);
+  if (genres) buch.genres = genres;
+  const tropes = namenListeAusDaten(e.tropes);
+  if (tropes) buch.tropes = tropes;
+  const warnungen = namenListeAusDaten(e.inhaltswarnungen);
+  if (warnungen) buch.inhaltswarnungen = warnungen;
+  if (istFormatId(e.format)) buch.format = e.format;
+  if (istUnterformatId(e.unterformat)) buch.unterformat = e.unterformat;
+  if (istSonderausgabeId(e.sonderausgabe)) buch.sonderausgabe = e.sonderausgabe;
+  if (istExemplarId(e.exemplar)) buch.exemplar = e.exemplar;
+  if (typeof e.preisCent === 'number' && Number.isInteger(e.preisCent) && e.preisCent >= 0) buch.preisCent = e.preisCent;
   return buch;
 }

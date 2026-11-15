@@ -72,6 +72,23 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN rezension TEXT',
     ],
   },
+  {
+    version: 6,
+    beschreibung: 'Genres, Tropes, Inhaltswarnungen und Ausgabe: Format, Exemplar, Sonderausgabe, Preis (REQ-052, REQ-053, REQ-058, REQ-059)',
+    anweisungen: [
+      // JSON-Listen von Namen; NULL = keine.
+      'ALTER TABLE buch ADD COLUMN genres TEXT',
+      'ALTER TABLE buch ADD COLUMN tropes TEXT',
+      'ALTER TABLE buch ADD COLUMN inhaltswarnungen TEXT',
+      // IDs aus src/domain/ausgabe.ts; NULL = nicht gewählt.
+      'ALTER TABLE buch ADD COLUMN format TEXT',
+      'ALTER TABLE buch ADD COLUMN unterformat TEXT',
+      'ALTER TABLE buch ADD COLUMN sonderausgabe TEXT',
+      'ALTER TABLE buch ADD COLUMN exemplar TEXT',
+      // Euro-Cent, ganzzahlig; NULL = kein Preis.
+      'ALTER TABLE buch ADD COLUMN preis_cent INTEGER',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

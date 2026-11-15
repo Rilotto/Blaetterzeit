@@ -2,7 +2,15 @@ import type { Buch } from '../domain/buch';
 import type { BookRepository } from './BookRepository';
 
 /** Kopie ohne geteilte Referenzen auf veränderliche Unterobjekte. */
-const kopie = (b: Buch): Buch => (b.bewertungen ? { ...b, bewertungen: { ...b.bewertungen } } : { ...b });
+const kopie = (b: Buch): Buch => {
+  const k: Buch = { ...b };
+  if (b.bewertungen) k.bewertungen = { ...b.bewertungen };
+  if (b.sitzungen) k.sitzungen = b.sitzungen.map((s) => ({ ...s }));
+  if (b.genres) k.genres = [...b.genres];
+  if (b.tropes) k.tropes = [...b.tropes];
+  if (b.inhaltswarnungen) k.inhaltswarnungen = [...b.inhaltswarnungen];
+  return k;
+};
 
 export class InMemoryBookRepository implements BookRepository {
   private buecher = new Map<string, Buch>();

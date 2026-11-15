@@ -3,7 +3,7 @@ import type { BookRepository } from './BookRepository';
 import type { SqlVerbindung, SqlWert } from './sqlite/SqlVerbindung';
 
 const SPALTEN =
-  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen, eingetragen_am, bewertungen, rezension';
+  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen, eingetragen_am, bewertungen, rezension, genres, tropes, inhaltswarnungen, format, unterformat, sonderausgabe, exemplar, preis_cent';
 
 /** Spaltenwerte eines Buches; fehlende optionale Angaben werden als NULL gespeichert. */
 function werte(b: Buch): SqlWert[] {
@@ -22,6 +22,14 @@ function werte(b: Buch): SqlWert[] {
     b.eingetragenAm ?? null,
     b.bewertungen ? JSON.stringify(b.bewertungen) : null,
     b.rezension ?? null,
+    b.genres ? JSON.stringify(b.genres) : null,
+    b.tropes ? JSON.stringify(b.tropes) : null,
+    b.inhaltswarnungen ? JSON.stringify(b.inhaltswarnungen) : null,
+    b.format ?? null,
+    b.unterformat ?? null,
+    b.sonderausgabe ?? null,
+    b.exemplar ?? null,
+    b.preisCent ?? null,
   ];
 }
 
@@ -52,11 +60,19 @@ function ausZeile(z: Record<string, unknown>): Buch {
     eingetragenAm: z.eingetragen_am ?? undefined,
     bewertungen: typeof z.bewertungen === 'string' ? jsonLesen(z.bewertungen) : undefined,
     rezension: z.rezension ?? undefined,
+    genres: typeof z.genres === 'string' ? jsonLesen(z.genres) : undefined,
+    tropes: typeof z.tropes === 'string' ? jsonLesen(z.tropes) : undefined,
+    inhaltswarnungen: typeof z.inhaltswarnungen === 'string' ? jsonLesen(z.inhaltswarnungen) : undefined,
+    format: z.format ?? undefined,
+    unterformat: z.unterformat ?? undefined,
+    sonderausgabe: z.sonderausgabe ?? undefined,
+    exemplar: z.exemplar ?? undefined,
+    preisCent: zahl(z.preis_cent),
   });
 }
 
 /**
- * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 bis 5, REQ-034, REQ-024, REQ-041, REQ-045, REQ-049).
+ * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 bis 6, REQ-034, REQ-024, REQ-041, REQ-045, REQ-049, REQ-052–059).
  * Reihenfolge = Reihenfolge des Anlegens (rowid bleibt beim Überschreiben erhalten).
  */
 export class SqliteBookRepository implements BookRepository {
@@ -83,11 +99,13 @@ export class SqliteBookRepository implements BookRepository {
       await this.db.ausfuehren(
         `UPDATE buch SET titel = ?, status = ?, autor = ?, erscheinungsjahr = ?, erscheinungsdatum = ?,
          seitenanzahl = ?, cover = ?, aktuelle_seite = ?, fortschritt_prozent = ?, fortschrittsmodus = ?,
-         sitzungen = ?, eingetragen_am = ?, bewertungen = ?, rezension = ?, geaendert = ? WHERE id = ?`,
+         sitzungen = ?, eingetragen_am = ?, bewertungen = ?, rezension = ?, genres = ?, tropes = ?,
+         inhaltswarnungen = ?, format = ?, unterformat = ?, sonderausgabe = ?, exemplar = ?, preis_cent = ?,
+         geaendert = ? WHERE id = ?`,
         [...werte(b), new Date().toISOString(), b.id],
       );
     } else {
-      await this.db.ausfuehren(`INSERT INTO buch (${SPALTEN}, geaendert) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+      await this.db.ausfuehren(`INSERT INTO buch (${SPALTEN}, geaendert) VALUES (${Array(SPALTEN.split(',').length + 1).fill('?').join(', ')})`, [
         b.id,
         ...werte(b),
         new Date().toISOString(),

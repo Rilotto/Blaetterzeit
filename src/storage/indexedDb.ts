@@ -36,6 +36,9 @@ const MIGRATIONEN: ((db: IDBDatabase, tx: IDBTransaction) => void)[] = [
   // die neuen Felder sind optional, vorhandene Datensätze bleiben unverändert gültig. Kein Umbau nötig,
   // die Version markiert den Schemastand.
   () => {},
+  // Version 5: Genres, Tropes, Inhaltswarnungen, Format, Unterformat, Sonderausgabe, Exemplar, Preis
+  // (REQ-052, REQ-053, REQ-058, REQ-059). Optionale Felder im Buchobjekt, kein Umbau nötig.
+  () => {},
 ];
 
 export const SCHEMA_VERSION = MIGRATIONEN.length;

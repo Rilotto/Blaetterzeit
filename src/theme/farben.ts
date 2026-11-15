@@ -556,3 +556,93 @@ export const kriteriumBlass = (id: KriteriumFarbe): string =>
 
 /** Leichter Schatten der aktiven Reiterpille (REQ-043, Referenzbild), aus „Dunkelbraun“ abgeleitet. */
 export const reiterPilleSchatten = `0 2px 6px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 18%, transparent)`;
+
+/** Farbrollen des Reiters „Details“ (REQ-051 bis REQ-056) und des Fensters „Format“ (REQ-058), nach REF-details-01 bis -03. */
+export type DetailsFarbrolle =
+  | 'ueberschrift'
+  | 'bearbeiten'
+  | 'pilleGefuelltFlaeche'
+  | 'pilleGefuelltSchrift'
+  | 'pilleGestricheltRahmen'
+  | 'pilleGestricheltSchrift'
+  | 'sammlungRahmen'
+  | 'sammlungSchrift'
+  | 'karteFlaeche'
+  | 'karteRahmen'
+  | 'trennlinie'
+  | 'zeileBezeichnung'
+  | 'zeileWert'
+  | 'zeilePfeil'
+  | 'preisLeer'
+  | 'kachelFlaeche'
+  | 'kachelRahmen'
+  | 'kachelGewaehltFlaeche'
+  | 'kachelGewaehltRahmen'
+  | 'kachelSchrift'
+  | 'kachelGewaehltSchrift'
+  | 'kachelIcon'
+  | 'hakenFlaeche'
+  | 'hakenIcon'
+  | 'kreisRahmen'
+  | 'unterKachelFlaeche'
+  | 'buchDunkel'
+  | 'buchAkzent'
+  | 'sonderPilleFlaeche'
+  | 'sonderPilleSchrift'
+  | 'sonderPilleGewaehltSchrift'
+  | 'sonderGewaehlt'
+  | 'exemplarFrage'
+  | 'exemplarFlaeche'
+  | 'exemplarGewaehltFlaeche'
+  | 'exemplarSchrift'
+  | 'exemplarGewaehltSchrift';
+
+/** Aus welcher Farbrubrik jede Farbrolle des Reiters „Details“ ihre Farbe bezieht (nur bestehende Rubriken). */
+export const detailsFarbrollen: Record<DetailsFarbrolle, FarbrubrikId> = {
+  ueberschrift: 'dunkelbraun',
+  bearbeiten: 'primaer',
+  pilleGefuelltFlaeche: 'primaer',
+  pilleGefuelltSchrift: 'hintergrund',
+  pilleGestricheltRahmen: 'sekundaer',
+  pilleGestricheltSchrift: 'primaer',
+  sammlungRahmen: 'sekundaer',
+  sammlungSchrift: 'primaer',
+  karteFlaeche: 'hintergrund',
+  karteRahmen: 'sekundaer',
+  trennlinie: 'sekundaer',
+  zeileBezeichnung: 'dunkelbraun',
+  zeileWert: 'tertiaer',
+  zeilePfeil: 'tertiaer',
+  preisLeer: 'primaer',
+  kachelFlaeche: 'hintergrund',
+  kachelRahmen: 'sekundaer',
+  kachelGewaehltFlaeche: 'ghost',
+  kachelGewaehltRahmen: 'primaer',
+  kachelSchrift: 'tertiaer',
+  kachelGewaehltSchrift: 'primaer',
+  kachelIcon: 'tertiaer',
+  hakenFlaeche: 'primaer',
+  hakenIcon: 'hintergrund',
+  kreisRahmen: 'sekundaer',
+  unterKachelFlaeche: 'ghost',
+  buchDunkel: 'primaer',
+  buchAkzent: 'action',
+  sonderPilleFlaeche: 'ghost',
+  sonderPilleSchrift: 'tertiaer',
+  sonderPilleGewaehltSchrift: 'primaer',
+  sonderGewaehlt: 'dunkelbraun',
+  exemplarFrage: 'tertiaer',
+  exemplarFlaeche: 'ghost',
+  exemplarGewaehltFlaeche: 'hintergrund',
+  exemplarSchrift: 'tertiaer',
+  exemplarGewaehltSchrift: 'dunkelbraun',
+};
+
+/** CSS-Ausdruck einer Farbrolle des Reiters „Details“ bzw. des Fensters „Format“. */
+export const detailsFarbe = (rolle: DetailsFarbrolle): string => rubrikFarbe(detailsFarbrollen[rolle]);
+
+/** Blasse Fläche einer gewählten Sonderausgabe (Referenzbild), aus „Primär“ und „Hintergrund“ gemischt. */
+export const sonderPilleGewaehltFlaeche = `color-mix(in srgb, ${rubrikFarbe('primaer')} 14%, ${rubrikFarbe('hintergrund')})`;
+
+/** Helles Buch (Taschenbuch, Kleinformat) im Fenster „Format“, aus „Primär“ und „Hintergrund“ gemischt. */
+export const buchHellFlaeche = `color-mix(in srgb, ${rubrikFarbe('primaer')} 45%, ${rubrikFarbe('hintergrund')})`;
