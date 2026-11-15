@@ -115,6 +115,23 @@ export function runBookRepositoryContract(name: string, factory: Fabrik) {
       expect(await nachher.get(prozent.id)).toEqual(prozent);
     });
 
+    it('speichert Bewertungen und Rezension (REQ-045, REQ-049), auch nach einem Neustart; Zurücksetzen entfernt sie', async () => {
+      const lang = `${'Absatz eins. '.repeat(400)}\n\nAbsatz zwei.`;
+      const buch = { ...neuesBuch({ titel: 'Bewertet', status: 'gelesen' }), bewertungen: { sterne: 4 as const, spice: 2 as const }, rezension: lang };
+      const andere = neuesBuch({ titel: 'Ohne', status: 'gelesen' });
+      await repo.save(buch);
+      await repo.save(andere);
+      expect(await repo.get(buch.id)).toEqual(buch);
+      const nachher = neustart ? await neustart() : repo;
+      expect(await nachher.get(buch.id)).toEqual(buch);
+      expect(await nachher.get(andere.id)).toEqual(andere);
+      const kopie = (await nachher.get(buch.id))!;
+      kopie.bewertungen!.sterne = 1;
+      expect((await nachher.get(buch.id))?.bewertungen?.sterne).toBe(4);
+      await nachher.save({ id: buch.id, titel: 'Bewertet', status: 'gelesen' });
+      expect(await nachher.get(buch.id)).toEqual({ id: buch.id, titel: 'Bewertet', status: 'gelesen' });
+    });
+
     it('liefert die Bücher in der Reihenfolge des Anlegens, auch nach dem Überschreiben', async () => {
       const a = neuesBuch({ titel: 'A', status: 'ungelesen' });
       const b = neuesBuch({ titel: 'B', status: 'ungelesen' });

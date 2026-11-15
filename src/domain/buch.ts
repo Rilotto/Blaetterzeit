@@ -2,6 +2,7 @@
  * Fachliches Kernmodell „Buch“ (REQ-008). Keine Abhängigkeit zu UI oder Speicher.
  * Begriffe siehe docs/glossary.md.
  */
+import { bewertungenAusDaten, type Bewertungen } from './bewertung';
 
 /**
  * Zentrale, geordnete Definition der Lesestatus (REQ-008).
@@ -58,6 +59,10 @@ export interface Buch {
    * Optional, damit ältere Datensätze ohne Datum gelesen werden können (sie gelten als älter als alle datierten).
    */
   eingetragenAm?: string;
+  /** Bewertungen je Kriterium, ganzzahlig 1–5; fehlender Eintrag = keine Bewertung (REQ-045). */
+  bewertungen?: Bewertungen;
+  /** Eigene Rezension, ungekürzt und ohne Längenbegrenzung (REQ-047, REQ-049). */
+  rezension?: string;
 }
 
 export type Fortschrittsmodus = 'seite' | 'prozent';
@@ -80,6 +85,8 @@ export const OPTIONALE_BUCHFELDER = [
   'fortschrittsmodus',
   'sitzungen',
   'eingetragenAm',
+  'bewertungen',
+  'rezension',
 ] as const;
 
 export interface NeuesBuch {
@@ -147,5 +154,9 @@ export function buchAusDaten(daten: unknown): Buch {
   }
   // Fehlt das Eintragungsdatum oder ist es ungültig, fehlt es im Ergebnis (robust für ältere Datensätze, REQ-041).
   if (istZeitpunkt(e.eingetragenAm)) buch.eingetragenAm = e.eingetragenAm;
+  const bewertungen = bewertungenAusDaten(e.bewertungen);
+  if (bewertungen) buch.bewertungen = bewertungen;
+  // Rezension: nur nicht leerer Text (REQ-049, AK-8).
+  if (typeof e.rezension === 'string' && e.rezension.trim() !== '') buch.rezension = e.rezension;
   return buch;
 }

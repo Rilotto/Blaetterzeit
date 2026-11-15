@@ -3,7 +3,7 @@ import type { BookRepository } from './BookRepository';
 import type { SqlVerbindung, SqlWert } from './sqlite/SqlVerbindung';
 
 const SPALTEN =
-  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen, eingetragen_am';
+  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen, eingetragen_am, bewertungen, rezension';
 
 /** Spaltenwerte eines Buches; fehlende optionale Angaben werden als NULL gespeichert. */
 function werte(b: Buch): SqlWert[] {
@@ -20,10 +20,12 @@ function werte(b: Buch): SqlWert[] {
     b.fortschrittsmodus ?? null,
     b.sitzungen ? JSON.stringify(b.sitzungen) : null,
     b.eingetragenAm ?? null,
+    b.bewertungen ? JSON.stringify(b.bewertungen) : null,
+    b.rezension ?? null,
   ];
 }
 
-function sitzungenLesen(json: string): unknown {
+function jsonLesen(json: string): unknown {
   try {
     return JSON.parse(json);
   } catch {
@@ -46,13 +48,15 @@ function ausZeile(z: Record<string, unknown>): Buch {
     aktuelleSeite: zahl(z.aktuelle_seite),
     fortschrittProzent: zahl(z.fortschritt_prozent),
     fortschrittsmodus: z.fortschrittsmodus ?? undefined,
-    sitzungen: typeof z.sitzungen === 'string' ? sitzungenLesen(z.sitzungen) : undefined,
+    sitzungen: typeof z.sitzungen === 'string' ? jsonLesen(z.sitzungen) : undefined,
     eingetragenAm: z.eingetragen_am ?? undefined,
+    bewertungen: typeof z.bewertungen === 'string' ? jsonLesen(z.bewertungen) : undefined,
+    rezension: z.rezension ?? undefined,
   });
 }
 
 /**
- * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 bis 4, REQ-034, REQ-024, REQ-041).
+ * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 bis 5, REQ-034, REQ-024, REQ-041, REQ-045, REQ-049).
  * Reihenfolge = Reihenfolge des Anlegens (rowid bleibt beim Überschreiben erhalten).
  */
 export class SqliteBookRepository implements BookRepository {
@@ -79,11 +83,11 @@ export class SqliteBookRepository implements BookRepository {
       await this.db.ausfuehren(
         `UPDATE buch SET titel = ?, status = ?, autor = ?, erscheinungsjahr = ?, erscheinungsdatum = ?,
          seitenanzahl = ?, cover = ?, aktuelle_seite = ?, fortschritt_prozent = ?, fortschrittsmodus = ?,
-         sitzungen = ?, eingetragen_am = ?, geaendert = ? WHERE id = ?`,
+         sitzungen = ?, eingetragen_am = ?, bewertungen = ?, rezension = ?, geaendert = ? WHERE id = ?`,
         [...werte(b), new Date().toISOString(), b.id],
       );
     } else {
-      await this.db.ausfuehren(`INSERT INTO buch (${SPALTEN}, geaendert) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+      await this.db.ausfuehren(`INSERT INTO buch (${SPALTEN}, geaendert) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
         b.id,
         ...werte(b),
         new Date().toISOString(),

@@ -15,8 +15,13 @@ import Statistik from '@/buchdetails/Statistik';
 import Statuspille from '@/buchdetails/Statuspille';
 import { kopfSchaltflaecheStil } from '@/buchdetails/stile';
 import { BUCH_HOEHE, KOPF_ICON, KOPF_SCHALTFLAECHE, RAND, seitenverhaeltnis } from '@/buchdetails/masse';
+import ReiterBereich from '@/buchdetails/reiter/ReiterBereich';
+import Reiterleiste from '@/buchdetails/reiter/Reiterleiste';
+import { START_REITER, type ReiterId } from '@/buchdetails/reiter/rezension';
+import Schreibfenster from '@/buchdetails/reiter/Schreibfenster';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
+import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
 import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
 import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
 import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore } from '@/storage';
@@ -38,7 +43,7 @@ export interface BuchDetailsProps {
   onZurueck: () => void;
 }
 
-type Blatt = 'buchlaenge' | 'aktuelleSeite' | null;
+type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | null;
 
 const systemzeit = () => new Date();
 
@@ -100,7 +105,7 @@ async function ladeBilder(speicher: ImageStore, buchId: string): Promise<Bilder>
   return bilder;
 }
 
-/** Fenster „Buchdetails“ (REQ-013 bis REQ-019). */
+/** Fenster „Buchdetails“ (REQ-013 bis REQ-028) mit Reiterleiste und Reiter „Rezension“ (REQ-043 bis REQ-049). */
 export default function BuchDetails({
   buchId,
   buch: vorgegeben,
@@ -117,6 +122,8 @@ export default function BuchDetails({
   const basis = vorgegeben && vorgegeben.id === buchId ? vorgegeben : geladen;
   const buch = geaendert && geaendert.id === buchId ? geaendert : basis;
   const [blatt, setBlatt] = useState<Blatt>(null);
+  // Aktiver Reiter; beim Öffnen „Rezension“ (REQ-043, AK-3).
+  const [reiter, setReiter] = useState<ReiterId>(START_REITER);
   const ausstehend = useRef<Promise<void> | null>(null);
   const [bilder, setBilder] = useState<Bilder>({});
   const [menue, setMenue] = useState<Bildbereich | null>(null);
@@ -199,6 +206,20 @@ export default function BuchDetails({
   const fortschrittSpeichern = (modus: Fortschrittsmodus, wert: number) => {
     if (!buch) return;
     speichern(fortschrittSichern(buch, modus, wert, jetzt()));
+    setBlatt(null);
+  };
+
+  // Bewertung setzen bzw. zurücksetzen und sofort speichern (REQ-045).
+  const bewerten = (kriterium: KriteriumId, n: number) => {
+    if (!buch) return;
+    speichern(bewertungAntippen(buch, kriterium, n));
+  };
+
+  // Rezension sichern (REQ-049); leerer Text wird bereits im Schreibfenster abgewiesen.
+  const rezensionSpeichern = (text: string) => {
+    if (!buch) return;
+    const neu = rezensionSichern(buch, text);
+    if (neu) speichern(neu);
     setBlatt(null);
   };
 
@@ -307,6 +328,8 @@ export default function BuchDetails({
           </div>
           <Fortschritt buch={buch} onAktuelleSeite={fortschrittOeffnen} onBuchlaenge={fortschrittOeffnen} />
           <Statistik buch={buch} jetzt={jetzt()} />
+          <Reiterleiste aktiv={reiter} onWaehlen={setReiter} />
+          <ReiterBereich reiter={reiter} buch={buch} onBewertungAntippen={bewerten} onSchreiben={() => setBlatt('rezension')} />
         </>
       ) : null}
       {buch && blatt === 'buchlaenge' ? (
@@ -318,6 +341,16 @@ export default function BuchDetails({
           startModus={modusVon(buch)}
           startWert={gespeicherteEingabe(buch)}
           onSichern={fortschrittSpeichern}
+          onSchliessen={() => setBlatt(null)}
+        />
+      ) : null}
+      {buch && blatt === 'rezension' ? (
+        <Schreibfenster
+          titel={buch.titel}
+          autor={buch.autor}
+          sterne={buch.bewertungen?.sterne}
+          rezension={buch.rezension}
+          onSichern={rezensionSpeichern}
           onSchliessen={() => setBlatt(null)}
         />
       ) : null}

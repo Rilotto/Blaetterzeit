@@ -32,6 +32,10 @@ const MIGRATIONEN: ((db: IDBDatabase, tx: IDBTransaction) => void)[] = [
       cursor.continue();
     };
   },
+  // Version 4: Bewertungen und Rezension (REQ-045, REQ-049). Bücher liegen als ganzes Objekt im Store;
+  // die neuen Felder sind optional, vorhandene Datensätze bleiben unverändert gültig. Kein Umbau nötig,
+  // die Version markiert den Schemastand.
+  () => {},
 ];
 
 export const SCHEMA_VERSION = MIGRATIONEN.length;

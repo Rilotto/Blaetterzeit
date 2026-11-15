@@ -20,7 +20,8 @@ html[data-kamera-aktiv] main {
 
 /* REQ-030: Platzhaltertexte der Eingabefelder in der Farbrolle des Feldes
    (Variable inline gesetzt, Wert aus src/theme/farben.ts). */
-input[data-bz-eingabe]::placeholder {
+input[data-bz-eingabe]::placeholder,
+textarea[data-rezension-eingabe]::placeholder {
   color: var(--bz-platzhalterfarbe);
   opacity: 1;
 }

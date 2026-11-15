@@ -14,7 +14,22 @@ export type FarbrubrikId =
   | 'ghostframe'
   | 'dunkelbraun'
   | 'flammerot'
-  | 'flammeorange';
+  | 'flammeorange'
+  // REQ-046: je Bewertungskriterium eine eigene Farbrubrik (volle Farbe).
+  | 'sterne'
+  | 'tempo'
+  | 'weltenbau'
+  | 'spice'
+  | 'spannung'
+  | 'action'
+  | 'hauptfiguren'
+  | 'nebenfiguren'
+  | 'plottwist'
+  | 'traenen'
+  | 'romantik'
+  | 'humor'
+  | 'grusel'
+  | 'dialoge';
 
 export interface Farbrubrik {
   /** Anzeigename der Rubrik (vom CEO vergeben bzw. Arbeitsname). */
@@ -37,6 +52,21 @@ export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
   // REQ-027: Verlauf der Streak-Flamme (unten Rot, oben Orange).
   flammerot: { name: 'Flamme Rot', wert: '#B5452F' },
   flammeorange: { name: 'Flamme Orange', wert: '#E0904A' },
+  // REQ-046: Bewertungskriterien (volle Farbe); die blasse Farbe wird berechnet (kriteriumBlass).
+  sterne: { name: 'Sterne', wert: '#D9A21B' },
+  tempo: { name: 'Tempo', wert: '#5B6FB0' },
+  weltenbau: { name: 'Weltenbau', wert: '#4E7D63' },
+  spice: { name: 'Spice', wert: '#B83A2E' },
+  spannung: { name: 'Spannung', wert: '#6D4C8D' },
+  action: { name: 'Action', wert: '#D9822B' },
+  hauptfiguren: { name: 'Hauptfiguren', wert: '#A0622D' },
+  nebenfiguren: { name: 'Nebenfiguren', wert: '#6B5849' },
+  plottwist: { name: 'Plot Twist', wert: '#8E3B67' },
+  traenen: { name: 'Tränen', wert: '#3F7CB8' },
+  romantik: { name: 'Romantik', wert: '#C2577A' },
+  humor: { name: 'Humor', wert: '#8EA33B' },
+  grusel: { name: 'Grusel', wert: '#45505A' },
+  dialoge: { name: 'Dialoge', wert: '#2F8F8A' },
 };
 
 export type NavigationsFarbrolle =
@@ -430,3 +460,99 @@ export function farbVariablen(): Record<string, string> {
   }
   return vars;
 }
+
+/** Farbrollen der Buchdetails: Reiterleiste (REQ-043), Reiter „Rezension“ (REQ-044, REQ-047) und Schreibfenster (REQ-049). */
+export type RezensionFarbrolle =
+  | 'reiterleisteFlaeche'
+  | 'reiterAktivFlaeche'
+  | 'reiterAktivSchrift'
+  | 'reiterInaktivIcon'
+  | 'abschnittsueberschrift'
+  | 'abschnittsIcon'
+  | 'karteFlaeche'
+  | 'karteRahmen'
+  | 'trennlinie'
+  | 'kriteriumName'
+  | 'stufentext'
+  | 'schreibfeldPlatzhalter'
+  | 'schreibfeldText'
+  | 'stiftIcon'
+  | 'fensterFlaeche'
+  | 'ziehgriff'
+  | 'fensterTitel'
+  | 'fensterAutor'
+  | 'schliessenFlaeche'
+  | 'schliessenRahmen'
+  | 'schliessenIcon'
+  | 'eingabePlatzhalter'
+  | 'eingabeText'
+  | 'sichernFlaeche'
+  | 'sichernSchrift';
+
+/** Aus welcher Farbrubrik jede Farbrolle ihre Farbe bezieht (nach REF-rezension-01/-04, nur bestehende Rubriken). */
+export const rezensionFarbrollen: Record<RezensionFarbrolle, FarbrubrikId> = {
+  reiterleisteFlaeche: 'ghostframe',
+  reiterAktivFlaeche: 'primaer',
+  reiterAktivSchrift: 'hintergrund',
+  reiterInaktivIcon: 'tertiaer',
+  abschnittsueberschrift: 'tertiaer',
+  abschnittsIcon: 'primaer',
+  karteFlaeche: 'hintergrund',
+  karteRahmen: 'sekundaer',
+  trennlinie: 'sekundaer',
+  kriteriumName: 'dunkelbraun',
+  stufentext: 'tertiaer',
+  schreibfeldPlatzhalter: 'tertiaer',
+  schreibfeldText: 'dunkelbraun',
+  stiftIcon: 'primaer',
+  fensterFlaeche: 'hintergrund',
+  ziehgriff: 'tertiaer',
+  fensterTitel: 'dunkelbraun',
+  fensterAutor: 'tertiaer',
+  schliessenFlaeche: 'hintergrund',
+  schliessenRahmen: 'sekundaer',
+  schliessenIcon: 'dunkelbraun',
+  eingabePlatzhalter: 'tertiaer',
+  eingabeText: 'dunkelbraun',
+  sichernFlaeche: 'primaer',
+  sichernSchrift: 'hintergrund',
+};
+
+/** CSS-Ausdruck einer Farbrolle der Reiterleiste bzw. des Reiters „Rezension“. */
+export const rezensionFarbe = (rolle: RezensionFarbrolle): string => rubrikFarbe(rezensionFarbrollen[rolle]);
+
+/** Farbrubrik je Bewertungskriterium (REQ-046); Schlüssel = Kriterium-ID aus src/domain/bewertung.ts. */
+export const kriteriumFarbrubriken = {
+  sterne: 'sterne',
+  tempo: 'tempo',
+  weltenbau: 'weltenbau',
+  spice: 'spice',
+  spannung: 'spannung',
+  action: 'action',
+  hauptfiguren: 'hauptfiguren',
+  nebenfiguren: 'nebenfiguren',
+  plotTwist: 'plottwist',
+  traenen: 'traenen',
+  romantik: 'romantik',
+  humor: 'humor',
+  grusel: 'grusel',
+  dialoge: 'dialoge',
+} as const satisfies Record<string, FarbrubrikId>;
+
+export type KriteriumFarbe = keyof typeof kriteriumFarbrubriken;
+
+/** Anteil der vollen Farbe in der blassen Farbe (Rest: „Hintergrund“). Kein Akzeptanzkriterium. */
+export const BLASS_ANTEIL = 25;
+
+/** Volle Farbe eines Kriteriums (angewähltes Symbol, REQ-046 AK-3). */
+export const kriteriumVoll = (id: KriteriumFarbe): string => rubrikFarbe(kriteriumFarbrubriken[id]);
+
+/**
+ * Blasse Farbe eines Kriteriums (REQ-046 AK-4): automatisch aus der vollen Farbe und „Hintergrund“ gemischt.
+ * Da beide als CSS-Variable eingehen, folgt sie jeder Änderung der vollen Farbe ohne eigenen Wert.
+ */
+export const kriteriumBlass = (id: KriteriumFarbe): string =>
+  `color-mix(in srgb, ${kriteriumVoll(id)} ${BLASS_ANTEIL}%, ${rubrikFarbe('hintergrund')})`;
+
+/** Leichter Schatten der aktiven Reiterpille (REQ-043, Referenzbild), aus „Dunkelbraun“ abgeleitet. */
+export const reiterPilleSchatten = `0 2px 6px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 18%, transparent)`;

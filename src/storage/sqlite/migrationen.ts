@@ -62,6 +62,16 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN eingetragen_am TEXT',
     ],
   },
+  {
+    version: 5,
+    beschreibung: 'Bewertungen je Kriterium und eigene Rezension (REQ-045, REQ-049)',
+    anweisungen: [
+      // JSON-Objekt { "<kriterium>": 1..5 }; NULL = keine Bewertung.
+      'ALTER TABLE buch ADD COLUMN bewertungen TEXT',
+      // Volltext ohne Längenbegrenzung; NULL = keine Rezension.
+      'ALTER TABLE buch ADD COLUMN rezension TEXT',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */
