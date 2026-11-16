@@ -8,6 +8,7 @@ import { InMemoryBookRepository } from '@/storage/InMemoryBookRepository';
 import { InMemoryImageStore } from '@/storage/InMemoryImageStore';
 import { farbrubriken, kriteriumBlass, kriteriumFarbrubriken, kriteriumVoll } from '@/theme';
 import BuchDetails from '@/views/BuchDetails';
+import Symbolbild from '@/components/Symbolbild';
 
 afterEach(cleanup);
 
@@ -25,6 +26,27 @@ describe('Domäne Bewertung', () => {
     for (const k of KRITERIEN) expect(farbrubriken[kriteriumFarbrubriken[k.id]]).toBeDefined();
     expect(kriteriumBlass('tempo')).toContain(kriteriumVoll('tempo'));
     expect(kriteriumBlass('tempo')).toContain('--bz-farbe-hintergrund');
+  });
+
+  it('jedes der 14 Kriterien hat ein sichtbares Icon: nicht-leerer Pfad im Raster 0 -960 960 960', () => {
+    expect(Object.keys(KRITERIUM_SYMBOL)).toHaveLength(14);
+    for (const k of KRITERIEN) {
+      const { container, unmount } = render(<Symbolbild name={KRITERIUM_SYMBOL[k.id]} farbe="red" groesse={24} />);
+      const pfade = Array.from(container.querySelectorAll('path'));
+      expect(pfade.length, k.id).toBeGreaterThan(0);
+      for (const p of pfade) {
+        const d = p.getAttribute('d') ?? '';
+        expect(d.trim().length, k.id).toBeGreaterThan(20);
+        if (p.hasAttribute('transform')) continue;
+        // Startpunkt muss im sichtbaren Bereich liegen (verhindert z. B. Pfade im 24er-Raster)
+        const [x, y] = (d.match(/^[Mm]\s*(-?[\d.]+)[\s,]*(-?[\d.]+)/) ?? []).slice(1).map(Number);
+        expect(x, k.id).toBeGreaterThanOrEqual(0);
+        expect(x, k.id).toBeLessThanOrEqual(960);
+        expect(y, k.id).toBeGreaterThanOrEqual(-960);
+        expect(y, k.id).toBeLessThanOrEqual(0);
+      }
+      unmount();
+    }
   });
 
   it('setzt, ändert und setzt zurück; andere Kriterien bleiben', () => {
