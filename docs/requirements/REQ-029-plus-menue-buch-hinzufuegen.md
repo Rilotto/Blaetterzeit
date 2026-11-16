@@ -22,6 +22,8 @@ Die Bezeichnung Menü „Buch hinzufügen“ ist ein Arbeitsname für die Dokume
 
 Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
+> **Hinweis (2026-11-16):** REQ-061 (Entwurf) ergänzt die Option „Barcode scannen“. Nach dessen Umsetzung ist hier AK-2 (genau eine Option) hinfällig. Bis dahin gilt dieser REQ unverändert.
+
 ## Anforderung (Satzschablone)
 
 **Öffnen**
@@ -141,3 +143,4 @@ CEO (wörtlich): „Das Menü schließt sich nur durch einen Klick auf ein Feld 
 | 2026-11-10 | Erstellt (Entwurf aus der CEO-Vorgabe „Buch anlegen“, Referenzbild 01) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F5: Schließen nur über eine Option, Tippen außerhalb oder „×“; „+“ wird bei geöffnetem Menü zu „×“; Abdunklung wie „Aktuelle Seite“ (neu AK-6 bis AK-9, AK-1 ergänzt). F7: Farbzuordnung (Tabelle). Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
 | 2026-11-10 | Vom CEO mit „Ja“ bestätigt: „×“ in den Farben des Plus-Icons. Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-16 | Hinweis auf REQ-061 („Barcode scannen“) ergänzt; Inhalt unverändert | Anforderungsmanager |

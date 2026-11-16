@@ -20,6 +20,8 @@ Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/
 
 Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
+> **Hinweis (2026-11-16):** REQ-060 (Abgestimmt) ergänzt das Blatt um die Karte „Ausgabe“ (ohne „Fotos“) und benennt „Erscheinungsdatum“ in „Erschienen“ um (mit Eingabe). Nach dessen Umsetzung sind hier AK-2 und AK-6 hinfällig. Bis dahin gilt dieser REQ unverändert.
+
 ## Anforderung (Satzschablone)
 
 **Aufbau (von oben nach unten, wie im Referenzbild)**
@@ -175,3 +177,4 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 | 2026-11-10 | CEO-Antworten eingearbeitet. F1: Pille „Hinzufügen“ immer aktiv, volles Bordeaux (AK-9). F2: Jahr = Erscheinungsjahr; „+ Erscheinungsdatum hinzufügen“ ohne Funktion, auf To-do-Liste (AK-6; frühere Anforderung „Erscheinungsdatum eintragen“ entfällt). F3: SEITEN = Seitenanzahl. F5: Schließen nur über X (ohne Speichern) oder „Hinzufügen“ (AK-7, AK-8). F7: Farbzuordnung. Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
 | 2026-11-10 | CEO-Ergänzung: Schließen auch per Android-Zurück-Taste und Herunterziehen am Ziehgriff, jeweils ohne Speichern (neu AK-10, AK-11; AK-8 auf bloßes Antippen des Ziehgriffs reduziert). Platzhaltertexte verschwinden bei allen Feldern (AK-3 erweitert). Vom CEO mit „Ja“ bestätigt: nach X Seite „Bücher“, Jahr nur Ziffern, höchstens vier (neu AK-12). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-10 | Verweis ergänzt: 1–3 Ziffern im Feld „JAHR“ sind ungültig, Hervorhebung in Primär und Verhalten beim Anlegen in REQ-031 (AK-12, AK-13). Status bleibt „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-16 | Hinweis auf REQ-060 (Karte „Ausgabe“ im Blatt) ergänzt; Inhalt unverändert | Anforderungsmanager |
