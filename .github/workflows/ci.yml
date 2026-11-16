@@ -50,6 +50,8 @@ jobs:
           java-version: 21
       - run: npm ci
       - run: npm run android:sync
+        env:
+          VITE_DEMODATEN: aus
       - name: Build-Umgebung ausgeben (Diagnose)
         working-directory: android
         run: |
