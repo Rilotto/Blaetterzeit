@@ -242,7 +242,9 @@ describe('Ablauf Barcode scannen', () => {
     cleanup();
 
     aufbauen({ suchen: async () => [] }, fakeScanner(true));
-    await waitFor(() => expect(document.querySelector('[data-seite="buecher"]')).toBeInTheDocument());
+    // Erst ein kurzer Hinweis mit der Fehlermeldung, dann zurück zur Seite „Bücher“.
+    expect(await screen.findByRole('alert')).toHaveTextContent('verweigert');
+    await waitFor(() => expect(document.querySelector('[data-seite="buecher"]')).toBeInTheDocument(), { timeout: 4000 });
     cleanup();
 
     const eins = aufbauen({ suchen: async () => [treffer('openlibrary', { titel: 'Nur einer' })] });

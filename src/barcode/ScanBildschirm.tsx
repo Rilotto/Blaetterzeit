@@ -4,7 +4,7 @@ import iconTaschenlampe from '@/assets/icons/icon-taschenlampe.png';
 import iconX from '@/assets/icons/icon-x.png';
 import Icon from '@/components/Icon';
 import { barcodeFarbe } from '@/theme';
-import type { BarcodeScanner } from './scanner';
+import { fehlerText, type BarcodeScanner } from './scanner';
 
 interface Props {
   scanner: BarcodeScanner;
@@ -12,7 +12,12 @@ interface Props {
   onIsbn: (isbn: string) => void;
   /** X angetippt, Kamera verweigert oder nicht verfügbar. */
   onAbbruch: () => void;
+  /** So lange steht der Fehlerhinweis, bevor es zur Seite „Bücher“ zurückgeht (ms). */
+  fehlerDauer?: number;
 }
+
+/** Standarddauer des Fehlerhinweises: lang genug zum Lesen bzw. für ein Bildschirmfoto. */
+const FEHLER_DAUER_MS = 2500;
 
 // Maße nach REF-barcode-01-scan.png (1080 px ≈ 412 dp, Faktor ≈ 2,6). Orientierungswerte, kein Akzeptanzkriterium.
 const bildschirmStil: CSSProperties = {
@@ -92,10 +97,28 @@ const hinweisStil: CSSProperties = {
   color: barcodeFarbe('scanText'),
 };
 
+// Unauffälliger Debug-Hinweis, wenn die Kamera nicht startet (Fehlermeldung für die Fehlersuche).
+const fehlerStil: CSSProperties = {
+  position: 'absolute',
+  left: '18px',
+  right: '18px',
+  bottom: '28px',
+  margin: 0,
+  padding: '8px 12px',
+  borderRadius: '10px',
+  fontSize: '12px',
+  lineHeight: 1.35,
+  wordBreak: 'break-word',
+  color: barcodeFarbe('scanText'),
+  backgroundColor: barcodeFarbe('scanFlaeche'),
+  border: `1px solid ${barcodeFarbe('scanText')}`,
+};
+
 /** Scan-Bildschirm (REQ-061): Kamerabild, Rahmen, X oben links, Taschenlampe oben rechts, zwei Texte. */
-export default function ScanBildschirm({ scanner, onIsbn, onAbbruch }: Props) {
+export default function ScanBildschirm({ scanner, onIsbn, onAbbruch, fehlerDauer = FEHLER_DAUER_MS }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [licht, setLicht] = useState(false);
+  const [fehler, setFehler] = useState<string | null>(null);
   const erledigt = useRef(false);
   const rueckrufe = useRef({ onIsbn, onAbbruch });
   useEffect(() => {
@@ -105,6 +128,7 @@ export default function ScanBildschirm({ scanner, onIsbn, onAbbruch }: Props) {
   useEffect(() => {
     erledigt.current = false;
     let aktiv = true;
+    let zurueck: ReturnType<typeof setTimeout> | undefined;
     void scanner
       .starten({
         video: videoRef.current,
@@ -115,18 +139,24 @@ export default function ScanBildschirm({ scanner, onIsbn, onAbbruch }: Props) {
           rueckrufe.current.onIsbn(isbn);
         },
       })
-      .catch((fehler: unknown) => {
-        // Kamerazugriff verweigert oder keine Kamera: zurück zur Seite „Bücher“ (REQ-061, AK-7).
-        console.warn('Barcode-Scanner nicht verfügbar:', fehler);
+      .catch((grund: unknown) => {
+        // Kamerazugriff verweigert oder keine Kamera: kurzer Hinweis mit der Meldung, dann zurück zur Seite
+        // „Bücher“ (REQ-061, AK-7). Nie stumm – die Meldung hilft bei der Fehlersuche auf dem Gerät.
+        console.warn('Barcode-Scanner nicht verfügbar:', grund);
         if (!aktiv || erledigt.current) return;
-        erledigt.current = true;
-        rueckrufe.current.onAbbruch();
+        setFehler(fehlerText(grund));
+        zurueck = setTimeout(() => {
+          if (!aktiv || erledigt.current) return;
+          erledigt.current = true;
+          rueckrufe.current.onAbbruch();
+        }, fehlerDauer);
       });
     return () => {
       aktiv = false;
+      if (zurueck !== undefined) clearTimeout(zurueck);
       void scanner.beenden().catch(() => undefined);
     };
-  }, [scanner]);
+  }, [scanner, fehlerDauer]);
 
   const lichtUmschalten = () => {
     const neu = !licht;
@@ -145,7 +175,11 @@ export default function ScanBildschirm({ scanner, onIsbn, onAbbruch }: Props) {
 
   return (
     <div data-scan-bildschirm="" data-sicherer-bereich="" style={bildschirmStil}>
-      <video ref={videoRef} data-scan-kamerabild="" muted playsInline style={videoStil} />
+      {/* Nativ (Android) liegt das Kamerabild HINTER der WebView. Ein <video> ohne Quelle würde die WebView mit
+          ihrem undurchsichtigen Standard-Vorschaubild füllen und die Kamera verdecken – deshalb nur im Web. */}
+      {scanner.vorschauNativ ? null : (
+        <video ref={videoRef} data-scan-kamerabild="" muted playsInline style={videoStil} />
+      )}
       <div style={kopfStil}>
         <button
           type="button"
@@ -181,6 +215,11 @@ export default function ScanBildschirm({ scanner, onIsbn, onAbbruch }: Props) {
           Wir schlagen es automatisch nach, sobald es erkannt wurde.
         </p>
       </div>
+      {fehler === null ? null : (
+        <p role="alert" data-scan-fehler="" style={fehlerStil}>
+          Kamera nicht verfügbar: {fehler}
+        </p>
+      )}
     </div>
   );
 }

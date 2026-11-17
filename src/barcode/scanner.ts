@@ -16,6 +16,12 @@ export interface ScanOptionen {
 }
 
 export interface BarcodeScanner {
+  /**
+   * true: Das Kamerabild zeichnet die Plattform selbst HINTER der WebView (Android, ML Kit). Der Scan-Bildschirm
+   * darf dann kein <video> zeigen – die Android-WebView malt in ein leeres <video> ihr undurchsichtiges
+   * Standard-Vorschaubild und verdeckt damit die Kamera.
+   */
+  readonly vorschauNativ?: boolean;
   /** Startet Kamera und Erkennung. Schlägt fehl, wenn der Kamerazugriff verweigert wird oder keine Kamera da ist. */
   starten(optionen: ScanOptionen): Promise<void>;
   /** Schaltet das Licht der Kamera ein bzw. aus. */
@@ -24,46 +30,97 @@ export interface BarcodeScanner {
   beenden(): Promise<void>;
 }
 
+/** Lesbare Meldung aus einem Fehler des Plugins (Capacitor liefert teils Objekte mit `message`/`code`). */
+export function fehlerText(fehler: unknown): string {
+  if (fehler instanceof Error && fehler.message) return fehler.message;
+  if (typeof fehler === 'string' && fehler) return fehler;
+  if (fehler && typeof fehler === 'object') {
+    const f = fehler as { message?: unknown; code?: unknown };
+    const teile = [f.code, f.message].filter((t) => typeof t === 'string' && t);
+    if (teile.length) return teile.join(': ');
+    try {
+      return JSON.stringify(fehler);
+    } catch {
+      // fällt unten durch
+    }
+  }
+  return 'Unbekannter Fehler';
+}
+
 /** Android: ML Kit, gebündeltes Modell (keine Play-Dienste-Pflicht). */
 export function nativerBarcodeScanner(): BarcodeScanner {
+  // Starten und Beenden laufen strikt nacheinander (ML Kit kennt nur eine Kamera-Sitzung). `lauf` zählt jeden
+  // Start und jedes Beenden; ein noch laufender Start erkennt daran, dass er inzwischen abgebrochen wurde.
+  let kette: Promise<unknown> = Promise.resolve();
+  const inReihe = <T>(f: () => Promise<T>): Promise<T> => {
+    const p = kette.then(f, f);
+    kette = p.catch(() => undefined);
+    return p;
+  };
+  let lauf = 0;
   let entfernen: (() => Promise<void>) | null = null;
-  let laeuft = false;
+  let kameraAn = false;
   const plugin = () => import('@capacitor-mlkit/barcode-scanning');
+
+  const aufraeumen = async () => {
+    document.documentElement.removeAttribute(BARCODE_AKTIV_ATTRIBUT);
+    const e = entfernen;
+    entfernen = null;
+    await e?.().catch(() => undefined);
+    if (!kameraAn) return;
+    kameraAn = false;
+    const { BarcodeScanner: MlKit } = await plugin();
+    await MlKit.stopScan().catch(() => undefined);
+  };
+
   return {
-    async starten({ beiIsbn }) {
-      const { BarcodeScanner: MlKit, BarcodeFormat } = await plugin();
-      const { camera } = await MlKit.requestPermissions();
-      if (camera !== 'granted' && camera !== 'limited') throw new Error('Kamerazugriff verweigert');
-      const h = await MlKit.addListener('barcodesScanned', (e) => {
-        const isbn = isbnAusBarcodes(e.barcodes.map((b) => b.rawValue ?? ''));
-        if (isbn) beiIsbn(isbn);
+    vorschauNativ: true,
+    starten({ beiIsbn }) {
+      const meinLauf = ++lauf;
+      const abgebrochen = () => meinLauf !== lauf;
+      return inReihe(async () => {
+        if (abgebrochen()) return;
+        const { BarcodeScanner: MlKit, BarcodeFormat } = await plugin();
+
+        const { supported } = await MlKit.isSupported();
+        if (!supported) throw new Error('Keine Kamera gefunden (ML Kit: nicht unterstützt)');
+
+        let { camera } = await MlKit.checkPermissions();
+        if (camera !== 'granted' && camera !== 'limited') ({ camera } = await MlKit.requestPermissions());
+        if (camera !== 'granted' && camera !== 'limited') throw new Error(`Kamerazugriff verweigert (${camera})`);
+
+        // Eine noch laufende Cover-Kamera (REQ-016, camera-preview) hält die Kamera fest – vorher freigeben.
+        const { kameraFreigeben } = await import('@/bild/kamera');
+        await kameraFreigeben();
+        if (abgebrochen()) return;
+
+        const h = await MlKit.addListener('barcodesScanned', (e) => {
+          if (abgebrochen()) return;
+          const isbn = isbnAusBarcodes(e.barcodes.map((b) => b.rawValue ?? ''));
+          if (isbn) beiIsbn(isbn);
+        });
+        entfernen = () => h.remove();
+        if (abgebrochen()) return; // aufgeräumt wird vom wartenden `beenden`
+        document.documentElement.setAttribute(BARCODE_AKTIV_ATTRIBUT, '');
+        try {
+          await MlKit.startScan({ formats: [BarcodeFormat.Ean13] });
+          kameraAn = true;
+        } catch (fehler) {
+          await aufraeumen();
+          throw new Error(`Kamera startet nicht: ${fehlerText(fehler)}`);
+        }
       });
-      entfernen = () => h.remove();
-      document.documentElement.setAttribute(BARCODE_AKTIV_ATTRIBUT, '');
-      try {
-        await MlKit.startScan({ formats: [BarcodeFormat.Ean13] });
-        laeuft = true;
-      } catch (fehler) {
-        document.documentElement.removeAttribute(BARCODE_AKTIV_ATTRIBUT);
-        await entfernen();
-        entfernen = null;
-        throw fehler;
-      }
     },
     async lichtSetzen(an) {
       const { BarcodeScanner: MlKit } = await plugin();
       if (an) await MlKit.enableTorch();
       else await MlKit.disableTorch();
     },
-    async beenden() {
+    beenden() {
+      lauf++;
+      // Oberfläche sofort wieder undurchsichtig; Kamera und Listener nach einem evtl. laufenden Start.
       document.documentElement.removeAttribute(BARCODE_AKTIV_ATTRIBUT);
-      const e = entfernen;
-      entfernen = null;
-      await e?.().catch(() => undefined);
-      if (!laeuft) return;
-      laeuft = false;
-      const { BarcodeScanner: MlKit } = await plugin();
-      await MlKit.stopScan().catch(() => undefined);
+      return inReihe(aufraeumen);
     },
   };
 }
