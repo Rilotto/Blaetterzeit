@@ -1,7 +1,7 @@
 ---
 id: REQ-061
 titel: Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

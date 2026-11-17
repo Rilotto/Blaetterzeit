@@ -37,9 +37,11 @@
 
     <!-- Permissions -->
 
+    <!-- REQ-062 / ADR-0003: ISBN-Suche bei DNB und Open Library (CapacitorHttp). -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- REQ-016: Kameraansicht in der App (@capacitor-community/camera-preview). Galerie über den
-         Android Photo Picker (@capacitor/camera) braucht keine Medienberechtigung. -->
+         Android Photo Picker (@capacitor/camera) braucht keine Medienberechtigung.
+         REQ-061: Barcode-Scanner (@capacitor-mlkit/barcode-scanning, startScan mit gebündeltem Modell). -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 </manifest>

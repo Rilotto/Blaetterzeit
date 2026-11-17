@@ -218,7 +218,8 @@ export type FortschrittFarbrolle =
   | 'eingabeSchrift'
   | 'sichernFlaeche'
   | 'sichernSchrift'
-  | 'hinweis';
+  | 'hinweis'
+  | 'eingabeFehler';
 
 /** Aus welcher Farbrubrik jede Farbrolle „Lesestatus und Fortschritt“ ihre Farbe bezieht (Farbangaben der REQs 021–028). */
 export const fortschrittFarbrollen: Record<FortschrittFarbrolle, FarbrubrikId> = {
@@ -261,6 +262,8 @@ export const fortschrittFarbrollen: Record<FortschrittFarbrolle, FarbrubrikId> =
   sichernFlaeche: 'primaer',
   sichernSchrift: 'hintergrund',
   hinweis: 'primaer',
+  // Hervorhebung eines ungültigen Feldes wie „JAHR“ (REQ-031; REQ-063, REQ-064).
+  eingabeFehler: 'primaer',
 };
 
 /** Farbrollen „Buch anlegen“: Menü „Buch hinzufügen“ (REQ-029) und Blatt „Manueller Eintrag“ (REQ-030 bis REQ-032). */
@@ -574,6 +577,7 @@ export type DetailsFarbrolle =
   | 'zeileWert'
   | 'zeilePfeil'
   | 'preisLeer'
+  | 'zeileFehler'
   | 'kachelFlaeche'
   | 'kachelRahmen'
   | 'kachelGewaehltFlaeche'
@@ -614,6 +618,8 @@ export const detailsFarbrollen: Record<DetailsFarbrolle, FarbrubrikId> = {
   zeileWert: 'tertiaer',
   zeilePfeil: 'tertiaer',
   preisLeer: 'primaer',
+  // Ungültiges Feld in der Karte „Ausgabe“ (Seiten im Manuellen Eintrag, REQ-060, AK-5) wie „JAHR“.
+  zeileFehler: 'primaer',
   kachelFlaeche: 'hintergrund',
   kachelRahmen: 'sekundaer',
   kachelGewaehltFlaeche: 'ghost',
@@ -646,3 +652,46 @@ export const sonderPilleGewaehltFlaeche = `color-mix(in srgb, ${rubrikFarbe('pri
 
 /** Helles Buch (Taschenbuch, Kleinformat) im Fenster „Format“, aus „Primär“ und „Hintergrund“ gemischt. */
 export const buchHellFlaeche = `color-mix(in srgb, ${rubrikFarbe('primaer')} 45%, ${rubrikFarbe('hintergrund')})`;
+
+/** Farbrollen „Barcode scannen“: Scan-Bildschirm (REQ-061) und Auswahlfenster (REQ-062), nur bestehende Rubriken. */
+export type BarcodeFarbrolle =
+  | 'scanFlaeche'
+  | 'scanText'
+  | 'scanRahmen'
+  | 'schliessenFlaeche'
+  | 'schliessenIcon'
+  | 'lampeFlaeche'
+  | 'lampeIcon'
+  | 'auswahlFlaeche'
+  | 'auswahlUeberschrift'
+  | 'auswahlText'
+  | 'trefferFlaeche'
+  | 'trefferRahmen'
+  | 'trefferTitel'
+  | 'trefferText'
+  | 'quelle'
+  | 'zurueckIcon';
+
+/** Aus welcher Farbrubrik jede Farbrolle „Barcode scannen“ ihre Farbe bezieht (nach REF-barcode-01-scan). */
+export const barcodeFarbrollen: Record<BarcodeFarbrolle, FarbrubrikId> = {
+  // Fläche nur sichtbar, wenn kein natives Kamerabild dahinter liegt (Web, Start der Kamera).
+  scanFlaeche: 'dunkelbraun',
+  scanText: 'hintergrund',
+  scanRahmen: 'hintergrund',
+  schliessenFlaeche: 'hintergrund',
+  schliessenIcon: 'dunkelbraun',
+  lampeFlaeche: 'dunkelbraun',
+  lampeIcon: 'hintergrund',
+  auswahlFlaeche: 'hintergrund',
+  auswahlUeberschrift: 'dunkelbraun',
+  auswahlText: 'tertiaer',
+  trefferFlaeche: 'ghost',
+  trefferRahmen: 'ghostframe',
+  trefferTitel: 'dunkelbraun',
+  trefferText: 'tertiaer',
+  quelle: 'primaer',
+  zurueckIcon: 'dunkelbraun',
+};
+
+/** CSS-Ausdruck einer Farbrolle „Barcode scannen“. */
+export const barcodeFarbe = (rolle: BarcodeFarbrolle): string => rubrikFarbe(barcodeFarbrollen[rolle]);

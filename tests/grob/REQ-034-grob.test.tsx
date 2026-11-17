@@ -40,7 +40,7 @@ async function tippe(el: Element) {
 }
 async function oeffneBlatt() {
   await tippe(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   return screen.getByRole('dialog', { name: 'Manueller Eintrag' });
 }
 const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(`^\\s*${n}\\s*$`, 'i')) as HTMLInputElement;

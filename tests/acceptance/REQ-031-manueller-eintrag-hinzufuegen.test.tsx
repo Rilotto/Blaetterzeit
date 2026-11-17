@@ -60,7 +60,7 @@ async function zeige(repo: BookRepository = repoFake(), bildspeicher: ImageStore
 async function oeffneBlatt() {
   fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
   const m = await screen.findByRole('menu', { name: 'Buch hinzufügen' });
-  fireEvent.click(within(m).getByRole('menuitem'));
+  fireEvent.click(within(m).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   return screen.findByRole('dialog', { name: 'Manueller Eintrag' });
 }
 const blatt = () => screen.queryByRole('dialog', { name: 'Manueller Eintrag' });
@@ -77,9 +77,10 @@ async function hinzufuegen() {
   });
 }
 const neue = (repo: ReturnType<typeof repoFake>) => [...repo.daten.values()].filter((b) => b.id !== MOMO.id);
+/** Seit REQ-060 ist die Seitenzahl Pflicht: ohne ausdrückliche Angabe wird „100“ eingetragen. */
 async function legeAn(felder: Record<string, string>) {
   await oeffneBlatt();
-  for (const [k, v] of Object.entries(felder)) gib(k, v);
+  for (const [k, v] of Object.entries({ Seiten: '100', ...felder })) gib(k, v);
   await hinzufuegen();
 }
 function farbeVon(ausdruck: string) {
@@ -168,6 +169,7 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
       await zeige(repo);
       const d = await oeffneBlatt();
       gib('Titel', 'Testbuch');
+      gib('Seiten', '100');
       const btn = within(d).getByRole('button', { name: 'Hinzufügen' });
       await act(async () => {
         fireEvent.click(btn);
@@ -178,14 +180,16 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
     });
   });
 
-  describe('AK-2 Platzhaltertexte werden nicht gespeichert', () => {
-    it('[REQ-031/AK-2] leere Felder Jahr/Seiten/Autor: weder 2024 noch 496 noch Platzhaltertexte, die Angaben fehlen', async () => {
+  // REQ-031/AK-2 ist laut Hinweis in REQ-031 mit REQ-060 hinfällig (leere Seiten sind nicht mehr möglich).
+  // Überführt: Seiten eingetragen, übrige optionale Felder leer – Platzhalter werden weiterhin nicht gespeichert.
+  describe('AK-2 (überführt in REQ-060) Platzhaltertexte werden nicht gespeichert', () => {
+    it('[REQ-031/AK-2] leere Felder Jahr/Autor bei Seiten 350: weder 2024 noch 496 noch Platzhaltertexte, die Angaben fehlen', async () => {
       const repo = repoFake();
       await zeige(repo);
-      await legeAn({ Titel: 'Testbuch' });
+      await legeAn({ Titel: 'Testbuch', Seiten: '350' });
       const [b] = neue(repo);
       expect(b.erscheinungsjahr).toBeUndefined();
-      expect(b.seitenanzahl).toBeUndefined();
+      expect(b.seitenanzahl).toBe(350);
       expect(b.autor).toBeUndefined();
       expect(b.erscheinungsdatum).toBeUndefined();
       const werte = Object.values(b).map(String);
@@ -277,12 +281,22 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
     });
   });
 
-  describe('AK-5 Nur Titel genügt', () => {
-    it('[REQ-031/AK-5] nur der Titel ist ausgefüllt: das Buch wird angelegt', async () => {
+  // REQ-031/AK-5 ist laut Hinweis in REQ-031 mit REQ-060 hinfällig. Überführt in REQ-060/AK-5 und AK-7.
+  describe('AK-5 (überführt in REQ-060) Titel und Seitenzahl genügen', () => {
+    it('[REQ-031/AK-5] nur der Titel ist ausgefüllt: kein Buch, Blatt bleibt offen', async () => {
       const repo = repoFake();
       await zeige(repo);
-      await legeAn({ Titel: 'Nur Titel' });
-      expect(neue(repo).map((b) => b.titel)).toEqual(['Nur Titel']);
+      await legeAn({ Titel: 'Nur Titel', Seiten: '' });
+      expect(repo.save).not.toHaveBeenCalled();
+      expect(blatt()).toBeVisible();
+      expect(feld('Titel').value).toBe('Nur Titel');
+    });
+
+    it('[REQ-031/AK-5] Titel und Seiten sind ausgefüllt: das Buch wird angelegt', async () => {
+      const repo = repoFake();
+      await zeige(repo);
+      await legeAn({ Titel: 'Nur Titel', Seiten: '12' });
+      expect(neue(repo).map((b) => [b.titel, b.seitenanzahl])).toEqual([['Nur Titel', 12]]);
       expect(screen.queryByRole('alert')).toBeNull();
     });
   });
@@ -327,12 +341,16 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
     });
   });
 
-  describe('AK-9 Ohne Seiten wird „Buchlänge“ abgefragt', () => {
-    it('[REQ-031/AK-9] ohne Eintrag in „SEITEN“ hat das Buch keine Seitenanzahl (Voraussetzung für „Buchlänge“, REQ-025)', async () => {
+  // REQ-031/AK-9 ist laut Hinweis in REQ-031 mit REQ-060 hinfällig. Überführt in REQ-060/AK-5.
+  describe('AK-9 (überführt in REQ-060/AK-5) Ohne Seiten wird kein Buch angelegt', () => {
+    it('[REQ-031/AK-9] ohne Eintrag in „Seiten“: kein Buch, Feld „Seiten“ markiert, kein Hinweistext', async () => {
       const repo = repoFake();
       await zeige(repo);
       await legeAn({ Titel: 'Testbuch', Seiten: '' });
-      expect(neue(repo)[0]).not.toHaveProperty('seitenanzahl');
+      expect(repo.save).not.toHaveBeenCalled();
+      expect(blatt()).toBeVisible();
+      expect(feld('Seiten')).toHaveAttribute('aria-invalid', 'true');
+      expect(screen.queryByRole('alert')).toBeNull();
     });
   });
 

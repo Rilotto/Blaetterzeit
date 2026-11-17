@@ -36,6 +36,11 @@ interface Props {
   onFormat: () => void;
   /** Zeile „Preis“ angetippt (REQ-059). */
   onPreis: () => void;
+  /** Zeile „Verlag“ bzw. „ISBN“ angetippt (REQ-063). */
+  onVerlag?: () => void;
+  onIsbn?: () => void;
+  /** Zeile „Hinzugefügt“ angetippt (REQ-064). */
+  onHinzugefuegt?: () => void;
 }
 
 // Überschriften wie REF-details-01/-02: normale Schreibweise, größer, Dunkelbraun (nicht Großbuchstaben wie „BEWERTUNG“).
@@ -192,6 +197,8 @@ function Zeile({
   letzte = false,
   hervorgehoben = false,
   onAntippen,
+  eingabe,
+  fehler = false,
 }: {
   id: AusgabeZeile;
   beschriftung: string;
@@ -199,8 +206,30 @@ function Zeile({
   letzte?: boolean;
   hervorgehoben?: boolean;
   onAntippen?: () => void;
+  /** Eingabefeld statt Wert (Seiten im Manuellen Eintrag, REQ-060). */
+  eingabe?: ReactNode;
+  /** Feld hervorgehoben wie ungültiges „JAHR“ (REQ-060, AK-5). */
+  fehler?: boolean;
 }) {
   const pfeil = MIT_PFEIL.includes(id);
+  if (eingabe !== undefined) {
+    return (
+      <label
+        data-ausgabe-zeile={id}
+        data-fehler={fehler ? 'true' : undefined}
+        style={{
+          ...zeileStil(letzte, true),
+          cursor: 'text',
+          ...(fehler ? { outline: `2px solid ${detailsFarbe('zeileFehler')}`, outlineOffset: '-2px', borderRadius: '10px' } : {}),
+        }}
+      >
+        <span data-zeile-bezeichnung="" style={{ ...bezeichnungStil, ...(fehler ? { color: detailsFarbe('zeileFehler') } : {}) }}>
+          {beschriftung}
+        </span>
+        {eingabe}
+      </label>
+    );
+  }
   return (
     <button type="button" data-ausgabe-zeile={id} onClick={onAntippen} style={zeileStil(letzte, Boolean(onAntippen))}>
       <span data-zeile-bezeichnung="" style={bezeichnungStil}>
@@ -218,8 +247,48 @@ function Zeile({
   );
 }
 
-/** Reiter „Details“ (REQ-051 bis REQ-056). */
-export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis }: Props) {
+/** Angaben der Karte „Ausgabe“, die direkt aus dem Buch bzw. den Eingaben kommen. */
+export type AusgabeAngaben = Pick<Buch, 'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn'>;
+
+export interface AusgabeKarteProps {
+  angaben: AusgabeAngaben;
+  /** Anzeigetexte der Zeilen Seiten, Erschienen und Hinzugefügt. */
+  werte: { seiten?: string; erschienen?: string; hinzugefuegt?: string };
+  /** Antippen je Zeile; ohne Eintrag ist die Zeile ohne Funktion. */
+  onZeile?: Partial<Record<AusgabeZeile, (() => void) | undefined>>;
+  /** Ohne Zeile „Fotos“ (Manueller Eintrag, REQ-060, AK-1). */
+  ohneFotos?: boolean;
+  /** Eingabefeld in der Zeile „Seiten“ statt Wert (Manueller Eintrag, REQ-060). */
+  seitenEingabe?: ReactNode;
+  seitenFehler?: boolean;
+}
+
+/** Karte „Ausgabe“ (REQ-056), auch im Blatt „Manueller Eintrag“ verwendet (REQ-060). */
+export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, seitenEingabe, seitenFehler }: AusgabeKarteProps) {
+  return (
+    <div data-ausgabe-karte="" style={karteDetails}>
+      <Zeile id="seiten" beschriftung="Seiten" wert={werte.seiten ?? ''} onAntippen={onZeile.seiten} eingabe={seitenEingabe} fehler={seitenFehler} />
+      <Zeile id="format" beschriftung="Format" wert={formatText(angaben)} onAntippen={onZeile.format} />
+      <Zeile id="exemplar" beschriftung="Exemplar" wert={exemplarText(angaben)} onAntippen={onZeile.exemplar} />
+      <Zeile id="sonderausgabe" beschriftung="Sonderausgabe" wert={sonderausgabeText(angaben)} onAntippen={onZeile.sonderausgabe} />
+      {ohneFotos ? null : <Zeile id="fotos" beschriftung="Fotos" wert="Cover" />}
+      <Zeile
+        id="preis"
+        beschriftung="Preis"
+        wert={angaben.preisCent !== undefined ? preisText(angaben.preisCent) : PREIS_LEER}
+        hervorgehoben={angaben.preisCent === undefined}
+        onAntippen={onZeile.preis}
+      />
+      <Zeile id="verlag" beschriftung="Verlag" wert={angaben.verlag ?? ''} onAntippen={onZeile.verlag} />
+      <Zeile id="erschienen" beschriftung="Erschienen" wert={werte.erschienen ?? ''} onAntippen={onZeile.erschienen} />
+      <Zeile id="isbn" beschriftung="ISBN" wert={angaben.isbn ?? ''} onAntippen={onZeile.isbn} />
+      <Zeile id="hinzugefuegt" beschriftung="Hinzugefügt" wert={werte.hinzugefuegt ?? ''} onAntippen={onZeile.hinzugefuegt} letzte />
+    </div>
+  );
+}
+
+/** Reiter „Details“ (REQ-051 bis REQ-056, REQ-063, REQ-064). */
+export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onVerlag, onIsbn, onHinzugefuegt }: Props) {
   const erschienen = buch.erscheinungsjahr ?? (buch.erscheinungsdatum ? Number(buch.erscheinungsdatum.slice(6)) : undefined);
   return (
     <div style={{ paddingBottom: '8px' }}>
@@ -248,24 +317,24 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis }: Pr
         </div>
       </Abschnitt>
       <Abschnitt id="ausgabe" titel="Ausgabe">
-        <div data-ausgabe-karte="" style={karteDetails}>
-          <Zeile id="seiten" beschriftung="Seiten" wert={buch.seitenanzahl !== undefined ? String(buch.seitenanzahl) : ''} onAntippen={onSeiten} />
-          <Zeile id="format" beschriftung="Format" wert={formatText(buch)} onAntippen={onFormat} />
-          <Zeile id="exemplar" beschriftung="Exemplar" wert={exemplarText(buch)} onAntippen={onFormat} />
-          <Zeile id="sonderausgabe" beschriftung="Sonderausgabe" wert={sonderausgabeText(buch)} onAntippen={onFormat} />
-          <Zeile id="fotos" beschriftung="Fotos" wert="Cover" />
-          <Zeile
-            id="preis"
-            beschriftung="Preis"
-            wert={buch.preisCent !== undefined ? preisText(buch.preisCent) : PREIS_LEER}
-            hervorgehoben={buch.preisCent === undefined}
-            onAntippen={onPreis}
-          />
-          <Zeile id="verlag" beschriftung="Verlag" wert="" />
-          <Zeile id="erschienen" beschriftung="Erschienen" wert={erschienen !== undefined && !Number.isNaN(erschienen) ? String(erschienen) : ''} />
-          <Zeile id="isbn" beschriftung="ISBN" wert="" />
-          <Zeile id="hinzugefuegt" beschriftung="Hinzugefügt" wert={hinzugefuegtText(buch.eingetragenAm)} letzte />
-        </div>
+        <AusgabeKarte
+          werte={{
+            seiten: buch.seitenanzahl !== undefined ? String(buch.seitenanzahl) : '',
+            erschienen: erschienen !== undefined && !Number.isNaN(erschienen) ? String(erschienen) : '',
+            hinzugefuegt: hinzugefuegtText(buch.eingetragenAm),
+          }}
+          angaben={buch}
+          onZeile={{
+            seiten: onSeiten,
+            format: onFormat,
+            exemplar: onFormat,
+            sonderausgabe: onFormat,
+            preis: onPreis,
+            verlag: onVerlag,
+            isbn: onIsbn,
+            hinzugefuegt: onHinzugefuegt,
+          }}
+        />
       </Abschnitt>
     </div>
   );

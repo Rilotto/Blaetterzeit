@@ -89,6 +89,16 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN preis_cent INTEGER',
     ],
   },
+  {
+    version: 7,
+    beschreibung: 'Ausgabe: Verlag und ISBN (REQ-060, REQ-063)',
+    anweisungen: [
+      // Freitext; NULL = kein Verlag.
+      'ALTER TABLE buch ADD COLUMN verlag TEXT',
+      // ISBN-10/-13 ohne Trennzeichen; NULL = keine ISBN.
+      'ALTER TABLE buch ADD COLUMN isbn TEXT',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

@@ -135,3 +135,93 @@ export function namenListeAusDaten(daten: unknown): string[] | undefined {
   const liste = daten.filter((n): n is string => typeof n === 'string' && n.trim() !== '');
   return liste.length > 0 ? liste : undefined;
 }
+
+/**
+ * Feld „ISBN“ (REQ-063, AK-3): nur Ziffern; ein „X“ ist nur als zehnte Stelle erlaubt (Prüfziffer der ISBN-10,
+ * Sprint-06-Plan). Mit „X“ höchstens 10, sonst höchstens 13 Stellen. Kleines „x“ wird zu „X“.
+ */
+export function isbnFiltern(wert: string): string {
+  let ergebnis = '';
+  for (const z of wert.toUpperCase()) {
+    if (ergebnis.endsWith('X')) break;
+    if (/\d/.test(z) && ergebnis.length < 13) ergebnis += z;
+    else if (z === 'X' && ergebnis.length === 9) ergebnis += z;
+  }
+  return ergebnis;
+}
+
+/** ISBN gültig: 10 oder 13 Stellen und Prüfziffer stimmt (REQ-063). „X“ steht bei ISBN-10 für 10. */
+export function isbnGueltig(isbn: string): boolean {
+  if (/^\d{9}[\dX]$/.test(isbn)) {
+    let summe = 0;
+    for (let i = 0; i < 10; i++) summe += (10 - i) * (isbn[i] === 'X' ? 10 : Number(isbn[i]));
+    return summe % 11 === 0;
+  }
+  if (/^\d{13}$/.test(isbn)) {
+    let summe = 0;
+    for (let i = 0; i < 13; i++) summe += (i % 2 === 0 ? 1 : 3) * Number(isbn[i]);
+    return summe % 10 === 0;
+  }
+  return false;
+}
+
+/** Datumsfeld TT.MM.JJJJ: nur Ziffern (höchstens acht), Punkte werden selbst gesetzt (REQ-060, REQ-064). */
+export function datumFiltern(wert: string): string {
+  const z = wert.replace(/\D/g, '').slice(0, 8);
+  if (z.length <= 2) return z;
+  if (z.length <= 4) return `${z.slice(0, 2)}.${z.slice(2)}`;
+  return `${z.slice(0, 2)}.${z.slice(2, 4)}.${z.slice(4)}`;
+}
+
+/** Existierendes Kalenderdatum im Format TT.MM.JJJJ → [Jahr, Monat 1–12, Tag]; sonst undefined. */
+function datumTeile(wert: string): [number, number, number] | undefined {
+  const m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(wert);
+  if (!m) return undefined;
+  const [t, mo, j] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const d = new Date(j, mo - 1, t);
+  if (d.getFullYear() !== j || d.getMonth() !== mo - 1 || d.getDate() !== t) return undefined;
+  return [j, mo, t];
+}
+
+/** Zeitpunkt → TT.MM.JJJJ in lokaler Zeit (Vorbelegung des Blatts „Hinzugefügt“, REQ-064, AK-1). */
+export function datumText(zeitpunkt: Date): string {
+  const zwei = (n: number) => String(n).padStart(2, '0');
+  return `${zwei(zeitpunkt.getDate())}.${zwei(zeitpunkt.getMonth() + 1)}.${zeitpunkt.getFullYear()}`;
+}
+
+/** Eintragungsdatum (ISO) → TT.MM.JJJJ; fehlend oder ungültig → leer. */
+export function eintragungsdatumText(eingetragenAm: string | undefined): string {
+  if (!eingetragenAm) return '';
+  const d = new Date(eingetragenAm);
+  return Number.isNaN(d.getTime()) ? '' : datumText(d);
+}
+
+export type DatumPruefung = { ok: true; datum: string } | { ok: false };
+
+/** „Erschienen“ (REQ-060, AK-3): existierendes Kalenderdatum TT.MM.JJJJ. */
+export function erschienenPruefen(eingabe: string): DatumPruefung {
+  return datumTeile(eingabe) ? { ok: true, datum: eingabe } : { ok: false };
+}
+
+/** „Hinzugefügt“ (REQ-064): existierendes Kalenderdatum TT.MM.JJJJ, nicht nach dem heutigen Tag (lokale Zeit). */
+export function hinzugefuegtPruefen(eingabe: string, jetzt: Date): DatumPruefung {
+  const teile = datumTeile(eingabe);
+  if (!teile) return { ok: false };
+  const [j, mo, t] = teile;
+  const heute = [jetzt.getFullYear(), jetzt.getMonth() + 1, jetzt.getDate()];
+  const zahl = (a: number[]) => a[0] * 10000 + a[1] * 100 + a[2];
+  return zahl([j, mo, t]) > zahl(heute) ? { ok: false } : { ok: true, datum: eingabe };
+}
+
+/**
+ * Neues Eintragungsdatum (ISO) aus einem geprüften Datum TT.MM.JJJJ (REQ-064). Ist es derselbe Tag wie `bisher`,
+ * bleibt der bisherige Zeitpunkt erhalten (Reihenfolge des Anlegens bleibt stabil); sonst 12:00 Uhr lokaler Zeit,
+ * damit der Tag in jeder Zeitzone gleich angezeigt wird.
+ */
+export function eintragungsdatumAusText(datum: string, bisher?: string): string {
+  if (bisher && eintragungsdatumText(bisher) === datum) return bisher;
+  const teile = datumTeile(datum);
+  if (!teile) throw new Error('Datum ungültig');
+  const [j, mo, t] = teile;
+  return new Date(j, mo - 1, t, 12).toISOString();
+}

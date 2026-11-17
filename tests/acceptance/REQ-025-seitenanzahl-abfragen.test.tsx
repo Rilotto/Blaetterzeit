@@ -369,7 +369,7 @@ describe('REQ-031 Nachtest aus Teil A (Menü „Buchlänge“ nach dem Anlegen)'
     render(<BA bildspeicher={bilderFake()} bildquelle={{ scannen: async () => null, galerie: async () => null }} />);
     await screen.findByRole('heading', { name: 'Deine Bücher' });
     fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-    fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+    fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
     const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
     fireEvent.change(within(d).getByLabelText(/^\s*Titel\s*$/i), { target: { value: 'Neu' } });
     if (seiten) fireEvent.change(within(d).getByLabelText(/^\s*Seiten\s*$/i), { target: { value: seiten } });
@@ -384,10 +384,21 @@ describe('REQ-031 Nachtest aus Teil A (Menü „Buchlänge“ nach dem Anlegen)'
     expect(blattAS()).not.toBeNull();
     expect(blattBL()).toBeNull();
   });
-  it('[REQ-031/AK-9] ohne Seiten angelegt: Lesefortschritt öffnet „Buchlänge“', async () => {
-    await legeAn();
-    await tippe(herz()!);
-    expect(blattBL()).not.toBeNull();
-    expect(blattAS()).toBeNull();
+  // REQ-031/AK-9 ist laut REQ-031 (Hinweis) mit REQ-060 hinfällig: ohne Seitenzahl wird kein Buch mehr angelegt.
+  // Der Test prüft deshalb das neue Verhalten (REQ-060/AK-5); „Buchlänge“ für Bücher ohne Seiten prüft REQ-025.
+  it('[REQ-031/AK-9] (überführt in REQ-060) ohne Seiten: kein Buch angelegt, Blatt bleibt offen', async () => {
+    const w = await starte();
+    const BA = w.BA;
+    render(<BA bildspeicher={bilderFake()} bildquelle={{ scannen: async () => null, galerie: async () => null }} />);
+    await screen.findByRole('heading', { name: 'Deine Bücher' });
+    fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
+    fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
+    const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
+    fireEvent.change(within(d).getByLabelText(/^\s*Titel\s*$/i), { target: { value: 'Neu' } });
+    await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
+    await warte(60);
+    expect(screen.getByRole('dialog', { name: 'Manueller Eintrag' })).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'Buchdetails' })).toBeNull();
+    expect((await w.repo.list()).filter((b) => b.titel === 'Neu')).toHaveLength(0);
   });
 });

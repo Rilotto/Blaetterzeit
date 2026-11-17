@@ -7,6 +7,7 @@ import { standardBildspeicher, standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattAktuelleSeite from '@/buchdetails/BlattAktuelleSeite';
 import BlattBuchlaenge from '@/buchdetails/BlattBuchlaenge';
+import { BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
 import BlattPreis from '@/buchdetails/BlattPreis';
 import Buchdarstellung, { type Bilder } from '@/buchdetails/Buchdarstellung';
 import Fortschritt from '@/buchdetails/Fortschritt';
@@ -23,7 +24,7 @@ import FensterFormat from '@/buchdetails/reiter/FensterFormat';
 import Schreibfenster from '@/buchdetails/reiter/Schreibfenster';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
-import type { Formatangaben } from '@/domain/ausgabe';
+import { eintragungsdatumAusText, type Formatangaben } from '@/domain/ausgabe';
 import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
 import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
 import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
@@ -46,7 +47,7 @@ export interface BuchDetailsProps {
   onZurueck: () => void;
 }
 
-type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | null;
+type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | 'verlag' | 'isbn' | 'hinzugefuegt' | null;
 
 const systemzeit = () => new Date();
 
@@ -252,6 +253,29 @@ export default function BuchDetails({
     setBlatt(null);
   };
 
+  // Verlag sichern (REQ-063); leer entfernt den Verlag.
+  const verlagSpeichern = (verlag: string) => {
+    if (!buch) return;
+    const neu: Buch = { ...buch };
+    delete neu.verlag;
+    speichern(verlag ? { ...neu, verlag } : neu);
+    setBlatt(null);
+  };
+
+  // ISBN sichern (REQ-063); das Blatt lässt nur gültige ISBN durch.
+  const isbnSpeichern = (isbn: string) => {
+    if (!buch) return;
+    speichern({ ...buch, isbn });
+    setBlatt(null);
+  };
+
+  // Eintragungsdatum ändern (REQ-064); gleicher Tag behält den bisherigen Zeitpunkt.
+  const hinzugefuegtSpeichern = (datum: string) => {
+    if (!buch) return;
+    speichern({ ...buch, eingetragenAm: eintragungsdatumAusText(datum, buch.eingetragenAm) });
+    setBlatt(null);
+  };
+
   // Standard-Bildquelle: „Scannen“ zeigt die Kameraansicht der App und liefert deren Foto bzw. null (Zurück).
   const kameraAnzeigen = (bereich: Bildbereich) => () =>
     new Promise<string | null>((resolve) => {
@@ -366,6 +390,9 @@ export default function BuchDetails({
             onSeiten={() => setBlatt('seiten')}
             onFormat={() => setBlatt('format')}
             onPreis={() => setBlatt('preis')}
+            onVerlag={() => setBlatt('verlag')}
+            onIsbn={() => setBlatt('isbn')}
+            onHinzugefuegt={() => setBlatt('hinzugefuegt')}
           />
         </>
       ) : null}
@@ -407,6 +434,11 @@ export default function BuchDetails({
         />
       ) : null}
       {buch && blatt === 'preis' ? <BlattPreis preisCent={buch.preisCent} onSichern={preisSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'verlag' ? <BlattVerlag verlag={buch.verlag} onSichern={verlagSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'isbn' ? <BlattIsbn isbn={buch.isbn} onSichern={isbnSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'hinzugefuegt' ? (
+        <BlattHinzugefuegt eingetragenAm={buch.eingetragenAm} jetzt={jetzt} onSichern={hinzugefuegtSpeichern} onSchliessen={() => setBlatt(null)} />
+      ) : null}
       {menue !== null ? (
         <Auswahlmenue
           oben={MENUE_OBEN}

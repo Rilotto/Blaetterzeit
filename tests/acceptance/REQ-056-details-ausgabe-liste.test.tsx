@@ -141,11 +141,28 @@ describe('REQ-056 Karte „Ausgabe“', () => {
     expect(wert(d, 'hinzugefuegt')).toBe('Okt. 2026');
   });
 
-  it.each(['fotos', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt'])('[REQ-056/AK-7] „%s“ antippen: kein Menü/Fenster, nichts ändert sich', async (id) => {
+  // Seit REQ-063 (Verlag, ISBN) und REQ-064 (Hinzugefügt) haben diese Zeilen eine Funktion; AK-7 gilt nur noch für
+  // „Fotos“ und „Erschienen“. Für die übrigen: Blatt öffnet sich, Schließen ohne Sichern ändert nichts.
+  it.each(['fotos', 'erschienen'])('[REQ-056/AK-7] „%s“ antippen: kein Menü/Fenster, nichts ändert sich', async (id) => {
     const b = buch({ seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00' });
     const { w, d } = await mitBuch(b);
     const vorher = await zustand(w, d, b.id);
     await tippe(zeile(d, id));
+    await warte(60);
+    expect(await zustand(w, d, b.id)).toEqual(vorher);
+  });
+
+  it.each(['verlag', 'isbn', 'hinzugefuegt'])('[REQ-056/AK-7] (geändert durch REQ-063/064) „%s“ öffnet ein Blatt; Schließen über X ändert nichts', async (id) => {
+    const b = buch({ seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00' });
+    const { w, d } = await mitBuch(b);
+    const vorher = await zustand(w, d, b.id);
+    await tippe(zeile(d, id));
+    const feld = await vi.waitFor(() => {
+      const f = document.querySelector<HTMLElement>(`[data-blatt-feld="${id}"]`);
+      expect(f).not.toBeNull();
+      return f!;
+    });
+    await tippe(feld.closest('[role="dialog"]')!.querySelector<HTMLElement>('[aria-label="Schließen"]')!);
     await warte(60);
     expect(await zustand(w, d, b.id)).toEqual(vorher);
   });

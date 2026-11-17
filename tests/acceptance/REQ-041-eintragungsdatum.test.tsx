@@ -26,9 +26,11 @@ async function zeige(sp: Speicher, jetzt: () => Date) {
 }
 async function legeAn(titel: string) {
   fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-  fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+  fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
   fireEvent.change(within(d).getByLabelText(/^\s*Titel\s*$/i), { target: { value: titel } });
+  // Seitenzahl ist seit REQ-060 Pflicht.
+  fireEvent.change(within(d).getByLabelText(/^\s*Seiten\s*$/i), { target: { value: '100' } });
   await act(async () => {
     fireEvent.click(within(d).getByRole('button', { name: 'Hinzufügen' }));
     await new Promise((r) => setTimeout(r, 30));
@@ -118,23 +120,24 @@ describe('REQ-041 Eintragungsdatum', () => {
     });
   });
 
-  describe('Anforderung: keine Änderungsmöglichkeit für den Nutzer', () => {
-    it('[REQ-041/AK-1] weder Blatt „Manueller Eintrag“ noch Buchdetails bieten ein Feld für das Eintragungsdatum', async () => {
+  // „nicht änderbar“ aus REQ-041 wird durch REQ-060 (beim Anlegen) und REQ-064 (Details) abgelöst: Änderung nur
+  // bewusst über die Zeile „Hinzugefügt“. Ohne Änderung gilt weiter der Zeitpunkt des Anlegens (REQ-041/AK-1).
+  describe('Anforderung (angepasst an REQ-060/REQ-064): Änderung nur über „Hinzugefügt“', () => {
+    it('[REQ-041/AK-1] das Blatt hat kein freies Datumsfeld; „Hinzugefügt“ zeigt den heutigen Tag, unverändert wird der Zeitpunkt gespeichert', async () => {
+      const zeitpunkt = new Date('2026-11-12T10:00:00Z');
       const s = await starte();
-      await zeige(s, () => new Date('2026-11-12T10:00:00Z'));
+      await zeige(s, () => zeitpunkt);
       fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-      fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+      fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
       const dlg = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
-      const verboten = /eingetragen|eintragung|eintragsdatum/i;
-      const felder = (el: HTMLElement) =>
-        Array.from(el.querySelectorAll('input, textarea, select')).map((f) => `${f.getAttribute('aria-label') ?? ''} ${f.getAttribute('name') ?? ''} ${f.getAttribute('type') ?? ''}`);
-      expect(felder(dlg).filter((f) => verboten.test(f) || /date|time/i.test(f))).toEqual([]);
-      expect(dlg.textContent ?? '').not.toMatch(verboten);
+      const felder = Array.from(dlg.querySelectorAll('input, textarea, select')).map((f) => `${f.getAttribute('aria-label') ?? ''} ${f.getAttribute('type') ?? ''}`);
+      expect(felder.filter((f) => /eingetragen|eintragung|hinzugef|date|time/i.test(f))).toEqual([]);
+      expect(dlg.querySelector('[data-ausgabe-zeile="hinzugefuegt"]')?.textContent).toContain('12.11.2026');
       cleanup();
-      await zeige(s, () => new Date('2026-11-12T10:00:00Z'));
-      const det = await legeAn('Ohne Feld');
-      expect(felder(det).filter((f) => verboten.test(f) || /date|time/i.test(f))).toEqual([]);
-      expect(det.textContent ?? '').not.toMatch(verboten);
+      await zeige(s, () => zeitpunkt);
+      await legeAn('Ohne Änderung');
+      const [b] = await finde(s.repo, 'Ohne Änderung');
+      expect(Date.parse(b.eingetragenAm!)).toBe(zeitpunkt.getTime());
     });
   });
 });

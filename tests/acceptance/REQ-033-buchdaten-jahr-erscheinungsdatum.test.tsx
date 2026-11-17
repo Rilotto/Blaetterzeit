@@ -142,11 +142,12 @@ describe('REQ-033 Erscheinungsjahr und Erscheinungsdatum', () => {
         </div>,
       );
       fireEvent.click(await screen.findByRole('button', { name: 'Buch hinzufügen' }));
-      fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+      fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
       const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
       fireEvent.change(within(d).getByLabelText(/^\s*titel\s*$/i), { target: { value: 'Neu' } });
       fireEvent.change(within(d).getByLabelText(/^\s*jahr\s*$/i), { target: { value: '2019' } });
-      fireEvent.click(within(d).getByRole('button', { name: '+ Erscheinungsdatum hinzufügen' }));
+      // Seit REQ-060: Seitenzahl Pflicht; „+ Erscheinungsdatum hinzufügen“ gibt es nicht mehr, „Erschienen“ bleibt leer.
+      fireEvent.change(within(d).getByLabelText(/^\s*seiten\s*$/i), { target: { value: '100' } });
       await act(async () => {
         fireEvent.click(within(d).getByRole('button', { name: 'Hinzufügen' }));
         await new Promise((r) => setTimeout(r, 20));

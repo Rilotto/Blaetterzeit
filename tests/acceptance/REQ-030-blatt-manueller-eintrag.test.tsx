@@ -71,7 +71,7 @@ async function zeige(repo = repoFake(), s = speicherFake()) {
 async function oeffneBlatt() {
   fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
   const m = await screen.findByRole('menu', { name: 'Buch hinzufügen' });
-  fireEvent.click(within(m).getByRole('menuitem'));
+  fireEvent.click(within(m).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   return screen.findByRole('dialog', { name: 'Manueller Eintrag' });
 }
 const blatt = () => screen.queryByRole('dialog', { name: 'Manueller Eintrag' });
@@ -81,7 +81,6 @@ const gib = (name: string, wert: string) => fireEvent.change(feld(name), { targe
 const griff = () => d().querySelector<HTMLElement>('[data-ziehgriff]')!;
 const coverFeld = () => d().querySelector<HTMLElement>('[data-cover-hinzufuegen]')!;
 const pille = () => within(d()).getByRole('button', { name: 'Hinzufügen' });
-const datumBtn = () => within(d()).getByRole('button', { name: '+ Erscheinungsdatum hinzufügen' });
 const xBtn = () => within(d()).getByRole('button', { name: 'Schließen' });
 async function warte() {
   await act(async () => {
@@ -128,8 +127,9 @@ function mitFlaeche(start: HTMLElement, grenze: HTMLElement, abwaerts = false): 
   if (!t) throw new Error('kein Element mit Fläche gefunden');
   return t;
 }
+// Seit REQ-060 liegt „Seiten“ in der Karte „Ausgabe“; die Formular-Karte umfasst Titel, Autor und Jahr.
 const karte = () => {
-  const s = feld('Seiten');
+  const s = feld('Jahr');
   for (let n = feld('Titel').parentElement; n && n !== d(); n = n.parentElement) {
     if (n.contains(s) && !TRANSPARENT.test(getComputedStyle(n).backgroundColor)) return n;
   }
@@ -172,8 +172,7 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
         xBtn(),
         coverFeld(),
         feld('Titel'),
-        feld('Seiten'),
-        datumBtn(),
+        feld('Jahr'),
         pille(),
       ];
       reihe.forEach((el, i) => expect(el, `Element ${i}`).toBeTruthy());
@@ -194,8 +193,10 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
     });
   });
 
-  describe('AK-2 Felder mit Beschriftung und Platzhaltertext', () => {
-    it.each(FELDER)('[REQ-030/AK-2] Feld „%s“ ist leer, mit Platzhalter „%s“ und Beschriftung in Großbuchstaben', async (name, platzhalter) => {
+  // REQ-030/AK-2 ist laut Hinweis in REQ-030 mit REQ-060 hinfällig („SEITEN“ wandert in die Karte „Ausgabe“,
+  // „Erscheinungsdatum“ heißt „Erschienen“). Die Tests prüfen das neue Verhalten (REQ-060/AK-1, AK-2).
+  describe('AK-2 (überführt in REQ-060) Felder mit Beschriftung und Platzhaltertext', () => {
+    it.each(FELDER.slice(0, 3))('[REQ-030/AK-2] Feld „%s“ ist leer, mit Platzhalter „%s“ und Beschriftung in Großbuchstaben', async (name, platzhalter) => {
       await zeige();
       await oeffneBlatt();
       const f = feld(name);
@@ -206,31 +207,30 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
       expect(gross, `Beschriftung ${name} in Großbuchstaben`).toBe(true);
     });
 
-    it('[REQ-030/AK-2] „JAHR“ und „SEITEN“ stehen nebeneinander in einer Zeile, „TITEL“ und „AUTOR“ darüber', async () => {
+    it('[REQ-030/AK-2] Feld „Seiten“ ist leer, mit Platzhalter „496“, genau einmal vorhanden, in der Karte „Ausgabe“', async () => {
       await zeige();
       await oeffneBlatt();
-      const j = feld('Jahr');
-      const s = feld('Seiten');
-      let zeile = j.parentElement!;
-      while (!zeile.contains(s)) zeile = zeile.parentElement!;
-      expect(zeile.contains(feld('Titel'))).toBe(false);
-      expect(zeile.contains(feld('Autor'))).toBe(false);
-      const cs = getComputedStyle(zeile);
-      const nebeneinander = (cs.display.includes('flex') && !cs.flexDirection.startsWith('column')) || cs.display.includes('grid');
-      expect(nebeneinander, `display=${cs.display} flex-direction=${cs.flexDirection}`).toBe(true);
-      expect(vor(feld('Titel'), feld('Autor'))).toBe(true);
-      expect(vor(feld('Autor'), j)).toBe(true);
-      expect(vor(j, s)).toBe(true);
+      const f = feld('Seiten');
+      expect(f.value).toBe('');
+      expect(f).toHaveAttribute('placeholder', '496');
+      expect(within(d()).getAllByLabelText(/^\s*Seiten\s*$/i)).toHaveLength(1);
+      expect(d().querySelector('[data-ausgabe-zeile="seiten"]')!.contains(f)).toBe(true);
     });
 
-    it('[REQ-030/AK-2] „ERSCHEINUNGSDATUM“ mit „+ Erscheinungsdatum hinzufügen“ steht unter Jahr/Seiten in der Karte', async () => {
+    it('[REQ-030/AK-2] „TITEL“, „AUTOR“, „JAHR“ in der Formular-Karte in dieser Reihenfolge', async () => {
       await zeige();
       await oeffneBlatt();
-      const b = beschriftung('Erscheinungsdatum');
-      expect(b.textContent!.trim() === 'ERSCHEINUNGSDATUM' || getComputedStyle(b).textTransform === 'uppercase').toBe(true);
-      expect(vor(feld('Seiten'), b)).toBe(true);
-      expect(vor(b, datumBtn())).toBe(true);
-      expect(karte().contains(datumBtn())).toBe(true);
+      expect(karte().contains(feld('Titel'))).toBe(true);
+      expect(karte().contains(feld('Jahr'))).toBe(true);
+      expect(vor(feld('Titel'), feld('Autor'))).toBe(true);
+      expect(vor(feld('Autor'), feld('Jahr'))).toBe(true);
+    });
+
+    it('[REQ-030/AK-2] „Erscheinungsdatum“ kommt nicht mehr vor, stattdessen die Zeile „Erschienen“', async () => {
+      await zeige();
+      await oeffneBlatt();
+      expect(d().textContent).not.toMatch(/Erscheinungsdatum/i);
+      expect(d().querySelectorAll('[data-ausgabe-zeile="erschienen"]')).toHaveLength(1);
     });
   });
 
@@ -303,7 +303,6 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
       ['dunkelbraun', 'Beschriftung TITEL', 'text', () => beschriftung('Titel')],
       ['dunkelbraun', 'Beschriftung SEITEN', 'text', () => beschriftung('Seiten')],
       ['dunkelbraun', 'eingegebener Text', 'text', () => feld('Autor')],
-      ['primaer', '„+ Erscheinungsdatum hinzufügen“', 'text', () => textElement(datumBtn(), '+ Erscheinungsdatum hinzufügen')],
       ['primaer', 'Pille „Hinzufügen“ Fläche', 'hintergrund', pille],
       ['hintergrund', 'Pille „Hinzufügen“ Schrift', 'text', () => textElement(pille(), 'Hinzufügen')],
     ];
@@ -332,7 +331,7 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
       await zeige();
       await oeffneBlatt();
       expect(getComputedStyle(coverFeld()).borderTopStyle).toBe('dashed');
-      const LIT = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|oklch|lab|lch)\(|\b(?:black|white|red|gray|grey|brown|beige)\b/i;
+      const LIT = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|oklch|lab|lch)\(|(?<![-\w])(?:black|white|red|gray|grey|brown|beige)(?![-\w])/i; // „white-space“ ist kein Farbwert
       const v = [d(), ...Array.from(d().querySelectorAll<HTMLElement>('*'))]
         .map((e) => (e.getAttribute('style') ?? '').replace(/url\([^)]*\)/g, ''))
         .filter((s) => LIT.test(s) || /var\(--[^,)]+,/.test(s));
@@ -340,19 +339,17 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
     });
   });
 
-  describe('AK-6 „+ Erscheinungsdatum hinzufügen“ ohne Funktion', () => {
-    it('[REQ-030/AK-6] Antippen ändert im Blatt nichts, keine Eingabe, kein Menü, nichts gespeichert', async () => {
+  // REQ-030/AK-6 ist laut Hinweis in REQ-030 mit REQ-060 hinfällig: „Erschienen“ hat jetzt eine Funktion.
+  // Der Test prüft das neue Verhalten (REQ-060/AK-3): Antippen öffnet die Eingabe, Schließen über X speichert nichts.
+  describe('AK-6 (überführt in REQ-060/AK-3) „Erschienen“ öffnet eine Eingabe', () => {
+    it('[REQ-030/AK-6] Antippen von „Erschienen“ öffnet ein Datumsfeld; nichts gespeichert', async () => {
       const { repo } = await zeige();
       await oeffneBlatt();
       gib('Titel', 'Momo 2');
-      const vorher = d().innerHTML;
-      const inputs = d().querySelectorAll('input, textarea, select').length;
-      await tippe(datumBtn());
-      expect(d().innerHTML).toBe(vorher);
-      expect(d().querySelectorAll('input, textarea, select')).toHaveLength(inputs);
-      expect(screen.queryByRole('menu')).toBeNull();
-      expect(screen.getAllByRole('dialog')).toHaveLength(1);
+      await tippe(d().querySelector<HTMLElement>('[data-ausgabe-zeile="erschienen"]')!);
+      await vi.waitFor(() => expect(document.querySelector('[data-blatt-feld="erschienen"]')).not.toBeNull());
       expect(repo.save).not.toHaveBeenCalled();
+      expect(feld('Titel').value).toBe('Momo 2');
     });
   });
 

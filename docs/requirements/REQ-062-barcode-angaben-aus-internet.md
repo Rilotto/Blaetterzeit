@@ -1,7 +1,7 @@
 ---
 id: REQ-062
 titel: Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

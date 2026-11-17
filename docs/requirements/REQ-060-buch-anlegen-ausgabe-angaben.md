@@ -1,7 +1,7 @@
 ---
 id: REQ-060
 titel: Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

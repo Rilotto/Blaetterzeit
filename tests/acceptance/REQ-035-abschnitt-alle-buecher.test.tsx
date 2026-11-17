@@ -198,9 +198,11 @@ describe('REQ-035 Abschnitt „Alle Bücher“', () => {
       for (const titel of ['A', 'B', 'C']) {
         zeit += 60_000;
         fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-        fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+        fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
         const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
         fireEvent.change(within(d).getByLabelText(/^\s*Titel\s*$/i), { target: { value: titel } });
+        // Seitenzahl ist seit REQ-060 Pflicht.
+        fireEvent.change(within(d).getByLabelText(/^\s*Seiten\s*$/i), { target: { value: '100' } });
         fireEvent.click(within(d).getByRole('button', { name: 'Hinzufügen' }));
         const det = await screen.findByRole('region', { name: 'Buchdetails' });
         fireEvent.click(within(det).getByRole('button', { name: 'Zurück' }));

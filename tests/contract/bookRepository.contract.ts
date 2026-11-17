@@ -143,6 +143,8 @@ export function runBookRepositoryContract(name: string, factory: Fabrik) {
         sonderausgabe: 'erstausgabe' as const,
         exemplar: 'geliehen' as const,
         preisCent: 0,
+        verlag: 'Carlsen',
+        isbn: '080442957X',
       };
       const ebook = { ...neuesBuch({ titel: 'E', status: 'gelesen' }), format: 'ebook' as const, exemplar: 'meins' as const, preisCent: 1299 };
       await repo.save(buch);

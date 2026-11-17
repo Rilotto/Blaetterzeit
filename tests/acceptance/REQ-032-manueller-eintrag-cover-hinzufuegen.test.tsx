@@ -71,7 +71,7 @@ async function warte() {
 async function oeffneBlatt() {
   fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
   const m = await screen.findByRole('menu', { name: 'Buch hinzufügen' });
-  fireEvent.click(within(m).getByRole('menuitem'));
+  fireEvent.click(within(m).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   return screen.findByRole('dialog', { name: 'Manueller Eintrag' });
 }
 const blatt = () => screen.queryByRole('dialog', { name: 'Manueller Eintrag' });
@@ -102,6 +102,8 @@ async function merkeVor(punkt = 'Aus Galerie auswählen') {
   await bestaetige();
 }
 async function hinzufuegen() {
+  // Seitenzahl ist seit REQ-060 Pflicht: ist sie leer, wird „100“ eingetragen.
+  if (feld('Seiten').value === '') gib('Seiten', '100');
   await act(async () => {
     fireEvent.click(within(d()).getByRole('button', { name: 'Hinzufügen' }));
     await new Promise((r) => setTimeout(r, 30));

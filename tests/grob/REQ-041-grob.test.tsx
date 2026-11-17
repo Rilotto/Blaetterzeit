@@ -26,9 +26,11 @@ async function zeige(sp: Speicher, jetzt: () => Date) {
 }
 async function legeAn(titel: string) {
   fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-  fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+  fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
   fireEvent.change(within(d).getByLabelText(/^\s*Titel\s*$/i), { target: { value: titel } });
+  // Seitenzahl ist seit REQ-060 Pflicht.
+  fireEvent.change(within(d).getByLabelText(/^\s*Seiten\s*$/i), { target: { value: '100' } });
   await act(async () => {
     fireEvent.click(within(d).getByRole('button', { name: 'Hinzufügen' }));
     await new Promise((r) => setTimeout(r, 30));

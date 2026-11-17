@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import iconBarcode from '@/assets/icons/icon-barcode.png';
 import iconHandEintragen from '@/assets/icons/icon-hand-eintragen.png';
 import Icon from '@/components/Icon';
 import { abdunklung, buchAnlegenFarbe, plusMenueSchatten, textformatAlleAnsehen } from '@/theme';
@@ -8,6 +9,8 @@ interface Props {
   oben: number;
   /** Abstand des Menüs zum rechten Rand des Kopfbereichs in px. */
   rechts: number;
+  /** Option „Barcode scannen“ gewählt (REQ-061). */
+  onBarcode: () => void;
   /** Option „Von Hand eintragen“ gewählt. */
   onVonHand: () => void;
   /** Tippen außerhalb des Menüs. */
@@ -86,13 +89,26 @@ const untertitelStil: CSSProperties = {
   color: buchAnlegenFarbe('menueOptionUntertitel'),
 };
 
-/** Menü „Buch hinzufügen“ (REQ-029) mit Abdunklung der Seite. Schließt nur über die Option oder Tippen außerhalb. */
-export default function PlusMenue({ oben, rechts, onVonHand, onSchliessen }: Props) {
+/** Menü „Buch hinzufügen“ (REQ-029, REQ-061) mit Abdunklung der Seite. Schließt nur über die Option oder Tippen außerhalb. */
+export default function PlusMenue({ oben, rechts, onBarcode, onVonHand, onSchliessen }: Props) {
   return (
     <>
       <div data-menue-hintergrund="" onClick={onSchliessen} style={hintergrundStil} />
       <div role="menu" aria-label="Buch hinzufügen" style={menueStil(oben, rechts)}>
-        <button type="button" role="menuitem" onClick={onVonHand} style={optionStil}>
+        <button type="button" role="menuitem" data-option="barcode" onClick={onBarcode} style={optionStil}>
+          <span style={kachelStil}>
+            <Icon datei="icon-barcode.png" url={iconBarcode} farbe={buchAnlegenFarbe('menueIcon')} groesse={22} />
+          </span>
+          <span style={texteStil}>
+            <span data-option-titel="" style={titelStil}>
+              Barcode scannen
+            </span>
+            <span data-option-untertitel="" style={untertitelStil}>
+              Ziel auf die Rückseite
+            </span>
+          </span>
+        </button>
+        <button type="button" role="menuitem" data-option="von-hand" onClick={onVonHand} style={optionStil}>
           <span style={kachelStil}>
             <Icon
               datei="icon-hand-eintragen.png"

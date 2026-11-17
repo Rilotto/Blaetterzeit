@@ -71,3 +71,23 @@ input[data-suchfeld]::-webkit-search-cancel-button {
 [data-blatt-unten] {
   padding-bottom: calc(24px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
 }
+
+/* REQ-061: Solange der Barcode-Scanner (ML Kit) das Kamerabild HINTER der WebView zeigt, ist nur
+   der Scan-Bildschirm sichtbar; alle übrigen Flächen sind durchsichtig bzw. ausgeblendet
+   (Attribut gesetzt von src/barcode/scanner.ts). */
+html[data-barcode-aktiv],
+html[data-barcode-aktiv] body,
+html[data-barcode-aktiv] [data-app-wurzel],
+html[data-barcode-aktiv] main {
+  background: transparent !important;
+}
+html[data-barcode-aktiv] body * {
+  visibility: hidden;
+}
+html[data-barcode-aktiv] [data-scan-bildschirm],
+html[data-barcode-aktiv] [data-scan-bildschirm] * {
+  visibility: visible;
+}
+html[data-barcode-aktiv] [data-scan-bildschirm] {
+  background: transparent !important;
+}

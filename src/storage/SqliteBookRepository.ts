@@ -3,7 +3,7 @@ import type { BookRepository } from './BookRepository';
 import type { SqlVerbindung, SqlWert } from './sqlite/SqlVerbindung';
 
 const SPALTEN =
-  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen, eingetragen_am, bewertungen, rezension, genres, tropes, inhaltswarnungen, format, unterformat, sonderausgabe, exemplar, preis_cent';
+  'id, titel, status, autor, erscheinungsjahr, erscheinungsdatum, seitenanzahl, cover, aktuelle_seite, fortschritt_prozent, fortschrittsmodus, sitzungen, eingetragen_am, bewertungen, rezension, genres, tropes, inhaltswarnungen, format, unterformat, sonderausgabe, exemplar, preis_cent, verlag, isbn';
 
 /** Spaltenwerte eines Buches; fehlende optionale Angaben werden als NULL gespeichert. */
 function werte(b: Buch): SqlWert[] {
@@ -30,6 +30,8 @@ function werte(b: Buch): SqlWert[] {
     b.sonderausgabe ?? null,
     b.exemplar ?? null,
     b.preisCent ?? null,
+    b.verlag ?? null,
+    b.isbn ?? null,
   ];
 }
 
@@ -68,11 +70,13 @@ function ausZeile(z: Record<string, unknown>): Buch {
     sonderausgabe: z.sonderausgabe ?? undefined,
     exemplar: z.exemplar ?? undefined,
     preisCent: zahl(z.preis_cent),
+    verlag: z.verlag ?? undefined,
+    isbn: z.isbn ?? undefined,
   });
 }
 
 /**
- * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 bis 6, REQ-034, REQ-024, REQ-041, REQ-045, REQ-049, REQ-052–059).
+ * Bücher auf dem Gerät in der SQLite-Tabelle `buch` (Migrationen 2 bis 7, REQ-034, REQ-024, REQ-041, REQ-045, REQ-049, REQ-052–059, REQ-063).
  * Reihenfolge = Reihenfolge des Anlegens (rowid bleibt beim Überschreiben erhalten).
  */
 export class SqliteBookRepository implements BookRepository {
@@ -101,6 +105,7 @@ export class SqliteBookRepository implements BookRepository {
          seitenanzahl = ?, cover = ?, aktuelle_seite = ?, fortschritt_prozent = ?, fortschrittsmodus = ?,
          sitzungen = ?, eingetragen_am = ?, bewertungen = ?, rezension = ?, genres = ?, tropes = ?,
          inhaltswarnungen = ?, format = ?, unterformat = ?, sonderausgabe = ?, exemplar = ?, preis_cent = ?,
+         verlag = ?, isbn = ?,
          geaendert = ? WHERE id = ?`,
         [...werte(b), new Date().toISOString(), b.id],
       );

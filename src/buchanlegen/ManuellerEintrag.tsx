@@ -6,22 +6,30 @@ import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
 import type { Ecken } from '@/bild/entzerren';
 import { standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
+import BlattPreis from '@/buchdetails/BlattPreis';
+import { BlattErschienen, BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
+import { AusgabeKarte } from '@/buchdetails/reiter/DetailsBereich';
+import FensterFormat from '@/buchdetails/reiter/FensterFormat';
+import { abschnittKopfStil } from '@/buchdetails/reiter/rezension';
 import KameraAnsicht from '@/buchdetails/KameraAnsicht';
 import { seitenverhaeltnis } from '@/buchdetails/masse';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
+import { datumText, type Formatangaben } from '@/domain/ausgabe';
 import type { Buch } from '@/domain/buch';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
 import type { BookRepository, ImageStore } from '@/storage';
-import { buchAnlegenFarbe } from '@/theme';
+import { buchAnlegenFarbe, detailsFarbe } from '@/theme';
 import {
   buchAusEingaben,
+  eingabenAusVorbelegung,
   jahrFiltern,
   jahrUngueltig,
-  LEERE_EINGABEN,
+  seitenFehlen,
   seitenFiltern,
   titelFehlt,
   type Eingaben,
+  type Vorbelegung,
 } from './eingabe';
 
 export interface ManuellerEintragProps {
@@ -37,7 +45,12 @@ export interface ManuellerEintragProps {
   onAngelegt: (buch: Buch) => void;
   /** Aktuelle Zeit für das Eintragungsdatum (REQ-041); ohne Angabe die Systemzeit. In Tests ersetzbar. */
   jetzt?: () => Date;
+  /** Vorbefüllte Angaben beim Öffnen, z. B. aus einem Barcode-Treffer (REQ-062). Nur beim ersten Anzeigen gelesen. */
+  vorbelegung?: Vorbelegung;
 }
+
+/** Blätter über dem Manuellen Eintrag für die Zeilen der Karte „Ausgabe“ (REQ-060). */
+type Unterblatt = 'format' | 'preis' | 'verlag' | 'isbn' | 'erschienen' | 'hinzugefuegt' | null;
 
 type Schritt = { art: 'blatt' } | { art: 'kamera' } | { art: 'zuschnitt'; bild: string };
 
@@ -175,11 +188,6 @@ const zeileStil = (letzte: boolean): CSSProperties => ({
   borderBottom: letzte ? 'none' : `1px solid ${buchAnlegenFarbe('trennlinie')}`,
 });
 
-const geteilteZeileStil: CSSProperties = {
-  display: 'flex',
-  borderBottom: `1px solid ${buchAnlegenFarbe('trennlinie')}`,
-};
-
 const feldStil = (fehler: boolean): CSSProperties => ({
   display: 'block',
   minWidth: 0,
@@ -226,19 +234,28 @@ const hinweisStil: CSSProperties = {
   color: buchAnlegenFarbe('fehler'),
 };
 
-const erscheinungsdatumStil: CSSProperties = {
-  display: 'block',
-  margin: '8px 0 0',
-  padding: 0,
-  border: 'none',
-  background: 'none',
-  fontFamily: 'inherit',
-  fontSize: '17px',
+// Eingabefeld der Zeile „Seiten“ in der Karte „Ausgabe“: rechtsbündig wie ein Zeilenwert (REQ-060).
+const seitenEingabeStil = (fehler: boolean): CSSProperties =>
+  ({
+    '--bz-platzhalterfarbe': buchAnlegenFarbe('platzhalter'),
+    flex: '1 1 auto',
+    minWidth: 0,
+    margin: 0,
+    padding: 0,
+    border: 'none',
+    outline: 'none',
+    background: 'none',
+    fontFamily: 'inherit',
+    fontSize: '16px',
+    textAlign: 'right',
+    color: fehler ? buchAnlegenFarbe('fehler') : detailsFarbe('zeileWert'),
+  }) as CSSProperties;
+
+const ausgabeUeberschriftStil: CSSProperties = {
+  margin: 0,
+  fontSize: '22px',
   fontWeight: 600,
-  textAlign: 'left',
-  color: buchAnlegenFarbe('erscheinungsdatum'),
-  cursor: 'pointer',
-  WebkitTapHighlightColor: 'transparent',
+  color: detailsFarbe('ueberschrift'),
 };
 
 // Pille „Hinzufügen“: immer aktiv, volles Primär (REQ-030, AK-9), wie die Pille „Sichern“.
@@ -294,7 +311,7 @@ function Feld({ name, platzhalter, wert, onWert, ziffern = false, fehler = false
   );
 }
 
-/** Blatt „Manueller Eintrag“ (REQ-030) mit Anlegen (REQ-031) und Cover (REQ-032). */
+/** Blatt „Manueller Eintrag“ (REQ-030) mit Anlegen (REQ-031, REQ-060), Cover (REQ-032) und Vorbelegung (REQ-062). */
 export default function ManuellerEintrag({
   repository,
   bildspeicher,
@@ -302,11 +319,14 @@ export default function ManuellerEintrag({
   onZurueck,
   onAngelegt,
   jetzt,
+  vorbelegung,
 }: ManuellerEintragProps) {
-  const [eingaben, setEingaben] = useState<Eingaben>(LEERE_EINGABEN);
+  const [eingaben, setEingaben] = useState<Eingaben>(() => eingabenAusVorbelegung(vorbelegung));
   const [titelHinweis, setTitelHinweis] = useState(false);
   const [jahrFehler, setJahrFehler] = useState(false);
-  const [cover, setCover] = useState<string | null>(null);
+  const [seitenFehler, setSeitenFehler] = useState(false);
+  const [unterblatt, setUnterblatt] = useState<Unterblatt>(null);
+  const [cover, setCover] = useState<string | null>(vorbelegung?.cover ?? null);
   const [menue, setMenue] = useState(false);
   const [schritt, setSchritt] = useState<Schritt>({ art: 'blatt' });
   const [versatz, setVersatz] = useState(0);
@@ -340,6 +360,11 @@ export default function ManuellerEintrag({
       setSchritt({ art: 'blatt' });
       return true;
     }
+    // Offenes Blatt einer Ausgabe-Zeile: nur dieses schließen, Eingaben bleiben (REQ-060).
+    if (unterblatt !== null) {
+      setUnterblatt(null);
+      return true;
+    }
     if (menue) setMenue(false);
     onZurueck();
     return false;
@@ -350,23 +375,46 @@ export default function ManuellerEintrag({
     onZurueck();
   };
 
-  const aendern = (feld: keyof Eingaben, wert: string) => {
+  const zeit = () => (jetzt ? jetzt() : new Date());
+  // Anzeige „Hinzugefügt“ ohne Überschreiben: der Tag des Öffnens (REQ-060, AK-8).
+  const [heute] = useState(() => datumText(jetzt ? jetzt() : new Date()));
+
+  const aendern = (feld: 'titel' | 'autor' | 'jahr' | 'seiten', wert: string) => {
     setEingaben((alt) => ({ ...alt, [feld]: wert }));
-    // Hinweis bzw. Hervorhebung verschwinden bei der nächsten Eingabe im jeweiligen Feld (REQ-031, AK-10/AK-14).
+    // Hinweis bzw. Hervorhebung verschwinden bei der nächsten Eingabe im jeweiligen Feld (REQ-031, AK-10/AK-14; REQ-060, AK-6).
     if (feld === 'titel') setTitelHinweis(false);
     if (feld === 'jahr') setJahrFehler(false);
+    if (feld === 'seiten') setSeitenFehler(false);
   };
+
+  /** Ergebnis eines Ausgabe-Blatts übernehmen (noch nicht speichern, REQ-060). */
+  const ausgabeSetzen = (neu: Partial<Eingaben>, entfernen: (keyof Eingaben)[] = []) => {
+    setEingaben((alt) => {
+      const e: Eingaben = { ...alt };
+      for (const k of entfernen) delete e[k];
+      return { ...e, ...neu };
+    });
+    setUnterblatt(null);
+  };
+
+  const formatSetzen = (a: Formatangaben) => ausgabeSetzen(a, ['format', 'unterformat', 'sonderausgabe', 'exemplar']);
+
+  // „Hinzugefügt“: der heutige Tag gilt als nicht überschrieben – dann zählt der Zeitpunkt des Anlegens (REQ-060, AK-8).
+  const hinzugefuegtSetzen = (datum: string) =>
+    datum === datumText(zeit()) ? ausgabeSetzen({}, ['hinzugefuegt']) : ausgabeSetzen({ hinzugefuegt: datum });
 
   const hinzufuegen = async () => {
     if (speichert.current) return;
     const ohneTitel = titelFehlt(eingaben);
     const falschesJahr = jahrUngueltig(eingaben);
+    const ohneSeiten = seitenFehlen(eingaben);
     setTitelHinweis(ohneTitel);
     setJahrFehler(falschesJahr);
-    if (ohneTitel || falschesJahr) return;
+    setSeitenFehler(ohneSeiten);
+    if (ohneTitel || falschesJahr || ohneSeiten) return;
     speichert.current = true;
     try {
-      const buch = buchAusEingaben(eingaben, jetzt ? jetzt() : new Date());
+      const buch = buchAusEingaben(eingaben, zeit());
       const repo = repository ?? (await standardRepository());
       await repo.save(buch);
       if (cover) {
@@ -540,43 +588,91 @@ export default function ManuellerEintrag({
             onWert={(w) => aendern('autor', w)}
             stil={zeileStil(false)}
           />
-          <div style={geteilteZeileStil}>
-            <Feld
-              name="Jahr"
-              platzhalter="2024"
-              wert={eingaben.jahr}
-              onWert={(w) => aendern('jahr', jahrFiltern(w))}
-              ziffern
-              fehler={jahrFehler}
-              stil={{
-                flex: '1 1 0',
-                minWidth: 0,
-                padding: '14px 14px 14px 0',
-                borderRight: `1px solid ${buchAnlegenFarbe('trennlinie')}`,
-              }}
-            />
-            <Feld
-              name="Seiten"
-              platzhalter="496"
-              wert={eingaben.seiten}
-              onWert={(w) => aendern('seiten', seitenFiltern(w))}
-              ziffern
-              stil={{ flex: '1 1 0', minWidth: 0, padding: '14px 0 14px 14px' }}
-            />
-          </div>
-          <div style={zeileStil(true)}>
-            <span style={beschriftungStil(false)}>ERSCHEINUNGSDATUM</span>
-            {/* Noch ohne Funktion (REQ-030, AK-6; To-do-Liste). */}
-            <button type="button" data-erscheinungsdatum="" style={erscheinungsdatumStil}>
-              + Erscheinungsdatum hinzufügen
-            </button>
-          </div>
+          <Feld
+            name="Jahr"
+            platzhalter="2024"
+            wert={eingaben.jahr}
+            onWert={(w) => aendern('jahr', jahrFiltern(w))}
+            ziffern
+            fehler={jahrFehler}
+            stil={zeileStil(true)}
+          />
         </div>
+
+        {/* Karte „Ausgabe“ wie im Reiter „Details“, ohne „Fotos“ (REQ-060, AK-1). */}
+        <section aria-label="Ausgabe" data-eintrag-ausgabe="">
+          <div style={abschnittKopfStil}>
+            <h3 style={ausgabeUeberschriftStil}>Ausgabe</h3>
+          </div>
+          <AusgabeKarte
+            ohneFotos
+            angaben={eingaben}
+            werte={{ erschienen: eingaben.erschienen ?? '', hinzugefuegt: eingaben.hinzugefuegt ?? heute }}
+            seitenFehler={seitenFehler}
+            seitenEingabe={
+              <input
+                type="text"
+                aria-label="Seiten"
+                data-bz-eingabe=""
+                data-seiten-eingabe=""
+                data-fehler={seitenFehler ? 'true' : undefined}
+                aria-invalid={seitenFehler ? true : undefined}
+                inputMode="numeric"
+                autoComplete="off"
+                placeholder="496"
+                value={eingaben.seiten}
+                onChange={(e) => aendern('seiten', seitenFiltern(e.target.value))}
+                style={seitenEingabeStil(seitenFehler)}
+              />
+            }
+            onZeile={{
+              format: () => setUnterblatt('format'),
+              exemplar: () => setUnterblatt('format'),
+              sonderausgabe: () => setUnterblatt('format'),
+              preis: () => setUnterblatt('preis'),
+              verlag: () => setUnterblatt('verlag'),
+              erschienen: () => setUnterblatt('erschienen'),
+              isbn: () => setUnterblatt('isbn'),
+              hinzugefuegt: () => setUnterblatt('hinzugefuegt'),
+            }}
+          />
+        </section>
 
         <button type="button" data-hinzufuegen="" onClick={() => void hinzufuegen()} style={hinzufuegenStil}>
           Hinzufügen
         </button>
       </div>
+      {unterblatt === 'format' ? (
+        <FensterFormat
+          start={{ format: eingaben.format, unterformat: eingaben.unterformat, sonderausgabe: eingaben.sonderausgabe, exemplar: eingaben.exemplar }}
+          onSichern={formatSetzen}
+          onSchliessen={() => setUnterblatt(null)}
+        />
+      ) : null}
+      {unterblatt === 'preis' ? (
+        <BlattPreis preisCent={eingaben.preisCent} onSichern={(preisCent) => ausgabeSetzen({ preisCent })} onSchliessen={() => setUnterblatt(null)} />
+      ) : null}
+      {unterblatt === 'verlag' ? (
+        <BlattVerlag
+          verlag={eingaben.verlag}
+          onSichern={(verlag) => (verlag ? ausgabeSetzen({ verlag }) : ausgabeSetzen({}, ['verlag']))}
+          onSchliessen={() => setUnterblatt(null)}
+        />
+      ) : null}
+      {unterblatt === 'isbn' ? (
+        <BlattIsbn isbn={eingaben.isbn} onSichern={(isbn) => ausgabeSetzen({ isbn })} onSchliessen={() => setUnterblatt(null)} />
+      ) : null}
+      {unterblatt === 'erschienen' ? (
+        <BlattErschienen erschienen={eingaben.erschienen} onSichern={(erschienen) => ausgabeSetzen({ erschienen })} onSchliessen={() => setUnterblatt(null)} />
+      ) : null}
+      {unterblatt === 'hinzugefuegt' ? (
+        <BlattHinzugefuegt
+          startDatum={eingaben.hinzugefuegt}
+          jetzt={zeit}
+          onSichern={hinzugefuegtSetzen}
+          onSchliessen={() => setUnterblatt(null)}
+        />
+      ) : null}
     </div>
   );
 }

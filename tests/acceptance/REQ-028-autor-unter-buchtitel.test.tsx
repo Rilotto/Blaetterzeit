@@ -263,9 +263,11 @@ describe('REQ-028 Autor unter dem Buchtitel', () => {
       render(<BA bildspeicher={bilderFake()} bildquelle={{ scannen: async () => null, galerie: async () => null }} />);
       await screen.findByRole('heading', { name: 'Deine Bücher' });
       fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-      fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+      fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
       const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
       fireEvent.change(within(d).getByLabelText(/^\s*Titel\s*$/i), { target: { value: 'Ohne Autor' } });
+      // Seitenzahl ist seit REQ-060 Pflicht.
+      fireEvent.change(within(d).getByLabelText(/^\s*Seiten\s*$/i), { target: { value: '100' } });
       await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
       await screen.findByRole('region', { name: 'Buchdetails' });
       await vi.waitFor(() => expect(pille()).not.toBeNull());

@@ -85,6 +85,10 @@ export interface Buch {
   exemplar?: ExemplarId;
   /** Bezahlter Preis in Euro-Cent, ganzzahlig ≥ 0 (REQ-059); fehlend = kein Preis gespeichert. */
   preisCent?: number;
+  /** Verlag, nicht leer (REQ-063); fehlend = kein Verlag. */
+  verlag?: string;
+  /** ISBN-10 oder ISBN-13 ohne Trennzeichen, Prüfziffer gültig (REQ-063); fehlend = keine ISBN. */
+  isbn?: string;
 }
 
 export type Fortschrittsmodus = 'seite' | 'prozent';
@@ -117,6 +121,8 @@ export const OPTIONALE_BUCHFELDER = [
   'sonderausgabe',
   'exemplar',
   'preisCent',
+  'verlag',
+  'isbn',
 ] as const;
 
 export interface NeuesBuch {
@@ -199,5 +205,7 @@ export function buchAusDaten(daten: unknown): Buch {
   if (istSonderausgabeId(e.sonderausgabe)) buch.sonderausgabe = e.sonderausgabe;
   if (istExemplarId(e.exemplar)) buch.exemplar = e.exemplar;
   if (typeof e.preisCent === 'number' && Number.isInteger(e.preisCent) && e.preisCent >= 0) buch.preisCent = e.preisCent;
+  if (typeof e.verlag === 'string' && e.verlag.trim() !== '') buch.verlag = e.verlag;
+  if (typeof e.isbn === 'string' && e.isbn !== '') buch.isbn = e.isbn;
   return buch;
 }
