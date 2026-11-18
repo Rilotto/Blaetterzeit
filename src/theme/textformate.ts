@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { schriftgroesse } from './typografie';
 
 // Zentrale Textformate (ohne Farben). Wer ein Format teilt, bezieht es von hier,
 // damit eine Änderung überall gleichzeitig wirkt.
@@ -10,7 +11,7 @@ import type { CSSProperties } from 'react';
  */
 export const textformatAlleAnsehen: CSSProperties = {
   fontFamily: 'inherit',
-  fontSize: '14px',
+  fontSize: schriftgroesse('meta'),
   fontStyle: 'italic',
   fontWeight: 400,
 };

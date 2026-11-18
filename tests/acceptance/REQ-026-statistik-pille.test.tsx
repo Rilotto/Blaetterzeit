@@ -205,7 +205,7 @@ describe('REQ-026 Statistik-Pille', () => {
   describe('AK-2 Farben und Rahmen', () => {
     const FAELLE: [string, string, Art, () => HTMLElement][] = [
       ['ghost', 'Hintergrund', 'hintergrund', () => mitFlaeche(statistik()!)],
-      ['ghostframe', 'Rahmen', 'rahmen', () => mitFlaeche(statistik()!)],
+      // Seit REQ-065 AK-11 ist die Karte durch einen weichen Schatten statt eines Rahmens abgesetzt (Test unten).
       ['dunkelbraun', 'Prozentzahl', 'text', () => textElement(teil('prozent'), /^\d+ ?%$/)],
       ['dunkelbraun', 'Sitzungszahl', 'text', () => textElement(teil('sitzungen'), /^\d+$/)],
       ['dunkelbraun', '„Tage in Folge“', 'text', () => textElement(teil('streak'), 'Tage in Folge')],
@@ -222,10 +222,12 @@ describe('REQ-026 Statistik-Pille', () => {
         expect(ist(finde(), art), wo).toContain(farbeVon(wurzel, '#0A1B2C'));
       });
     });
-    it('[REQ-026/AK-2] Rahmen durchgehend (solid), zwei Trennlinien in „GhostFrame“ zwischen den Teilen', async () => {
+    // Angepasst Sprint 06 Teil C (REQ-065 AK-11): weicher Schatten statt Rahmen; die Trennlinien bleiben „GhostFrame“.
+    it('[REQ-026/AK-2] Karte durch weichen Schatten statt Rahmen abgesetzt, zwei Trennlinien in „GhostFrame“ zwischen den Teilen', async () => {
       const { wurzel } = await details(await starte(), buchB());
       const p = mitFlaeche(statistik()!);
-      expect(getComputedStyle(p).borderTopStyle).toBe('solid');
+      expect(['', 'none']).toContain(getComputedStyle(p).borderTopStyle);
+      expect(p.style.boxShadow).toContain('var(--bz-schattenfarbe)');
       const gf = rubrik(wurzel, 'ghostframe');
       const trenner = (a: HTMLElement, b: HTMLElement) => {
         const ca = getComputedStyle(a);

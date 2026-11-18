@@ -7,7 +7,7 @@ import { coverBreite, coverFlaecheStil, coverHoehe } from '@/components/coverFla
 import type { Buch } from '@/domain/buch';
 import { alphabetisch, anzahlText, kartenzusatz, suchen, suchfeldText } from '@/domain/uebersicht';
 import type { AnsichtRepository, Uebersichtsansicht } from '@/storage';
-import { uebersichtFarbe } from '@/theme';
+import { uebersichtFarbe, textstufe, pillenhoehe, kartenSchatten, abstand } from '@/theme';
 import Filterleiste from './Filterleiste';
 import type { FilterDefinition } from './filterKonfiguration';
 import { seitenRand } from './layout';
@@ -42,7 +42,7 @@ interface Props {
 const zeileStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '10px',
+  gap: abstand('s'),
   padding: `0 ${seitenRand}px`,
 };
 
@@ -50,10 +50,10 @@ const suchfeldRahmenStil: CSSProperties = {
   boxSizing: 'border-box',
   display: 'flex',
   alignItems: 'center',
-  gap: '10px',
+  gap: abstand('s'),
   height: '46px',
-  margin: `16px ${seitenRand}px 0`,
-  padding: '0 18px',
+  margin: `${abstand('l')} ${seitenRand}px 0`,
+  padding: `0 ${abstand('l')}`,
   borderRadius: '9999px',
   border: `1.5px solid ${uebersichtFarbe('suchfeldRahmen')}`,
   backgroundColor: uebersichtFarbe('suchfeldFlaeche'),
@@ -68,7 +68,7 @@ const suchfeldStil: CSSProperties = {
   outline: 'none',
   background: 'none',
   fontFamily: 'inherit',
-  fontSize: '17px',
+  ...textstufe('text'),
   color: uebersichtFarbe('suchfeldText'),
   // Farbe des Platzhaltertexts über die Variable in index.css (::placeholder).
   ['--bz-platzhalterfarbe' as string]: uebersichtFarbe('suchfeldPlatzhalter'),
@@ -77,7 +77,7 @@ const suchfeldStil: CSSProperties = {
 const anzahlStil: CSSProperties = {
   flex: '1 1 auto',
   margin: 0,
-  fontSize: '15px',
+  ...textstufe('meta'),
   fontWeight: 600,
   whiteSpace: 'nowrap',
   color: uebersichtFarbe('anzahl'),
@@ -85,8 +85,8 @@ const anzahlStil: CSSProperties = {
 
 const umschalterStil: CSSProperties = {
   display: 'flex',
-  gap: '2px',
-  padding: '3px',
+  gap: abstand('xs'),
+  padding: abstand('xs'),
   borderRadius: '9999px',
   border: `1px solid ${uebersichtFarbe('umschalterRahmen')}`,
   backgroundColor: uebersichtFarbe('umschalterFlaeche'),
@@ -109,21 +109,21 @@ const umschalterKnopfStil = (aktiv: boolean): CSSProperties => ({
 });
 
 const sortierStil: CSSProperties = {
-  height: '36px',
+  height: pillenhoehe,
   margin: 0,
-  padding: '0 16px',
+  padding: `0 ${abstand('l')}`,
   borderRadius: '9999px',
   border: `1px solid ${uebersichtFarbe('sortierRahmen')}`,
   backgroundColor: uebersichtFarbe('sortierFlaeche'),
   fontFamily: 'inherit',
-  fontSize: '15px',
+  ...textstufe('meta'),
   fontWeight: 600,
   color: uebersichtFarbe('sortierSchrift'),
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
 };
 
-const listeBasis: CSSProperties = { margin: '16px 0 0', padding: `0 ${seitenRand}px`, listStyle: 'none' };
+const listeBasis: CSSProperties = { margin: `${abstand('l')} 0 0`, padding: `0 ${seitenRand}px`, listStyle: 'none' };
 
 // Raster: drei Cover nebeneinander (Referenzbild), Covergröße wie in den Abschnitten (REQ-009/REQ-010).
 const rasterStil: CSSProperties = {
@@ -131,15 +131,15 @@ const rasterStil: CSSProperties = {
   display: 'grid',
   gridTemplateColumns: `repeat(auto-fill, ${coverBreite}px)`,
   justifyContent: 'space-between',
-  rowGap: '18px',
-  columnGap: '12px',
+  rowGap: abstand('l'),
+  columnGap: abstand('m'),
 };
 
-const kartenListeStil: CSSProperties = { ...listeBasis, display: 'flex', flexDirection: 'column', gap: '12px' };
+const kartenListeStil: CSSProperties = { ...listeBasis, display: 'flex', flexDirection: 'column', gap: abstand('m') };
 
 const titelStil: CSSProperties = {
   margin: 0,
-  fontSize: '15px',
+  ...textstufe('titel'),
   fontWeight: 600,
   lineHeight: 1.3,
   overflowWrap: 'break-word',
@@ -153,14 +153,15 @@ const titelStil: CSSProperties = {
 const autorZeileStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '5px',
+  gap: abstand('xs'),
   minHeight: '18px',
-  marginTop: '3px',
+  marginTop: abstand('xs'),
 };
 
 const autorStil: CSSProperties = {
   minWidth: 0,
-  fontSize: '14px',
+  ...textstufe('meta'),
+  fontStyle: 'italic',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -175,10 +176,12 @@ const KARTE_COVER_HOEHE = Math.round((KARTE_COVER_BREITE * coverHoehe) / coverBr
 
 const karteStil: CSSProperties = {
   display: 'flex',
-  gap: '14px',
-  padding: '12px',
+  gap: abstand('m'),
+  padding: abstand('m'),
   borderRadius: '18px',
-  border: `1.5px solid ${uebersichtFarbe('kartenRahmen')}`,
+  // Weicher, warmer Schatten statt hartem Rahmen (REQ-065 AK-11).
+  border: 'none',
+  boxShadow: kartenSchatten,
   backgroundColor: uebersichtFarbe('kartenFlaeche'),
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
@@ -193,24 +196,24 @@ const karteCoverStil: CSSProperties = {
 const balkenStil: CSSProperties = {
   position: 'relative',
   height: '6px',
-  marginTop: '10px',
+  marginTop: abstand('s'),
   overflow: 'hidden',
   borderRadius: '3px',
   backgroundColor: uebersichtFarbe('balkenLeer'),
 };
 
 const fortschrittTextStil: CSSProperties = {
-  margin: '8px 0 0',
-  fontSize: '15px',
+  margin: `${abstand('s')} 0 0`,
+  ...textstufe('meta'),
   color: uebersichtFarbe('fortschrittText'),
 };
 
 const statuschipStil: CSSProperties = {
   display: 'inline-block',
-  marginTop: '10px',
-  padding: '4px 12px',
+  marginTop: abstand('s'),
+  padding: `${abstand('xs')} ${abstand('m')}`,
   borderRadius: '9999px',
-  fontSize: '14px',
+  ...textstufe('meta'),
   fontWeight: 600,
   backgroundColor: uebersichtFarbe('statuschipFlaeche'),
   color: uebersichtFarbe('statuschipSchrift'),
@@ -260,7 +263,7 @@ function Rastereintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: string
   return (
     <li data-rastereintrag={buch.id} style={{ width: `${coverBreite}px`, minWidth: 0, cursor: 'pointer' }} onClick={() => onAntippen(buch)}>
       {cover ? <img src={cover} alt={buch.titel} style={coverBildStil} /> : <CoverPlatzhalter />}
-      <p data-buchtitel="" style={{ ...titelStil, marginTop: '8px' }}>
+      <p data-buchtitel="" style={{ ...titelStil, marginTop: abstand('s') }}>
         {buch.titel}
       </p>
       <Autorzeile autor={buch.autor} />
@@ -277,8 +280,8 @@ function Listenkarte({ buch, cover, onAntippen }: { buch: Buch; cover?: string; 
       ) : (
         <CoverPlatzhalter breite={KARTE_COVER_BREITE} hoehe={KARTE_COVER_HOEHE} />
       )}
-      <div style={{ flex: '1 1 auto', minWidth: 0, paddingTop: '4px' }}>
-        <p data-buchtitel="" style={{ ...titelStil, fontSize: '18px' }}>
+      <div style={{ flex: '1 1 auto', minWidth: 0, paddingTop: abstand('xs') }}>
+        <p data-buchtitel="" style={titelStil}>
           {buch.titel}
         </p>
         <Autorzeile autor={buch.autor} />
@@ -370,7 +373,7 @@ export default function Uebersicht({
   const beschriftung = suchfeldText(listenname);
 
   return (
-    <div data-uebersicht={listeId} data-ansicht={ansicht ?? ''} style={{ paddingBottom: '24px' }}>
+    <div data-uebersicht={listeId} data-ansicht={ansicht ?? ''} style={{ paddingBottom: abstand('xl') }}>
       {kopf}
       <Filterleiste filter={filter} buecher={buecher ?? []} aktivId={listeId} onAntippen={onFilter} />
       <label style={suchfeldRahmenStil}>
@@ -386,7 +389,7 @@ export default function Uebersicht({
           style={suchfeldStil}
         />
       </label>
-      <div style={{ ...zeileStil, marginTop: '16px' }}>
+      <div style={{ ...zeileStil, marginTop: abstand('l') }}>
         <p data-buecherzahl="" style={anzahlStil}>
           {liste === undefined ? '' : anzahlText(liste.length)}
         </p>

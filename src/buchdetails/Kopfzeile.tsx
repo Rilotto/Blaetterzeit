@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import iconZurueck from '@/assets/icons/icon-zurueck.png';
 import Icon from '@/components/Icon';
-import { buchdetailsFarbe } from '@/theme';
+import { buchdetailsFarbe, abstand } from '@/theme';
 import { KOPF_ICON, RAND } from './masse';
 import { kopfSchaltflaecheStil } from './stile';
 
@@ -9,7 +9,7 @@ const kopfStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: `8px ${RAND - 8}px 0`,
+  padding: `${abstand('s')} ${RAND - 8}px 0`,
 };
 
 

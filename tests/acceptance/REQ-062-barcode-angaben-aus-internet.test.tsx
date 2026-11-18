@@ -312,3 +312,47 @@ describe('REQ-062 Treffer zur ISBN', () => {
     warn.mockRestore();
   });
 });
+
+// Sprint 06 Teil C: REQ-062 AK-9 (Fassung 2026-11-18) – Preis und Format aus dem Treffer werden übernommen.
+describe('REQ-062 AK-9 Preis und Format', () => {
+  const MIT: Treffer = { quelle: 'dnb', angaben: { titel: 'Mit Preis', autor: 'Rowling, J. K.', isbn: ISBN, seitenanzahl: 335, preisCent: 1299, format: 'print', unterformat: 'taschenbuch' } };
+  const OHNE: Treffer = { quelle: 'openlibrary', angaben: { titel: 'Ohne Preis', autor: 'J. K. Rowling', isbn: ISBN, seitenanzahl: 335 } };
+  const wertIn = (id: string) => norm(zeile(id)?.querySelector('[data-zeile-wert]')?.textContent ?? zeile(id)?.textContent);
+
+  async function waehle(quelle: 'dnb' | 'openlibrary') {
+    const suche = { suchen: vi.fn(async () => [MIT, OHNE]) };
+    const w = await zeige(suche);
+    await scanne(w.scanner);
+    const a = await screen.findByRole('dialog', { name: 'Gefundene Bücher' }, W);
+    await tippe(a.querySelector(`[data-treffer][data-quelle="${quelle}"]`)!);
+    await vi.waitFor(() => expect(blatt()).not.toBeNull(), W);
+    return w;
+  }
+
+  it('[REQ-062/AK-9] Treffer mit Preis und Format: beides im Blatt „Manueller Eintrag“ ausgefüllt', async () => {
+    await waehle('dnb');
+    await vi.waitFor(() => expect(wertIn('preis')).toContain('12,99 €'), W);
+    expect(wertIn('format')).toMatch(/Print/);
+    expect(wertIn('format')).toMatch(/Taschenbuch/);
+  });
+
+  it('[REQ-062/AK-9] danach „Hinzufügen“: Buch mit Preis und Format gespeichert', async () => {
+    const { repo } = await waehle('dnb');
+    await tippe(within(blatt()!).getByRole('button', { name: 'Hinzufügen' }));
+    await screen.findByRole('region', { name: 'Buchdetails' }, W);
+    expect(neue(repo)).toHaveLength(1);
+    expect(neue(repo)[0]).toMatchObject({ preisCent: 1299, format: 'print', unterformat: 'taschenbuch' });
+  });
+
+  it('[REQ-062/AK-9] stattdessen zweiter Treffer ohne Preis und Format: beides bleibt leer', async () => {
+    const { repo } = await waehle('openlibrary');
+    expect(feld('Titel').value).toBe('Ohne Preis');
+    expect(wertIn('preis')).not.toMatch(/\d/);
+    expect(wertIn('format')).not.toMatch(/Print|Taschenbuch|E-Book|Hörbuch/);
+    await tippe(within(blatt()!).getByRole('button', { name: 'Hinzufügen' }));
+    await screen.findByRole('region', { name: 'Buchdetails' }, W);
+    expect(neue(repo)).toHaveLength(1);
+    expect(neue(repo)[0].preisCent).toBeUndefined();
+    expect(neue(repo)[0].format).toBeUndefined();
+  });
+});

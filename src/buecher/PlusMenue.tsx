@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import iconBarcode from '@/assets/icons/icon-barcode.png';
 import iconHandEintragen from '@/assets/icons/icon-hand-eintragen.png';
 import Icon from '@/components/Icon';
-import { abdunklung, buchAnlegenFarbe, plusMenueSchatten, textformatAlleAnsehen } from '@/theme';
+import { abdunklung, buchAnlegenFarbe, plusMenueSchatten, textformatAlleAnsehen, textstufe, abstand } from '@/theme';
 
 interface Props {
   /** Oberkante des Menüs in px, relativ zum Kopfbereich. */
@@ -34,7 +34,7 @@ const menueStil = (oben: number, rechts: number): CSSProperties => ({
   boxSizing: 'border-box',
   width: '298px',
   maxWidth: `calc(100% - ${2 * rechts}px)`,
-  padding: '6px 0',
+  padding: `${abstand('s')} 0`,
   borderRadius: '20px',
   border: `1.5px solid ${buchAnlegenFarbe('menueRahmen')}`,
   backgroundColor: buchAnlegenFarbe('menueFlaeche'),
@@ -44,11 +44,11 @@ const menueStil = (oben: number, rechts: number): CSSProperties => ({
 const optionStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '16px',
+  gap: abstand('l'),
   boxSizing: 'border-box',
   width: '100%',
   margin: 0,
-  padding: '12px 16px',
+  padding: `${abstand('m')} ${abstand('l')}`,
   border: 'none',
   background: 'none',
   fontFamily: 'inherit',
@@ -71,12 +71,12 @@ const kachelStil: CSSProperties = {
 const texteStil: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '2px',
+  gap: abstand('xs'),
   minWidth: 0,
 };
 
 const titelStil: CSSProperties = {
-  fontSize: '17px',
+  ...textstufe('titel'),
   fontWeight: 600,
   lineHeight: 1.25,
   color: buchAnlegenFarbe('menueOptionTitel'),

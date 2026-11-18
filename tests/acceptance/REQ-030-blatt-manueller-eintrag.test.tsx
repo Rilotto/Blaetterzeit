@@ -299,7 +299,7 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
       ['tertiaer', 'Kamera-Icon', 'icon', () => coverFeld().querySelector<HTMLElement>('[data-icon]')!],
       ['tertiaer', 'Text „Cover hinzufügen“', 'text', () => textElement(coverFeld(), 'Cover hinzufügen')],
       ['ghost', 'Formular-Karte Fläche', 'hintergrund', karte],
-      ['ghostframe', 'Formular-Karte Rahmen', 'rahmen', karte],
+      // Formular-Karte: seit REQ-065 AK-11 weicher Schatten statt Rahmen (eigener Test unten).
       ['dunkelbraun', 'Beschriftung TITEL', 'text', () => beschriftung('Titel')],
       ['dunkelbraun', 'Beschriftung SEITEN', 'text', () => beschriftung('Seiten')],
       ['dunkelbraun', 'eingegebener Text', 'text', () => feld('Autor')],
@@ -325,6 +325,13 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
       } finally {
         rubriken[id].wert = alt;
       }
+    });
+
+    it('[REQ-030/AK-5] Formular-Karte durch weichen Schatten statt Rahmen abgesetzt (REQ-065 AK-11)', async () => {
+      await zeige();
+      await oeffneBlatt();
+      expect(['', 'none']).toContain(getComputedStyle(karte()).borderTopStyle);
+      expect(karte().style.boxShadow).toContain('var(--bz-schattenfarbe)');
     });
 
     it('[REQ-030/AK-5] Rahmen des Felds „Cover hinzufügen“ gestrichelt; kein Element des Blatts hat ein Farbliteral im Style', async () => {

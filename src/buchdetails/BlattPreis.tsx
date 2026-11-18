@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { preisPruefen, preisText } from '@/domain/ausgabe';
 import BlattUnten, { blattEingabeStil, blattHinweisStil, sichernStil } from './BlattUnten';
+import { abstand } from '@/theme';
 
 interface Props {
   /** Gespeicherter Preis in Cent; ohne Wert ist das Feld mit „0,00 €“ vorbefüllt (REQ-059, AK-1/AK-3). */
@@ -43,7 +44,7 @@ export default function BlattPreis({ preisCent, onSichern, onSchliessen }: Props
         onKeyDown={(e) => {
           if (e.key === 'Enter') sichern();
         }}
-        style={{ ...blattEingabeStil, marginTop: '14px' }}
+        style={{ ...blattEingabeStil, marginTop: abstand('m') }}
       />
       {hinweis !== null ? (
         <p role="alert" data-hinweis="" style={blattHinweisStil}>

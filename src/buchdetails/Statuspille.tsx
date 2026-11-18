@@ -2,7 +2,7 @@ import { useRef, useState, type CSSProperties } from 'react';
 import iconAufAb from '@/assets/icons/icon-auf-ab.png';
 import Icon from '@/components/Icon';
 import { LESESTATUS, type LesestatusId } from '@/domain/buch';
-import { fortschrittFarbe } from '@/theme';
+import { fortschrittFarbe, textstufe, pillenhoehePx, abstand } from '@/theme';
 import { eintragStil, hintergrundStil, menueFlaecheStil } from './Auswahlmenue';
 import { statusIcon } from './statusIcons';
 
@@ -16,7 +16,7 @@ interface Props {
 // Orientierungswerte, kein Akzeptanzkriterium. Höhe bewusst großzügiger (40 px), damit Unterlängen
 // (g, j, p …) sicher Platz haben.
 const PILLE_BREITE = 202;
-const PILLE_HOEHE = 40;
+const PILLE_HOEHE = pillenhoehePx;
 /** Zeilenhöhe des Pillentexts: deutlich über der Schriftgröße, damit Unterlängen nicht abgeschnitten werden. */
 const TEXT_ZEILENHOEHE = 24;
 const MENUE_ABSTAND = 8;
@@ -40,19 +40,19 @@ const pilleStil: CSSProperties = {
   gridTemplateColumns: '20px 1fr 20px',
   alignItems: 'center',
   justifyItems: 'center',
-  columnGap: '8px',
+  columnGap: abstand('s'),
   boxSizing: 'border-box',
   width: `${PILLE_BREITE}px`,
   maxWidth: '100%',
   height: `${PILLE_HOEHE}px`,
   margin: '0 auto',
-  padding: '0 14px',
+  padding: `0 ${abstand('m')}`,
   border: 'none',
   borderRadius: `${PILLE_HOEHE / 2}px`,
   backgroundColor: fortschrittFarbe('statuspilleFlaeche'),
   color: fortschrittFarbe('statuspilleSchrift'),
   fontFamily: 'inherit',
-  fontSize: '17px',
+  ...textstufe('text'),
   fontWeight: 600,
   lineHeight: `${TEXT_ZEILENHOEHE}px`,
   cursor: 'pointer',

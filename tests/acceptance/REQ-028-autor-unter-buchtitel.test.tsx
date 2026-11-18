@@ -12,7 +12,7 @@ import type { ComponentType, CSSProperties } from 'react';
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Buch } from '@/domain/buch';
 import type { BookRepository, ImageStore } from '@/storage';
-import { farbrubriken, farbVariablen } from '@/theme';
+import { farbrubriken, farbVariablen, typografieVariablen } from '@/theme';
 
 // ----------------------------------------------------------------------------- gemeinsamer Aufbau Teil B
 // Speicher: Standard-Speicher der App (IndexedDB, hier fake-indexeddb). „Neustart“ = Module neu laden,
@@ -230,10 +230,22 @@ describe('REQ-028 Autor unter dem Buchtitel', () => {
   });
 
   describe('AK-4 Kleinere Schrift als der Titel', () => {
+    /** Wirksame Schriftgröße in px: nächste Inline-Angabe (Element oder Vorfahr), Variablen über die zentrale Definition aufgelöst. */
+    const schriftPx = (el: HTMLElement): number => {
+      const vars = typografieVariablen();
+      for (let n: HTMLElement | null = el; n; n = n.parentElement) {
+        const f = n.style.fontSize;
+        if (!f) continue;
+        const m = /^var\((--[\w-]+)\)$/.exec(f.trim());
+        return parseFloat(m ? vars[m[1]] : f);
+      }
+      return parseFloat(getComputedStyle(el).fontSize);
+    };
     it('[REQ-028/AK-4] Schriftgröße Autor < Schriftgröße Titel', async () => {
       await details(await starte(), buchB({ autor: 'Michael Ende' }));
-      const a = parseFloat(getComputedStyle(autor()!).fontSize);
-      const t = parseFloat(getComputedStyle(titel()).fontSize);
+      // Angepasst Sprint 06 Teil C (REQ-065): Größen sind Stufen-Variablen; jsdom löst var() nicht auf.
+      const a = schriftPx(autor()!);
+      const t = schriftPx(titel());
       expect(a).toBeGreaterThan(0);
       expect(a).toBeLessThan(t);
     });

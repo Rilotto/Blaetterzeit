@@ -19,7 +19,7 @@ import { datumText, type Formatangaben } from '@/domain/ausgabe';
 import type { Buch } from '@/domain/buch';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
 import type { BookRepository, ImageStore } from '@/storage';
-import { buchAnlegenFarbe, detailsFarbe } from '@/theme';
+import { buchAnlegenFarbe, detailsFarbe, textstufe, bildschirmrandPx, pillenhoehe, kartenSchatten, abstand } from '@/theme';
 import {
   buchAusEingaben,
   eingabenAusVorbelegung,
@@ -56,7 +56,7 @@ type Schritt = { art: 'blatt' } | { art: 'kamera' } | { art: 'zuschnitt'; bild: 
 
 // Maße nach REF-buch-anlegen-02-manueller-eintrag.png (1080 px ≈ 412 dp, Faktor ≈ 2,6).
 // Orientierungswerte, kein Akzeptanzkriterium.
-const RAND = 22;
+const RAND = bildschirmrandPx;
 const COVER_BREITE = 176;
 const COVER_HOEHE = 256;
 /** Ab dieser Zugstrecke nach unten schließt das Blatt (REQ-030, AK-11). */
@@ -79,7 +79,7 @@ const innenStil: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'stretch',
-  paddingBottom: '24px',
+  paddingBottom: abstand('xl'),
 };
 
 const griffBereichStil: CSSProperties = {
@@ -106,12 +106,12 @@ const kopfStil: CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   height: '44px',
-  margin: `4px ${RAND}px 0`,
+  margin: `${abstand('xs')} ${RAND}px 0`,
 };
 
 const ueberschriftStil: CSSProperties = {
   margin: 0,
-  fontSize: '20px',
+  ...textstufe('abschnitt'),
   fontWeight: 700,
   lineHeight: 1.2,
   color: buchAnlegenFarbe('blattUeberschrift'),
@@ -127,8 +127,8 @@ const schliessenStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '34px',
-  height: '34px',
+  width: pillenhoehe,
+  height: pillenhoehe,
   margin: 0,
   padding: 0,
   borderRadius: '50%',
@@ -141,7 +141,7 @@ const schliessenStil: CSSProperties = {
 const coverBereichStil: CSSProperties = {
   position: 'relative',
   alignSelf: 'center',
-  marginTop: '12px',
+  marginTop: abstand('m'),
 };
 
 const coverFeldStil = (mitBild: boolean): CSSProperties => ({
@@ -150,7 +150,7 @@ const coverFeldStil = (mitBild: boolean): CSSProperties => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '12px',
+  gap: abstand('m'),
   width: `${COVER_BREITE}px`,
   height: `${COVER_HOEHE}px`,
   margin: 0,
@@ -160,7 +160,7 @@ const coverFeldStil = (mitBild: boolean): CSSProperties => ({
   border: mitBild ? 'none' : `2px dashed ${buchAnlegenFarbe('coverFeldRahmen')}`,
   backgroundColor: buchAnlegenFarbe('coverFeldFlaeche'),
   fontFamily: 'inherit',
-  fontSize: '17px',
+  ...textstufe('text'),
   fontWeight: 600,
   color: buchAnlegenFarbe('coverFeldInhalt'),
   cursor: 'pointer',
@@ -176,33 +176,33 @@ const coverBildStil: CSSProperties = {
 
 const karteStil: CSSProperties = {
   boxSizing: 'border-box',
-  margin: `24px ${RAND}px 0`,
-  padding: '0 18px',
+  margin: `${abstand('xl')} ${RAND}px 0`,
+  padding: `0 ${abstand('l')}`,
   borderRadius: '20px',
-  border: `1.5px solid ${buchAnlegenFarbe('formularRahmen')}`,
+  // Weicher, warmer Schatten statt hartem Rahmen (REQ-065 AK-11).
+  border: 'none',
+  boxShadow: kartenSchatten,
   backgroundColor: buchAnlegenFarbe('formularFlaeche'),
 };
 
 const zeileStil = (letzte: boolean): CSSProperties => ({
-  padding: '14px 0',
+  padding: `${abstand('m')} 0`,
   borderBottom: letzte ? 'none' : `1px solid ${buchAnlegenFarbe('trennlinie')}`,
 });
 
 const feldStil = (fehler: boolean): CSSProperties => ({
   display: 'block',
   minWidth: 0,
-  margin: '0 -8px',
-  padding: '0 8px',
+  margin: `0 calc(-1 * ${abstand('s')})`,
+  padding: `0 ${abstand('s')}`,
   borderRadius: '10px',
   outline: fehler ? `2px solid ${buchAnlegenFarbe('fehler')}` : 'none',
 });
 
 const beschriftungStil = (fehler: boolean): CSSProperties => ({
   display: 'block',
-  fontSize: '12.5px',
+  ...textstufe('label'),
   fontWeight: 500,
-  letterSpacing: '0.06em',
-  textTransform: 'uppercase',
   lineHeight: 1.3,
   color: fehler ? buchAnlegenFarbe('fehler') : buchAnlegenFarbe('feldBeschriftung'),
 });
@@ -214,7 +214,7 @@ const eingabeStil = (fehler: boolean): CSSProperties =>
     display: 'block',
     boxSizing: 'border-box',
     width: '100%',
-    margin: '6px 0 0',
+    margin: `${abstand('s')} 0 0`,
     padding: 0,
     border: '2px solid transparent',
     borderWidth: '0 0 2px',
@@ -222,14 +222,14 @@ const eingabeStil = (fehler: boolean): CSSProperties =>
     outline: 'none',
     background: 'none',
     fontFamily: 'inherit',
-    fontSize: '18px',
+    ...textstufe('text'),
     lineHeight: 1.35,
     color: fehler ? buchAnlegenFarbe('fehler') : buchAnlegenFarbe('eingabe'),
   }) as CSSProperties;
 
 const hinweisStil: CSSProperties = {
-  margin: '6px 0 0',
-  fontSize: '13px',
+  margin: `${abstand('s')} 0 0`,
+  ...textstufe('meta'),
   lineHeight: 1.3,
   color: buchAnlegenFarbe('fehler'),
 };
@@ -246,14 +246,14 @@ const seitenEingabeStil = (fehler: boolean): CSSProperties =>
     outline: 'none',
     background: 'none',
     fontFamily: 'inherit',
-    fontSize: '16px',
+    ...textstufe('text'),
     textAlign: 'right',
     color: fehler ? buchAnlegenFarbe('fehler') : detailsFarbe('zeileWert'),
   }) as CSSProperties;
 
 const ausgabeUeberschriftStil: CSSProperties = {
   margin: 0,
-  fontSize: '22px',
+  ...textstufe('abschnitt'),
   fontWeight: 600,
   color: detailsFarbe('ueberschrift'),
 };
@@ -261,13 +261,13 @@ const ausgabeUeberschriftStil: CSSProperties = {
 // Pille „Hinzufügen“: immer aktiv, volles Primär (REQ-030, AK-9), wie die Pille „Sichern“.
 const hinzufuegenStil: CSSProperties = {
   boxSizing: 'border-box',
-  height: '56px',
-  margin: `28px ${RAND + 4}px 0`,
-  padding: '0 24px',
+  height: pillenhoehe,
+  margin: `${abstand('xl')} ${RAND}px 0`,
+  padding: `0 ${abstand('xl')}`,
   border: 'none',
   borderRadius: '9999px',
   fontFamily: 'inherit',
-  fontSize: '18px',
+  ...textstufe('text'),
   fontWeight: 600,
   backgroundColor: buchAnlegenFarbe('hinzufuegenFlaeche'),
   color: buchAnlegenFarbe('hinzufuegenSchrift'),

@@ -29,7 +29,7 @@ import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/
 import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
 import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
 import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore } from '@/storage';
-import { buchdetailsFarbe, fortschrittFarbe } from '@/theme';
+import { buchdetailsFarbe, fortschrittFarbe, textstufe, abstand, bildschirmrand } from '@/theme';
 
 export interface BuchDetailsProps {
   buchId: string;
@@ -58,7 +58,7 @@ type Schritt =
 
 const ansichtStil: CSSProperties = {
   position: 'relative',
-  paddingBottom: '24px',
+  paddingBottom: abstand('xl'),
 };
 
 // Kopfzeile (8 + 40) + Abstand (10) + Buch + 8 px: Oberkante des Auswahlmenüs (Referenzbild: direkt unter dem Buch).
@@ -66,8 +66,8 @@ const MENUE_OBEN = 8 + KOPF_SCHALTFLAECHE + 10 + BUCH_HOEHE + 8;
 
 // Buchtitel unter der Buchdarstellung (REQ-018): mittig, höchstens zwei Zeilen mit „…“.
 const titelStil: CSSProperties = {
-  margin: `24px ${RAND}px 0`,
-  fontSize: '22px',
+  margin: `${abstand('xl')} ${RAND}px 0`,
+  ...textstufe('titel'),
   fontWeight: 700,
   lineHeight: 1.25,
   textAlign: 'center',
@@ -81,8 +81,9 @@ const titelStil: CSSProperties = {
 
 // Autor unter dem Titel (REQ-028): eine Zeile mit „…“, kleiner als der Titel, Tertiär.
 const autorStil: CSSProperties = {
-  margin: `4px ${RAND}px 0`,
-  fontSize: '17px',
+  margin: `${abstand('xs')} ${RAND}px 0`,
+  ...textstufe('meta'),
+  fontStyle: 'italic',
   fontWeight: 400,
   lineHeight: 1.3,
   textAlign: 'center',
@@ -95,7 +96,7 @@ const autorStil: CSSProperties = {
 const pillenBereichStil: CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
-  margin: `20px ${RAND}px 0`,
+  margin: `${bildschirmrand} ${RAND}px 0`,
 };
 
 /** Bilder aller Bereiche eines Buches aus dem Bildspeicher. */

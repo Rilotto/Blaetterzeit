@@ -122,12 +122,14 @@ describe('REQ-064 „Hinzugefügt“ ändern', () => {
     expect(feld()!.value).toBe(datum);
     await sichern();
     await vi.waitFor(() => expect(feld()).toBeNull(), W);
-    // Anzeigeformat der Zeile: REQ-056 zeigt „Monat Jahr“ (Annahme des Entwicklers „Feb. 2025“) – beides akzeptiert.
-    await vi.waitFor(() => expect(['Feb. 2025', '01.02.2025']).toContain(wert(d)), W);
+    // Fassung 2026-11-18 (Sprint 06 Teil C): Zeile zeigt Monat und Jahr nach REQ-056 („Feb. 2025“), das Blatt TT.MM.JJJJ.
+    await vi.waitFor(() => expect(wert(d)).toBe('Feb. 2025'), W);
     const b = await gespeichert(id);
     expect(tag(b?.eingetragenAm)).toBe(datum);
     const d2 = await zeige(await starte(), id);
-    expect(['Feb. 2025', '01.02.2025']).toContain(wert(d2));
+    expect(wert(d2)).toBe('Feb. 2025');
+    await oeffne(d2);
+    expect(feld()!.value).toBe('01.02.2025');
   });
 
   it('[REQ-064/AK-2] Grenzfall: der heutige Tag ist gültig', async () => {

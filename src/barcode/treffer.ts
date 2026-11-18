@@ -1,5 +1,6 @@
 // Treffer der ISBN-Suche (REQ-062) und Parser der beiden Quellen. Ohne Netz, damit einzeln testbar.
 import type { Vorbelegung } from '@/buchanlegen/eingabe';
+import type { FormatId, UnterformatId } from '@/domain/ausgabe';
 import { isbnNormalisieren } from './isbn';
 
 export type QuelleId = 'dnb' | 'openlibrary';
@@ -44,6 +45,36 @@ export function seitenAus(umfang: string | undefined): number | undefined {
   const m = umfang?.match(/(\d+)\s*(?:Seiten|S\.|S\b|p\.|pages)/i);
   const n = m ? Number(m[1]) : NaN;
   return Number.isInteger(n) && n > 0 ? n : undefined;
+}
+
+/**
+ * Preis in Cent aus einer Preisangabe der Quelle, bevorzugt Euro für Deutschland
+ * (DNB 020 $c z. B. „kart. : EUR 12.00 (DE), EUR 12.40 (AT)“, „Gb. : 22,00 EUR“). Ohne Euro-Preis: undefined.
+ */
+export function preisCentAus(angabe: string | undefined): number | undefined {
+  if (!angabe) return undefined;
+  const preise: { cent: number; de: boolean }[] = [];
+  const muster = /(?:EUR|€)\s*(\d{1,4})(?:[.,](\d{1,2}))?\s*(\([A-Z]{1,2}\))?|(\d{1,4})(?:[.,](\d{1,2}))?\s*(?:EUR|€)\s*(\([A-Z]{1,2}\))?/g;
+  for (const m of angabe.matchAll(muster)) {
+    const euro = m[1] ?? m[4];
+    const cent = m[2] ?? m[5] ?? '0';
+    const land = m[3] ?? m[6];
+    if (euro === undefined) continue;
+    preise.push({ cent: Number(euro) * 100 + Number(cent.padEnd(2, '0')), de: !land || land === '(DE)' });
+  }
+  return (preise.find((p) => p.de) ?? preise[0])?.cent;
+}
+
+/** Format und Unterformat aus einer Formatangabe der Quelle (DNB-Einbandart, Open-Library-„physical_format“). */
+export function formatAus(angabe: string | undefined): { format?: FormatId; unterformat?: UnterformatId } {
+  const t = angabe?.toLowerCase() ?? '';
+  if (!t) return {};
+  if (/h(ö|oe)rbuch|audio|\bcd\b|mp3|h(ö|oe)rspiel/.test(t)) return { format: 'hoerbuch' };
+  if (/e-?book|epub|online-ressource|kindle|\bpdf\b/.test(t)) return { format: 'ebook' };
+  if (/mass market|kleinformat/.test(t)) return { format: 'print', unterformat: 'kleinformat' };
+  if (/hardcover|hardback|festeinband|\bgeb\.|gebunden|\bgb\.|\bpp\.|pappband|leinen|\bln\./.test(t)) return { format: 'print', unterformat: 'hardcover' };
+  if (/paperback|taschenbuch|softcover|broschiert|broschur|kartoniert|flexibler einband|\bkart\.|\bkt\.|\bpb\.|\bbr\./.test(t)) return { format: 'print', unterformat: 'taschenbuch' };
+  return {};
 }
 
 const ohneLeere = (v: Vorbelegung): Vorbelegung =>
@@ -107,9 +138,14 @@ export function dnbTrefferLesen(xml: string, gesuchteIsbn: string): Treffer[] {
     const seiten = seitenAus(unterfeld(erstes('300'), 'a'));
     const isbns = f.filter((x) => x.tag === '020').flatMap((x) => x.unterfelder.filter(([c]) => c === 'a' || c === '9').map(([, w]) => w));
     const isbn = isbns.map((w) => isbnNormalisieren(w.split(/\s/)[0] ?? '')).find((w) => w !== null) ?? gesuchteIsbn;
+    // Preis und Einbandart (REQ-062 AK-9): 020 $c (Bezugsbedingungen) bzw. 020 $q; Medientyp aus 337/338.
+    const bezug = f.filter((x) => x.tag === '020').flatMap((x) => x.unterfelder.filter(([c]) => c === 'c' || c === 'q').map(([, w]) => w)).join(' ');
+    const medium = f.filter((x) => x.tag === '337' || x.tag === '338' || x.tag === '250').map((x) => unterfeld(x, 'a') ?? '').join(' ');
+    const preisCent = preisCentAus(bezug);
+    const fmt = formatAus(bezug).format ? formatAus(bezug) : formatAus(medium);
     const t: Treffer = {
       quelle: 'dnb',
-      angaben: ohneLeere({ titel, autor, verlag, erscheinungsjahr: jahr, seitenanzahl: seiten, isbn }),
+      angaben: ohneLeere({ titel, autor, verlag, erscheinungsjahr: jahr, seitenanzahl: seiten, isbn, ...fmt, preisCent }),
       coverUrl: dnbCoverUrl(gesuchteIsbn),
     };
     if (brauchbar(t)) ergebnis.push(t);
@@ -131,6 +167,8 @@ interface OlEintrag {
   number_of_pages?: unknown;
   publishers?: unknown;
   publish_date?: unknown;
+  physical_format?: unknown;
+  price?: unknown;
   identifiers?: { isbn_13?: unknown; isbn_10?: unknown };
   cover?: { large?: unknown; medium?: unknown; small?: unknown };
 }
@@ -179,6 +217,9 @@ export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Tre
         erscheinungsjahr: jahrAus(zeichen(eintrag.publish_date)),
         seitenanzahl: seiten,
         isbn,
+        // Preis und Format (REQ-062 AK-9), nur falls die Quelle sie liefert.
+        ...formatAus(zeichen(eintrag.physical_format)),
+        preisCent: preisCentAus(zeichen(eintrag.price)),
       }),
       ...(cover && /^https:\/\/covers\.openlibrary\.org\//.test(cover) ? { coverUrl: cover } : {}),
     };

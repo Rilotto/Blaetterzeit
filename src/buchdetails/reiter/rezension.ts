@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { SymbolName } from '@/components/Symbolbild';
 import type { KriteriumId } from '@/domain/bewertung';
-import { rezensionFarbe } from '@/theme';
+import { rezensionFarbe, textstufe, pillenhoehe, kartenSchatten, abstand } from '@/theme';
 import { RAND } from '../masse';
 
 /** Die vier Reiter der Buchdetails in fester Reihenfolge (REQ-043, AK-2). */
@@ -47,15 +47,13 @@ export const abschnittKopfStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  margin: `32px ${RAND}px 14px`,
+  margin: `calc(${abstand('xl')} + ${abstand('s')}) ${RAND}px ${abstand('m')}`,
 };
 
 export const abschnittUeberschriftStil: CSSProperties = {
   margin: 0,
-  fontSize: '15px',
+  ...textstufe('label'),
   fontWeight: 700,
-  letterSpacing: '0.04em',
-  textTransform: 'uppercase',
   color: rezensionFarbe('abschnittsueberschrift'),
 };
 
@@ -63,9 +61,9 @@ export const abschnittSchaltflaecheStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '40px',
-  height: '40px',
-  margin: '-8px -8px -8px 0',
+  width: pillenhoehe,
+  height: pillenhoehe,
+  margin: `calc(-1 * ${abstand('s')}) calc(-1 * ${abstand('s')}) calc(-1 * ${abstand('s')}) 0`,
   padding: 0,
   border: 'none',
   background: 'none',
@@ -76,9 +74,11 @@ export const abschnittSchaltflaecheStil: CSSProperties = {
 export const karteStil: CSSProperties = {
   boxSizing: 'border-box',
   margin: `0 ${RAND}px`,
-  padding: '4px 14px 4px 18px',
+  padding: `${abstand('xs')} ${abstand('m')} ${abstand('xs')} ${abstand('l')}`,
   borderRadius: '24px',
-  border: `2px solid ${rezensionFarbe('karteRahmen')}`,
+  // Weicher, warmer Schatten statt hartem Rahmen (REQ-065 AK-11).
+  border: 'none',
+  boxShadow: kartenSchatten,
   backgroundColor: rezensionFarbe('karteFlaeche'),
 };
 

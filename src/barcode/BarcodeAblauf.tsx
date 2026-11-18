@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Vorbelegung } from '@/buchanlegen/eingabe';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
-import { barcodeFarbe } from '@/theme';
+import { barcodeFarbe, abstand } from '@/theme';
 import Auswahlfenster from './Auswahlfenster';
 import ScanBildschirm from './ScanBildschirm';
 import type { BarcodeScanner } from './scanner';
@@ -27,7 +27,7 @@ const sucheStil: CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '0 32px',
+  padding: `0 calc(${abstand('xl')} + ${abstand('s')})`,
   textAlign: 'center',
   backgroundColor: barcodeFarbe('auswahlFlaeche'),
   color: barcodeFarbe('auswahlText'),

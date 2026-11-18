@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react';
 import type { MenuePunktId } from '@/navigation/menu';
 import BuecherAnsicht from './BuecherAnsicht';
+import ProfilAnsicht from './ProfilAnsicht';
 import UnderConstruction from './UnderConstruction';
 
 /**
@@ -12,5 +13,5 @@ export const ansichten: Record<MenuePunktId, ComponentType> = {
   buecher: BuecherAnsicht,
   bibliothek: UnderConstruction,
   statistik: UnderConstruction,
-  profil: UnderConstruction,
+  profil: ProfilAnsicht,
 };

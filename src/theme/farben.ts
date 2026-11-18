@@ -69,6 +69,102 @@ export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
   dialoge: { name: 'Dialoge', wert: '#2F8F8A' },
 };
 
+/** Farbdesigns (REQ-068): Jedes Design legt einen Wert für jede Farbrubrik fest. */
+export type FarbdesignId = 'klassisch' | 'salbei' | 'nachtlektuere';
+
+export interface Farbdesign {
+  /** Anzeigename im Fenster „Design“. */
+  name: string;
+  /** Wert je Farbrubrik. */
+  werte: Record<FarbrubrikId, string>;
+  /** Dunkles Design: Schatten und Abdunklung werden aus „Hintergrund“ statt „Dunkelbraun“ abgeleitet. */
+  dunkel: boolean;
+}
+
+/**
+ * Werte von „Klassisch“ = die Standardwerte aus `farbrubriken`, LIVE über Getter: Eine Änderung der
+ * Rubriken („Farben auf Zuruf“, auch zur Laufzeit) wirkt sofort im Design „Klassisch“.
+ */
+const klassischWerte = Object.defineProperties(
+  {} as Record<FarbrubrikId, string>,
+  Object.fromEntries(
+    (Object.keys(farbrubriken) as FarbrubrikId[]).map((id) => [id, { enumerable: true, get: () => farbrubriken[id].wert }]),
+  ),
+);
+
+/**
+ * Zentrale Definition der Farbdesigns in fester Reihenfolge (REQ-068). Neue Designs nur auf Zuruf des CEO.
+ * „Klassisch“ = die Standardwerte aus `farbrubriken`. Bei „Salbei“ und „Nachtlektüre“ sind Hintergrund,
+ * Primär, Sekundär, Tertiär und Dunkelbraun vom CEO vorgegeben, die übrigen Rubriken abgeleitet
+ * (Nachtlektüre: Kriterienfarben aufgehellt, damit sie auf dunklem Hintergrund lesbar bleiben).
+ */
+export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
+  klassisch: { name: 'Klassisch', dunkel: false, werte: klassischWerte },
+  salbei: {
+    name: 'Salbei',
+    dunkel: false,
+    werte: {
+      ...klassischWerte,
+      hintergrund: '#F3F5EE',
+      primaer: '#4E7D63',
+      sekundaer: '#C9D6C3',
+      tertiaer: '#5E6B5A',
+      dunkelbraun: '#2C3A2F',
+      ghost: '#E6EBDF',
+      ghostframe: '#D3DCCB',
+      weltenbau: '#3F8A5C',
+      nebenfiguren: '#5E6B5A',
+    },
+  },
+  nachtlektuere: {
+    name: 'Nachtlektüre',
+    dunkel: true,
+    werte: {
+      hintergrund: '#2B2420',
+      primaer: '#D9A21B',
+      sekundaer: '#5A4A3E',
+      tertiaer: '#B8A58C',
+      dunkelbraun: '#F1E9DA',
+      ghost: '#3A302A',
+      ghostframe: '#4D4037',
+      flammerot: '#D2573E',
+      flammeorange: '#EBA25A',
+      sterne: '#E8B83A',
+      tempo: '#8E9FDC',
+      weltenbau: '#7DB394',
+      spice: '#E26C5C',
+      spannung: '#AC8CCB',
+      action: '#E9A256',
+      hauptfiguren: '#CF9258',
+      nebenfiguren: '#B8A58C',
+      plottwist: '#CC77A8',
+      traenen: '#74AADF',
+      romantik: '#E58DA9',
+      humor: '#B6C863',
+      grusel: '#9AA5B0',
+      dialoge: '#5CBFB8',
+    },
+  },
+};
+
+/** Reihenfolge der Farbdesigns in der Liste (REQ-068 AK-1). */
+export const farbdesignReihenfolge: readonly FarbdesignId[] = ['klassisch', 'salbei', 'nachtlektuere'];
+
+/** Farbdesign ohne Nutzerwahl (REQ-068 AK-2). */
+export const standardFarbdesign: FarbdesignId = 'klassisch';
+
+export const istFarbdesignId = (wert: unknown): wert is FarbdesignId =>
+  typeof wert === 'string' && (farbdesignReihenfolge as readonly string[]).includes(wert);
+
+/** Farbrubriken der fünf Farbkreise je Design (REQ-068). */
+export const designVorschauRubriken: readonly FarbrubrikId[] = ['hintergrund', 'primaer', 'sekundaer', 'tertiaer', 'dunkelbraun'];
+
+/**
+ * Warme Schattenfarbe (REQ-065 AK-11), aus den Rubriken des aktiven Designs abgeleitet
+ * (CSS-Variable `--bz-schattenfarbe`, gesetzt in farbVariablen).
+ */
+export const schattenFarbe = 'var(--bz-schattenfarbe)';
+
 export type NavigationsFarbrolle =
   | 'navigationshintergrund'
   | 'hervorhebungsfarbe'
@@ -410,16 +506,16 @@ export const buchAnlegenFarbe = (rolle: BuchAnlegenFarbrolle): string => rubrikF
  * Abdunklung hinter Menüs (Menü „Buch hinzufügen“, REQ-029; Vorbild Menü „Aktuelle Seite“, REQ-024).
  * Aus „Dunkelbraun“ abgeleitet, damit kein eigener Farbwert entsteht. Stärke prüft der CEO im Prototyp.
  */
-export const abdunklung = `color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 28%, transparent)`;
+export const abdunklung = `color-mix(in srgb, ${schattenFarbe} 28%, transparent)`;
 
 /** Schatten des Menüs „Buch hinzufügen“ (Referenzbild), aus „Dunkelbraun“ abgeleitet. */
-export const plusMenueSchatten = `0 10px 30px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 18%, transparent)`;
+export const plusMenueSchatten = `0 10px 30px color-mix(in srgb, ${schattenFarbe} 18%, transparent)`;
 
 /** Weicher Schatten der Coverfläche in den Buchdetails (Referenzbild), aus „Dunkelbraun“ abgeleitet. */
-export const buchdetailsCoverSchatten = `0 10px 24px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 22%, transparent)`;
+export const buchdetailsCoverSchatten = `0 10px 24px color-mix(in srgb, ${schattenFarbe} 22%, transparent)`;
 
 /** Schatten des Auswahlmenüs (REQ-015, Referenzbild), aus „Dunkelbraun“ abgeleitet. */
-export const auswahlmenueSchatten = `0 8px 28px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 20%, transparent)`;
+export const auswahlmenueSchatten = `0 8px 28px color-mix(in srgb, ${schattenFarbe} 20%, transparent)`;
 
 /** Leicht durchscheinende Fläche des Auswahlmenüs (Referenzbild: Inhalt darunter schimmert durch). */
 export const auswahlmenueFlaeche = `color-mix(in srgb, ${rubrikFarbe(buchdetailsFarbrollen.auswahlmenueFlaeche)} 92%, transparent)`;
@@ -428,14 +524,14 @@ export const auswahlmenueFlaeche = `color-mix(in srgb, ${rubrikFarbe(buchdetails
  * Dezenter Schatten der Coverflächen (REQ-009). Die Schattenfarbe ist aus der
  * Rubrik „Dunkelbraun“ abgeleitet (abgeschwächt), damit kein eigener Farbwert entsteht.
  */
-export const coverSchatten = `0 2px 6px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 25%, transparent)`;
+export const coverSchatten = `0 2px 6px color-mix(in srgb, ${schattenFarbe} 25%, transparent)`;
 
 /**
  * Setzt alle Farb-CSS-Variablen auf ein Element (z. B. `<html>`), damit auch
  * Bereiche außerhalb der App-Wurzel (html/body) die Farbrubriken nutzen können.
  */
-export function farbVariablenAnwenden(ziel: HTMLElement): void {
-  for (const [name, wert] of Object.entries(farbVariablen())) {
+export function farbVariablenAnwenden(ziel: HTMLElement, design: FarbdesignId = standardFarbdesign): void {
+  for (const [name, wert] of Object.entries(farbVariablen(design))) {
     ziel.style.setProperty(name, wert);
   }
 }
@@ -450,10 +546,11 @@ export const navFarbe = (rolle: NavigationsFarbrolle): string => `var(${navRolle
  * Alle Farb-CSS-Variablen: die Rubriken mit ihren Werten und die
  * Navigations-Farbrollen als Verweis auf ihre Rubrik.
  */
-export function farbVariablen(): Record<string, string> {
+export function farbVariablen(design: FarbdesignId = standardFarbdesign): Record<string, string> {
   const vars: Record<string, string> = {};
-  for (const [id, rubrik] of Object.entries(farbrubriken) as [FarbrubrikId, Farbrubrik][]) {
-    vars[rubrikVariable(id)] = rubrik.wert;
+  const { werte, dunkel } = farbdesigns[design];
+  for (const id of Object.keys(farbrubriken) as FarbrubrikId[]) {
+    vars[rubrikVariable(id)] = werte[id];
   }
   for (const [rolle, rubrik] of Object.entries(navigationsFarbrollen) as [
     NavigationsFarbrolle,
@@ -461,6 +558,10 @@ export function farbVariablen(): Record<string, string> {
   ][]) {
     vars[navRolleVariable(rolle)] = `var(${rubrikVariable(rubrik)})`;
   }
+  // Warme Schatten: hell aus „Dunkelbraun“, dunkel aus abgedunkeltem „Hintergrund“ (sonst leuchtende Schatten).
+  vars['--bz-schattenfarbe'] = dunkel
+    ? `color-mix(in srgb, var(${rubrikVariable('hintergrund')}) 35%, black)`
+    : `var(${rubrikVariable('dunkelbraun')})`;
   return vars;
 }
 
@@ -558,7 +659,7 @@ export const kriteriumBlass = (id: KriteriumFarbe): string =>
   `color-mix(in srgb, ${kriteriumVoll(id)} ${BLASS_ANTEIL}%, ${rubrikFarbe('hintergrund')})`;
 
 /** Leichter Schatten der aktiven Reiterpille (REQ-043, Referenzbild), aus „Dunkelbraun“ abgeleitet. */
-export const reiterPilleSchatten = `0 2px 6px color-mix(in srgb, ${rubrikFarbe('dunkelbraun')} 18%, transparent)`;
+export const reiterPilleSchatten = `0 2px 6px color-mix(in srgb, ${schattenFarbe} 18%, transparent)`;
 
 /** Farbrollen des Reiters „Details“ (REQ-051 bis REQ-056) und des Fensters „Format“ (REQ-058), nach REF-details-01 bis -03. */
 export type DetailsFarbrolle =
@@ -695,3 +796,6 @@ export const barcodeFarbrollen: Record<BarcodeFarbrolle, FarbrubrikId> = {
 
 /** CSS-Ausdruck einer Farbrolle „Barcode scannen“. */
 export const barcodeFarbe = (rolle: BarcodeFarbrolle): string => rubrikFarbe(barcodeFarbrollen[rolle]);
+
+/** Weicher, warmer Schatten von Karten statt eines harten Rahmens (REQ-065 AK-11). */
+export const kartenSchatten = `0 1px 2px color-mix(in srgb, ${schattenFarbe} 10%, transparent), 0 6px 18px color-mix(in srgb, ${schattenFarbe} 12%, transparent)`;

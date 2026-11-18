@@ -3,7 +3,7 @@ import iconTaschenlampeAus from '@/assets/icons/icon-taschenlampe-aus.png';
 import iconTaschenlampe from '@/assets/icons/icon-taschenlampe.png';
 import iconX from '@/assets/icons/icon-x.png';
 import Icon from '@/components/Icon';
-import { barcodeFarbe } from '@/theme';
+import { barcodeFarbe, textstufe, zeilenabstand, abstand } from '@/theme';
 import { fehlerText, type BarcodeScanner } from './scanner';
 
 interface Props {
@@ -42,7 +42,7 @@ const kopfStil: CSSProperties = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '14px 18px 0',
+  padding: `${abstand('m')} ${abstand('l')} 0`,
 };
 
 const rundStil = (flaeche: string, groesse: number): CSSProperties => ({
@@ -69,7 +69,7 @@ const mitteStil: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '0 34px',
+  padding: `0 calc(${abstand('xl')} + ${abstand('s')})`,
   textAlign: 'center',
 };
 
@@ -83,17 +83,17 @@ const rahmenStil: CSSProperties = {
 };
 
 const titelStil: CSSProperties = {
-  margin: '22px 0 0',
-  fontSize: '22px',
+  margin: `${abstand('xl')} 0 0`,
+  ...textstufe('abschnitt'),
   fontWeight: 700,
   lineHeight: 1.25,
   color: barcodeFarbe('scanText'),
 };
 
 const hinweisStil: CSSProperties = {
-  margin: '8px 0 0',
-  fontSize: '15px',
-  lineHeight: 1.35,
+  margin: `${abstand('s')} 0 0`,
+  ...textstufe('text'),
+  lineHeight: zeilenabstand,
   color: barcodeFarbe('scanText'),
 };
 
@@ -104,9 +104,9 @@ const fehlerStil: CSSProperties = {
   right: '18px',
   bottom: '28px',
   margin: 0,
-  padding: '8px 12px',
+  padding: `${abstand('s')} ${abstand('m')}`,
   borderRadius: '10px',
-  fontSize: '12px',
+  ...textstufe('meta'),
   lineHeight: 1.35,
   wordBreak: 'break-word',
   color: barcodeFarbe('scanText'),

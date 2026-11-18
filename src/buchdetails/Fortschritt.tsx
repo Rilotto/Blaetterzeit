@@ -3,7 +3,7 @@ import iconHerz from '@/assets/icons/icon-herz.png';
 import Icon from '@/components/Icon';
 import type { Buch } from '@/domain/buch';
 import { fortschrittExakt, fortschrittText, hatSeitenanzahl } from '@/domain/fortschritt';
-import { fortschrittFarbe } from '@/theme';
+import { fortschrittFarbe, textstufe, pillenhoehe, abstand, bildschirmrand } from '@/theme';
 
 interface Props {
   buch: Buch;
@@ -22,7 +22,7 @@ const bereichStil: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  marginTop: '20px',
+  marginTop: bildschirmrand,
 };
 
 const balkenStil: CSSProperties = {
@@ -32,7 +32,7 @@ const balkenStil: CSSProperties = {
   maxWidth: '100%',
   height: `${BALKEN_HOEHE}px`,
   // Großzügige Tippfläche um den schmalen Balken.
-  margin: '6px 0',
+  margin: `${abstand('s')} 0`,
   overflow: 'hidden',
   borderRadius: `${BALKEN_HOEHE / 2}px`,
   backgroundColor: fortschrittFarbe('balkenLeer'),
@@ -48,12 +48,12 @@ const fuellungStil = (prozent: number): CSSProperties => ({
 });
 
 const textStil: CSSProperties = {
-  margin: '10px 0 0',
-  padding: '2px 8px',
+  margin: `${abstand('s')} 0 0`,
+  padding: `${abstand('xs')} ${abstand('s')}`,
   border: 'none',
   background: 'none',
   fontFamily: 'inherit',
-  fontSize: '17px',
+  ...textstufe('meta'),
   fontWeight: 500,
   color: fortschrittFarbe('fortschrittText'),
   cursor: 'pointer',
@@ -64,8 +64,8 @@ const herzStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '40px',
-  height: '40px',
+  width: pillenhoehe,
+  height: pillenhoehe,
   margin: 0,
   padding: 0,
   border: 'none',

@@ -6,8 +6,9 @@ import Bewertung from './Bewertung';
 import DeineRezension from './DeineRezension';
 import DetailsBereich from './DetailsBereich';
 import type { ReiterId } from './rezension';
+import { abstand } from '@/theme';
 
-const platzhalterStil: CSSProperties = { padding: '48px 24px' };
+const platzhalterStil: CSSProperties = { padding: `calc(${abstand('xl')} * 2) ${abstand('xl')}` };
 
 interface Props {
   reiter: ReiterId;

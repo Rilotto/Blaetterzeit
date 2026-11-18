@@ -8,7 +8,7 @@ import {
   isbnFiltern,
   isbnGueltig,
 } from '@/domain/ausgabe';
-import { fortschrittFarbe } from '@/theme';
+import { fortschrittFarbe, abstand } from '@/theme';
 import BlattUnten, { blattEingabeStil, sichernStil } from './BlattUnten';
 
 /** Ergebnis der Prüfung beim Sichern: gültiger Wert oder `null` (Feld wird hervorgehoben). */
@@ -27,6 +27,8 @@ export interface BlattFeldProps {
   pruefen?: FeldPruefung;
   platzhalter?: string;
   inputMode?: 'text' | 'numeric';
+  /** Großschreibung der Bildschirmtastatur, z. B. „characters“ für das „X“ der ISBN-10. */
+  autoCapitalize?: 'off' | 'characters';
   maxLength?: number;
   /** Gültiger Wert gesichert. */
   onSichern: (wert: string) => void;
@@ -46,6 +48,7 @@ export default function BlattFeld({
   pruefen = (w) => w,
   platzhalter,
   inputMode = 'text',
+  autoCapitalize,
   maxLength,
   onSichern,
   onSchliessen,
@@ -67,6 +70,7 @@ export default function BlattFeld({
       <input
         type="text"
         inputMode={inputMode}
+        autoCapitalize={autoCapitalize}
         autoComplete="off"
         aria-label={titel}
         data-blatt-feld={kennung}
@@ -84,7 +88,7 @@ export default function BlattFeld({
         }}
         style={{
           ...blattEingabeStil,
-          marginTop: '14px',
+          marginTop: abstand('m'),
           ...(fehler ? { border: `2px solid ${fortschrittFarbe('eingabeFehler')}`, color: fortschrittFarbe('eingabeFehler') } : {}),
         }}
       />
@@ -113,7 +117,9 @@ export function BlattIsbn({ isbn, ...rest }: EinfachProps & { isbn?: string }) {
       kennung="isbn"
       startWert={isbn ?? ''}
       platzhalter="9783551551672"
-      inputMode="numeric"
+      // Textfeld statt Zahlentastatur, damit „X“ (ISBN-10) eingebbar ist; gefiltert wird weiterhin (REQ-063 AK-3).
+      inputMode="text"
+      autoCapitalize="characters"
       filtern={isbnFiltern}
       pruefen={(w) => (isbnGueltig(w) ? w : null)}
       {...rest}

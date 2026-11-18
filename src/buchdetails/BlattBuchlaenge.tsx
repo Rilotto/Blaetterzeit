@@ -1,7 +1,7 @@
 import { useState, type CSSProperties } from 'react';
 import { seitenanzahlErlaubt } from '@/domain/ausgabe';
 import { seitenanzahlPruefen } from '@/domain/fortschritt';
-import { fortschrittFarbe } from '@/theme';
+import { fortschrittFarbe, textstufe, abstand } from '@/theme';
 import BlattUnten, { blattEingabeStil, blattHinweisStil, sichernStil } from './BlattUnten';
 
 interface Props {
@@ -16,8 +16,8 @@ interface Props {
 }
 
 const untertitelStil: CSSProperties = {
-  margin: '6px 0 14px',
-  fontSize: '17px',
+  margin: `${abstand('s')} 0 ${abstand('m')}`,
+  ...textstufe('text'),
   lineHeight: 1.3,
   color: fortschrittFarbe('blattUntertitel'),
 };

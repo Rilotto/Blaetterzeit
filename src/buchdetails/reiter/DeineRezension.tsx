@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import Symbolbild from '@/components/Symbolbild';
-import { rezensionFarbe } from '@/theme';
+import { rezensionFarbe, textstufe, zeilenabstand, abstand, bildschirmrand } from '@/theme';
 import { RAND } from '../masse';
 import { REZENSION_PLATZHALTER, abschnittKopfStil, abschnittSchaltflaecheStil, abschnittUeberschriftStil, karteStil } from './rezension';
 
@@ -9,7 +9,7 @@ const schreibfeldStil: CSSProperties = {
   display: 'block',
   width: `calc(100% - ${2 * RAND}px)`,
   minHeight: '72px',
-  padding: '18px 20px',
+  padding: `${abstand('l')} ${bildschirmrand}`,
   textAlign: 'left',
   fontFamily: 'inherit',
   cursor: 'pointer',
@@ -19,16 +19,16 @@ const schreibfeldStil: CSSProperties = {
 const platzhalterStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '12px',
-  fontSize: '22px',
-  lineHeight: 1.3,
+  gap: abstand('m'),
+  ...textstufe('text'),
+  lineHeight: zeilenabstand,
   color: rezensionFarbe('schreibfeldPlatzhalter'),
 };
 
 const textStil: CSSProperties = {
   display: 'block',
-  fontSize: '17px',
-  lineHeight: 1.45,
+  ...textstufe('text'),
+  lineHeight: zeilenabstand,
   whiteSpace: 'pre-wrap',
   overflowWrap: 'anywhere',
   color: rezensionFarbe('schreibfeldText'),

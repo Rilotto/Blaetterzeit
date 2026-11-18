@@ -1,5 +1,5 @@
 import { useId, type CSSProperties } from 'react';
-import { flammeZahlGedeckt, fortschrittFarbe } from '@/theme';
+import { flammeZahlGedeckt, fortschrittFarbe, textstufe } from '@/theme';
 
 interface Props {
   /** Streak-Zahl (REQ-027). */
@@ -31,7 +31,7 @@ const zahlStil = (aktiv: boolean): CSSProperties => ({
   // Zahl im bauchigen unteren Teil der Flamme.
   top: '50%',
   textAlign: 'center',
-  fontSize: '15px',
+  ...textstufe('meta'),
   fontWeight: 700,
   lineHeight: 1,
   color: aktiv ? fortschrittFarbe('flammeZahlAktiv') : flammeZahlGedeckt,

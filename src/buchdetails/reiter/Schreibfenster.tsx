@@ -3,11 +3,11 @@ import Symbolbild from '@/components/Symbolbild';
 import type { BewertungsWert } from '@/domain/bewertung';
 import { rezensionLeer } from '@/domain/bewertung';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
-import { abdunklung, kriteriumBlass, kriteriumVoll, rezensionFarbe, sichernKante } from '@/theme';
+import { abdunklung, kriteriumBlass, kriteriumVoll, rezensionFarbe, sichernKante, textstufe, zeilenabstand, bildschirmrandPx, pillenhoehe, abstand } from '@/theme';
 import { REZENSION_PLATZHALTER, SCHREIBFENSTER_ZUG_SCHWELLE, STUFEN } from './rezension';
 
 
-const RAND_FENSTER = 24;
+const RAND_FENSTER = bildschirmrandPx;
 
 const hintergrundStil: CSSProperties = {
   position: 'fixed',
@@ -62,13 +62,13 @@ const kopfStil: CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   minHeight: '52px',
-  padding: '0 48px',
+  padding: `0 calc(${abstand('xl')} * 2)`,
   textAlign: 'center',
 };
 
 const titelStil: CSSProperties = {
   margin: 0,
-  fontSize: '18px',
+  ...textstufe('titel'),
   fontWeight: 700,
   lineHeight: 1.25,
   overflowWrap: 'anywhere',
@@ -76,8 +76,9 @@ const titelStil: CSSProperties = {
 };
 
 const autorStil: CSSProperties = {
-  margin: '2px 0 0',
-  fontSize: '15px',
+  margin: `${abstand('xs')} 0 0`,
+  ...textstufe('meta'),
+  fontStyle: 'italic',
   lineHeight: 1.25,
   color: rezensionFarbe('fensterAutor'),
 };
@@ -91,8 +92,8 @@ const schliessenStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '38px',
-  height: '38px',
+  width: pillenhoehe,
+  height: pillenhoehe,
   margin: 0,
   padding: 0,
   borderRadius: '50%',
@@ -105,8 +106,8 @@ const schliessenStil: CSSProperties = {
 const sterneStil: CSSProperties = {
   display: 'flex',
   justifyContent: 'flex-end',
-  gap: '2px',
-  marginTop: '8px',
+  gap: abstand('xs'),
+  marginTop: abstand('s'),
 };
 
 const eingabeStil: CSSProperties = {
@@ -114,15 +115,15 @@ const eingabeStil: CSSProperties = {
   minHeight: '120px',
   boxSizing: 'border-box',
   width: '100%',
-  margin: '12px 0 0',
+  margin: `${abstand('m')} 0 0`,
   padding: 0,
   border: 'none',
   outline: 'none',
   resize: 'none',
   background: 'none',
   fontFamily: 'inherit',
-  fontSize: '20px',
-  lineHeight: 1.45,
+  ...textstufe('text'),
+  lineHeight: zeilenabstand,
   color: rezensionFarbe('eingabeText'),
   // Farbe des Platzhaltertexts über die Variable in index.css (::placeholder).
   ['--bz-platzhalterfarbe' as string]: rezensionFarbe('eingabePlatzhalter'),
@@ -133,16 +134,16 @@ const sichernStil: CSSProperties = {
   flex: '0 0 auto',
   boxSizing: 'border-box',
   width: '100%',
-  height: '56px',
-  margin: '16px 0 calc(16px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)))',
+  height: pillenhoehe,
+  margin: `${abstand('l')} 0 calc(${abstand('l')} + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0)))`,
   padding: 0,
   border: 'none',
-  borderRadius: '28px',
+  borderRadius: '999px',
   backgroundColor: rezensionFarbe('sichernFlaeche'),
   color: rezensionFarbe('sichernSchrift'),
   boxShadow: sichernKante,
   fontFamily: 'inherit',
-  fontSize: '20px',
+  ...textstufe('text'),
   fontWeight: 600,
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',

@@ -13,10 +13,10 @@ import {
   type UnterformatId,
 } from '@/domain/ausgabe';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
-import { abdunklung, buchHellFlaeche, detailsFarbe, rezensionFarbe, sichernKante, sonderPilleGewaehltFlaeche } from '@/theme';
+import { abdunklung, buchHellFlaeche, detailsFarbe, rezensionFarbe, sichernKante, sonderPilleGewaehltFlaeche, schriftgroesse, textstufe, bildschirmrandPx, pillenhoehe, abstand } from '@/theme';
 import { SCHREIBFENSTER_ZUG_SCHWELLE } from './rezension';
 
-const RAND_FENSTER = 20;
+const RAND_FENSTER = bildschirmrandPx;
 
 const hintergrundStil: CSSProperties = {
   position: 'fixed',
@@ -35,7 +35,7 @@ const fensterStil = (versatz: number): CSSProperties => ({
   boxSizing: 'border-box',
   maxHeight: 'calc(100% - 40px)',
   overflowY: 'auto',
-  padding: `0 ${RAND_FENSTER}px calc(16px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)))`,
+  padding: `0 ${RAND_FENSTER}px calc(${abstand('l')} + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0)))`,
   borderTopLeftRadius: '28px',
   borderTopRightRadius: '28px',
   backgroundColor: rezensionFarbe('fensterFlaeche'),
@@ -57,7 +57,7 @@ const griffStil: CSSProperties = { width: '40px', height: '5px', borderRadius: '
 
 const kopfStil: CSSProperties = { position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '52px' };
 
-const titelStil: CSSProperties = { margin: 0, fontSize: '20px', fontWeight: 700, color: rezensionFarbe('fensterTitel') };
+const titelStil: CSSProperties = { margin: 0, ...textstufe('abschnitt'), fontWeight: 700, color: rezensionFarbe('fensterTitel') };
 
 const schliessenStil: CSSProperties = {
   position: 'absolute',
@@ -68,8 +68,8 @@ const schliessenStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '38px',
-  height: '38px',
+  width: pillenhoehe,
+  height: pillenhoehe,
   margin: 0,
   padding: 0,
   borderRadius: '50%',
@@ -81,7 +81,7 @@ const schliessenStil: CSSProperties = {
 
 const knopf: CSSProperties = { margin: 0, fontFamily: 'inherit', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' };
 
-const kachelnStil: CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '8px' };
+const kachelnStil: CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: abstand('s'), marginTop: abstand('s') };
 
 const kachelStil = (gewaehlt: boolean): CSSProperties => ({
   ...knopf,
@@ -89,13 +89,13 @@ const kachelStil = (gewaehlt: boolean): CSSProperties => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '8px',
-  padding: '18px 4px 14px',
+  gap: abstand('s'),
+  padding: `${abstand('l')} ${abstand('xs')} ${abstand('m')}`,
   borderRadius: '18px',
   border: `2px solid ${detailsFarbe(gewaehlt ? 'kachelGewaehltRahmen' : 'kachelRahmen')}`,
   backgroundColor: detailsFarbe(gewaehlt ? 'kachelGewaehltFlaeche' : 'kachelFlaeche'),
   color: detailsFarbe(gewaehlt ? 'kachelGewaehltSchrift' : 'kachelSchrift'),
-  fontSize: '15px',
+  ...textstufe('text'),
   fontWeight: 600,
 });
 
@@ -113,8 +113,8 @@ const markeStil: CSSProperties = {
 };
 
 const karteStil: CSSProperties = {
-  marginTop: '14px',
-  padding: '14px 12px 14px',
+  marginTop: abstand('m'),
+  padding: `${abstand('m')} ${abstand('m')} ${abstand('m')}`,
   borderRadius: '22px',
   border: `2px solid ${detailsFarbe('kachelRahmen')}`,
   backgroundColor: detailsFarbe('kachelFlaeche'),
@@ -123,14 +123,14 @@ const karteStil: CSSProperties = {
 const karteKopfStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '10px',
-  margin: '0 4px 12px',
-  fontSize: '19px',
+  gap: abstand('s'),
+  margin: `0 ${abstand('xs')} ${abstand('m')}`,
+  ...textstufe('titel'),
   fontWeight: 700,
   color: detailsFarbe('zeileBezeichnung'),
 };
 
-const unterKachelnStil: CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' };
+const unterKachelnStil: CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: abstand('s') };
 
 const unterKachelStil = (gewaehlt: boolean): CSSProperties => ({
   ...knopf,
@@ -138,14 +138,14 @@ const unterKachelStil = (gewaehlt: boolean): CSSProperties => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'flex-end',
-  gap: '6px',
+  gap: abstand('s'),
   minHeight: '96px',
-  padding: '10px 2px 8px',
+  padding: `${abstand('s')} ${abstand('xs')} ${abstand('s')}`,
   borderRadius: '16px',
   border: `2px solid ${gewaehlt ? detailsFarbe('kachelGewaehltRahmen') : 'transparent'}`,
   backgroundColor: detailsFarbe('unterKachelFlaeche'),
   color: detailsFarbe('zeileBezeichnung'),
-  fontSize: '12.5px',
+  ...textstufe('meta'),
   fontWeight: 700,
   lineHeight: 1.15,
   overflowWrap: 'anywhere',
@@ -155,32 +155,30 @@ const sonderKopfStil: CSSProperties = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'baseline',
-  margin: '14px 4px 10px',
-  paddingTop: '12px',
+  margin: `${abstand('m')} ${abstand('xs')} ${abstand('s')}`,
+  paddingTop: abstand('m'),
   borderTop: `1.5px solid ${detailsFarbe('trennlinie')}`,
-  fontSize: '18px',
+  ...textstufe('text'),
   color: detailsFarbe('zeileBezeichnung'),
 };
 
-const sonderPillenStil: CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: '8px' };
+const sonderPillenStil: CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: abstand('s') };
 
 const sonderPilleStil = (gewaehlt: boolean): CSSProperties => ({
   ...knopf,
-  padding: '8px 14px',
+  padding: `${abstand('s')} ${abstand('m')}`,
   border: 'none',
   borderRadius: '20px',
   backgroundColor: gewaehlt ? sonderPilleGewaehltFlaeche : detailsFarbe('sonderPilleFlaeche'),
   color: detailsFarbe(gewaehlt ? 'sonderPilleGewaehltSchrift' : 'sonderPilleSchrift'),
-  fontSize: '15px',
+  ...textstufe('text'),
   fontWeight: 600,
 });
 
 const frageStil: CSSProperties = {
-  margin: '24px 6px 10px',
-  fontSize: '14px',
+  margin: `${abstand('xl')} ${abstand('s')} ${abstand('s')}`,
+  ...textstufe('label'),
   fontWeight: 700,
-  letterSpacing: '0.06em',
-  textTransform: 'uppercase',
   color: detailsFarbe('exemplarFrage'),
 };
 
@@ -188,8 +186,8 @@ const exemplarFeldStil: CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
   justifyContent: 'space-around',
-  gap: '4px',
-  padding: '5px',
+  gap: abstand('xs'),
+  padding: abstand('xs'),
   borderRadius: '18px',
   backgroundColor: detailsFarbe('exemplarFlaeche'),
 };
@@ -197,12 +195,12 @@ const exemplarFeldStil: CSSProperties = {
 const exemplarStil = (gewaehlt: boolean): CSSProperties => ({
   ...knopf,
   flex: '1 0 30%',
-  padding: '9px 6px',
+  padding: `${abstand('s')} ${abstand('s')}`,
   border: 'none',
   borderRadius: '13px',
   backgroundColor: gewaehlt ? detailsFarbe('exemplarGewaehltFlaeche') : 'transparent',
   color: detailsFarbe(gewaehlt ? 'exemplarGewaehltSchrift' : 'exemplarSchrift'),
-  fontSize: '17px',
+  ...textstufe('text'),
   fontWeight: 600,
 });
 
@@ -211,15 +209,15 @@ const sichernStil: CSSProperties = {
   display: 'block',
   boxSizing: 'border-box',
   width: '100%',
-  height: '56px',
-  marginTop: '22px',
+  height: pillenhoehe,
+  marginTop: abstand('xl'),
   padding: 0,
   border: 'none',
-  borderRadius: '28px',
+  borderRadius: '999px',
   backgroundColor: rezensionFarbe('sichernFlaeche'),
   color: rezensionFarbe('sichernSchrift'),
   boxShadow: sichernKante,
-  fontSize: '20px',
+  ...textstufe('text'),
   fontWeight: 600,
 };
 
@@ -254,7 +252,7 @@ function UnterformatBild({ id }: { id: UnterformatId }): ReactNode {
       return (
         <svg {...gemeinsam}>
           <rect x="9" y="6" width="26" height="40" rx="3" fill="none" stroke={detailsFarbe('zeileBezeichnung')} strokeWidth="2" />
-          <text x="22" y="32" textAnchor="middle" fontSize="16" fontWeight="700" fill={detailsFarbe('zeileBezeichnung')}>
+          <text x="22" y="32" textAnchor="middle" fontWeight="700" style={{ fontSize: schriftgroesse('titel') }} fill={detailsFarbe('zeileBezeichnung')}>
             ?
           </text>
         </svg>

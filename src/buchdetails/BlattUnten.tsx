@@ -1,7 +1,8 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 import iconX from '@/assets/icons/icon-x.png';
 import Icon from '@/components/Icon';
-import { abdunklung, fortschrittFarbe, sichernKante } from '@/theme';
+import { useZurueckTaste } from '@/plattform/zurueckTaste';
+import { abdunklung, fortschrittFarbe, sichernKante, textstufe, bildschirmrandPx, pillenhoehe, abstand, bildschirmrand } from '@/theme';
 
 interface Props {
   /** Überschrift und Name des Dialogs, z. B. „Aktuelle Seite“. */
@@ -13,7 +14,7 @@ interface Props {
 
 // Maße nach REF-buchdetails-03-aktuelle-seite.png und REF-buchdetails-04-buchlaenge.png (≈ 2,26 px je dp):
 // Ecken oben ≈ 28 dp, Seitenrand ≈ 26 dp, X ≈ 34 dp. Orientierungswerte, kein Akzeptanzkriterium.
-export const BLATT_RAND = 24;
+export const BLATT_RAND = bildschirmrandPx;
 
 const hintergrundStil: CSSProperties = {
   position: 'fixed',
@@ -66,7 +67,7 @@ const kopfStil: CSSProperties = {
 
 const ueberschriftStil: CSSProperties = {
   margin: 0,
-  fontSize: '20px',
+  ...textstufe('abschnitt'),
   fontWeight: 700,
   lineHeight: 1.2,
   color: fortschrittFarbe('blattUeberschrift'),
@@ -81,8 +82,8 @@ const schliessenStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '34px',
-  height: '34px',
+  width: pillenhoehe,
+  height: pillenhoehe,
   margin: 0,
   padding: 0,
   borderRadius: '50%',
@@ -99,13 +100,13 @@ export const blattEingabeStil: CSSProperties = {
   width: '100%',
   height: '56px',
   margin: 0,
-  padding: '0 16px',
+  padding: `0 ${abstand('l')}`,
   borderRadius: '20px',
   border: `1.5px solid ${fortschrittFarbe('eingabeRahmen')}`,
   backgroundColor: fortschrittFarbe('eingabeFlaeche'),
   color: fortschrittFarbe('eingabeSchrift'),
   fontFamily: 'inherit',
-  fontSize: '22px',
+  ...textstufe('text'),
   fontWeight: 500,
   textAlign: 'center',
   outline: 'none',
@@ -113,8 +114,8 @@ export const blattEingabeStil: CSSProperties = {
 
 /** Kurzer Hinweis unter dem Eingabefeld (leeres oder ungültiges Feld). */
 export const blattHinweisStil: CSSProperties = {
-  margin: '8px 4px 0',
-  fontSize: '14px',
+  margin: `${abstand('s')} ${abstand('xs')} 0`,
+  ...textstufe('meta'),
   lineHeight: 1.3,
   color: fortschrittFarbe('hinweis'),
 };
@@ -124,16 +125,16 @@ export const sichernStil: CSSProperties = {
   display: 'block',
   boxSizing: 'border-box',
   width: '100%',
-  height: '54px',
-  margin: '20px 0 4px',
+  height: pillenhoehe,
+  margin: `${bildschirmrand} 0 ${abstand('xs')}`,
   padding: 0,
   border: 'none',
-  borderRadius: '27px',
+  borderRadius: '999px',
   backgroundColor: fortschrittFarbe('sichernFlaeche'),
   color: fortschrittFarbe('sichernSchrift'),
   boxShadow: sichernKante,
   fontFamily: 'inherit',
-  fontSize: '19px',
+  ...textstufe('text'),
   fontWeight: 600,
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
@@ -141,16 +142,29 @@ export const sichernStil: CSSProperties = {
 
 /** Blatt von unten mit Abdunklung der Buchdetails, Ziehgriff (nur optisch), Überschrift und X (REQ-024, REQ-025). */
 export default function BlattUnten({ titel, onSchliessen, children }: Props) {
+  // Android-Zurück-Taste schließt das Blatt ohne Speichern (REQ-059 AK-4, REQ-063 AK-6).
+  const verlassen = useZurueckTaste(() => {
+    onSchliessen();
+    return false;
+  });
+  // Schließt das Blatt auf anderem Weg (z. B. „Sichern“ im Inhalt), wird der eigene Verlaufseintrag entfernt.
+  const verlassenRef = useRef(verlassen);
+  verlassenRef.current = verlassen;
+  useEffect(() => () => verlassenRef.current(), []);
+  const schliessen = () => {
+    verlassen();
+    onSchliessen();
+  };
   return (
     <>
-      <div data-blatt-hintergrund="" onClick={onSchliessen} style={hintergrundStil} />
+      <div data-blatt-hintergrund="" onClick={schliessen} style={hintergrundStil} />
       <div role="dialog" aria-modal="true" aria-label={titel} data-blatt-unten="" style={blattStil}>
         <div style={griffBereichStil}>
           <div data-ziehgriff="" style={griffStil} />
         </div>
         <div style={kopfStil}>
           <h2 style={ueberschriftStil}>{titel}</h2>
-          <button type="button" aria-label="Schließen" onClick={onSchliessen} style={schliessenStil}>
+          <button type="button" aria-label="Schließen" onClick={schliessen} style={schliessenStil}>
             <Icon datei="icon-x.png" url={iconX} farbe={fortschrittFarbe('schliessenIcon')} groesse={16} />
           </button>
         </div>

@@ -10,7 +10,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Buch } from '@/domain/buch';
 import type { ImageStore } from '@/storage';
 import { InMemoryBookRepository } from '@/storage/InMemoryBookRepository';
-import { farbVariablen } from '@/theme';
+import { farbVariablen, typografieVariablen } from '@/theme';
 import BuchDetails from '@/views/BuchDetails';
 
 vi.mock('@/buecher/demodaten', () => ({ demoBuecher: [] }));
@@ -51,7 +51,10 @@ describe('REQ-043 Reiterleiste', () => {
     expect(statistik).not.toBeNull();
     expect(statistik.compareDocumentPosition(leiste(d)) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const st = leiste(d).style;
-    expect(parseFloat(st.marginTop || st.margin.split(' ')[0])).toBeGreaterThan(0);
+    // Angepasst Sprint 06 Teil C (REQ-065 AK-8): Abstand kommt als Raster-Variable, jsdom löst var() nicht auf.
+    const oben = (st.marginTop || st.margin.split(' ')[0]).trim();
+    const raster = /^var\((--bz-abstand-[\w-]+)\)$/.exec(oben);
+    expect(parseFloat(raster ? typografieVariablen()[raster[1]] : oben)).toBeGreaterThan(0);
     // Bildschirmbreite: keine feste/maximale Breite in px, keine Inline-Leiste.
     expect(st.width === '' || st.width.includes('100%')).toBe(true);
     expect(st.maxWidth).toBe('');

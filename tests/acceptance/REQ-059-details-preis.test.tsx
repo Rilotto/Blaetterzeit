@@ -91,6 +91,15 @@ async function sichern() {
   await warte(60);
 }
 
+/** Android-Zurück-Taste (im Web/Test als popstate, siehe src/plattform/zurueckTaste.ts). */
+async function zurueckTaste() {
+  await warte(20);
+  await act(async () => {
+    window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
+    await new Promise((r) => setTimeout(r, 20));
+  });
+}
+
 describe('REQ-059 Preis', () => {
   it('[REQ-059/AK-1] ohne Preis: Menü „Preis“ mit „0,00 €“, Ziehgriff, X, „Sichern“', async () => {
     const { d } = await mitBuch();
@@ -133,14 +142,25 @@ describe('REQ-059 Preis', () => {
     expect(norm(feld().value)).toBe('12,99 €');
   });
 
-  it.each(['X', 'Außen'])('[REQ-059/AK-4] 20,00 eingeben, schließen über %s: bleibt 12,99 €', async (weg) => {
+  // Sprint 06 Teil C: dritter Durchlauf Android-Zurück-Taste (REQ-059 AK-4, Fassung 2026-11-18); Web: popstate.
+  it.each(['X', 'Außen', 'Zurück-Taste'])('[REQ-059/AK-4] 20,00 eingeben, schließen über %s: Menü zu, bleibt 12,99 €', async (weg) => {
     const { d, id } = await mitBuch(buch({ preisCent: 1299 }));
     await oeffne(d);
     await gibEin('20,00');
     if (weg === 'X') await tippe(blatt()!.querySelector('[aria-label="Schließen"]')!);
-    else await tippe(document.querySelector('[data-blatt-hintergrund]')!);
+    else if (weg === 'Außen') await tippe(document.querySelector('[data-blatt-hintergrund]')!);
+    else await zurueckTaste();
     await vi.waitFor(() => expect(blatt()).toBeNull(), W);
     expect(wert(d, 'preis')).toBe('12,99 €');
     expect((await gespeichert(id))?.preisCent).toBe(1299);
+  });
+
+  it('[REQ-059/AK-4] Zurück-Taste schließt nur das Menü, die Buchdetails bleiben offen', async () => {
+    const { d } = await mitBuch(buch({ preisCent: 1299 }));
+    await oeffne(d);
+    await zurueckTaste();
+    await vi.waitFor(() => expect(blatt()).toBeNull(), W);
+    expect(screen.getByRole('region', { name: 'Buchdetails' })).toBeInTheDocument();
+    expect(wert(d, 'preis')).toBe('12,99 €');
   });
 });

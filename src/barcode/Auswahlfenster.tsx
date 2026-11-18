@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import iconZurueck from '@/assets/icons/icon-zurueck.png';
 import Icon from '@/components/Icon';
-import { barcodeFarbe } from '@/theme';
+import { barcodeFarbe, textstufe, zeilenabstand, abstand, bildschirmrand } from '@/theme';
 import { QUELLEN_NAME, type Treffer } from './treffer';
 
 interface Props {
@@ -25,8 +25,8 @@ const fensterStil: CSSProperties = {
 const innenStil: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '12px',
-  padding: '8px 20px 32px',
+  gap: abstand('m'),
+  padding: `${abstand('s')} ${bildschirmrand} calc(${abstand('xl')} + ${abstand('s')})`,
 };
 
 const zurueckStil: CSSProperties = {
@@ -35,7 +35,7 @@ const zurueckStil: CSSProperties = {
   justifyContent: 'center',
   width: '44px',
   height: '44px',
-  margin: '0 0 0 -10px',
+  margin: `0 0 0 calc(-1 * ${abstand('s')})`,
   padding: 0,
   border: 'none',
   background: 'none',
@@ -44,28 +44,28 @@ const zurueckStil: CSSProperties = {
 };
 
 const ueberschriftStil: CSSProperties = {
-  margin: '4px 0 0',
-  fontSize: '26px',
+  margin: `${abstand('xs')} 0 0`,
+  ...textstufe('abschnitt'),
   fontWeight: 700,
   lineHeight: 1.2,
   color: barcodeFarbe('auswahlUeberschrift'),
 };
 
 const textStil: CSSProperties = {
-  margin: '0 0 8px',
-  fontSize: '15px',
-  lineHeight: 1.4,
+  margin: `0 0 ${abstand('s')}`,
+  ...textstufe('text'),
+  lineHeight: zeilenabstand,
   color: barcodeFarbe('auswahlText'),
 };
 
 const trefferStil: CSSProperties = {
   display: 'flex',
-  gap: '14px',
+  gap: abstand('m'),
   alignItems: 'flex-start',
   boxSizing: 'border-box',
   width: '100%',
   margin: 0,
-  padding: '12px',
+  padding: abstand('m'),
   border: `1.5px solid ${barcodeFarbe('trefferRahmen')}`,
   borderRadius: '16px',
   backgroundColor: barcodeFarbe('trefferFlaeche'),
@@ -86,7 +86,7 @@ const coverStil: CSSProperties = {
 
 const titelStil: CSSProperties = {
   display: 'block',
-  fontSize: '17px',
+  ...textstufe('titel'),
   fontWeight: 600,
   lineHeight: 1.25,
   color: barcodeFarbe('trefferTitel'),
@@ -94,16 +94,16 @@ const titelStil: CSSProperties = {
 
 const zeileStil: CSSProperties = {
   display: 'block',
-  marginTop: '3px',
-  fontSize: '14px',
+  marginTop: abstand('xs'),
+  ...textstufe('meta'),
   lineHeight: 1.3,
   color: barcodeFarbe('trefferText'),
 };
 
 const quelleStil: CSSProperties = {
   display: 'block',
-  marginTop: '6px',
-  fontSize: '13px',
+  marginTop: abstand('s'),
+  ...textstufe('meta'),
   fontStyle: 'italic',
   color: barcodeFarbe('quelle'),
 };
@@ -161,7 +161,7 @@ export default function Auswahlfenster({ isbn, treffer, onWahl, onZurueck }: Pro
                   {t.angaben.titel}
                 </span>
                 {t.angaben.autor ? (
-                  <span data-treffer-autor="" style={zeileStil}>
+                  <span data-treffer-autor="" style={{ ...zeileStil, fontStyle: 'italic' }}>
                     {t.angaben.autor}
                   </span>
                 ) : null}

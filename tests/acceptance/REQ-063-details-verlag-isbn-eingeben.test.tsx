@@ -101,6 +101,15 @@ function inPrimaer(el: HTMLElement) {
   return [cs.color, cs.borderTopColor, cs.outlineColor, cs.boxShadow].some((w) => w.includes(primaer));
 }
 
+/** Android-Zurück-Taste (im Web/Test als popstate, siehe src/plattform/zurueckTaste.ts). */
+async function zurueckTaste() {
+  await warte(20);
+  await act(async () => {
+    window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
+    await new Promise((r) => setTimeout(r, 20));
+  });
+}
+
 describe('REQ-063 Verlag und ISBN', () => {
   it('[REQ-063/AK-1] Buch ohne Verlag: „Carlsen“ eintragen und sichern → Zeile zeigt „Carlsen“, auch nach Neustart', async () => {
     const { d, id } = await mitBuch();
@@ -156,6 +165,35 @@ describe('REQ-063 Verlag und ISBN', () => {
     expect(feld('isbn')!.value).toBe(aus);
   });
 
+  // Sprint 06 Teil C: AK-3 erweitert (Fassung 2026-11-18) – „X“ als Prüfziffer an letzter Stelle einer ISBN-10.
+  it('[REQ-063/AK-3] ISBN-10 080442957X eingeben und sichern → gespeichert, Zeile zeigt sie, auch nach Neustart', async () => {
+    const { d, id } = await mitBuch();
+    await oeffne(d, 'isbn');
+    gib('isbn', '080442957X');
+    expect(feld('isbn')!.value).toBe('080442957X');
+    await sichern('isbn');
+    await vi.waitFor(() => expect(feld('isbn')).toBeNull(), W);
+    await vi.waitFor(() => expect(wert(d, 'isbn')).toBe('080442957X'), W);
+    expect((await gespeichert(id))?.isbn).toBe('080442957X');
+    const d2 = await neustartAnzeige(id);
+    expect(wert(d2, 'isbn')).toBe('080442957X');
+  });
+
+  it.each([
+    ['08X0442957', 'X nicht an letzter Stelle'],
+    ['978355155167X', 'X bei 13 Stellen'],
+    ['080442957Y', 'anderer Buchstabe'],
+  ])('[REQ-063/AK-3] Negativfall „%s“ (%s): wird nicht gesichert', async (ein) => {
+    const { d, id } = await mitBuch();
+    await oeffne(d, 'isbn');
+    gib('isbn', ein);
+    expect(feld('isbn')!.value).toMatch(/^\d*X?$/);
+    await sichern('isbn');
+    expect(feld('isbn')).not.toBeNull();
+    expect(wert(d, 'isbn')).toBe('');
+    expect((await gespeichert(id))?.isbn).toBeUndefined();
+  });
+
   it.each(['9783551551670', '12345', '978355155167', ''])('[REQ-063/AK-4] ungültige ISBN „%s“: Feld in Primär markiert, kein Hinweistext, Blatt offen, nichts gespeichert', async (ein) => {
     const { d, id } = await mitBuch();
     await oeffne(d, 'isbn');
@@ -197,12 +235,14 @@ describe('REQ-063 Verlag und ISBN', () => {
     expect((await gespeichert(id))?.isbn).toBe('9783551551672');
   });
 
-  it.each(['X', 'Außen'])('[REQ-063/AK-6] „Carlsen“ eingetragen, Schließen über %s: vorheriger Verlag bleibt', async (weg) => {
+  // Sprint 06 Teil C: Android-Zurück-Taste ergänzt (REQ-063 AK-6, Fassung 2026-11-18); Web: popstate.
+  it.each(['X', 'Außen', 'Zurück-Taste'])('[REQ-063/AK-6] „Carlsen“ eingetragen, Schließen über %s: Blatt zu, vorheriger Verlag bleibt', async (weg) => {
     const { d, id } = await mitBuch(buch({ verlag: 'Alt-Verlag' }));
     await oeffne(d, 'verlag');
     gib('verlag', 'Carlsen');
     if (weg === 'X') await tippe(dialog('verlag')!.querySelector('[aria-label="Schließen"]')!);
-    else await tippe(document.querySelector('[data-blatt-hintergrund]')!);
+    else if (weg === 'Außen') await tippe(document.querySelector('[data-blatt-hintergrund]')!);
+    else await zurueckTaste();
     await vi.waitFor(() => expect(feld('verlag')).toBeNull(), W);
     expect(wert(d, 'verlag')).toBe('Alt-Verlag');
     expect((await gespeichert(id))?.verlag).toBe('Alt-Verlag');
@@ -216,6 +256,17 @@ describe('REQ-063 Verlag und ISBN', () => {
     await vi.waitFor(() => expect(feld('isbn')).toBeNull(), W);
     expect(wert(d, 'isbn')).toBe('');
     expect((await gespeichert(id))?.isbn).toBeUndefined();
+  });
+
+  it('[REQ-063/AK-6] Blatt „ISBN“: Zurück-Taste schließt es, vorhandene ISBN bleibt, Buchdetails bleiben offen', async () => {
+    const { d, id } = await mitBuch(buch({ isbn: '9783551551672' }));
+    await oeffne(d, 'isbn');
+    gib('isbn', '3551551677');
+    await zurueckTaste();
+    await vi.waitFor(() => expect(feld('isbn')).toBeNull(), W);
+    expect(screen.getByRole('region', { name: 'Buchdetails' })).toBeInTheDocument();
+    expect(wert(d, 'isbn')).toBe('9783551551672');
+    expect((await gespeichert(id))?.isbn).toBe('9783551551672');
   });
 
   it('[REQ-063/AK-7] „Fotos“ antippen: kein Blatt, nichts ändert sich', async () => {

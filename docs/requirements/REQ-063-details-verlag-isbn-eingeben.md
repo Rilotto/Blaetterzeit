@@ -30,7 +30,7 @@ Bisher (CEO, 2026-11-15, REQ-056): Verlag und ISBN „aktuell leer, bitte ohne E
 - Wenn der Nutzer „Sichern“ antippt, muss das System den Verlag dauerhaft speichern, das Blatt schließen und den Verlag in der Zeile „Verlag“ anzeigen.
 
 **ISBN**
-- Wenn der Nutzer die Zeile „ISBN“ antippt, muss das System ein gleich aufgebautes Blatt anzeigen, dessen Feld nur Ziffern annimmt; eine vorhandene ISBN steht im Feld.
+- Wenn der Nutzer die Zeile „ISBN“ antippt, muss das System ein gleich aufgebautes Blatt anzeigen, dessen Feld nur Ziffern annimmt, zusätzlich „X“ als letzte Stelle einer 10-stelligen ISBN (Prüfziffer 10). Eine vorhandene ISBN steht im Feld.
 - Eine ISBN ist gültig, wenn sie 10 oder 13 Stellen hat und ihre Prüfziffer stimmt.
 - Wenn der Nutzer „Sichern“ antippt und die ISBN ungültig ist, muss das System das Feld so hervorheben wie das ungültige Feld „JAHR“ (REQ-031: Primär, kein Hinweistext, bis der Nutzer etwas im Feld ändert), nichts speichern und das Blatt geöffnet lassen.
 - Wenn die ISBN gültig ist, muss das System sie bei „Sichern“ dauerhaft speichern, das Blatt schließen und sie in der Zeile „ISBN“ anzeigen.
@@ -56,10 +56,11 @@ Bisher (CEO, 2026-11-15, REQ-056): Verlag und ISBN „aktuell leer, bitte ohne E
 - **Dann** zeigt die Zeile „ISBN“ diese ISBN
 - **Und** nach einem Neustart der App ist sie unverändert vorhanden
 
-### AK-3 ISBN nimmt nur Ziffern an
+### AK-3 ISBN nimmt nur Ziffern an, bei ISBN-10 „X“ an letzter Stelle
 - **Gegeben** das Blatt „ISBN“ ist geöffnet
 - **Wenn** der Nutzer „978-3a“ eingibt
 - **Dann** enthält das Feld nur „9783“
+- **Und** gibt der Nutzer 080442957X ein und tippt „Sichern“ an, wird diese ISBN-10 gespeichert und in der Zeile „ISBN“ angezeigt
 
 ### AK-4 Ungültige ISBN wird nicht gesichert
 - **Gegeben** im Blatt „ISBN“ steht 9783551551670 (Prüfziffer falsch) bzw. 12345 (falsche Länge)
@@ -108,3 +109,4 @@ Bisher (CEO, 2026-11-15, REQ-056): Verlag und ISBN „aktuell leer, bitte ohne E
 | 2026-11-16 | Erstellt (Entwurf aus der CEO-Antwort zum Änderungsantrag „Buch anlegen“) | Anforderungsmanager |
 | 2026-11-16 | Vom CEO angenommenen Vorschlag eingearbeitet (Blätter für Verlag und ISBN, Prüfung der ISBN). „Hinzugefügt“ in REQ-064 ausgelagert. Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
 | 2026-11-18 | Android-Zurück-Taste ergänzt (schließt die Blätter Verlag und ISBN und verwirft die Eingabe), AK-6 erweitert. Anlass ist Befund 3 des Testers, beauftragt vom Scrum Master. Status unverändert | Anforderungsmanager |
+| 2026-11-18 | AK-3 und Anforderung angepasst: Bei ISBN-10 ist „X“ an letzter Stelle erlaubt (Prüfziffer 10). Der Scrum Master hat seinen eigenen, vom CEO angenommenen Vorschlag „nur Ziffern“ korrigiert (sprints/sprint-06/plan.md, „Hinweise / kleine Klärungen“). Status unverändert | Anforderungsmanager |

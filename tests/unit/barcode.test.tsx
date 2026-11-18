@@ -74,7 +74,7 @@ describe('ISBN aus Barcode', () => {
 });
 
 describe('Parser', () => {
-  it('DNB: Titel, Autor, Verlag, Jahr, Seiten, ISBN, Cover-Adresse', () => {
+  it('DNB: Titel, Autor, Verlag, Jahr, Seiten, ISBN, Preis, Format, Cover-Adresse', () => {
     const [t, ...rest] = dnbTrefferLesen(DNB_XML, '9783551551672');
     expect(rest).toHaveLength(0);
     expect(t!.quelle).toBe('dnb');
@@ -85,6 +85,10 @@ describe('Parser', () => {
       erscheinungsjahr: 2019,
       seitenanzahl: 335,
       isbn: '9783551551672',
+      // REQ-062 AK-9: „Festeinband : EUR 22.00 (DE)“
+      preisCent: 2200,
+      format: 'print',
+      unterformat: 'hardcover',
     });
     expect(t!.coverUrl).toContain('isbn=9783551551672');
     expect(dnbTrefferLesen(DNB_LEER, '9783551551672')).toEqual([]);

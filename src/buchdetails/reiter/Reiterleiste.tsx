@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import Symbolbild from '@/components/Symbolbild';
-import { rezensionFarbe, reiterPilleSchatten } from '@/theme';
+import { rezensionFarbe, reiterPilleSchatten, textstufe, abstand } from '@/theme';
+import { abstandsraster } from '@/theme/typografie';
 import { RAND } from '../masse';
 import { REITER, type ReiterId } from './rezension';
 
@@ -8,14 +9,15 @@ import { REITER, type ReiterId } from './rezension';
 const ANTEIL_AKTIV = 2.6;
 const ANTEIL_INAKTIV = 1;
 const SUMME = ANTEIL_AKTIV + 3 * ANTEIL_INAKTIV;
-const INNEN = 6;
+// Innenabstand = Rasterabstand „s“ (REQ-065 AK-8).
+const INNEN = abstandsraster.s;
 const UEBERGANG = '320ms cubic-bezier(0.4, 0, 0.2, 1)';
 
 const leisteStil: CSSProperties = {
   position: 'relative',
   boxSizing: 'border-box',
   display: 'flex',
-  margin: `24px ${RAND}px 0`,
+  margin: `${abstand('xl')} ${RAND}px 0`,
   height: '60px',
   padding: `${INNEN}px`,
   borderRadius: '30px',
@@ -43,13 +45,13 @@ const reiterStil = (aktiv: boolean): CSSProperties => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '8px',
+  gap: abstand('s'),
   margin: 0,
   padding: 0,
   border: 'none',
   background: 'none',
   fontFamily: 'inherit',
-  fontSize: '17px',
+  ...textstufe('text'),
   fontWeight: 700,
   whiteSpace: 'nowrap',
   overflow: 'hidden',

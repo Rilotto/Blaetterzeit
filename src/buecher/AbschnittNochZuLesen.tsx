@@ -4,7 +4,7 @@ import CoverPlatzhalter from '@/components/CoverPlatzhalter';
 import Icon from '@/components/Icon';
 import { coverBreite, coverFlaecheStil } from '@/components/coverFlaeche';
 import type { Buch } from '@/domain/buch';
-import { buecherFarbe, textformatAlleAnsehen } from '@/theme';
+import { buecherFarbe, textformatAlleAnsehen, abstand } from '@/theme';
 import { abschnittKonfiguration, buecherNochZuLesen } from './abschnittKonfiguration';
 import PlatzhalterText from './PlatzhalterText';
 import {
@@ -43,10 +43,10 @@ export const alleAnsehenStil: CSSProperties = {
 // Oben/unten etwas Luft, damit der Coverschatten nicht abgeschnitten wird.
 const listeStil: CSSProperties = {
   ...horizontalScrollStil,
-  gap: '16px',
+  gap: abstand('l'),
   margin: 0,
-  paddingTop: '4px',
-  paddingBottom: '8px',
+  paddingTop: abstand('xs'),
+  paddingBottom: abstand('s'),
   listStyle: 'none',
 };
 
@@ -75,7 +75,7 @@ const titelStil: CSSProperties = {
 };
 
 const leerBereichStil: CSSProperties = {
-  padding: `4px ${seitenRand}px 8px`,
+  padding: `${abstand('xs')} ${seitenRand}px ${abstand('s')}`,
 };
 
 const leerFlaecheStil: CSSProperties = {

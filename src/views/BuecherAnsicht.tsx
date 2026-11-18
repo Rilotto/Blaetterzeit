@@ -17,6 +17,7 @@ import Uebersicht from '@/buecher/Uebersicht';
 import type { Buch } from '@/domain/buch';
 import type { AnsichtRepository, BookRepository, ImageStore } from '@/storage';
 import BuchDetails from './BuchDetails';
+import { abstand } from '@/theme';
 
 interface Props {
   /** Filter der Filterleiste; ohne Angabe die zentrale Filterkonfiguration (REQ-007). */
@@ -40,7 +41,7 @@ interface Props {
 }
 
 const seiteStil: CSSProperties = {
-  paddingBottom: '24px',
+  paddingBottom: abstand('xl'),
 };
 
 /** Lädt die Bücher über die Repository-Schnittstelle, sofern keine übergeben wurden; `stand` erzwingt ein Neuladen. */

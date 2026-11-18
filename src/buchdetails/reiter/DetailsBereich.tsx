@@ -8,7 +8,7 @@ import {
   sonderausgabeText,
 } from '@/domain/ausgabe';
 import type { Buch } from '@/domain/buch';
-import { detailsFarbe } from '@/theme';
+import { detailsFarbe, textstufe, kartenSchatten, abstand, bildschirmrand } from '@/theme';
 import { RAND } from '../masse';
 import { abschnittKopfStil, abschnittUeberschriftStil, karteStil } from './rezension';
 
@@ -46,7 +46,7 @@ interface Props {
 // Überschriften wie REF-details-01/-02: normale Schreibweise, größer, Dunkelbraun (nicht Großbuchstaben wie „BEWERTUNG“).
 const ueberschriftStil: CSSProperties = {
   ...abschnittUeberschriftStil,
-  fontSize: '22px',
+  ...textstufe('abschnitt'),
   fontWeight: 600,
   letterSpacing: 'normal',
   textTransform: 'none',
@@ -54,29 +54,29 @@ const ueberschriftStil: CSSProperties = {
 };
 
 const bearbeitenStil: CSSProperties = {
-  margin: '-8px -4px -8px 0',
-  padding: '8px 4px',
+  margin: `calc(-1 * ${abstand('s')}) calc(-1 * ${abstand('xs')}) calc(-1 * ${abstand('s')}) 0`,
+  padding: `${abstand('s')} ${abstand('xs')}`,
   border: 'none',
   background: 'none',
   fontFamily: 'inherit',
-  fontSize: '17px',
+  ...textstufe('text'),
   color: detailsFarbe('bearbeiten'),
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
 };
 
-const pillenStil: CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: '8px', margin: `0 ${RAND}px` };
+const pillenStil: CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: abstand('s'), margin: `0 ${RAND}px` };
 
 const pilleBasis: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
-  gap: '6px',
+  gap: abstand('s'),
   boxSizing: 'border-box',
   minHeight: '34px',
-  padding: '4px 14px',
+  padding: `${abstand('xs')} ${abstand('m')}`,
   borderRadius: '17px',
   fontFamily: 'inherit',
-  fontSize: '15px',
+  ...textstufe('text'),
   fontWeight: 600,
   lineHeight: 1.2,
 };
@@ -108,22 +108,24 @@ const sammlungStil: CSSProperties = {
   WebkitTapHighlightColor: 'transparent',
 };
 
-const karteDetails: CSSProperties = {
+export const karteDetails: CSSProperties = {
   ...karteStil,
-  padding: '0 16px 0 20px',
-  border: `2px solid ${detailsFarbe('karteRahmen')}`,
+  padding: `0 ${abstand('l')} 0 ${bildschirmrand}`,
+  // Weicher, warmer Schatten statt hartem Rahmen (REQ-065 AK-11).
+  border: 'none',
+  boxShadow: kartenSchatten,
   backgroundColor: detailsFarbe('karteFlaeche'),
 };
 
-const zeileStil = (letzte: boolean, antippbar: boolean): CSSProperties => ({
+export const zeileStil = (letzte: boolean, antippbar: boolean): CSSProperties => ({
   display: 'flex',
   alignItems: 'center',
-  gap: '12px',
+  gap: abstand('m'),
   boxSizing: 'border-box',
   width: '100%',
   minHeight: '54px',
   margin: 0,
-  padding: '10px 0',
+  padding: `${abstand('s')} 0`,
   border: 'none',
   borderBottom: letzte ? 'none' : `1.5px solid ${detailsFarbe('trennlinie')}`,
   background: 'none',
@@ -133,24 +135,24 @@ const zeileStil = (letzte: boolean, antippbar: boolean): CSSProperties => ({
   WebkitTapHighlightColor: 'transparent',
 });
 
-const bezeichnungStil: CSSProperties = {
+export const bezeichnungStil: CSSProperties = {
   flex: '0 0 auto',
-  fontSize: '18px',
+  ...textstufe('text'),
   color: detailsFarbe('zeileBezeichnung'),
 };
 
-const wertStil = (hervorgehoben: boolean): CSSProperties => ({
+export const wertStil = (hervorgehoben: boolean): CSSProperties => ({
   flex: '1 1 auto',
   minWidth: 0,
   textAlign: 'right',
-  fontSize: '16px',
+  ...textstufe('meta'),
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   color: hervorgehoben ? detailsFarbe('preisLeer') : detailsFarbe('zeileWert'),
 });
 
-const pfeilStil: CSSProperties = { flex: '0 0 auto', fontSize: '22px', lineHeight: 1, color: detailsFarbe('zeilePfeil') };
+export const pfeilStil: CSSProperties = { flex: '0 0 auto', ...textstufe('titel'), lineHeight: 1, color: detailsFarbe('zeilePfeil') };
 
 function Abschnitt({ id, titel, bearbeiten, children }: { id: string; titel: string; bearbeiten?: boolean; children: ReactNode }) {
   return (
@@ -291,7 +293,7 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
 export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onVerlag, onIsbn, onHinzugefuegt }: Props) {
   const erschienen = buch.erscheinungsjahr ?? (buch.erscheinungsdatum ? Number(buch.erscheinungsdatum.slice(6)) : undefined);
   return (
-    <div style={{ paddingBottom: '8px' }}>
+    <div style={{ paddingBottom: abstand('s') }}>
       <Abschnitt id="genres" titel="Genres" bearbeiten>
         <Pillen id="genres" namen={buch.genres} leerText="Genres hinzufügen" />
       </Abschnitt>
@@ -306,7 +308,7 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onVe
         <button type="button" data-sammlung-hinzufuegen="" style={sammlungStil}>
           Zu einer Sammlung hinzufügen
         </button>
-        <div style={{ ...karteDetails, marginTop: '12px' }}>
+        <div style={{ ...karteDetails, marginTop: abstand('m') }}>
           <button type="button" data-in-bibliotheken="" style={zeileStil(true, false)}>
             <span style={bezeichnungStil}>In Bibliotheken</span>
             <span style={wertStil(false)} />

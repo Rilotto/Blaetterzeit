@@ -91,3 +91,21 @@ html[data-barcode-aktiv] [data-scan-bildschirm] * {
 html[data-barcode-aktiv] [data-scan-bildschirm] {
   background: transparent !important;
 }
+
+/* REQ-065 AK-9: Jede Schaltfläche (button) und jedes Element mit data-tippflaeche erhält eine unsichtbar
+   erweiterte Tippfläche von mindestens 44 × 44 px, auch wenn die sichtbare Fläche kleiner ist
+   (Wert: --bz-tippflaeche aus src/theme/typografie.ts). Inline gesetztes position hat Vorrang. */
+button,
+[data-tippflaeche] {
+  position: relative;
+}
+button::before,
+[data-tippflaeche]::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--bz-tippflaeche, 44px));
+  height: max(100%, var(--bz-tippflaeche, 44px));
+  transform: translate(-50%, -50%);
+}

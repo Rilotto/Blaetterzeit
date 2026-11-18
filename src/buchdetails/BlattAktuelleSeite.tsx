@@ -1,7 +1,7 @@
 import { useState, type CSSProperties } from 'react';
 import type { Fortschrittsmodus } from '@/domain/buch';
 import { fortschrittPruefen, umrechnen } from '@/domain/fortschritt';
-import { fortschrittFarbe } from '@/theme';
+import { fortschrittFarbe, textstufe, abstand } from '@/theme';
 import BlattUnten, { blattEingabeStil, blattHinweisStil, sichernStil } from './BlattUnten';
 
 interface Props {
@@ -24,9 +24,9 @@ const MODI: { modus: Fortschrittsmodus; text: string }[] = [
 
 const umschalterStil: CSSProperties = {
   display: 'flex',
-  gap: '4px',
-  margin: '10px 0 14px',
-  padding: '4px',
+  gap: abstand('xs'),
+  margin: `${abstand('s')} 0 ${abstand('m')}`,
+  padding: abstand('xs'),
   borderRadius: '18px',
   backgroundColor: fortschrittFarbe('umschalterInaktiv'),
 };
@@ -41,7 +41,7 @@ const optionStil = (aktiv: boolean): CSSProperties => ({
   backgroundColor: aktiv ? fortschrittFarbe('umschalterAktiv') : fortschrittFarbe('umschalterInaktiv'),
   color: fortschrittFarbe('umschalterSchrift'),
   fontFamily: 'inherit',
-  fontSize: '16px',
+  ...textstufe('text'),
   fontWeight: aktiv ? 600 : 500,
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',

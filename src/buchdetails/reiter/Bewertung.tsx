@@ -1,15 +1,15 @@
 import type { CSSProperties } from 'react';
 import Symbolbild from '@/components/Symbolbild';
 import { KRITERIEN, stufentext, type Bewertungen, type KriteriumId } from '@/domain/bewertung';
-import { kriteriumBlass, kriteriumVoll, rezensionFarbe } from '@/theme';
+import { kriteriumBlass, kriteriumVoll, rezensionFarbe, textstufe, pillenhoehe, abstand, tippflaeche } from '@/theme';
 import { KRITERIUM_SYMBOL, STUFEN, abschnittKopfStil, abschnittSchaltflaecheStil, abschnittUeberschriftStil, karteStil } from './rezension';
 
 const zeileStil = (letzte: boolean): CSSProperties => ({
   display: 'flex',
   alignItems: 'center',
-  gap: '8px',
+  gap: abstand('s'),
   minHeight: '60px',
-  padding: '8px 0',
+  padding: `${abstand('s')} 0`,
   borderBottom: letzte ? 'none' : `1.5px solid ${rezensionFarbe('trennlinie')}`,
 });
 
@@ -17,7 +17,7 @@ const namenBereichStil: CSSProperties = { flex: '1 1 auto', minWidth: 0 };
 
 const nameStil: CSSProperties = {
   display: 'block',
-  fontSize: '17px',
+  ...textstufe('text'),
   fontWeight: 700,
   lineHeight: 1.2,
   overflowWrap: 'anywhere',
@@ -26,8 +26,8 @@ const nameStil: CSSProperties = {
 
 const stufentextStil: CSSProperties = {
   display: 'block',
-  marginTop: '2px',
-  fontSize: '15px',
+  marginTop: abstand('xs'),
+  ...textstufe('meta'),
   fontStyle: 'italic',
   lineHeight: 1.25,
   color: rezensionFarbe('stufentext'),
@@ -39,8 +39,10 @@ const symbolSchaltflaecheStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '30px',
-  height: '40px',
+  // Breite = Mindest-Tippfläche (REQ-065 AK-9): Die 44-px-Flächen der Symbole liegen lückenlos nebeneinander,
+  // ohne sich zu überlappen (die Vergrößerung per ::before greift hier nicht über die Breite hinaus).
+  width: tippflaeche,
+  height: pillenhoehe,
   margin: 0,
   padding: 0,
   border: 'none',
@@ -98,7 +100,7 @@ export default function Bewertung({ bewertungen, onAntippen }: Props) {
                       onClick={() => onAntippen(k.id, n)}
                       style={symbolSchaltflaecheStil}
                     >
-                      <Symbolbild name={KRITERIUM_SYMBOL[k.id]} farbe={voll ? kriteriumVoll(k.id) : kriteriumBlass(k.id)} groesse={24} />
+                      <Symbolbild name={KRITERIUM_SYMBOL[k.id]} farbe={voll ? kriteriumVoll(k.id) : kriteriumBlass(k.id)} groesse={22} />
                     </button>
                   );
                 })}
