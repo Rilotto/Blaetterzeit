@@ -18,6 +18,7 @@ import BuecherAnsicht from '@/views/BuecherAnsicht';
 import type { Bildquelle } from '@/bild/bildquelle';
 import type { Buch } from '@/domain/buch';
 import type { BookRepository, ImageStore } from '@/storage';
+import { ZURUECK_FRIST_MS } from '@/plattform/zurueckTaste';
 import { farbVariablen } from '@/theme';
 
 const PNG = {
@@ -111,6 +112,12 @@ async function hinzufuegen() {
 }
 const neue = (repo: ReturnType<typeof repoFake>) => [...repo.daten.values()].filter((b) => b.id !== MOMO.id);
 async function androidZurueck() {
+  // Robust für langsame CI: Ein selbst ausgelöstes „Zurück“ (Schließen/Unmount im vorigen Test, auch aus neu
+  // geladenen Modul-Instanzen) kann noch ausstehen; sein verspätetes popstate würde sonst dieses Ereignis abfangen
+  // (Mechanismus H4 in src/plattform/zurueckTaste.ts). Darum erst die Frist abwarten.
+  await act(async () => {
+    await new Promise((r) => setTimeout(r, ZURUECK_FRIST_MS + 100));
+  });
   await act(async () => {
     window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
     await new Promise((r) => setTimeout(r, 20));
@@ -418,7 +425,7 @@ describe('REQ-032 Cover beim manuellen Eintrag', () => {
       await merkeVor();
       await schliessen();
       await warte();
-      expect(blatt()).toBeNull();
+      await vi.waitFor(() => expect(blatt()).toBeNull(), { timeout: 3000 });
       expect(screen.getByRole('heading', { name: 'Deine Bücher' })).toBeVisible();
       expect(repo.save).not.toHaveBeenCalled();
       expect(s.put).not.toHaveBeenCalled();
