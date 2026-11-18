@@ -69,8 +69,9 @@ Gepflegt vom Anforderungsmanager. Im Code werden die englischen Bezeichner verwe
 | Bibliothek | – | Gesamtheit aller erfassten Bücher eines Nutzers. |
 | Theme | `Theme` | Veraltet, abgelöst durch „Farbdesign“ und „Schriftwahl“ (REQ-001 ersetzt durch REQ-068). |
 | Abschnitt „App“ | – | Abschnitt der Seite „Profil“ mit einer Karte im Stil von „Ausgabe“. Derzeit nur die Zeile „Design“ mit der aktuellen Wahl, z. B. „Klassisch · Fraunces ›“ (REQ-066). |
-| Fenster „Design“ | – | Blatt von unten mit Ziehgriff, Titel, X, Live-Vorschau (Mini-Buchkarte) und Umschaltpille „Farben / Schriftart“. Antippen wirkt sofort, es gibt kein „Sichern“ (REQ-067). |
+| Fenster „Design“ | – | Blatt von unten mit Ziehgriff, Titel, X, Live-Vorschau (Mini-Buchkarte) und Umschaltpille „Farben / Schriftart“, künftig „Farben | Schriftart | Stil“ (REQ-071). Antippen wirkt sofort, es gibt kein „Sichern“ (REQ-067). |
 | Farbdesign | – | Zentral definierter, benannter Satz von Werten für alle Farbrubriken. Zum Start gibt es Klassisch (Standard), Salbei und Nachtlektüre. Wahl dauerhaft gespeichert, neue Designs nur auf Zuruf des CEO (REQ-068). |
+| Stil | – | Wählbare Formensprache der App (dritte Pille „Stil“ im Fenster „Design“), zentral definiert: „Klassisch“ (Standard, heutige Karten, Pillen, weiche Schatten) und „Feuilleton“ (Linien statt Karten, Text mit Unterstrich statt Pillen, wie gedruckt). Mit Farbdesign und Schriftwahl frei kombinierbar, dauerhaft gespeichert. Nicht zu verwechseln mit „Format“ der Karte „Ausgabe“ (REQ-071). |
 | Schriftwahl | – | Wählbare App-Schrift aus einer zentralen Liste, derzeit Systemschrift und Fraunces (Standard). Wahl dauerhaft gespeichert, mit dem Farbdesign frei kombinierbar (REQ-069). |
 | Hauptnavigation | – | Dauerhaft sichtbare Navigationsleiste am unteren Bildschirmrand mit fünf Menüpunkten (REQ-002). |
 | Menüpunkt | – | Eintrag der Hauptnavigation, bestehend aus Icon und darunterliegender Beschriftung: Start, Bücher, Bibliothek, Statistik, Profil (REQ-002). |
