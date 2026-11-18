@@ -21,3 +21,9 @@ Planung beauftragt vom CEO 2026-11-16: „passt alles für mich. bitte für den 
 
 ## Testvorgabe
 Lokal nur Tests der Sprint-REQs + Typecheck/Lint; Gegenprobe minimal (3–5 Fehler: Pflichtfelder, ISBN-Prüfziffer, Übernahme der Treffer in den Manuellen Eintrag, Speichern); Sicherheitsnetz CI.
+
+## Nachtrag 2026-11-18 – Teil C: Look & Feel „cozy“ (für den nächsten Prototyp)
+CEO: „Plane die Änderung bitte für den nächsten Prototypen mir ein. Es soll Variante B - Fraunces werden.“
+- REQ-065 (Should, Abgestimmt): Fraunces lokal (OFL), zentrale Schriftgrößenstufen (12/14/15/17/20/22–26), Abstandsraster, Pillen 36 px (Tippfläche ≥ 44 px), kursive Autoren/Stufentexte, gesperrte Labels, Papier-Körnung, warme Schatten, Zeilenabstand ~1,5.
+- REQ-003 angepasst (Systemschrift entfällt).
+- Aufwand geschätzt 5–8 % Nutzungslimit; Risiko: Tests mit fest geprüften Pixelwerten müssen angepasst werden.
