@@ -30,3 +30,4 @@ CEO: „Plane die Änderung bitte für den nächsten Prototypen mir ein. Es soll
 - Ergänzung 2026-11-18: REQ-066–069 (Profil › App › Design: Farben/Schriftart, Live-Vorschau, Designs Klassisch/Salbei/Nachtlektüre, Schriften Systemschrift/Fraunces, sofortiger Wechsel ohne Neustart, dauerhaft gespeichert). REQ-001 abgelöst. Aufwand zusammen mit REQ-065 geschätzt 12–18 % Nutzungslimit.
 - Nachtrag 2026-11-18: REQ-070 Lupe + Feinjustierung (Variante b) beim Zuschneiden – für den nächsten Prototyp vorgemerkt, Umsetzung erst nach weiteren CEO-Wünschen und ausdrücklicher Bitte.
 - Nachtrag 2026-11-18: REQ-071 Design-Pille „Stil“ (Klassisch/Feuilleton, Feuilleton app-weit) – für den nächsten Prototyp vorgemerkt.
+- Nachtrag 2026-11-18: REQ-072 Maße (Zeile + Blatt, Scan-Übernahme) und REQ-073 Proportionen aus Maßen (Cover/Rücken/Schnitt maßstabsgetreu, auch Startrahmen Zuschnitt) – für den nächsten Prototyp vorgemerkt. Feuilleton-Cover-Platzhalter = nur Rahmen (REQ-071).

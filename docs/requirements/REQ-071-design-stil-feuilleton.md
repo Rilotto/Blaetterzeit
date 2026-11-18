@@ -40,7 +40,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 - F2: Seitentitel und Buchtitel groß, in normaler Strichstärke (nicht fett).
 - F3: Filterleiste ohne Pillen: Filter als reiner Text in Tertiär, der aktive Filter in Primär mit Unterstrich (Standard 2 px).
 - F4: Umschaltpillen (Reiterleiste REQ-043, Umschaltpille im Fenster „Design“) und Status-Chips folgen demselben Muster: Text, der aktive Eintrag in Primär mit Unterstrich, statt gefüllter Pille.
-- F5: Cover-Platzhalter eckig (ohne Rundung); Fortschrittsbalken dünn (Standard ca. 2 px).
+- F5: Cover-Platzhalter ohne Fläche, nur als dünner Rahmen in GhostFrame mit eckigen Ecken (CEO 2026-11-18: „B passt für mich“; abweichend von der Ghost-Fläche aus REQ-010, die für „Klassisch“ gilt); Fortschrittsbalken dünn (Standard ca. 2 px).
 - F6: Untere Hauptnavigation auf der Farbrubrik „Hintergrund“ mit Trennlinie oben; das aktive Icon in Primär mit kurzem Strich darüber (statt Hervorhebung hinter dem Icon).
 - Konkrete Maße (Strichstärken, Größen) sind Standardwerte auf Zuruf und kein Akzeptanzkriterium.
 
@@ -97,7 +97,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 ### AK-9 Feuilleton: Cover-Platzhalter, Fortschritt, Navigation
 - **Gegeben** „Feuilleton“ ist aktiv
 - **Wenn** der Nutzer Cover-Platzhalter, Fortschrittsbalken und Hauptnavigation betrachtet
-- **Dann** ist der Cover-Platzhalter eckig und der Fortschrittsbalken dünn
+- **Dann** ist der Cover-Platzhalter keine Fläche, sondern ein dünner Rahmen in GhostFrame mit eckigen Ecken, und der Fortschrittsbalken ist dünn
 - **Und** die Hauptnavigation liegt auf „Hintergrund“ mit Trennlinie oben, das aktive Icon ist in Primär mit kurzem Strich darüber
 
 ### AK-10 Anzeige in der Zeile „Design“
@@ -128,4 +128,5 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 
 | Datum | Änderung | durch |
 |---|---|---|
+| 2026-11-18 | F5 und AK-9: Cover-Platzhalter im Feuilleton nur als dünner Rahmen in GhostFrame, eckig (CEO: „B passt für mich“), löst den Widerspruch zu REQ-010 | Anforderungsmanager |
 | 2026-11-18 | Erstellt aus CEO-Wunsch, CEO-Antwort („ja überall“) und dem vom CEO angenommenen Vorschlag des Scrum Masters. Status „Abgestimmt“ | Anforderungsmanager |

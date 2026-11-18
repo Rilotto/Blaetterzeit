@@ -27,6 +27,7 @@ Gepflegt vom Anforderungsmanager. Hier stehen Wünsche, die der CEO ausdrücklic
 | 2026-11-15 | Funktion „Sammlungen und Bibliotheken“ (Reiter Details) | „keine Funktion aktuell, bitte auf die To-Do Liste“; Prio Could | REQ-055 |
 | 2026-11-15 | Funktion „Bearbeiten“ bei Genres, Tropes, Inhaltswarnungen | „ja, aber aktuell ohne Funktion (To-Do Liste -> Could)“ | REQ-051 |
 | 2026-11-16 | Google Books als weitere Quelle für „Barcode scannen“ | Vom CEO angenommener Vorschlag: „Google Books später (To-do, Could, erfordert kostenlosen API-Schlüssel des CEO)“; Prio Could | REQ-062 |
+| 2026-11-18 | 3D-Modell des Buches | 3D-Modell des Buches aus Maßen und Bildern (Cover, Rücken, Schnitt). CEO: „Ist mir wichtig, ich möchte später noch ein 3D Modell als Funktionalität einfügen.“ Prio Could | REQ-072, REQ-073 |
 | 2026-11-09 | Buchdetails aus weiteren Listen öffnen | „Später auch noch aus diversen Listen, das fügen wir aber nachträglich mit ein, wenn es relevant wird.“ | REQ-013 |
 
 - 2026-11-09 (Scrum Master): REQ-016 um die CEO-Entscheidung ergänzen, dass der Hinweis „Kamera nicht verfügbar“ auch bei verweigertem Zugriff erscheint. Zitat: „Ja, der Hinweis soll weiterhin bestehen.“
