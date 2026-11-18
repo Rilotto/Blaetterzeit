@@ -28,3 +28,4 @@ CEO: „Plane die Änderung bitte für den nächsten Prototypen mir ein. Es soll
 - REQ-003 angepasst (Systemschrift entfällt).
 - Aufwand geschätzt 5–8 % Nutzungslimit; Risiko: Tests mit fest geprüften Pixelwerten müssen angepasst werden.
 - Ergänzung 2026-11-18: REQ-066–069 (Profil › App › Design: Farben/Schriftart, Live-Vorschau, Designs Klassisch/Salbei/Nachtlektüre, Schriften Systemschrift/Fraunces, sofortiger Wechsel ohne Neustart, dauerhaft gespeichert). REQ-001 abgelöst. Aufwand zusammen mit REQ-065 geschätzt 12–18 % Nutzungslimit.
+- Nachtrag 2026-11-18: REQ-070 Lupe + Feinjustierung (Variante b) beim Zuschneiden – für den nächsten Prototyp vorgemerkt, Umsetzung erst nach weiteren CEO-Wünschen und ausdrücklicher Bitte.
