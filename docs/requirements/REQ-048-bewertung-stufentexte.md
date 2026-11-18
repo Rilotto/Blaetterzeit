@@ -1,7 +1,7 @@
 ---
 id: REQ-048
 titel: Reiter „Rezension“ – Stufentext unter dem Kriteriennamen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

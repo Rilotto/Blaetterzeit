@@ -1,7 +1,7 @@
 ---
 id: REQ-056
 titel: Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

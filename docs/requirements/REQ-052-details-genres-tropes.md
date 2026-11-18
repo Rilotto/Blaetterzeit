@@ -1,7 +1,7 @@
 ---
 id: REQ-052
 titel: Reiter „Details“ – Genres und Tropes als Pillen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

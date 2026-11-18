@@ -1,7 +1,7 @@
 ---
 id: REQ-063
 titel: Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

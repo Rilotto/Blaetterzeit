@@ -1,7 +1,7 @@
 ---
 id: REQ-057
 titel: Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

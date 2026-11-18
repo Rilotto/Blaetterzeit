@@ -1,7 +1,7 @@
 ---
 id: REQ-047
 titel: Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

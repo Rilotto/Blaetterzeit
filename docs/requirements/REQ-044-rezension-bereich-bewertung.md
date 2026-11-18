@@ -1,7 +1,7 @@
 ---
 id: REQ-044
 titel: Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

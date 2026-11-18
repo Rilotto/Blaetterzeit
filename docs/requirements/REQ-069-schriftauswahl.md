@@ -1,7 +1,7 @@
 ---
 id: REQ-069
 titel: Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces)
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

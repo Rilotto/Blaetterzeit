@@ -1,7 +1,7 @@
 ---
 id: REQ-064
 titel: Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

@@ -1,7 +1,7 @@
 ---
 id: REQ-053
 titel: Reiter „Details“ – Inhaltswarnungen als Pillen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

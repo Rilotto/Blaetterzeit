@@ -1,7 +1,7 @@
 ---
 id: REQ-065
 titel: Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: qualitaet
 quelle: CEO

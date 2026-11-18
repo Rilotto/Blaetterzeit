@@ -1,7 +1,7 @@
 ---
 id: REQ-043
 titel: Buchdetails – Reiterleiste mit wandernder Pille
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

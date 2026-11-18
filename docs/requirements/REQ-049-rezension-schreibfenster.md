@@ -1,7 +1,7 @@
 ---
 id: REQ-049
 titel: Reiter „Rezension“ – Schreibfenster für die eigene Rezension
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

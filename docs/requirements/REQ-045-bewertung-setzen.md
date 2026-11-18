@@ -1,7 +1,7 @@
 ---
 id: REQ-045
 titel: Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

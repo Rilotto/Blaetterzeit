@@ -1,7 +1,7 @@
 ---
 id: REQ-058
 titel: Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

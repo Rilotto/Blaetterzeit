@@ -1,7 +1,7 @@
 ---
 id: REQ-059
 titel: Reiter „Details“ – Preis über ein Menü eingeben
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

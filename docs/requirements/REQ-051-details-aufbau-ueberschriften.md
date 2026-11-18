@@ -1,7 +1,7 @@
 ---
 id: REQ-051
 titel: Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

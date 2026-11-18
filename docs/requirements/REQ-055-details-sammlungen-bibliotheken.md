@@ -1,7 +1,7 @@
 ---
 id: REQ-055
 titel: Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

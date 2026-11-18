@@ -1,7 +1,7 @@
 ---
 id: REQ-046
 titel: Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass)
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
