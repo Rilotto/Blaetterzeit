@@ -108,7 +108,7 @@ const vorschauStil = (farbdesign: FarbdesignId, schriftId: SchriftId): CSSProper
   marginTop: abstand('s'),
   padding: abstand('m'),
   borderRadius: '18px',
-  backgroundColor: rubrikFarbe('hintergrund'),
+  backgroundColor: rubrikFarbe('kartenflaeche'),
   boxShadow: kartenSchatten,
   fontFamily: schrift,
 });

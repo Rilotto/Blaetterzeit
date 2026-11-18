@@ -38,8 +38,9 @@ Abstimmungsnachweis (CEO, 2026-11-18, wörtlich): „Plane die Änderung bitte f
 
 **Cozy-Details**
 - Das System muss Autorenangaben und Stufentexte (REQ-048) kursiv darstellen.
-- Das System muss den Hintergrund der App mit einer leichten Papier-Körnung darstellen.
+- Das System muss den Hintergrund der App einfarbig in der Farbrubrik „Hintergrund“ darstellen, ohne Papier-Körnung (entfällt laut CEO-Feedback vom 2026-11-18).
 - Das System muss Karten mit einem weichen, warmen Schatten statt eines harten Rahmens absetzen.
+- Das System muss die Fläche aller Karten (z. B. Ausgabe, App, Bewertung, Rezension, Listenkarten) in der neuen Farbrubrik „Kartenfläche“ darstellen. Ausgenommen sind die Statistik-Pille (REQ-026) und die Formular-Karte im Blatt „Manueller Eintrag“ (REQ-030), die wie abgenommen „Ghost“ bleiben. Sie ist heller als „Hintergrund“. Die Standardwerte stehen je Farbdesign in REQ-068 und sind auf Zuruf änderbar.
 - Das System muss Fließtext mit einem Zeilenabstand von etwa dem 1,5-Fachen der Schriftgröße darstellen.
 
 **Standardwerte (keine Akzeptanzkriterien, auf Zuruf änderbar)**
@@ -127,17 +128,24 @@ Welche Stufe ein bestehendes Element bekommt, legt der Entwickler nach folgender
 - **Wenn** die Autorenangabe (z. B. in den Buchdetails) und ein Stufentext (z. B. „Hat mir gefallen“) angezeigt werden
 - **Dann** sind beide kursiv dargestellt
 
-### AK-11 Papier-Körnung, weiche Schatten, Zeilenabstand
+### AK-11 Einfarbiger Hintergrund, weiche Schatten, Zeilenabstand
 - **Gegeben** die App ist geöffnet
 - **Wenn** der Hintergrund, eine Karte (z. B. Statistik-Pille oder Karte „Ausgabe“) und ein mehrzeiliger Fließtext betrachtet werden
-- **Dann** zeigt der Hintergrund eine leichte Papier-Körnung
+- **Dann** ist der Hintergrund einfarbig in der Farbrubrik „Hintergrund“, ohne Papier-Körnung oder Textur
 - **Und** die Karte ist durch einen weichen Schatten abgesetzt und nicht durch einen harten Rahmen
 - **Und** der Fließtext hat einen Zeilenabstand von etwa dem 1,5-Fachen der Schriftgröße
+
+### AK-12 Karten in der Farbrubrik „Kartenfläche“
+- **Gegeben** die App ist geöffnet
+- **Wenn** die Karten „Ausgabe“ (Buchdetails) und „App“ (Profil) betrachtet werden
+- **Dann** beziehen beide ihre Fläche aus der Farbrubrik „Kartenfläche“
+- **Und** in jedem Farbdesign ist „Kartenfläche“ heller als „Hintergrund“
+- **Und** die Statistik-Pille (REQ-026) und die Formular-Karte im Blatt „Manueller Eintrag“ (REQ-030) behalten die Fläche „Ghost“
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Konkrete Zahlenwerte (Pixel, Zeilenabstand, Icongröße, Stärke der Körnung und des Schattens). Sie sind Standardwerte auf Zuruf und keine Akzeptanzkriterien.
-- Farben und Farbrubriken. Sie bleiben unverändert. Die Schattenfarbe leitet sich aus den bestehenden Farbrubriken ab.
+- Farben und Farbrubriken bleiben unverändert, ausgenommen die neue Rubrik „Kartenfläche“. Die Schattenfarbe leitet sich aus den bestehenden Farbrubriken ab.
 - Inhalte, Texte, Reihenfolge und Verhalten bestehender Elemente. Sie bleiben unverändert, es ändern sich nur Schrift, Schriftgröße, Abstände, Höhen und die genannten Cozy-Details.
 - Eine Möglichkeit für den Nutzer, Schrift oder Schriftgröße in der App zu ändern (vgl. REQ-001 Themes).
 
@@ -164,5 +172,8 @@ Welche Stufe ein bestehendes Element bekommt, legt der Entwickler nach folgender
 
 | Datum | Änderung | durch |
 |---|---|---|
+| 2026-11-18 | Statistik-Pille (REQ-026) und Formular-Karte im Manuellen Eintrag (REQ-030) aus „Kartenfläche“ und AK-12 herausgenommen. Sie bleiben „Ghost“, wie vom CEO abgenommen (Vorgabe des Scrum Masters). Status unverändert | Anforderungsmanager |
+| 2026-11-18 | Neue Farbrubrik „Kartenfläche“ für alle Karten, heller als „Hintergrund“ (neu AK-12, Standardwerte je Design in REQ-068). Begründung: Der CEO wünscht die hellere Kartenfläche „wie bei Buchdetails -> Ausgabe“. Diese wirkte bisher nur durch die Körnung heller, und die Körnung entfällt. Status unverändert | Anforderungsmanager |
+| 2026-11-18 | Papier-Körnung entfällt, der Hintergrund ist wieder rein „Hintergrund“ (Anforderung und AK-11 angepasst). CEO zum Prototyp: „Mir wirkt der Hintergrund zu dunkel. Kannst du bitte die Papier Körnung entfernen?“ Status unverändert | Anforderungsmanager |
 | 2026-11-18 | AK-1 und AK-3 an die Schriftwahl aus REQ-069 angepasst: Fraunces ist Standard ohne Nutzerwahl, und die Schriftliste ist die einzige Ausnahme von der zentralen Schrift (CEO: „Systemschrift wie bisher und dann erstmal nur Fraunces.“). Status unverändert | Anforderungsmanager |
 | 2026-11-18 | Erstellt aus dem vom CEO angenommenen Vorschlag des Scrum Masters (Variante B, Fraunces). Status „Abgestimmt“, Priorität Should. Abstimmungsnachweis (CEO, wörtlich): „Plane die Änderung bitte für den nächsten Prototypen mir ein. Es soll Variante B - Fraunces werden. Danke für den Vorschlag!“ | Anforderungsmanager |

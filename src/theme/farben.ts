@@ -7,6 +7,8 @@
 
 export type FarbrubrikId =
   | 'hintergrund'
+  // Fläche aller Karten, heller als „Hintergrund“ (nach Wegfall der Papier-Körnung).
+  | 'kartenflaeche'
   | 'primaer'
   | 'sekundaer'
   | 'tertiaer'
@@ -41,6 +43,8 @@ export interface Farbrubrik {
 /** Allgemeine Farbrubriken der App mit ihren aktuellen Standardwerten. */
 export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
   hintergrund: { name: 'Hintergrund', wert: '#FAF6EB' },
+  // Fläche aller Karten (Ausgabe, Profil › App, Bewertung, Rezension, Statistik, Listenkarten, Format).
+  kartenflaeche: { name: 'Kartenfläche', wert: '#FFFDF8' },
   primaer: { name: 'Primär', wert: '#76312C' },
   sekundaer: { name: 'Sekundär', wert: '#D9C8AE' },
   tertiaer: { name: 'Tertiär', wert: '#6B5849' },
@@ -106,6 +110,7 @@ export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
     werte: {
       ...klassischWerte,
       hintergrund: '#F3F5EE',
+      kartenflaeche: '#FBFCF8',
       primaer: '#4E7D63',
       sekundaer: '#C9D6C3',
       tertiaer: '#5E6B5A',
@@ -121,6 +126,7 @@ export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
     dunkel: true,
     werte: {
       hintergrund: '#2B2420',
+      kartenflaeche: '#362D28',
       primaer: '#D9A21B',
       sekundaer: '#5A4A3E',
       tertiaer: '#B8A58C',
@@ -463,7 +469,7 @@ export const uebersichtFarbrollen: Record<UebersichtFarbrolle, FarbrubrikId> = {
   sortierFlaeche: 'hintergrund',
   sortierRahmen: 'ghostframe',
   sortierSchrift: 'dunkelbraun',
-  kartenFlaeche: 'hintergrund',
+  kartenFlaeche: 'kartenflaeche',
   kartenRahmen: 'ghostframe',
   buchtitel: 'dunkelbraun',
   autor: 'tertiaer',
@@ -601,7 +607,7 @@ export const rezensionFarbrollen: Record<RezensionFarbrolle, FarbrubrikId> = {
   reiterInaktivIcon: 'tertiaer',
   abschnittsueberschrift: 'tertiaer',
   abschnittsIcon: 'primaer',
-  karteFlaeche: 'hintergrund',
+  karteFlaeche: 'kartenflaeche',
   karteRahmen: 'sekundaer',
   trennlinie: 'sekundaer',
   kriteriumName: 'dunkelbraun',
@@ -712,7 +718,7 @@ export const detailsFarbrollen: Record<DetailsFarbrolle, FarbrubrikId> = {
   pilleGestricheltSchrift: 'primaer',
   sammlungRahmen: 'sekundaer',
   sammlungSchrift: 'primaer',
-  karteFlaeche: 'hintergrund',
+  karteFlaeche: 'kartenflaeche',
   karteRahmen: 'sekundaer',
   trennlinie: 'sekundaer',
   zeileBezeichnung: 'dunkelbraun',
@@ -721,7 +727,7 @@ export const detailsFarbrollen: Record<DetailsFarbrolle, FarbrubrikId> = {
   preisLeer: 'primaer',
   // Ungültiges Feld in der Karte „Ausgabe“ (Seiten im Manuellen Eintrag, REQ-060, AK-5) wie „JAHR“.
   zeileFehler: 'primaer',
-  kachelFlaeche: 'hintergrund',
+  kachelFlaeche: 'kartenflaeche',
   kachelRahmen: 'sekundaer',
   kachelGewaehltFlaeche: 'ghost',
   kachelGewaehltRahmen: 'primaer',

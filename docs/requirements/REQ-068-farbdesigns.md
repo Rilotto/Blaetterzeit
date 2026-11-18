@@ -31,11 +31,13 @@ CEO (2026-11-18, wörtlich): „Farben gibt mir eine Übersicht, welche der bish
 
 **Standardwerte (keine Akzeptanzkriterien, auf Zuruf änderbar, analog CLAUDE.md „Farben auf Zuruf“)**
 
-| Design | Hintergrund | Primär | Sekundär | Tertiär | Dunkelbraun (Text) |
-|---|---|---|---|---|---|
-| Klassisch | heutige Standardfarben | | | | |
-| Salbei | #F3F5EE | #4E7D63 | #C9D6C3 | #5E6B5A | #2C3A2F |
-| Nachtlektüre (dunkel) | #2B2420 | #D9A21B | #5A4A3E | #B8A58C | #F1E9DA |
+| Design | Hintergrund | Primär | Sekundär | Tertiär | Dunkelbraun (Text) | Kartenfläche (REQ-065) |
+|---|---|---|---|---|---|---|
+| Klassisch | heutige Standardfarben | | | | | #FFFDF8 |
+| Salbei | #F3F5EE | #4E7D63 | #C9D6C3 | #5E6B5A | #2C3A2F | #FBFCF8 |
+| Nachtlektüre (dunkel) | #2B2420 | #D9A21B | #5A4A3E | #B8A58C | #F1E9DA | #362D28 |
+
+„Kartenfläche“ erscheint nicht in den fünf Farbkreisen der Liste.
 
 Die übrigen Farbrubriken (Ghost, GhostFrame, Flamme Rot und Orange, Kriterienfarben) leitet der Entwickler je Design passend ab. Eine Farbänderung auf Zuruf betrifft das vom CEO genannte Design.
 
@@ -91,4 +93,5 @@ Die übrigen Farbrubriken (Ghost, GhostFrame, Flamme Rot und Orange, Kriterienfa
 
 | Datum | Änderung | durch |
 |---|---|---|
+| 2026-11-18 | Farbrubrik „Kartenfläche“ (REQ-065) mit Standardwerten je Design in die Tabelle aufgenommen (Klassisch #FFFDF8, Salbei #FBFCF8, Nachtlektüre #362D28). Begründung: CEO-Wunsch nach hellerer Kartenfläche „wie bei Buchdetails -> Ausgabe“, nachdem die Körnung entfällt. Status unverändert | Anforderungsmanager |
 | 2026-11-18 | Erstellt aus der CEO-Anforderung, dem angenommenen Mockup und den CEO-Antworten (Start-Designs, Ablösung von REQ-001). Status „Abgestimmt“ | Anforderungsmanager |

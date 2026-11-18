@@ -233,10 +233,45 @@ function Zeile({
     );
   }
   return (
-    <button type="button" data-ausgabe-zeile={id} onClick={onAntippen} style={zeileStil(letzte, Boolean(onAntippen))}>
-      <span data-zeile-bezeichnung="" style={bezeichnungStil}>
-        {beschriftung}
-      </span>
+    <KartenZeile
+      zeilenAttribute={{ 'data-ausgabe-zeile': id }}
+      beschriftung={beschriftung}
+      wert={wert}
+      hervorgehoben={hervorgehoben}
+      pfeil={pfeil}
+      letzte={letzte}
+      onAntippen={onAntippen}
+    />
+  );
+}
+
+/**
+ * Zeile einer Karte im Stil der Karte „Ausgabe“ (REQ-056): Bezeichnung links, Wert rechts, optional Pfeil,
+ * Trennlinie außer bei der letzten Zeile. Auch im Profil › App verwendet (REQ-066).
+ */
+export function KartenZeile({
+  zeilenAttribute,
+  anzeigeAttribute,
+  beschriftung,
+  wert,
+  hervorgehoben = false,
+  pfeil = false,
+  letzte = false,
+  onAntippen,
+}: {
+  /** data-Attribute der Zeile (z. B. data-ausgabe-zeile). */
+  zeilenAttribute: Record<`data-${string}`, string>;
+  /** Optional: data-Attribute einer layoutneutralen Hülle um Wert und Pfeil. */
+  anzeigeAttribute?: Record<`data-${string}`, string>;
+  beschriftung: string;
+  wert: string;
+  hervorgehoben?: boolean;
+  pfeil?: boolean;
+  letzte?: boolean;
+  onAntippen?: () => void;
+}) {
+  const wertUndPfeil = (
+    <>
       <span data-zeile-wert="" style={wertStil(hervorgehoben)}>
         {wert}
       </span>
@@ -245,6 +280,20 @@ function Zeile({
           ›
         </span>
       ) : null}
+    </>
+  );
+  return (
+    <button type="button" {...zeilenAttribute} onClick={onAntippen} style={zeileStil(letzte, Boolean(onAntippen))}>
+      <span data-zeile-bezeichnung="" style={bezeichnungStil}>
+        {beschriftung}
+      </span>
+      {anzeigeAttribute ? (
+        <span {...anzeigeAttribute} style={{ display: 'contents' }}>
+          {wertUndPfeil}
+        </span>
+      ) : (
+        wertUndPfeil
+      )}
     </button>
   );
 }

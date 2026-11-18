@@ -5,7 +5,6 @@ import { startMenuePunkt, type MenuePunktId } from '@/navigation/menu';
 import { createEinstellungRepository, type EinstellungRepository } from '@/storage';
 import {
   farbVariablen,
-  papierKoernung,
   rubrikFarbe,
   schrift,
   schriftgroesse,
@@ -31,8 +30,6 @@ const appStil = (farbdesign: FarbdesignId, schriftId: SchriftId): CSSProperties 
   lineHeight: zeilenabstand,
   // Die App-Wurzel deckt den ganzen Bildschirm in der Farbrubrik „Hintergrund“ ab (REQ-002/AK-13).
   backgroundColor: rubrikFarbe('hintergrund'),
-  // Leichte Papier-Körnung über dem Hintergrund (REQ-065 AK-11).
-  backgroundImage: papierKoernung,
   position: 'fixed',
   inset: 0,
   display: 'flex',
@@ -45,7 +42,6 @@ const inhaltStil: CSSProperties = {
   overflowY: 'auto',
   // Inhaltsbereich aller Ansichten in derselben Rubrik wie die Hauptnavigation (REQ-002/AK-13).
   backgroundColor: rubrikFarbe('hintergrund'),
-  backgroundImage: papierKoernung,
   // Oberer sicherer Bereich (Statusleiste), da die App randlos läuft (viewport-fit=cover).
   paddingTop: 'var(--safe-area-inset-top, env(safe-area-inset-top, 0px))',
 };

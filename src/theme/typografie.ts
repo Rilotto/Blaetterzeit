@@ -106,16 +106,3 @@ export function typografieVariablen(): Record<string, string> {
   vars['--bz-nav-icon'] = `${navIconPx}px`;
   return vars;
 }
-
-/**
- * Leichte Papier-Körnung des App-Hintergrunds (REQ-065 AK-11): feines Rauschen als SVG-Kachel,
- * halbtransparent über der Farbrubrik „Hintergrund“, daher in jedem Farbdesign passend.
- * Stärke (Deckkraft) ist Standardwert auf Zuruf.
- */
-export const papierKoernungDeckkraft = 0.06;
-const koernungSvg =
-  `<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>` +
-  `<filter id='k'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/>` +
-  `<feColorMatrix values='0 0 0 0 0.25  0 0 0 0 0.18  0 0 0 0 0.1  0 0 0 ${papierKoernungDeckkraft * 4} 0'/></filter>` +
-  `<rect width='100%' height='100%' filter='url(%23k)' opacity='0.5'/></svg>`;
-export const papierKoernung = `url("data:image/svg+xml;utf8,${koernungSvg}")`;

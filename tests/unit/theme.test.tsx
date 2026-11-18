@@ -21,6 +21,7 @@ describe('Farbrubriken', () => {
         'ghost',
         'ghostframe',
         'hintergrund',
+        'kartenflaeche',
         'primaer',
         'sekundaer',
         'tertiaer',

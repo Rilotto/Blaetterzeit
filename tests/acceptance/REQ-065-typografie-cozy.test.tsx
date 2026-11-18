@@ -404,13 +404,25 @@ describe('REQ-065 Typografie und Proportionen', () => {
     expect(getComputedStyle(st).fontStyle).toBe('italic');
   });
 
-  describe('AK-11 Papier-Körnung, weiche Schatten, Zeilenabstand', () => {
-    it('[REQ-065/AK-11] Hintergrund der App zeigt eine Körnung über der Farbrubrik „Hintergrund“', () => {
+  describe('AK-11 Einfarbiger Hintergrund, weiche Schatten, Zeilenabstand', () => {
+    it('[REQ-065/AK-11] Hintergrund der App einfarbig in der Farbrubrik „Hintergrund“, ohne Körnung oder Textur', () => {
       render(<App einstellungRepository={new InMemoryEinstellungRepository()} />);
-      expect(wurzel().style.backgroundImage).toMatch(/url\(/);
-      expect(wurzel().style.backgroundColor).toBe('var(--bz-farbe-hintergrund)');
       const main = screen.getByRole('main');
-      expect(main.style.backgroundImage || wurzel().style.backgroundImage).toMatch(/url\(/);
+      for (const el of [wurzel(), main]) {
+        expect(el.style.backgroundColor).toBe('var(--bz-farbe-hintergrund)');
+        expect(['', 'none']).toContain(el.style.backgroundImage);
+        expect(['', 'none']).toContain(getComputedStyle(el).backgroundImage);
+      }
+      // auch <html>/<body> und kein Vorfahre des Inhaltsbereichs legen eine Textur darüber
+      for (let n: HTMLElement | null = main; n; n = n.parentElement) expect(['', 'none'], n.tagName).toContain(n.style.backgroundImage);
+    });
+
+    it('[REQ-065/AK-11] Negativfall: im Quellcode keine Papier-Körnung (SVG-Rauschen) mehr', () => {
+      const treffer = walk(SRC)
+        .filter((u) => /\.(ts|tsx|css)$/.test(u.pathname))
+        .filter((u) => /feTurbulence|papierKoernung|fractalNoise/i.test(ohneKommentare(fs.readFileSync(u, 'utf8'))))
+        .map(rel);
+      expect(treffer).toEqual([]);
     });
 
     it('[REQ-065/AK-11] Statistik-Pille und Karte „Ausgabe“: weicher Schatten statt hartem Rahmen', async () => {
@@ -433,6 +445,76 @@ describe('REQ-065 Typografie und Proportionen', () => {
       const z = Number(vars()['--bz-zeilenabstand']);
       expect(z).toBeGreaterThanOrEqual(1.4);
       expect(z).toBeLessThanOrEqual(1.6);
+    });
+  });
+  describe('AK-12 Karten in der Farbrubrik „Kartenfläche“', () => {
+    const KARTE = 'var(--bz-farbe-kartenflaeche)';
+    /** Fläche einer Karte: das Element selbst oder der nächste Vorfahre mit eigener Hintergrundfarbe. */
+    const flaeche = (el: HTMLElement) => {
+      for (let n: HTMLElement | null = el; n; n = n.parentElement) if (n.style.backgroundColor) return n.style.backgroundColor;
+      return '';
+    };
+    const hell = (hex: string) => {
+      const k = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+      return 0.2126 * k[0] + 0.7152 * k[1] + 0.0722 * k[2];
+    };
+
+    it('[REQ-065/AK-12] Karte „Ausgabe“ (Buchdetails) hat die Fläche „Kartenfläche“', async () => {
+      const d = await ansichtDetails();
+      await reiterDetails(d);
+      expect(d.querySelector<HTMLElement>('[data-ausgabe-karte]')!.style.backgroundColor).toBe(KARTE);
+    });
+
+    it('[REQ-065/AK-12] Karte „App“ (Profil) hat die Fläche „Kartenfläche“', async () => {
+      render(<App einstellungRepository={new InMemoryEinstellungRepository()} />);
+      await tippe(within(nav()).getByRole('button', { name: 'Profil' }));
+      const k = await vi.waitFor(() => {
+        const e = document.querySelector<HTMLElement>('[data-profil-karte]');
+        expect(e).not.toBeNull();
+        return e!;
+      }, W);
+      expect(k.style.backgroundColor).toBe(KARTE);
+    });
+
+    it('[REQ-065/AK-12] Ausnahmen: Statistik-Pille und Formular-Karte „Manueller Eintrag“ behalten die Fläche „Ghost“', async () => {
+      const d = await ansichtDetails();
+      expect(d.querySelector<HTMLElement>('[data-statistik]')!.style.backgroundColor).toBe('var(--bz-farbe-ghost)');
+      cleanup();
+      await ansichtBuecher();
+      const blatt = await blattManuell();
+      expect(flaeche(blatt.querySelector<HTMLElement>('[data-formular-karte]')!)).toBe('var(--bz-farbe-ghost)');
+    });
+
+    it('[REQ-065/AK-12] weitere Karten (Bewertung, Rezension, Listenkarte „Bücher“) haben die Fläche „Kartenfläche“', async () => {
+      const d = await ansichtDetails();
+      expect(flaeche(d.querySelector<HTMLElement>('[data-bewertung-karte]')!)).toBe(KARTE);
+      expect(flaeche(d.querySelector<HTMLElement>('[data-bereich-rezension] [data-schreibfeld]')!)).toBe(KARTE);
+      cleanup();
+      await ansichtBuecher();
+      // Übersicht „Alle“ über die Filter-Pille (REQ-036), dann Listenansicht (REQ-037)
+      await tippe(within(screen.getByRole('group', { name: 'Filter' })).getByRole('button', { name: 'Alle' }));
+      const wahl = await vi.waitFor(() => {
+        const e = document.querySelector<HTMLElement>('[data-uebersicht] [data-ansicht-wahl="liste"]');
+        expect(e).not.toBeNull();
+        return e!;
+      }, W);
+      await tippe(wahl);
+      const liste = await vi.waitFor(() => {
+        const e = document.querySelector<HTMLElement>('[data-listenkarte]');
+        expect(e).not.toBeNull();
+        return e!;
+      }, W);
+      expect(flaeche(liste)).toBe(KARTE);
+    });
+
+    it('[REQ-065/AK-12] in jedem Farbdesign ist „Kartenfläche“ heller als „Hintergrund“ und als CSS-Variable gesetzt', () => {
+      for (const id of ['klassisch', 'salbei', 'nachtlektuere'] as const) {
+        const v = farbVariablen(id);
+        const karte = v['--bz-farbe-kartenflaeche'];
+        const grund = v['--bz-farbe-hintergrund'];
+        expect(karte, id).toMatch(/^#[0-9a-f]{6}$/i);
+        expect(hell(karte), `${id}: ${karte} vs ${grund}`).toBeGreaterThan(hell(grund));
+      }
     });
   });
 });
