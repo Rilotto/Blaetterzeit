@@ -27,3 +27,4 @@ CEO: „Plane die Änderung bitte für den nächsten Prototypen mir ein. Es soll
 - REQ-065 (Should, Abgestimmt): Fraunces lokal (OFL), zentrale Schriftgrößenstufen (12/14/15/17/20/22–26), Abstandsraster, Pillen 36 px (Tippfläche ≥ 44 px), kursive Autoren/Stufentexte, gesperrte Labels, Papier-Körnung, warme Schatten, Zeilenabstand ~1,5.
 - REQ-003 angepasst (Systemschrift entfällt).
 - Aufwand geschätzt 5–8 % Nutzungslimit; Risiko: Tests mit fest geprüften Pixelwerten müssen angepasst werden.
+- Ergänzung 2026-11-18: REQ-066–069 (Profil › App › Design: Farben/Schriftart, Live-Vorschau, Designs Klassisch/Salbei/Nachtlektüre, Schriften Systemschrift/Fraunces, sofortiger Wechsel ohne Neustart, dauerhaft gespeichert). REQ-001 abgelöst. Aufwand zusammen mit REQ-065 geschätzt 12–18 % Nutzungslimit.

@@ -71,7 +71,7 @@ Welche Stufe ein bestehendes Element bekommt, legt der Entwickler nach folgender
 ## Akzeptanzkriterien
 
 ### AK-1 App-Schrift ist Fraunces und wird lokal ausgeliefert
-- **Gegeben** die App ist gebaut und ohne Internetverbindung geöffnet
+- **Gegeben** die App ist gebaut und ohne Internetverbindung geöffnet, und der Nutzer hat keine andere Schrift gewählt (REQ-069)
 - **Wenn** der Nutzer Texte auf der Seite „Bücher“, in den Buchdetails und in der Hauptnavigation betrachtet
 - **Dann** sind alle diese Texte in Fraunces dargestellt
 - **Und** die App lädt keine Schriftdatei aus dem Internet (die Schriftdatei ist Teil des Builds)
@@ -84,8 +84,8 @@ Welche Stufe ein bestehendes Element bekommt, legt der Entwickler nach folgender
 ### AK-3 Schrift an genau einer Stelle, mit generischer Ersatzschrift
 - **Gegeben** die Schriftfestlegungen der App
 - **Wenn** geprüft wird, wo die Schrift für Texte festgelegt wird
-- **Dann** ist sie nur in der zentralen Schriftvariable `--bz-schrift` festgelegt, deren Schriftfolge mit Fraunces beginnt und mit einer generischen Ersatzschrift endet
-- **Und** kein Element legt eine davon abweichende Schrift fest
+- **Dann** ist sie nur in der zentralen Schriftvariable `--bz-schrift` festgelegt, deren Schriftfolge ohne Nutzerwahl mit Fraunces beginnt und mit einer generischen Ersatzschrift endet
+- **Und** kein Element legt eine davon abweichende Schrift fest. Einzige Ausnahme sind die Zeilen der Schriftliste in REQ-069.
 
 ### AK-4 Nur die definierten Schriftgrößenstufen
 - **Gegeben** die zentrale Definition der Schriftgrößenstufen Label, Meta, Text, Titel, Abschnitt, Seite
@@ -164,4 +164,5 @@ Welche Stufe ein bestehendes Element bekommt, legt der Entwickler nach folgender
 
 | Datum | Änderung | durch |
 |---|---|---|
+| 2026-11-18 | AK-1 und AK-3 an die Schriftwahl aus REQ-069 angepasst: Fraunces ist Standard ohne Nutzerwahl, und die Schriftliste ist die einzige Ausnahme von der zentralen Schrift (CEO: „Systemschrift wie bisher und dann erstmal nur Fraunces.“). Status unverändert | Anforderungsmanager |
 | 2026-11-18 | Erstellt aus dem vom CEO angenommenen Vorschlag des Scrum Masters (Variante B, Fraunces). Status „Abgestimmt“, Priorität Should. Abstimmungsnachweis (CEO, wörtlich): „Plane die Änderung bitte für den nächsten Prototypen mir ein. Es soll Variante B - Fraunces werden. Danke für den Vorschlag!“ | Anforderungsmanager |

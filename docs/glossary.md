@@ -67,7 +67,11 @@ Gepflegt vom Anforderungsmanager. Im Code werden die englischen Bezeichner verwe
 | Suchfeld-Muster | – | Text im leeren Suchfeld einer Übersicht: „In [Liste] suchen“, z. B. „In Alle Bücher suchen“, „In Noch zu lesen suchen“ (Entwurf, REQ-038). |
 | Eintragungsdatum | – | Zeitpunkt, zu dem ein Buch angelegt wurde; automatisch gespeichert, nicht änderbar (Entwurf, REQ-041). Künftig beim Anlegen und im Reiter „Details“ überschreibbar (TT.MM.JJJJ, nicht in der Zukunft) (REQ-060, REQ-064). |
 | Bibliothek | – | Gesamtheit aller erfassten Bücher eines Nutzers. |
-| Theme | `Theme` | Vom CEO bereitgestelltes, in den Einstellungen (Rubrik „Themes“) auswählbares Erscheinungsbild der App. Bei Auswahl ändert sich das Aussehen der App entsprechend. Woraus ein Theme besteht, ist noch nicht festgelegt (REQ-001). |
+| Theme | `Theme` | Veraltet, abgelöst durch „Farbdesign“ und „Schriftwahl“ (REQ-001 ersetzt durch REQ-068). |
+| Abschnitt „App“ | – | Abschnitt der Seite „Profil“ mit einer Karte im Stil von „Ausgabe“. Derzeit nur die Zeile „Design“ mit der aktuellen Wahl, z. B. „Klassisch · Fraunces ›“ (REQ-066). |
+| Fenster „Design“ | – | Blatt von unten mit Ziehgriff, Titel, X, Live-Vorschau (Mini-Buchkarte) und Umschaltpille „Farben / Schriftart“. Antippen wirkt sofort, es gibt kein „Sichern“ (REQ-067). |
+| Farbdesign | – | Zentral definierter, benannter Satz von Werten für alle Farbrubriken. Zum Start gibt es Klassisch (Standard), Salbei und Nachtlektüre. Wahl dauerhaft gespeichert, neue Designs nur auf Zuruf des CEO (REQ-068). |
+| Schriftwahl | – | Wählbare App-Schrift aus einer zentralen Liste, derzeit Systemschrift und Fraunces (Standard). Wahl dauerhaft gespeichert, mit dem Farbdesign frei kombinierbar (REQ-069). |
 | Hauptnavigation | – | Dauerhaft sichtbare Navigationsleiste am unteren Bildschirmrand mit fünf Menüpunkten (REQ-002). |
 | Menüpunkt | – | Eintrag der Hauptnavigation, bestehend aus Icon und darunterliegender Beschriftung: Start, Bücher, Bibliothek, Statistik, Profil (REQ-002). |
 | Aktiver Menüpunkt | – | Der aktuell ausgewählte Menüpunkt. Er wird mit einer Hervorhebung hinter dem Icon sowie Icon und Beschriftung in der Aktivfarbe dargestellt (REQ-002). |

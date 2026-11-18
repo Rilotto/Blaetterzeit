@@ -62,6 +62,7 @@ Vorgabe des CEO (wörtlich): „Dann lassen wir das mit der Schriftart. Wir nutz
 - **REQ-002 (Hauptnavigation, In Umsetzung):** Die Beschriftungen der Menüpunkte und der Platzhaltertext „under construction :)“ sind aktuell die einzigen Texte der App und werden in der App-Schrift dargestellt. Das Verhalten von REQ-002 (Inhalte, Farben, Anordnung) bleibt unverändert.
 - **REQ-001 (Themes, Entwurf):** Ob ein Theme später auch die Schrift umfasst, ist dort zu klären. Die zentrale Festlegung der App-Schrift ist dafür die Grundlage.
 - **REQ-065 (Typografie, Abgestimmt 2026-11-18):** Legt die endgültige App-Schrift fest: Fraunces, lokal ausgeliefert, mit Lizenzdatei. Die Randbedingungen „Systemschrift des Geräts“ und „keine Schriftdatei“ dieses REQ gelten ab Umsetzung von REQ-065 nicht mehr. Anforderungstext und AK-1 bis AK-3 dieses REQ bleiben unverändert gültig.
+- **REQ-069 (Schriftauswahl, Abgestimmt 2026-11-18):** Die Zeilen der Schriftliste zeigen Name und Beispielsatz in ihrer eigenen Schrift. Das ist eine bewusste Ausnahme zu AK-2. Die App-Schrift ist vom Nutzer wählbar (Systemschrift oder Fraunces) und bleibt an einer zentralen Stelle definiert.
 - **Hinweis für später (blockiert nicht):** Die endgültige App-Schrift legt der CEO noch fest. Sobald sie feststeht, wird sie an der zentralen Stelle eingetragen. Falls dafür eine Schriftdatei mit der App ausgeliefert werden soll, ist das eine Änderung der Randbedingungen und wird mit dem CEO abgestimmt.
 
 ## Offene Fragen
