@@ -1,7 +1,7 @@
 ---
 id: REQ-067
 titel: Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

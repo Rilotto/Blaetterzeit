@@ -24,7 +24,7 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 
 - Wenn der Nutzer im Reiter „Details“ die Zeile „Hinzugefügt“ antippt, muss das System ein Blatt nach dem Muster des Menüs „Preis“ (REQ-059) mit einem Datumsfeld im Format TT.MM.JJJJ und der Pille „Sichern“ anzeigen, vorbefüllt mit dem gespeicherten Eintragungsdatum.
 - Ein Datum ist ungültig, wenn es kein existierendes Kalenderdatum im Format TT.MM.JJJJ ist oder in der Zukunft liegt.
-- Wenn der Nutzer „Sichern“ antippt und das Datum gültig ist, muss das System es dauerhaft als Eintragungsdatum speichern, das Blatt schließen und es in der Zeile „Hinzugefügt“ anzeigen.
+- Wenn der Nutzer „Sichern“ antippt und das Datum gültig ist, muss das System es dauerhaft als Eintragungsdatum speichern, das Blatt schließen und es in der Zeile „Hinzugefügt“ im Format von REQ-056 anzeigen (Monat abgekürzt und Jahr, z. B. „Feb. 2025“). Im Blatt steht das Datum als TT.MM.JJJJ.
 - Wenn das Datum ungültig ist, muss das System das Feld so hervorheben wie das ungültige Feld „JAHR“ (REQ-031: Primär, kein Hinweistext, bis der Nutzer etwas im Feld ändert), nichts speichern und das Blatt geöffnet lassen.
 - Wenn der Nutzer das Blatt auf anderem Weg als „Sichern“ schließt, muss das System die Eingabe verwerfen.
 - Dasselbe Blatt dient beim Anlegen zum Überschreiben von „Hinzugefügt“ (REQ-060).
@@ -39,7 +39,8 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 ### AK-2 Gültiges Datum sichern
 - **Gegeben** das Blatt „Hinzugefügt“ ist geöffnet
 - **Wenn** der Nutzer 01.02.2025 einträgt und „Sichern“ antippt
-- **Dann** ist das Eintragungsdatum 01.02.2025 und die Zeile „Hinzugefügt“ zeigt dieses Datum
+- **Dann** ist das Eintragungsdatum 01.02.2025, und die Zeile „Hinzugefügt“ zeigt es abgekürzt wie in REQ-056 als Monat und Jahr („Feb. 2025“)
+- **Und** beim erneuten Öffnen zeigt das Blatt „01.02.2025“ (TT.MM.JJJJ)
 - **Und** nach einem Neustart der App ist es unverändert vorhanden
 
 ### AK-3 Datum in der Zukunft wird nicht gesichert
@@ -81,3 +82,4 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-16 | Erstellt aus CEO-Antwort und vom CEO angenommenem Vorschlag; Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
+| 2026-11-18 | Anforderung und AK-2 klargestellt: Die Zeile zeigt Monat und Jahr nach REQ-056 („Feb. 2025“), das Blatt zeigt TT.MM.JJJJ. Anlass ist Befund 2 des Testers. CEO auf die Frage „‚Hinzugefügt‘ in den Details als ‚Feb. 2025‘ – so lassen?“: „ja“ | Anforderungsmanager |

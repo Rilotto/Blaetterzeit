@@ -22,7 +22,7 @@ Antwort des CEO (wörtlich, 2026-11-15): „In €, Es öffnet sich ein Menü wi
 - Ohne gespeicherten Preis muss das System das Eingabefeld mit „0,00 €“ vorbefüllen; mit gespeichertem Preis steht dieser im Feld.
 - Das System muss Beträge in Euro mit zwei Nachkommastellen und Komma als Dezimaltrennzeichen annehmen und anzeigen.
 - Wenn der Nutzer „Sichern“ antippt, muss das System den Preis dauerhaft speichern (ADR-0002), das Menü schließen und in der Zeile „Preis“ den Betrag im Format „12,99 €“ anzeigen.
-- Wenn der Nutzer das Menü über X oder Tippen außerhalb schließt, darf das System nichts speichern (wie REQ-025).
+- Wenn der Nutzer das Menü über X, Tippen außerhalb oder die Android-Zurück-Taste schließt, darf das System nichts speichern (wie REQ-025). Die Android-Zurück-Taste schließt das Menü wie bei den anderen Blättern.
 
 ## Akzeptanzkriterien
 
@@ -44,8 +44,9 @@ Antwort des CEO (wörtlich, 2026-11-15): „In €, Es öffnet sich ein Menü wi
 
 ### AK-4 Schließen ohne Sichern
 - **Gegeben** das Menü „Preis“ ist geöffnet und 20,00 eingegeben, gespeichert ist 12,99 €
-- **Wenn** der Nutzer X bzw. (zweiter Durchlauf) außerhalb tippt
-- **Dann** zeigt die Zeile „Preis“ weiterhin „12,99 €“
+- **Wenn** der Nutzer X antippt, im zweiten Durchlauf außerhalb tippt und im dritten Durchlauf die Android-Zurück-Taste drückt
+- **Dann** ist das Menü jeweils geschlossen
+- **Und** die Zeile „Preis“ zeigt weiterhin „12,99 €“
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -69,3 +70,4 @@ Antwort des CEO (wörtlich, 2026-11-15): „In €, Es öffnet sich ein Menü wi
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Antwort 2.3 | Anforderungsmanager |
 | 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |
+| 2026-11-18 | Android-Zurück-Taste ergänzt (schließt und verwirft, wie bei den anderen Blättern), AK-4 um einen dritten Durchlauf erweitert. Anlass ist Befund 3 des Testers, beauftragt vom Scrum Master | Anforderungsmanager |

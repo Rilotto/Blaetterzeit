@@ -39,7 +39,9 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 
 **Übernahme**
 - Wenn der Nutzer einen Treffer antippt, muss das System das Blatt „Manueller Eintrag“ (REQ-030, REQ-060) öffnen und dessen Felder mit den Angaben dieses Treffers ausfüllen; ein vorhandenes Coverfoto wird als Cover übernommen (wie REQ-032).
+- Wenn der Treffer einen Preis und/oder ein Format liefert, muss das System auch diese Angaben in den Manuellen Eintrag übernehmen.
 - Wenn zu einem Feld keine Angabe vorliegt, muss das System dieses Feld leer lassen.
+- Das System übernimmt den Autor so, wie die Quelle ihn liefert, ohne die Schreibweise zu vereinheitlichen.
 - Das System muss dem Nutzer die Möglichkeit bieten, alle Felder danach von Hand zu bearbeiten. Anlegen, Pflichtangaben und Schließen richten sich nach REQ-030, REQ-031 und REQ-060; das Buch wird erst mit „Hinzufügen“ angelegt.
 
 **Kein Ergebnis**
@@ -90,6 +92,12 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 - **Wenn** eine ISBN erkannt wurde
 - **Dann** wird die Seite „Bücher“ angezeigt und es wurde kein Buch angelegt
 
+### AK-9 Preis und Format werden übernommen
+- **Gegeben** ein Treffer liefert einen Preis und ein Format, ein zweiter Treffer liefert keines von beiden
+- **Wenn** der Nutzer den ersten Treffer antippt
+- **Dann** sind Preis und Format im Blatt „Manueller Eintrag“ mit diesen Angaben ausgefüllt
+- **Und** wählt der Nutzer stattdessen den zweiten Treffer, bleiben Preis und Format leer
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Option im Menü und Scan-Bildschirm (REQ-061).
@@ -115,3 +123,4 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 |---|---|---|
 | 2026-11-16 | Erstellt (Entwurf aus der CEO-Antwort zum Änderungsantrag „Buch anlegen“) | Anforderungsmanager |
 | 2026-11-16 | CEO-Antworten und angenommener Vorschlag eingearbeitet: Quellen DNB und Open Library, Auswahlfenster mit Quellenhinweis und Zurück-Pfeil, Übernahme ins Blatt „Manueller Eintrag“, kein Internet/nichts gefunden zur Seite „Bücher“. Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
+| 2026-11-18 | Preis und Format werden übernommen (neu AK-9). CEO auf die Frage „Preis und Format beim Scan nicht übernehmen?“: „doch, sollen auch übernommen werden“. Autor wie geliefert, CEO auf die Frage „Autor-Schreibweise beim Scan vereinheitlichen?“: „nein das ist egal“. Status unverändert | Anforderungsmanager |

@@ -37,6 +37,7 @@ Bisher (CEO, 2026-11-15, REQ-056): Verlag und ISBN „aktuell leer, bitte ohne E
 
 **Schließen**
 - Wenn der Nutzer eines der Blätter auf anderem Weg als „Sichern“ schließt (wie beim Menü „Preis“), muss das System die Eingabe verwerfen.
+- Die Android-Zurück-Taste muss jedes der Blätter schließen und die Eingabe verwerfen, wie bei den anderen Blättern.
 
 **Fotos**
 - Die Zeile „Fotos“ bleibt ohne Funktion.
@@ -73,8 +74,9 @@ Bisher (CEO, 2026-11-15, REQ-056): Verlag und ISBN „aktuell leer, bitte ohne E
 
 ### AK-6 Schließen ohne Sichern verwirft
 - **Gegeben** das Blatt „Verlag“ ist geöffnet und „Carlsen“ eingetragen
-- **Wenn** der Nutzer es schließt, ohne „Sichern“ anzutippen
-- **Dann** ist der vorherige Verlag unverändert
+- **Wenn** der Nutzer es schließt, ohne „Sichern“ anzutippen, auch über die Android-Zurück-Taste
+- **Dann** ist das Blatt geschlossen und der vorherige Verlag unverändert
+- **Und** dasselbe gilt für das Blatt „ISBN“: Die Android-Zurück-Taste schließt es, und die ISBN bleibt unverändert
 
 ### AK-7 Fotos bleibt ohne Funktion
 - **Gegeben** der Reiter „Details“ ist geöffnet
@@ -105,3 +107,4 @@ Bisher (CEO, 2026-11-15, REQ-056): Verlag und ISBN „aktuell leer, bitte ohne E
 |---|---|---|
 | 2026-11-16 | Erstellt (Entwurf aus der CEO-Antwort zum Änderungsantrag „Buch anlegen“) | Anforderungsmanager |
 | 2026-11-16 | Vom CEO angenommenen Vorschlag eingearbeitet (Blätter für Verlag und ISBN, Prüfung der ISBN). „Hinzugefügt“ in REQ-064 ausgelagert. Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
+| 2026-11-18 | Android-Zurück-Taste ergänzt (schließt die Blätter Verlag und ISBN und verwirft die Eingabe), AK-6 erweitert. Anlass ist Befund 3 des Testers, beauftragt vom Scrum Master. Status unverändert | Anforderungsmanager |

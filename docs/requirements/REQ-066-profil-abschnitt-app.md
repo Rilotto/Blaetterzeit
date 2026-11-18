@@ -1,7 +1,7 @@
 ---
 id: REQ-066
 titel: Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

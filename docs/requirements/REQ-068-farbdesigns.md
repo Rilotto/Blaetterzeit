@@ -1,7 +1,7 @@
 ---
 id: REQ-068
 titel: Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre)
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
