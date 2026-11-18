@@ -1,6 +1,6 @@
 // Nativer Barcode-Scanner (ML Kit, Android) und Scan-Bildschirm bei nativer Vorschau / Startfehler.
 import '@testing-library/jest-dom/vitest';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const ml = vi.hoisted(() => {
@@ -122,9 +122,18 @@ describe('Scan-Bildschirm', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const onAbbruch = vi.fn();
     const scanner = fake({ starten: vi.fn(async () => Promise.reject(new Error('Kamera startet nicht: XYZ'))) });
-    render(<ScanBildschirm scanner={scanner} onIsbn={vi.fn()} onAbbruch={onAbbruch} fehlerDauer={50} />);
-    expect(await screen.findByRole('alert')).toHaveTextContent('Kamera startet nicht: XYZ');
-    expect(onAbbruch).not.toHaveBeenCalled();
-    await waitFor(() => expect(onAbbruch).toHaveBeenCalledTimes(1));
+    // Deterministisch mit künstlicher Zeit: unabhängig von der Geschwindigkeit der CI.
+    vi.useFakeTimers();
+    try {
+      render(<ScanBildschirm scanner={scanner} onIsbn={vi.fn()} onAbbruch={onAbbruch} fehlerDauer={50} />);
+      await act(async () => {});
+      expect(screen.getByRole('alert')).toHaveTextContent('Kamera startet nicht: XYZ');
+      act(() => void vi.advanceTimersByTime(49));
+      expect(onAbbruch).not.toHaveBeenCalled();
+      act(() => void vi.advanceTimersByTime(1));
+      expect(onAbbruch).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
