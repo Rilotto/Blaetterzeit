@@ -3,7 +3,7 @@ import iconPlus from '@/assets/icons/icon-plus.png';
 import iconRegler from '@/assets/icons/icon-regler.png';
 import iconX from '@/assets/icons/icon-x.png';
 import Icon from '@/components/Icon';
-import { buecherFarbe, textstufe, pillenhoehePx, navIconPx, abstand } from '@/theme';
+import { buecherFarbe, textstufe, pillenhoehePx, navIconPx, abstand, stilRolle } from '@/theme';
 import { seitenRand } from './layout';
 import PlusMenue from './PlusMenue';
 
@@ -90,7 +90,7 @@ interface Props {
 export default function Kopfbereich({ menueOffen = false, onPlus, onBarcode, onVonHand, onMenueSchliessen }: Props) {
   return (
     <header style={kopfStil}>
-      <h1 style={ueberschriftStil}>Deine Bücher</h1>
+      <h1 {...stilRolle('seitentitel')} style={ueberschriftStil}>Deine Bücher</h1>
       <div style={schaltflaechenStil}>
         <button type="button" aria-label="Filter und Einstellungen" style={filterStil}>
           <Icon

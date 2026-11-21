@@ -7,7 +7,7 @@ import { coverBreite, coverFlaecheStil, coverHoehe } from '@/components/coverFla
 import type { Buch } from '@/domain/buch';
 import { alphabetisch, anzahlText, kartenzusatz, suchen, suchfeldText } from '@/domain/uebersicht';
 import type { AnsichtRepository, Uebersichtsansicht } from '@/storage';
-import { uebersichtFarbe, textstufe, pillenhoehe, kartenSchatten, abstand } from '@/theme';
+import { uebersichtFarbe, textstufe, pillenhoehe, kartenSchatten, abstand, stilRolle } from '@/theme';
 import Filterleiste from './Filterleiste';
 import type { FilterDefinition } from './filterKonfiguration';
 import { seitenRand } from './layout';
@@ -263,7 +263,7 @@ function Rastereintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: string
   return (
     <li data-rastereintrag={buch.id} style={{ width: `${coverBreite}px`, minWidth: 0, cursor: 'pointer' }} onClick={() => onAntippen(buch)}>
       {cover ? <img src={cover} alt={buch.titel} style={coverBildStil} /> : <CoverPlatzhalter />}
-      <p data-buchtitel="" style={{ ...titelStil, marginTop: abstand('s') }}>
+      <p data-buchtitel="" {...stilRolle('buchtitel')} style={{ ...titelStil, marginTop: abstand('s') }}>
         {buch.titel}
       </p>
       <Autorzeile autor={buch.autor} />
@@ -274,14 +274,14 @@ function Rastereintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: string
 function Listenkarte({ buch, cover, onAntippen }: { buch: Buch; cover?: string; onAntippen: (b: Buch) => void }) {
   const zusatz = kartenzusatz(buch);
   return (
-    <li data-listenkarte={buch.id} style={karteStil} onClick={() => onAntippen(buch)}>
+    <li data-listenkarte={buch.id} {...stilRolle('eintrag')} style={karteStil} onClick={() => onAntippen(buch)}>
       {cover ? (
         <img src={cover} alt={buch.titel} style={karteCoverStil} />
       ) : (
         <CoverPlatzhalter breite={KARTE_COVER_BREITE} hoehe={KARTE_COVER_HOEHE} />
       )}
       <div style={{ flex: '1 1 auto', minWidth: 0, paddingTop: abstand('xs') }}>
-        <p data-buchtitel="" style={titelStil}>
+        <p data-buchtitel="" {...stilRolle('buchtitel')} style={titelStil}>
           {buch.titel}
         </p>
         <Autorzeile autor={buch.autor} />
@@ -293,9 +293,11 @@ function Listenkarte({ buch, cover, onAntippen }: { buch: Buch; cover?: string; 
               aria-valuemax={100}
               aria-valuenow={zusatz.exakt}
               data-fortschrittsbalken=""
+              {...stilRolle('balken')}
               style={balkenStil}
             >
               <span
+                {...stilRolle('balkenfuellung')}
                 style={{
                   display: 'block',
                   width: `${zusatz.exakt}%`,
@@ -310,7 +312,7 @@ function Listenkarte({ buch, cover, onAntippen }: { buch: Buch; cover?: string; 
             </p>
           </>
         ) : zusatz.art === 'status' ? (
-          <span data-statuschip={buch.status} style={statuschipStil}>
+          <span data-statuschip={buch.status} {...stilRolle('chip')} style={statuschipStil}>
             {zusatz.text}
           </span>
         ) : null}
@@ -393,13 +395,14 @@ export default function Uebersicht({
         <p data-buecherzahl="" style={anzahlStil}>
           {liste === undefined ? '' : anzahlText(liste.length)}
         </p>
-        <div role="group" aria-label="Ansicht" data-umschalter="" style={umschalterStil}>
+        <div role="group" aria-label="Ansicht" data-umschalter="" {...stilRolle('leiste')} style={umschalterStil}>
           <button
             type="button"
             aria-label="Rasteransicht"
             aria-pressed={ansicht === 'raster'}
             data-ansicht-wahl="raster"
             onClick={() => ansichtWaehlen('raster')}
+            {...stilRolle('reiter')}
             style={umschalterKnopfStil(ansicht === 'raster')}
           >
             <RasterSymbol />
@@ -410,6 +413,7 @@ export default function Uebersicht({
             aria-pressed={ansicht === 'liste'}
             data-ansicht-wahl="liste"
             onClick={() => ansichtWaehlen('liste')}
+            {...stilRolle('reiter')}
             style={umschalterKnopfStil(ansicht === 'liste')}
           >
             <ListenSymbol />

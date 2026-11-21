@@ -64,7 +64,7 @@ export default function App({ einstellungRepository }: Props) {
 }
 
 function AppInhalt() {
-  const { farbdesign, schrift: schriftId } = useDesign();
+  const { farbdesign, schrift: schriftId, stil } = useDesign();
   const [aktiv, setAktiv] = useState<MenuePunktId>(startMenuePunkt);
   // Jedes Antippen eines Menüpunkts ruft dessen Seite neu auf – auch den bereits aktiven
   // (z. B. „Bücher“ aus den Buchdetails zurück zu „Deine Bücher“, REQ-013 AK-7).
@@ -76,7 +76,7 @@ function AppInhalt() {
   };
 
   return (
-    <div data-app-wurzel="" data-farbdesign={farbdesign} data-schrift={schriftId} style={appStil(farbdesign, schriftId)}>
+    <div data-app-wurzel="" data-farbdesign={farbdesign} data-schrift={schriftId} data-stil={stil} style={appStil(farbdesign, schriftId)}>
       <main style={inhaltStil}>
         <Ansicht key={aufruf} />
       </main>

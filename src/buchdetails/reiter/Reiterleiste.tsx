@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import Symbolbild from '@/components/Symbolbild';
-import { rezensionFarbe, reiterPilleSchatten, textstufe, abstand } from '@/theme';
+import { rezensionFarbe, reiterPilleSchatten, textstufe, abstand, stilRolle } from '@/theme';
 import { abstandsraster } from '@/theme/typografie';
 import { RAND } from '../masse';
 import { REITER, type ReiterId } from './rezension';
@@ -70,8 +70,8 @@ interface Props {
 export default function Reiterleiste({ aktiv, onWaehlen }: Props) {
   const index = REITER.findIndex((r) => r.id === aktiv);
   return (
-    <div role="tablist" aria-label="Bereiche" data-reiterleiste="" style={leisteStil}>
-      <div aria-hidden="true" data-reiterpille="" data-reiter-index={index} style={pilleStil(index)} />
+    <div role="tablist" aria-label="Bereiche" data-reiterleiste="" {...stilRolle('leiste')} style={leisteStil}>
+      <div aria-hidden="true" data-reiterpille="" data-reiter-index={index} {...stilRolle('leistenpille')} style={pilleStil(index)} />
       {REITER.map((r) => {
         const istAktiv = r.id === aktiv;
         return (
@@ -86,7 +86,7 @@ export default function Reiterleiste({ aktiv, onWaehlen }: Props) {
             onClick={() => {
               if (!istAktiv) onWaehlen(r.id);
             }}
-            style={reiterStil(istAktiv)}
+            {...stilRolle('reiter')} style={reiterStil(istAktiv)}
           >
             <Symbolbild
               name={r.symbol}

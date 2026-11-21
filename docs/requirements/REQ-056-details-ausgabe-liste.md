@@ -1,6 +1,6 @@
 ---
 id: REQ-056
-titel: Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen
+titel: Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen
 status: Implementiert
 prioritaet: Must
 art: funktional
@@ -25,9 +25,9 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ## Anforderung (Satzschablone)
 
-- Das System muss unter „Ausgabe“ eine Karte mit genau diesen Zeilen in dieser Reihenfolge darstellen, je links Bezeichnung, rechts Wert: Seiten, Format, Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt.
+- Das System muss unter „Ausgabe“ eine Karte mit genau diesen Zeilen in dieser Reihenfolge darstellen, je links Bezeichnung, rechts Wert: Seiten, Format, Maße (REQ-072), Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt.
 - Das System darf keine Zeile „Signiert“ darstellen (CEO: „Signiert soll bitte nicht umgesetzt werden.“).
-- Das System muss die Zeilen Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis rechts mit einem Pfeil „›“ darstellen, die übrigen ohne Pfeil.
+- Das System muss die Zeilen Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis sowie die Zeile „Maße“ (REQ-072) rechts mit einem Pfeil „›“ darstellen, die übrigen ohne Pfeil.
 - Werte:
   - Seiten: Seitenanzahl des Buches (REQ-025); Antippen: REQ-057.
   - Format: gewähltes Format, bei Print mit gewähltem Unterformat getrennt durch „ · “ (z. B. „Print · Taschenbuch“); Antippen: REQ-058.
@@ -44,16 +44,16 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ## Akzeptanzkriterien
 
-### AK-1 Zehn Zeilen in fester Reihenfolge, kein „Signiert“
+### AK-1 Elf Zeilen in fester Reihenfolge, kein „Signiert“
 - **Gegeben** der Reiter „Details“ ist aktiv
 - **Wenn** die Karte unter „Ausgabe“ betrachtet wird
-- **Dann** lauten die Zeilen von oben nach unten genau: Seiten, Format, Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt
+- **Dann** lauten die Zeilen von oben nach unten genau: Seiten, Format, Maße, Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt
 - **Und** es gibt keine Zeile „Signiert“
 
 ### AK-2 Pfeile
 - **Gegeben** die Karte „Ausgabe“ wird angezeigt
 - **Wenn** die rechten Enden der Zeilen betrachtet werden
-- **Dann** haben genau Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis einen Pfeil „›“
+- **Dann** haben genau Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis sowie „Maße“ (REQ-072) einen Pfeil „›“
 
 ### AK-3 Seiten und Erschienen
 - **Gegeben** ein Buch mit Seitenanzahl 608 und Erscheinungsjahr 2025
@@ -106,3 +106,5 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 | 2026-11-15 | Erstellt aus CEO-Vorgabe „Reiter Details“ | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten 2, 3 eingearbeitet; Auslegungen: Signiert/Fotos nur Anzeige wie Screenshot, leere Werte rechts leer, Preisanzeige (neu AK-5, AK-7) | Anforderungsmanager |
 | 2026-11-15 | CEO: „Signiert soll bitte nicht umgesetzt werden. Der Rest ist in Ordnung.“ Zeile „Signiert“ entfernt (zehn Zeilen; AK-1, AK-5, AK-7 angepasst). Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-21 | CEO (wörtlich): „ja ergänze bitte den Pfeil bei "Maße".“ Zeile „Maße“ (REQ-072) in die Pfeil-Aufzählung (Anforderung, AK-2) aufgenommen. Status unverändert | Anforderungsmanager |
+| 2026-11-21 | Konflikt mit REQ-072 (vom CEO bestätigt: „Maße“ direkt unter „Format“) aufgelöst: Zeilenliste und AK-1 auf elf Zeilen mit „Maße“ nach „Format“, Titel angepasst. Status unverändert | Anforderungsmanager |

@@ -4,7 +4,7 @@ import iconKamera from '@/assets/icons/icon-kamera.png';
 import iconLupe from '@/assets/icons/icon-lupe.png';
 import iconX from '@/assets/icons/icon-x.png';
 import Icon from '@/components/Icon';
-import { auswahlmenueFlaeche, auswahlmenueSchatten, buchdetailsFarbe, textstufe, abstand, bildschirmrand } from '@/theme';
+import { auswahlmenueFlaeche, auswahlmenueSchatten, buchdetailsFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
 
 export type MenueAktion = 'scannen' | 'galerie' | 'online' | 'entfernen';
 
@@ -107,7 +107,7 @@ export default function Auswahlmenue({ oben, mitEntfernen, onAktion, onSchliesse
   return (
     <>
       <div data-menue-hintergrund="" onClick={onSchliessen} style={hintergrundStil} />
-      <div role="menu" aria-label="Bild hinzufügen" style={menueStil(oben)}>
+      <div role="menu" aria-label="Bild hinzufügen" {...stilRolle('blatt')} style={menueStil(oben)}>
         {eintraege.map((e) => (
           <button key={e.aktion} type="button" role="menuitem" onClick={() => onAktion(e.aktion)} style={auswahlEintragStil}>
             <span style={textStil}>{e.text}</span>

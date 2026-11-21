@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import Symbolbild from '@/components/Symbolbild';
 import { KRITERIEN, stufentext, type Bewertungen, type KriteriumId } from '@/domain/bewertung';
-import { kriteriumBlass, kriteriumVoll, rezensionFarbe, textstufe, pillenhoehe, abstand, tippflaeche } from '@/theme';
+import { kriteriumBlass, kriteriumVoll, rezensionFarbe, textstufe, pillenhoehe, abstand, tippflaeche, stilRolle } from '@/theme';
 import { KRITERIUM_SYMBOL, STUFEN, abschnittKopfStil, abschnittSchaltflaecheStil, abschnittUeberschriftStil, karteStil } from './rezension';
 
 const zeileStil = (letzte: boolean): CSSProperties => ({
@@ -70,7 +70,7 @@ export default function Bewertung({ bewertungen, onAntippen }: Props) {
           <Symbolbild name="filter" farbe={rezensionFarbe('abschnittsIcon')} groesse={26} />
         </button>
       </div>
-      <div data-bewertung-karte="" style={karteStil}>
+      <div data-bewertung-karte="" {...stilRolle('karte')} style={karteStil}>
         {KRITERIEN.map((k, i) => {
           const wert = bewertungen?.[k.id];
           const text = stufentext(k.id, wert);

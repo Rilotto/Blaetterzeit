@@ -6,6 +6,7 @@ import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
 import type { Ecken } from '@/bild/entzerren';
 import { standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
+import BlattMasse from '@/buchdetails/BlattMasse';
 import BlattPreis from '@/buchdetails/BlattPreis';
 import { BlattErschienen, BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
 import { AusgabeKarte } from '@/buchdetails/reiter/DetailsBereich';
@@ -15,11 +16,11 @@ import KameraAnsicht from '@/buchdetails/KameraAnsicht';
 import { seitenverhaeltnis } from '@/buchdetails/masse';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
-import { datumText, type Formatangaben } from '@/domain/ausgabe';
+import { datumText, type Formatangaben, type Masse } from '@/domain/ausgabe';
 import type { Buch } from '@/domain/buch';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
 import type { BookRepository, ImageStore } from '@/storage';
-import { buchAnlegenFarbe, detailsFarbe, textstufe, bildschirmrandPx, pillenhoehe, kartenSchatten, abstand } from '@/theme';
+import { buchAnlegenFarbe, detailsFarbe, textstufe, bildschirmrandPx, pillenhoehe, kartenSchatten, abstand, stilRolle } from '@/theme';
 import {
   buchAusEingaben,
   eingabenAusVorbelegung,
@@ -50,7 +51,7 @@ export interface ManuellerEintragProps {
 }
 
 /** Blätter über dem Manuellen Eintrag für die Zeilen der Karte „Ausgabe“ (REQ-060). */
-type Unterblatt = 'format' | 'preis' | 'verlag' | 'isbn' | 'erschienen' | 'hinzugefuegt' | null;
+type Unterblatt = 'format' | 'masse' | 'preis' | 'verlag' | 'isbn' | 'erschienen' | 'hinzugefuegt' | null;
 
 type Schritt = { art: 'blatt' } | { art: 'kamera' } | { art: 'zuschnitt'; bild: string };
 
@@ -397,6 +398,8 @@ export default function ManuellerEintrag({
     setUnterblatt(null);
   };
 
+  const masseSetzen = (m: Masse) => ausgabeSetzen(m, ['breiteMm', 'hoeheMm', 'dickeMm']);
+
   const formatSetzen = (a: Formatangaben) => ausgabeSetzen(a, ['format', 'unterformat', 'sonderausgabe', 'exemplar']);
 
   // „Hinzugefügt“: der heutige Tag gilt als nicht überschrieben – dann zählt der Zeitpunkt des Anlegens (REQ-060, AK-8).
@@ -471,7 +474,7 @@ export default function ManuellerEintrag({
   };
 
   const zuschnittBestaetigen = async (bild: string, ecken: Ecken) => {
-    const ergebnis = await zuschneiden(bild, ecken, seitenverhaeltnis('cover')).catch(() => bild);
+    const ergebnis = await zuschneiden(bild, ecken, seitenverhaeltnis('cover', eingaben)).catch(() => bild);
     if (!aktiv.current) return;
     setCover(ergebnis);
     setSchritt({ art: 'blatt' });
@@ -512,6 +515,7 @@ export default function ManuellerEintrag({
       <Zuschnitt
         bild={bild}
         bereich="cover"
+        masse={eingaben}
         onBestaetigen={(ecken) => zuschnittBestaetigen(bild, ecken)}
         onZurueck={() => setSchritt({ art: 'blatt' })}
       />
@@ -519,7 +523,7 @@ export default function ManuellerEintrag({
   }
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Manueller Eintrag" data-sicherer-bereich="" style={blattStil(versatz)}>
+    <div role="dialog" aria-modal="true" aria-label="Manueller Eintrag" data-sicherer-bereich="" {...stilRolle('blatt')} style={blattStil(versatz)}>
       <div style={innenStil}>
         <div
           data-ziehgriff=""
@@ -567,7 +571,7 @@ export default function ManuellerEintrag({
           ) : null}
         </div>
 
-        <div data-formular-karte="" style={karteStil}>
+        <div data-formular-karte="" {...stilRolle('karte')} style={karteStil}>
           <Feld
             name="Titel"
             platzhalter="Buchtitel"
@@ -627,6 +631,7 @@ export default function ManuellerEintrag({
             }
             onZeile={{
               format: () => setUnterblatt('format'),
+              masse: () => setUnterblatt('masse'),
               exemplar: () => setUnterblatt('format'),
               sonderausgabe: () => setUnterblatt('format'),
               preis: () => setUnterblatt('preis'),
@@ -646,6 +651,13 @@ export default function ManuellerEintrag({
         <FensterFormat
           start={{ format: eingaben.format, unterformat: eingaben.unterformat, sonderausgabe: eingaben.sonderausgabe, exemplar: eingaben.exemplar }}
           onSichern={formatSetzen}
+          onSchliessen={() => setUnterblatt(null)}
+        />
+      ) : null}
+      {unterblatt === 'masse' ? (
+        <BlattMasse
+          masse={{ breiteMm: eingaben.breiteMm, hoeheMm: eingaben.hoeheMm, dickeMm: eingaben.dickeMm }}
+          onSichern={masseSetzen}
           onSchliessen={() => setUnterblatt(null)}
         />
       ) : null}

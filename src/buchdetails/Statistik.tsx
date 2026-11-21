@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Buch } from '@/domain/buch';
 import { fortschrittGerundet, streak } from '@/domain/fortschritt';
-import { fortschrittFarbe, textstufe, kartenSchatten, abstand } from '@/theme';
+import { fortschrittFarbe, textstufe, kartenSchatten, abstand, stilRolle } from '@/theme';
 import Flamme from './Flamme';
 import { RAND } from './masse';
 
@@ -78,7 +78,7 @@ function Teil({ merkmal, oben, text }: { merkmal: string; oben: ReactNode; text:
 export default function Statistik({ buch, jetzt }: Props) {
   const tage = streak(buch.sitzungen, jetzt);
   return (
-    <div data-statistik="" style={pilleStil}>
+    <div data-statistik="" {...stilRolle('eintrag')} style={pilleStil}>
       <Teil merkmal="data-streak" oben={<Flamme zahl={tage} />} text="Tage in Folge" />
       <div data-trennlinie="" aria-hidden="true" style={trennlinieStil} />
       <Teil

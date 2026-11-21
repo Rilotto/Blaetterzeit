@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import Symbolbild from '@/components/Symbolbild';
-import { rezensionFarbe, textstufe, zeilenabstand, abstand, bildschirmrand } from '@/theme';
+import { rezensionFarbe, textstufe, zeilenabstand, abstand, bildschirmrand, stilRolle } from '@/theme';
 import { RAND } from '../masse';
 import { REZENSION_PLATZHALTER, abschnittKopfStil, abschnittSchaltflaecheStil, abschnittUeberschriftStil, karteStil } from './rezension';
 
@@ -53,7 +53,7 @@ export default function DeineRezension({ rezension, onSchreiben }: Props) {
           <Symbolbild name="teilen" farbe={rezensionFarbe('abschnittsIcon')} groesse={26} />
         </button>
       </div>
-      <button type="button" aria-label="Rezension schreiben" data-schreibfeld="" onClick={onSchreiben} style={schreibfeldStil}>
+      <button type="button" aria-label="Rezension schreiben" data-schreibfeld="" onClick={onSchreiben} {...stilRolle('eintrag')} style={schreibfeldStil}>
         {rezension ? (
           <span data-rezension-text="" style={textStil}>
             {rezension}

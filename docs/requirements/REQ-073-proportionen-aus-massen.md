@@ -1,7 +1,7 @@
 ---
 id: REQ-073
 titel: Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -23,8 +23,7 @@ Erweitert REQ-014 (Buchdarstellung). Anordnung, Beschriftungen, Farben und Bilda
 - Das System muss Cover, Buchrücken und Schnitt in den Buchdetails (REQ-013, REQ-014) im selben Maßstab darstellen:
   - Cover: Seitenverhältnis Breite : Höhe des Buches.
   - Buchrücken und Schnitt: Breite entsprechend der Dicke, Höhe gleich der Coverhöhe.
-- Das System muss für fehlende Maße Standardwerte verwenden: Breite 13,5 cm, Höhe 21 cm, Dicke 2,5 cm. Fehlt nur ein Einzelwert, ersetzt das System nur diesen durch seinen Standardwert.
-- Das System muss die Standardwerte an einer zentralen Stelle führen. Sie sind auf Zuruf des CEO änderbar und kein Akzeptanzkriterium.
+- Das System muss für fehlende Maße die formatabhängigen Standardmaße nach REQ-077 verwenden (Breite, Höhe, aus der Seitenzahl geschätzte Dicke). Fehlt nur ein Einzelwert, ersetzt das System nur diesen. Die frühere pauschale Vorgabe 13,5 × 21 × 2,5 entfällt.
 - Das System muss hinterlegte Bilder von Cover, Buchrücken und Schnitt in die jeweils aktuelle Form einpassen.
 - Wenn sich die Maße ändern (REQ-072), muss das System die Darstellung beim nächsten Anzeigen der Buchdetails mit den neuen Proportionen zeigen.
 - Das System muss beim Zuschnitt (REQ-017) als Startrahmen das Seitenverhältnis des jeweiligen Zielbereichs nach diesem REQ verwenden.
@@ -43,14 +42,16 @@ Erweitert REQ-014 (Buchdarstellung). Anordnung, Beschriftungen, Farben und Bilda
 - **Dann** sind Buchrücken und Schnitt beim Buch mit Dicke 5 im Verhältnis zur Coverbreite breiter
 
 ### AK-3 Standardproportion ohne Maße
-- **Gegeben** ein Buch ohne Maße
+- **Gegeben** ein Taschenbuch mit 400 Seiten ohne Maße
 - **Wenn** seine Buchdetails angezeigt werden
-- **Dann** entsprechen die Proportionen 13,5 × 21 × 2,5
+- **Dann** entsprechen die Proportionen den Standardmaßen nach REQ-077 (derzeit 12,0 × 19,0 × 2,4)
+- **Gegeben** dasselbe Buch als Hardcover
+- **Dann** entsprechen die Proportionen den Hardcover-Standardmaßen (derzeit 14,8 × 21,0 × 2,8)
 
 ### AK-4 Fehlender Einzelwert
-- **Gegeben** ein Buch nur mit Dicke 5
+- **Gegeben** ein Taschenbuch nur mit Dicke 5
 - **Wenn** seine Buchdetails angezeigt werden
-- **Dann** entsprechen die Proportionen 13,5 × 21 × 5
+- **Dann** entsprechen die Proportionen 12,0 × 19,0 × 5 (Breite und Höhe nach REQ-077)
 
 ### AK-5 Bilder eingepasst
 - **Gegeben** ein Buch mit hinterlegten Bildern für Cover, Rücken und Schnitt
@@ -64,7 +65,7 @@ Erweitert REQ-014 (Buchdarstellung). Anordnung, Beschriftungen, Farben und Bilda
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- 3D-Modell des Buches (To-do-Liste, Could).
+- 3D-Modell des Buches (REQ-074 bis REQ-076).
 - Proportionen in Buchlisten und Cover-Platzhaltern (REQ-009, REQ-010, REQ-020) bleiben einheitlich.
 
 ## Qualitätsanforderungen
@@ -74,7 +75,7 @@ Erweitert REQ-014 (Buchdarstellung). Anordnung, Beschriftungen, Farben und Bilda
 ## Abhängigkeiten
 
 - REQ-014 (wird erweitert; die dortige Orientierung „Cover ≈ 2:3, Rücken/Schnitt ca. 98 px“ wird durch die Proportionen aus Maßen bzw. Standardwerten abgelöst; AK-1 von REQ-014 bleibt bei üblichen Buchmaßen erfüllt).
-- REQ-017 (Startrahmen), REQ-072 (Maße).
+- REQ-017 (Startrahmen), REQ-072 (Maße), REQ-077 (Standardmaße; AK-3/AK-4 erst umsetzbar, wenn REQ-077 abgestimmt ist).
 
 ## Offene Fragen
 
@@ -85,3 +86,4 @@ Erweitert REQ-014 (Buchdarstellung). Anordnung, Beschriftungen, Farben und Bilda
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-18 | Erstellt aus CEO-Wunsch und vom CEO bestätigtem Konzept. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-21 | CEO („a klingt gut“): formatabhängige Standardmaße nach REQ-077 statt pauschal 13,5 × 21 × 2,5. Anforderung, AK-3, AK-4 geändert. Status unverändert | Anforderungsmanager |

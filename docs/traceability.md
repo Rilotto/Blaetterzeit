@@ -386,13 +386,13 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-053-details-inhaltswarnungen.test.tsx |
 | REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
 | REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
@@ -478,35 +478,64 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
-| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-1 | 0 | 0 |  |
-| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-2 | 0 | 0 |  |
-| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-3 | 0 | 0 |  |
-| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-4 | 0 | 0 |  |
-| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-5 | 0 | 0 |  |
-| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-6 | 0 | 0 |  |
-| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-7 | 0 | 0 |  |
-| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-8 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-1 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-2 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-3 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-4 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-5 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-6 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-7 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-8 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-9 | 0 | 0 |  |
-| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-10 | 0 | 0 |  |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-1 | 0 | 0 |  |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-2 | 0 | 0 |  |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-3 | 0 | 0 |  |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-4 | 0 | 0 |  |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-5 | 0 | 0 |  |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-6 | 0 | 0 |  |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-7 | 0 | 0 |  |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-8 | 0 | 0 |  |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-1 | 0 | 0 |  |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-2 | 0 | 0 |  |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-3 | 0 | 0 |  |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-4 | 0 | 0 |  |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-5 | 0 | 0 |  |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-6 | 0 | 0 |  |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-070-zuschnitt-lupe-feinjustierung.test.tsx |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-070-zuschnitt-lupe-feinjustierung.test.tsx |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-070-zuschnitt-lupe-feinjustierung.test.tsx |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-070-zuschnitt-lupe-feinjustierung.test.tsx |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-070-zuschnitt-lupe-feinjustierung.test.tsx |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Implementiert | AK-6 | 6 | 0 | tests/acceptance/REQ-070-zuschnitt-lupe-feinjustierung.test.tsx |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-070-zuschnitt-lupe-feinjustierung.test.tsx |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-070-zuschnitt-lupe-feinjustierung.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-7 | 4 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-10 | 4 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-12 | 4 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-1 | 2 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-2 | 4 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-3 | 3 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-4 | 5 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-5 | 8 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-6 | 4 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-7 | 2 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-8 | 8 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-9 | 0 | 0 |  |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-2 | 1 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-3 | 1 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-4 | 4 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-5 | 1 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-6 | 4 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-2 | 0 | 0 |  |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-3 | 0 | 0 |  |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-4 | 0 | 0 |  |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-5 | 0 | 0 |  |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-6 | 0 | 0 |  |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-7 | 0 | 0 |  |
+| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Abgestimmt | AK-2 | 0 | 0 |  |
+| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Abgestimmt | AK-3 | 0 | 0 |  |
+| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Abgestimmt | AK-4 | 0 | 0 |  |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-2 | 0 | 0 |  |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-3 | 0 | 0 |  |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-4 | 0 | 0 |  |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-5 | 0 | 0 |  |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-6 | 0 | 0 |  |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-7 | 0 | 0 |  |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-6 | 0 | 0 |  |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-7 | 0 | 0 |  |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-2 | 0 | 0 |  |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-3 | 0 | 0 |  |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-4 | 0 | 0 |  |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-5 | 0 | 0 |  |
+| REQ-078 | 3D-Ansicht – Hinweis bei Hörbüchern | Abgestimmt | AK-1 | 0 | 0 |  |

@@ -1,13 +1,16 @@
 import type { CSSProperties } from 'react';
 import { BILDBEREICHE, type Bildbereich } from '@/storage/ImageStore';
 import { buchdetailsCoverSchatten, buchdetailsFarbe, textformatAlleAnsehen, textstufe, abstand } from '@/theme';
-import { BEREICH_ABSTAND, BUCH_HOEHE, bereichBreite, bereichName } from './masse';
+import type { Masse } from '@/domain/ausgabe';
+import { BEREICH_ABSTAND, bereichName, darstellungsMasse } from './masse';
 
 export type Bilder = Partial<Record<Bildbereich, string>>;
 
 interface Props {
   titel: string;
   bilder: Bilder;
+  /** Maße des Buches (REQ-073); fehlende Werte = Standardmaße. */
+  masse?: Masse;
   onAntippen: (bereich: Bildbereich) => void;
 }
 
@@ -19,12 +22,12 @@ const reiheStil: CSSProperties = {
   marginTop: abstand('s'),
 };
 
-const grundStil = (bereich: Bildbereich): CSSProperties => ({
+const grundStil = (bereich: Bildbereich, masse: { hoehe: number; cover: number; schmal: number }): CSSProperties => ({
   boxSizing: 'border-box',
   position: 'relative',
   flex: '0 0 auto',
-  width: `${bereichBreite(bereich)}px`,
-  height: `${BUCH_HOEHE}px`,
+  width: `${Number((bereich === 'cover' ? masse.cover : masse.schmal).toFixed(2))}px`,
+  height: `${Number(masse.hoehe.toFixed(2))}px`,
   margin: 0,
   padding: 0,
   overflow: 'hidden',
@@ -102,8 +105,9 @@ function Inhalt({ bereich, titel, bild }: { bereich: Bildbereich; titel: string;
   );
 }
 
-/** Buchdarstellung aus Buchrücken, Cover und Schnitt (REQ-014). */
-export default function Buchdarstellung({ titel, bilder, onAntippen }: Props) {
+/** Buchdarstellung aus Buchrücken, Cover und Schnitt (REQ-014), Proportionen aus den Maßen (REQ-073). */
+export default function Buchdarstellung({ titel, bilder, masse, onAntippen }: Props) {
+  const d = darstellungsMasse(masse);
   return (
     <div data-buchdarstellung="" style={reiheStil}>
       {BILDBEREICHE.map((bereich) => {
@@ -115,7 +119,7 @@ export default function Buchdarstellung({ titel, bilder, onAntippen }: Props) {
             data-bereich={bereich}
             aria-label={bereichName[bereich]}
             onClick={() => onAntippen(bereich)}
-            style={{ ...grundStil(bereich), ...(bild ? mitBildStil(bereich) : ohneBildStil(bereich)) }}
+            style={{ ...grundStil(bereich, d), ...(bild ? mitBildStil(bereich) : ohneBildStil(bereich)) }}
           >
             <Inhalt bereich={bereich} titel={titel} bild={bild} />
           </button>

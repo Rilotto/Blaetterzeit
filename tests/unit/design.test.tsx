@@ -61,7 +61,7 @@ describe('Profil › App › Design (REQ-066 bis REQ-069)', () => {
     const { container } = render(<App einstellungRepository={repo} />);
     profilOeffnen();
     expect(screen.queryByText('under construction :)')).toBeNull();
-    expect(container.querySelector('[data-design-anzeige]')?.textContent).toBe('Klassisch · Fraunces ›');
+    expect(container.querySelector('[data-design-anzeige]')?.textContent).toBe('Klassisch · Fraunces · Klassisch ›');
 
     fireEvent.click(container.querySelector('[data-profil-zeile="design"]') as HTMLElement);
     expect(screen.getByRole('dialog', { name: 'Design' })).toBeTruthy();
@@ -82,7 +82,7 @@ describe('Profil › App › Design (REQ-066 bis REQ-069)', () => {
 
     fireEvent.click(container.querySelector('[data-design-schliessen]') as HTMLElement);
     expect(screen.queryByRole('dialog', { name: 'Design' })).toBeNull();
-    expect(container.querySelector('[data-design-anzeige]')?.textContent).toBe('Nachtlektüre · Systemschrift ›');
+    expect(container.querySelector('[data-design-anzeige]')?.textContent).toBe('Nachtlektüre · Systemschrift · Klassisch ›');
     await waitFor(async () => {
       expect(await repo.lesen('farbdesign')).toBe('nachtlektuere');
       expect(await repo.lesen('schrift')).toBe('system');
@@ -97,7 +97,7 @@ describe('Profil › App › Design (REQ-066 bis REQ-069)', () => {
     await act(async () => {});
     expect(wurzel(container).style.getPropertyValue('--bz-farbe-primaer')).toBe('#4E7D63');
     profilOeffnen();
-    expect(container.querySelector('[data-design-anzeige]')?.textContent).toBe('Salbei · Fraunces ›');
+    expect(container.querySelector('[data-design-anzeige]')?.textContent).toBe('Salbei · Fraunces · Klassisch ›');
   });
 });
 

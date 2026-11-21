@@ -3,7 +3,7 @@ import iconHerz from '@/assets/icons/icon-herz.png';
 import Icon from '@/components/Icon';
 import type { Buch } from '@/domain/buch';
 import { fortschrittExakt, fortschrittText, hatSeitenanzahl } from '@/domain/fortschritt';
-import { fortschrittFarbe, textstufe, pillenhoehe, abstand, bildschirmrand } from '@/theme';
+import { fortschrittFarbe, textstufe, pillenhoehe, abstand, bildschirmrand, stilRolle, tippflaecheAttr } from '@/theme';
 
 interface Props {
   buch: Buch;
@@ -95,9 +95,12 @@ export default function Fortschritt({ buch, onAktuelleSeite, onBuchlaenge }: Pro
         aria-valuemax={100}
         aria-valuenow={prozent}
         onClick={onAktuelleSeite}
+        // Erweiterte Tippfläche (REQ-065 AK-9); wirkt, sobald der Balken nicht mehr abschneidet (Feuilleton, REQ-071).
+        {...tippflaecheAttr}
+        {...stilRolle('balken')}
         style={balkenStil}
       >
-        <span data-fortschritt-fuellung="" style={fuellungStil(prozent)} />
+        <span data-fortschritt-fuellung="" {...stilRolle('balkenfuellung')} style={fuellungStil(prozent)} />
       </div>
       <button type="button" data-fortschritt-text="" onClick={onAktuelleSeite} style={textStil}>
         {fortschrittText(buch)}

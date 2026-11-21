@@ -1,6 +1,6 @@
 // Treffer der ISBN-Suche (REQ-062) und Parser der beiden Quellen. Ohne Netz, damit einzeln testbar.
 import type { Vorbelegung } from '@/buchanlegen/eingabe';
-import type { FormatId, UnterformatId } from '@/domain/ausgabe';
+import { cmZuMm, type FormatId, type Masse, type UnterformatId } from '@/domain/ausgabe';
 import { isbnNormalisieren } from './isbn';
 
 export type QuelleId = 'dnb' | 'openlibrary';
@@ -77,6 +77,42 @@ export function formatAus(angabe: string | undefined): { format?: FormatId; unte
   return {};
 }
 
+const zahlAus = (w: string): number => Number(w.replace(',', '.'));
+
+/**
+ * Höhe aus der Maßangabe der DNB (MARC 300 $c), z. B. „21 cm“, „21,5 cm“ oder „210 mm“ (REQ-072, AK-8).
+ * Nur eine eindeutige Angabe mit genau einem Wert gilt; „24 x 17 cm“, Formatangaben wie „8°“ oder mehrere Werte
+ * ergeben nichts.
+ */
+export function dnbMasseAus(angabe: string | undefined): Masse {
+  if (!angabe) return {};
+  if (/\d\s*(?:cm|mm)?\s*[x×]\s*\d/i.test(angabe)) return {};
+  const werte = [...angabe.matchAll(/(\d+(?:[.,]\d+)?)\s*(cm|mm)\b/gi)];
+  if (werte.length !== 1) return {};
+  const [, zahl, einheit] = werte[0];
+  const cm = einheit.toLowerCase() === 'mm' ? zahlAus(zahl) / 10 : zahlAus(zahl);
+  const hoeheMm = cmZuMm(cm);
+  return hoeheMm ? { hoeheMm } : {};
+}
+
+const EINHEIT_IN_CM: Record<string, number> = { cm: 1, centimeter: 1, centimeters: 1, centimetre: 1, centimetres: 1, mm: 0.1, millimeter: 0.1, millimeters: 0.1, in: 2.54, inch: 2.54, inches: 2.54 };
+
+/**
+ * Maße aus „physical_dimensions“ von Open Library, z. B. „20 x 13 x 2 centimeters“ oder „7.8 x 5.1 x 1.2 inches“
+ * (REQ-072, AK-8). Eindeutig nur mit genau drei Werten und bekannter Einheit: Bei einem Buch ist der größte Wert die
+ * Höhe, der mittlere die Breite und der kleinste die Dicke (die Reihenfolge der Quelle ist nicht verlässlich).
+ * Andere Angaben ergeben nichts.
+ */
+export function openLibraryMasseAus(angabe: string | undefined): Masse {
+  const m = angabe?.trim().match(/^(\d+(?:[.,]\d+)?)\s*[x×]\s*(\d+(?:[.,]\d+)?)\s*[x×]\s*(\d+(?:[.,]\d+)?)\s*([a-zA-Z]+)\.?$/);
+  if (!m) return {};
+  const faktor = EINHEIT_IN_CM[m[4].toLowerCase()];
+  if (!faktor) return {};
+  const [dicke, breite, hoehe] = [m[1], m[2], m[3]].map((w) => cmZuMm(zahlAus(w) * faktor)).sort((a, b) => (a ?? 0) - (b ?? 0));
+  if (!dicke || !breite || !hoehe) return {};
+  return { breiteMm: breite, hoeheMm: hoehe, dickeMm: dicke };
+}
+
 const ohneLeere = (v: Vorbelegung): Vorbelegung =>
   Object.fromEntries(Object.entries(v).filter(([, w]) => w !== undefined && w !== '')) as Vorbelegung;
 
@@ -145,7 +181,8 @@ export function dnbTrefferLesen(xml: string, gesuchteIsbn: string): Treffer[] {
     const fmt = formatAus(bezug).format ? formatAus(bezug) : formatAus(medium);
     const t: Treffer = {
       quelle: 'dnb',
-      angaben: ohneLeere({ titel, autor, verlag, erscheinungsjahr: jahr, seitenanzahl: seiten, isbn, ...fmt, preisCent }),
+      // Maße (REQ-072, AK-8): Höhe aus 300 $c.
+      angaben: ohneLeere({ titel, autor, verlag, erscheinungsjahr: jahr, seitenanzahl: seiten, isbn, ...fmt, preisCent, ...dnbMasseAus(unterfeld(erstes('300'), 'c')) }),
       coverUrl: dnbCoverUrl(gesuchteIsbn),
     };
     if (brauchbar(t)) ergebnis.push(t);
@@ -169,6 +206,9 @@ interface OlEintrag {
   publish_date?: unknown;
   physical_format?: unknown;
   price?: unknown;
+  physical_dimensions?: unknown;
+  /** Bei jscmd=details liegt der Ausgabe-Datensatz unter „details“. */
+  details?: { physical_dimensions?: unknown };
   identifiers?: { isbn_13?: unknown; isbn_10?: unknown };
   cover?: { large?: unknown; medium?: unknown; small?: unknown };
 }
@@ -220,6 +260,8 @@ export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Tre
         // Preis und Format (REQ-062 AK-9), nur falls die Quelle sie liefert.
         ...formatAus(zeichen(eintrag.physical_format)),
         preisCent: preisCentAus(zeichen(eintrag.price)),
+        // Maße (REQ-072, AK-8), nur falls eindeutig.
+        ...openLibraryMasseAus(zeichen(eintrag.physical_dimensions) ?? zeichen(eintrag.details?.physical_dimensions)),
       }),
       ...(cover && /^https:\/\/covers\.openlibrary\.org\//.test(cover) ? { coverUrl: cover } : {}),
     };

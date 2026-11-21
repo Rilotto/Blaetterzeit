@@ -99,6 +99,16 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN isbn TEXT',
     ],
   },
+  {
+    version: 8,
+    beschreibung: 'Ausgabe: Maße Breite, Höhe, Dicke (REQ-072)',
+    anweisungen: [
+      // Ganze Millimeter (= cm mit einer Nachkommastelle); NULL = kein Wert.
+      'ALTER TABLE buch ADD COLUMN breite_mm INTEGER',
+      'ALTER TABLE buch ADD COLUMN hoehe_mm INTEGER',
+      'ALTER TABLE buch ADD COLUMN dicke_mm INTEGER',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import type { Buch } from '@/domain/buch';
-import { buecherFarbe, textstufe, pillenhoehePx, abstand } from '@/theme';
+import { buecherFarbe, textstufe, pillenhoehePx, abstand, stilRolle } from '@/theme';
 import type { FilterDefinition } from './filterKonfiguration';
 import { horizontalScrollStil } from './layout';
 
@@ -76,6 +76,7 @@ export default function Filterleiste({ filter, buecher, aktivId: vorgegeben, onA
             data-filter={f.id}
             aria-pressed={aktiv}
             onClick={() => antippen(f)}
+            {...stilRolle('reiter')}
             style={kapselStil(aktiv)}
           >
             {f.name}

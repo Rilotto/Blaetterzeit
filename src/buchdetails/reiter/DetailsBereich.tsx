@@ -1,14 +1,17 @@
 import type { CSSProperties, ReactNode } from 'react';
 import {
+  MASSE_LEER,
   PREIS_LEER,
   exemplarText,
   formatText,
+  hatMasse,
   hinzugefuegtText,
+  masseText,
   preisText,
   sonderausgabeText,
 } from '@/domain/ausgabe';
 import type { Buch } from '@/domain/buch';
-import { detailsFarbe, textstufe, kartenSchatten, abstand, bildschirmrand } from '@/theme';
+import { detailsFarbe, textstufe, kartenSchatten, abstand, bildschirmrand, stilRolle } from '@/theme';
 import { RAND } from '../masse';
 import { abschnittKopfStil, abschnittUeberschriftStil, karteStil } from './rezension';
 
@@ -16,6 +19,7 @@ import { abschnittKopfStil, abschnittUeberschriftStil, karteStil } from './rezen
 export type AusgabeZeile =
   | 'seiten'
   | 'format'
+  | 'masse'
   | 'exemplar'
   | 'sonderausgabe'
   | 'fotos'
@@ -26,7 +30,7 @@ export type AusgabeZeile =
   | 'hinzugefuegt';
 
 /** Zeilen mit Pfeil „›“ (REQ-056, AK-2). */
-const MIT_PFEIL: readonly AusgabeZeile[] = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis'];
+const MIT_PFEIL: readonly AusgabeZeile[] = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'masse'];
 
 interface Props {
   buch: Buch;
@@ -36,6 +40,8 @@ interface Props {
   onFormat: () => void;
   /** Zeile „Preis“ angetippt (REQ-059). */
   onPreis: () => void;
+  /** Zeile „Maße“ angetippt (REQ-072). */
+  onMasse?: () => void;
   /** Zeile „Verlag“ bzw. „ISBN“ angetippt (REQ-063). */
   onVerlag?: () => void;
   onIsbn?: () => void;
@@ -219,6 +225,7 @@ function Zeile({
       <label
         data-ausgabe-zeile={id}
         data-fehler={fehler ? 'true' : undefined}
+        {...stilRolle('eintrag')}
         style={{
           ...zeileStil(letzte, true),
           cursor: 'text',
@@ -283,7 +290,7 @@ export function KartenZeile({
     </>
   );
   return (
-    <button type="button" {...zeilenAttribute} onClick={onAntippen} style={zeileStil(letzte, Boolean(onAntippen))}>
+    <button type="button" {...zeilenAttribute} onClick={onAntippen} {...stilRolle('eintrag')} style={zeileStil(letzte, Boolean(onAntippen))}>
       <span data-zeile-bezeichnung="" style={bezeichnungStil}>
         {beschriftung}
       </span>
@@ -299,7 +306,10 @@ export function KartenZeile({
 }
 
 /** Angaben der Karte „Ausgabe“, die direkt aus dem Buch bzw. den Eingaben kommen. */
-export type AusgabeAngaben = Pick<Buch, 'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn'>;
+export type AusgabeAngaben = Pick<
+  Buch,
+  'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn' | 'breiteMm' | 'hoeheMm' | 'dickeMm'
+>;
 
 export interface AusgabeKarteProps {
   angaben: AusgabeAngaben;
@@ -317,9 +327,16 @@ export interface AusgabeKarteProps {
 /** Karte „Ausgabe“ (REQ-056), auch im Blatt „Manueller Eintrag“ verwendet (REQ-060). */
 export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, seitenEingabe, seitenFehler }: AusgabeKarteProps) {
   return (
-    <div data-ausgabe-karte="" style={karteDetails}>
+    <div data-ausgabe-karte="" {...stilRolle('karte')} style={karteDetails}>
       <Zeile id="seiten" beschriftung="Seiten" wert={werte.seiten ?? ''} onAntippen={onZeile.seiten} eingabe={seitenEingabe} fehler={seitenFehler} />
       <Zeile id="format" beschriftung="Format" wert={formatText(angaben)} onAntippen={onZeile.format} />
+      <Zeile
+        id="masse"
+        beschriftung="Maße"
+        wert={hatMasse(angaben) ? masseText(angaben) : MASSE_LEER}
+        hervorgehoben={!hatMasse(angaben)}
+        onAntippen={onZeile.masse}
+      />
       <Zeile id="exemplar" beschriftung="Exemplar" wert={exemplarText(angaben)} onAntippen={onZeile.exemplar} />
       <Zeile id="sonderausgabe" beschriftung="Sonderausgabe" wert={sonderausgabeText(angaben)} onAntippen={onZeile.sonderausgabe} />
       {ohneFotos ? null : <Zeile id="fotos" beschriftung="Fotos" wert="Cover" />}
@@ -339,7 +356,7 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
 }
 
 /** Reiter „Details“ (REQ-051 bis REQ-056, REQ-063, REQ-064). */
-export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onVerlag, onIsbn, onHinzugefuegt }: Props) {
+export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt }: Props) {
   const erschienen = buch.erscheinungsjahr ?? (buch.erscheinungsdatum ? Number(buch.erscheinungsdatum.slice(6)) : undefined);
   return (
     <div style={{ paddingBottom: abstand('s') }}>
@@ -357,8 +374,8 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onVe
         <button type="button" data-sammlung-hinzufuegen="" style={sammlungStil}>
           Zu einer Sammlung hinzufügen
         </button>
-        <div style={{ ...karteDetails, marginTop: abstand('m') }}>
-          <button type="button" data-in-bibliotheken="" style={zeileStil(true, false)}>
+        <div {...stilRolle('karte')} style={{ ...karteDetails, marginTop: abstand('m') }}>
+          <button type="button" data-in-bibliotheken="" {...stilRolle('eintrag')} style={zeileStil(true, false)}>
             <span style={bezeichnungStil}>In Bibliotheken</span>
             <span style={wertStil(false)} />
             <span aria-hidden="true" style={pfeilStil}>
@@ -378,6 +395,7 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onVe
           onZeile={{
             seiten: onSeiten,
             format: onFormat,
+            masse: onMasse,
             exemplar: onFormat,
             sonderausgabe: onFormat,
             preis: onPreis,

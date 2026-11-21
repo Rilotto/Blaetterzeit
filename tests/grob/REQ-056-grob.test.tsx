@@ -39,11 +39,11 @@ const abschnitt = (d: HTMLElement, id: string) => bereich(d).querySelector<HTMLE
 const zeile = (d: HTMLElement, id: string) => bereich(d).querySelector<HTMLElement>(`[data-ausgabe-zeile="${id}"]`)!;
 const wert = (d: HTMLElement, id: string) => norm(zeile(d, id).querySelector('[data-zeile-wert]')?.textContent);
 
-it('[REQ-056/GROB] zehn Zeilen in fester Reihenfolge mit Werten aus dem Buch', async () => {
+it('[REQ-056/GROB] elf Zeilen (mit „Maße“ laut REQ-072) in fester Reihenfolge mit Werten aus dem Buch', async () => {
   const { d } = await details(buch({ seitenanzahl: 608, erscheinungsjahr: 2025, format: 'print', unterformat: 'taschenbuch', exemplar: 'meins' }));
   const zeilen = Array.from(abschnitt(d, 'ausgabe').querySelectorAll<HTMLElement>('[data-ausgabe-karte] [data-ausgabe-zeile]'));
   expect(zeilen.map((z) => norm(z.querySelector('[data-zeile-bezeichnung]')?.textContent))).toEqual(
-    ['Seiten', 'Format', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'],
+    ['Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'],
   );
   expect(wert(d, 'seiten')).toBe('608');
   expect(wert(d, 'format')).toBe('Print · Taschenbuch');

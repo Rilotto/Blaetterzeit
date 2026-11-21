@@ -16,7 +16,8 @@ import Kopfzeile from '@/buchdetails/Kopfzeile';
 import Statistik from '@/buchdetails/Statistik';
 import Statuspille from '@/buchdetails/Statuspille';
 import { kopfSchaltflaecheStil } from '@/buchdetails/stile';
-import { BUCH_HOEHE, KOPF_ICON, KOPF_SCHALTFLAECHE, RAND, seitenverhaeltnis } from '@/buchdetails/masse';
+import { KOPF_ICON, KOPF_SCHALTFLAECHE, RAND, darstellungsMasse, seitenverhaeltnis } from '@/buchdetails/masse';
+import BlattMasse from '@/buchdetails/BlattMasse';
 import ReiterBereich from '@/buchdetails/reiter/ReiterBereich';
 import Reiterleiste from '@/buchdetails/reiter/Reiterleiste';
 import { START_REITER, type ReiterId } from '@/buchdetails/reiter/rezension';
@@ -24,12 +25,12 @@ import FensterFormat from '@/buchdetails/reiter/FensterFormat';
 import Schreibfenster from '@/buchdetails/reiter/Schreibfenster';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
-import { eintragungsdatumAusText, type Formatangaben } from '@/domain/ausgabe';
+import { eintragungsdatumAusText, type Formatangaben, type Masse } from '@/domain/ausgabe';
 import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
 import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
 import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
 import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore } from '@/storage';
-import { buchdetailsFarbe, fortschrittFarbe, textstufe, abstand, bildschirmrand } from '@/theme';
+import { buchdetailsFarbe, fortschrittFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
 
 export interface BuchDetailsProps {
   buchId: string;
@@ -47,7 +48,7 @@ export interface BuchDetailsProps {
   onZurueck: () => void;
 }
 
-type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | 'verlag' | 'isbn' | 'hinzugefuegt' | null;
+type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | 'masse' | 'verlag' | 'isbn' | 'hinzugefuegt' | null;
 
 const systemzeit = () => new Date();
 
@@ -62,7 +63,7 @@ const ansichtStil: CSSProperties = {
 };
 
 // Kopfzeile (8 + 40) + Abstand (10) + Buch + 8 px: Oberkante des Auswahlmenüs (Referenzbild: direkt unter dem Buch).
-const MENUE_OBEN = 8 + KOPF_SCHALTFLAECHE + 10 + BUCH_HOEHE + 8;
+const menueOben = (buchHoehe: number) => 8 + KOPF_SCHALTFLAECHE + 10 + buchHoehe + 8;
 
 // Buchtitel unter der Buchdarstellung (REQ-018): mittig, höchstens zwei Zeilen mit „…“.
 const titelStil: CSSProperties = {
@@ -254,6 +255,17 @@ export default function BuchDetails({
     setBlatt(null);
   };
 
+  // Maße sichern (REQ-072): leeres Feld = kein Wert.
+  const masseSpeichern = (m: Masse) => {
+    if (!buch) return;
+    const neu: Buch = { ...buch };
+    delete neu.breiteMm;
+    delete neu.hoeheMm;
+    delete neu.dickeMm;
+    speichern({ ...neu, ...m });
+    setBlatt(null);
+  };
+
   // Verlag sichern (REQ-063); leer entfernt den Verlag.
   const verlagSpeichern = (verlag: string) => {
     if (!buch) return;
@@ -333,7 +345,7 @@ export default function BuchDetails({
   };
 
   const zuschnittBestaetigen = async (bild: string, bereich: Bildbereich, ecken: Ecken) => {
-    const ergebnis = await zuschneiden(bild, ecken, seitenverhaeltnis(bereich)).catch(() => bild);
+    const ergebnis = await zuschneiden(bild, ecken, seitenverhaeltnis(bereich, buch)).catch(() => bild);
     await speicher.put(buchId, bereich, ergebnis);
     if (!aktiv.current) return;
     setBilder((alt) => ({ ...alt, [bereich]: ergebnis }));
@@ -349,6 +361,7 @@ export default function BuchDetails({
       <Zuschnitt
         bild={bild}
         bereich={bereich}
+        masse={buch}
         onBestaetigen={(ecken) => zuschnittBestaetigen(bild, bereich, ecken)}
         onZurueck={() => setSchritt({ art: 'details' })}
       />
@@ -368,8 +381,8 @@ export default function BuchDetails({
       />
       {buch ? (
         <>
-          <Buchdarstellung titel={buch.titel} bilder={bilder} onAntippen={setMenue} />
-          <h1 data-buchdetails-titel="" style={titelStil}>
+          <Buchdarstellung titel={buch.titel} bilder={bilder} masse={buch} onAntippen={setMenue} />
+          <h1 data-buchdetails-titel="" {...stilRolle('seitentitel', 'buchtitel')} style={titelStil}>
             {buch.titel}
           </h1>
           {buch.autor ? (
@@ -391,6 +404,7 @@ export default function BuchDetails({
             onSeiten={() => setBlatt('seiten')}
             onFormat={() => setBlatt('format')}
             onPreis={() => setBlatt('preis')}
+            onMasse={() => setBlatt('masse')}
             onVerlag={() => setBlatt('verlag')}
             onIsbn={() => setBlatt('isbn')}
             onHinzugefuegt={() => setBlatt('hinzugefuegt')}
@@ -435,6 +449,7 @@ export default function BuchDetails({
         />
       ) : null}
       {buch && blatt === 'preis' ? <BlattPreis preisCent={buch.preisCent} onSichern={preisSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'masse' ? <BlattMasse masse={buch} onSichern={masseSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'verlag' ? <BlattVerlag verlag={buch.verlag} onSichern={verlagSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'isbn' ? <BlattIsbn isbn={buch.isbn} onSichern={isbnSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'hinzugefuegt' ? (
@@ -442,7 +457,7 @@ export default function BuchDetails({
       ) : null}
       {menue !== null ? (
         <Auswahlmenue
-          oben={MENUE_OBEN}
+          oben={menueOben(darstellungsMasse(buch).hoehe)}
           mitEntfernen={Boolean(bilder[menue])}
           onAktion={(a) => void aktion(a)}
           onSchliessen={() => setMenue(null)}

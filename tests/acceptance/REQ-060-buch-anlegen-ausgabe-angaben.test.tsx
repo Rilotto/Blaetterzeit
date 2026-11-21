@@ -21,8 +21,9 @@ vi.mock('@/buecher/demodaten', () => ({ demoBuecher: [] }));
 
 type Welt = { repo: BookRepository; bilder: ImageStore; BA: ComponentType<Record<string, unknown>> };
 const W = { timeout: 4000 };
-const ZEILEN = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt'];
-const NAMEN = ['Seiten', 'Format', 'Exemplar', 'Sonderausgabe', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'];
+// REQ-072: Zeile „Maße“ auch im Manuellen Eintrag direkt unter „Format“ (Anpassung Sprint 07)
+const ZEILEN = ['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt'];
+const NAMEN = ['Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'];
 
 async function starte(): Promise<Welt> {
   vi.resetModules();

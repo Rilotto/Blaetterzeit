@@ -79,7 +79,13 @@ describe('REQ-066 Profil › App › Design', () => {
     const bilder = { get: async () => undefined, put: async () => {}, remove: async () => {} } as unknown as ImageStore;
     render(<BuchDetails buchId={b.id} repository={repo} bildspeicher={bilder} bildquelle={{ scannen: async () => null, galerie: async () => null }} onZurueck={() => {}} />);
     const d = await screen.findByRole('region', { name: 'Buchdetails' }, W);
-    await tippe(d.querySelector('[data-reiter="details"]')!);
+    // robust: Reiterleiste erscheint erst nach dem asynchronen Laden des Buches
+    const reiterDetails = await vi.waitFor(() => {
+      const e = d.querySelector<HTMLElement>('[data-reiter="details"]');
+      expect(e).not.toBeNull();
+      return e!;
+    }, W);
+    await tippe(reiterDetails);
     const ausgabe = await vi.waitFor(() => {
       const e = d.querySelector<HTMLElement>('[data-ausgabe-karte]');
       expect(e).not.toBeNull();
@@ -116,28 +122,29 @@ describe('REQ-066 Profil › App › Design', () => {
     expect(karte.style.backgroundColor).not.toBe('var(--bz-farbe-hintergrund)');
   });
 
-  it('[REQ-066/AK-2] ohne Wahl: Zeile zeigt „Klassisch · Fraunces ›“', async () => {
+  // Anpassung Sprint 07: REQ-071 erweitert die Anzeige um den Stil (Farbdesign · Schrift · Stil).
+  it('[REQ-066/AK-2] ohne Wahl: Zeile zeigt „Klassisch · Fraunces · Klassisch ›“', async () => {
     await starteMit();
     await profil();
-    await vi.waitFor(() => expect(anzeige()).toBe('Klassisch · Fraunces ›'), W);
+    await vi.waitFor(() => expect(anzeige()).toBe('Klassisch · Fraunces · Klassisch ›'), W);
   });
 
-  it('[REQ-066/AK-2] Salbei und Systemschrift gewählt: Zeile zeigt „Salbei · Systemschrift ›“', async () => {
+  it('[REQ-066/AK-2] Salbei und Systemschrift gewählt: Zeile zeigt „Salbei · Systemschrift · Klassisch ›“', async () => {
     await starteMit('salbei', 'system');
     await profil();
-    await vi.waitFor(() => expect(anzeige()).toBe('Salbei · Systemschrift ›'), W);
+    await vi.waitFor(() => expect(anzeige()).toBe('Salbei · Systemschrift · Klassisch ›'), W);
   });
 
   it('[REQ-066/AK-2] nach anderer Wahl im Fenster „Design“ zeigt die Zeile ohne Neustart die neue Wahl', async () => {
     await starteMit('salbei', 'system');
     const zeile = await profil();
-    await vi.waitFor(() => expect(anzeige()).toBe('Salbei · Systemschrift ›'), W);
+    await vi.waitFor(() => expect(anzeige()).toBe('Salbei · Systemschrift · Klassisch ›'), W);
     await tippe(zeile);
     const f = await screen.findByRole('dialog', { name: 'Design' }, W);
     await tippe(f.querySelector('button[data-farbdesign="nachtlektuere"]')!);
     await tippe(f.querySelector('[data-design-reiter="schriftart"]')!);
     await tippe(f.querySelector('button[data-schrift-zeile="fraunces"]')!);
-    await vi.waitFor(() => expect(anzeige()).toBe('Nachtlektüre · Fraunces ›'), W);
+    await vi.waitFor(() => expect(anzeige()).toBe('Nachtlektüre · Fraunces · Klassisch ›'), W);
   });
 
   it('[REQ-066/AK-3] Zeile „Design“ antippen öffnet das Fenster „Design“', async () => {

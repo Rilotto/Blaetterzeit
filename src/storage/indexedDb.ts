@@ -39,6 +39,9 @@ const MIGRATIONEN: ((db: IDBDatabase, tx: IDBTransaction) => void)[] = [
   // Version 5: Genres, Tropes, Inhaltswarnungen, Format, Unterformat, Sonderausgabe, Exemplar, Preis
   // (REQ-052, REQ-053, REQ-058, REQ-059). Optionale Felder im Buchobjekt, kein Umbau nötig.
   () => {},
+  // Version 6: Verlag, ISBN (REQ-063) und Maße breiteMm, hoeheMm, dickeMm (REQ-072). Optionale Felder im
+  // Buchobjekt, vorhandene Datensätze bleiben gültig; kein Umbau nötig.
+  () => {},
 ];
 
 export const SCHEMA_VERSION = MIGRATIONEN.length;
