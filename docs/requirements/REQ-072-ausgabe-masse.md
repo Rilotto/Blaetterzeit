@@ -23,6 +23,7 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 
 **Zeile „Maße“**
 - Das System muss in der Karte „Ausgabe“ (REQ-056) direkt unter der Zeile „Format“ die Zeile „Maße“ darstellen.
+- Das System muss die Zeile „Maße“ rechts mit einem Pfeil „›“ darstellen, wie die Zeile „Preis“ (REQ-056).
 - Sind Werte hinterlegt, muss die Zeile sie als „Breite × Höhe × Dicke cm“ mit genau einer Nachkommastelle und Komma zeigen, z. B. „13,5 × 21,0 × 3,2 cm“. Ein fehlender Einzelwert erscheint als „–“, z. B. „– × 21,0 × – cm“.
 - Ist kein Wert hinterlegt, muss die Zeile „Trag die Maße ein“ zeigen (Muster wie „Preis“, REQ-059).
 
@@ -45,6 +46,7 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 - **Gegeben** die Karte „Ausgabe“ eines Buches
 - **Wenn** der Nutzer sie betrachtet
 - **Dann** steht die Zeile „Maße“ direkt unter „Format“
+- **Und** die Zeile „Maße“ zeigt rechts einen Pfeil „›“, wie „Preis“
 
 ### AK-2 Anzeige mit und ohne Werte
 - **Gegeben** ein Buch ohne Maße
@@ -110,3 +112,4 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-18 | Erstellt aus CEO-Wunsch und vom CEO bestätigtem Vorschlag (eine Nachkommastelle). Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-21 | CEO (wörtlich): „ja ergänze bitte den Pfeil bei "Maße".“ Pfeil „›“ rechts an der Zeile „Maße“ ergänzt (Anforderung, AK-1). Status unverändert | Anforderungsmanager |

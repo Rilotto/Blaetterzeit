@@ -30,7 +30,7 @@ export type AusgabeZeile =
   | 'hinzugefuegt';
 
 /** Zeilen mit Pfeil „›“ (REQ-056, AK-2). */
-const MIT_PFEIL: readonly AusgabeZeile[] = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis'];
+const MIT_PFEIL: readonly AusgabeZeile[] = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'masse'];
 
 interface Props {
   buch: Buch;

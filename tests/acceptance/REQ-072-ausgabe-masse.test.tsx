@@ -119,6 +119,20 @@ describe('REQ-072 Maße', () => {
       expect(ids[ids.indexOf('format') + 1]).toBe('masse');
       expect(norm(zeile(d, 'masse').querySelector('[data-zeile-bezeichnung]')?.textContent)).toBe('Maße');
     });
+
+    it('[REQ-072/AK-1] Zeile „Maße“ zeigt rechts den Pfeil „›“ wie „Preis“ (mit und ohne Werte)', async () => {
+      const { d } = await mitBuch(buch({ hoeheMm: 210 }));
+      const pfeil = zeile(d, 'masse').querySelector<HTMLElement>('[data-zeile-pfeil]');
+      expect(pfeil).not.toBeNull();
+      expect(norm(pfeil!.textContent)).toBe('›');
+      const wertEl = zeile(d, 'masse').querySelector('[data-zeile-wert]')!;
+      expect(wertEl.compareDocumentPosition(pfeil!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      const preisPfeil = zeile(d, 'preis').querySelector<HTMLElement>('[data-zeile-pfeil]')!;
+      expect(pfeil!.style.cssText).toBe(preisPfeil.style.cssText);
+      cleanup();
+      const { d: d2 } = await mitBuch();
+      expect(norm(zeile(d2, 'masse').querySelector('[data-zeile-pfeil]')?.textContent)).toBe('›');
+    });
   });
 
   describe('AK-2 Anzeige', () => {

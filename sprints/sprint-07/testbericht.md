@@ -6,5 +6,5 @@
 - **Gegenprobe (5/5 erkannt):** Lupe fehlt, Lupe auf falscher Seite, Maße nicht gespeichert, Rücken ignoriert die Dicke, Stil nicht gespeichert.
 - **Fehler:** keine.
 - **Risiko 1:** Wird der Manuelle Eintrag ausgehängt, solange er offen ist, bleibt ein Eintrag im Zurück-Verlauf liegen. Ein später geöffnetes Blatt schließt dann sofort (in Tests nachgestellt). Der Fehler liegt in schon vorhandenem Code (Zurück-Taste), ist nicht neu.
-- **Annahmen Entwickler (an SM):** (a) Blätter behalten im Feuilleton ihre Fläche. Das steht in Spannung zu F1 („keine Ghost-Flächen … auch Blätter“). (b) „Maße“ hat keinen Pfeil, obwohl die Zeile wie „Preis“ ein Blatt öffnet. (c) Open Library nur bei drei Werten, größter Wert = Höhe. (d) Höchstens 4 Stellen vor dem Komma.
-- **Empfehlung:** freigabefähig, sobald die CI (volle Suite) grün ist und (a)/(b) mit dem Anforderungsmanager geklärt sind.
+- **Annahmen Entwickler (an SM):** (a) Blätter behalten im Feuilleton ihre Fläche. Das steht in Spannung zu F1 („keine Ghost-Flächen … auch Blätter“). (b) erledigt: Pfeil an „Maße“ (CEO 2026-11-21), Tests REQ-056/AK-2 und REQ-072/AK-1 angepasst. (c) Open Library nur bei drei Werten, größter Wert = Höhe. (d) Höchstens 4 Stellen vor dem Komma.
+- **Empfehlung:** freigabefähig, sobald die CI (volle Suite) grün ist und (a) mit dem Anforderungsmanager geklärt ist.

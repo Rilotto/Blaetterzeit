@@ -91,10 +91,10 @@ describe('REQ-056 Karte „Ausgabe“', () => {
     expect(bereich(d).textContent).not.toMatch(/Signiert/i);
   });
 
-  it('[REQ-056/AK-2] genau Seiten, Format, Exemplar, Sonderausgabe, Fotos, Preis haben den Pfeil „›“', async () => {
+  it('[REQ-056/AK-2] genau Seiten, Format, Maße, Exemplar, Sonderausgabe, Fotos, Preis haben den Pfeil „›“', async () => {
     const { d } = await mitBuch(buch({ seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00' }));
     const mit = zeilen(d).filter((z) => z.querySelector('[data-zeile-pfeil]')).map((z) => z.getAttribute('data-ausgabe-zeile'));
-    expect(mit).toEqual(['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis']);
+    expect(mit).toEqual(['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis']);
     for (const z of zeilen(d).filter((z) => z.querySelector('[data-zeile-pfeil]'))) expect(norm(z.querySelector('[data-zeile-pfeil]')!.textContent)).toBe('›');
     for (const id of ['verlag', 'erschienen', 'isbn', 'hinzugefuegt']) expect(zeile(d, id).textContent).not.toContain('›');
   });
