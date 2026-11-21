@@ -36,11 +36,13 @@ describe('Frontcover in der Liste', () => {
     await speicher.put(buch.id, 'ruecken', BILD);
     const { unmount } = render(<BuecherAnsicht buecher={[buch]} bildspeicher={speicher} />);
     await act(async () => {});
-    expect(document.querySelector('[data-cover-platzhalter]')).not.toBeNull();
+    // Auf „Noch zu lesen“ eingeschränkt: Das Buch steht zusätzlich im Abschnitt „Alle Bücher“ (REQ-035).
+    const nochZuLesen = () => screen.getByRole('region', { name: 'Noch zu lesen' });
+    expect(nochZuLesen().querySelector('[data-cover-platzhalter]')).not.toBeNull();
     unmount();
     await speicher.put(buch.id, 'cover', BILD);
     render(<BuecherAnsicht buecher={[buch]} bildspeicher={speicher} />);
-    expect(await screen.findByRole('img', { name: 'Momo' })).toHaveAttribute('src', BILD);
+    expect(await within(nochZuLesen()).findByRole('img', { name: 'Momo' })).toHaveAttribute('src', BILD);
   });
 });
 

@@ -40,7 +40,7 @@ Welche Filter es gibt, wie sie heißen, in welcher Reihenfolge sie stehen und we
 - Wenn die Seite „Bücher“ aufgerufen wird, muss das System den Filter „Für dich“ als aktiven Filter darstellen. Das gilt bei jedem Aufruf, auch nach einem Seitenwechsel (CEO: „Standardmäßig auch bei einem Seitenwechsel, soll immer 'Für dich' aktiv sein.“).
 - Wenn der Nutzer einen Filter antippt, muss das System ihn als aktiven Filter und den zuvor aktiven Filter als inaktiven Filter darstellen.
 - Wenn der Nutzer einen Filter antippt, muss das System die dem Filter in der Filterkonfiguration zugeordnete Filterlogik auslösen (Anknüpfungspunkt für die spätere Filterlogik, REQ-007).
-- Wenn der Nutzer einen Filter antippt, darf sich auf der Seite „Bücher“ außer der Darstellung der Filter (aktiv/inaktiv) nichts ändern (CEO: „aktuell soll […] erstmal nichts passieren, außer, dass ein Filter aktiv angezeigt wird.“). Die Filterlogik bewirkt im Grundgerüst nichts Sichtbares.
+- Wenn der Nutzer einen Filter antippt, darf sich auf der Seite „Bücher“ außer der Darstellung der Filter (aktiv/inaktiv) nichts ändern (CEO: „aktuell soll […] erstmal nichts passieren, außer, dass ein Filter aktiv angezeigt wird.“). Ausnahmen: Der Filter „Alle“ öffnet die Übersicht „Alle Bücher“ (REQ-039), der Filter „Gerade am Lesen“ die Übersicht „Gerade am Lesen“ (REQ-042). In den Übersichten ändert das Antippen eines Filters die angezeigten Bücher (REQ-036).
 
 **Farben**
 - Das System muss alle Farben dieses REQ über Farbrollen aus zentral definierten Farbrubriken beziehen (REQ-002, „Farben“; CLAUDE.md, „Farben auf Zuruf“). Zuordnung:
@@ -79,9 +79,9 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 - **Dann** befindet sich direkt unterhalb der Überschrift „Deine Bücher“ die Filterleiste
 
 ### AK-2 Filter gemäß Filterkonfiguration
-- **Gegeben** die aktuelle Filterkonfiguration (REQ-007) mit den Filtern „Für dich“, „Gerade am Lesen“, „Noch zu lesen“ in dieser Reihenfolge
+- **Gegeben** die aktuelle Filterkonfiguration (REQ-007) mit den Filtern „Alle“, „Für dich“, „Gerade am Lesen“, „Noch zu lesen“ in dieser Reihenfolge
 - **Wenn** die Filterleiste angezeigt wird
-- **Dann** enthält sie genau diese drei Filter, von links nach rechts in dieser Reihenfolge und mit genau diesen Beschriftungen
+- **Dann** enthält sie genau diese vier Filter, von links nach rechts in dieser Reihenfolge und mit genau diesen Beschriftungen
 
 ### AK-3 „Für dich“ ist beim ersten Aufruf aktiv
 - **Gegeben** die App wurde gerade geöffnet
@@ -128,8 +128,7 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 - **Gegeben** „Für dich“ ist aktiv
 - **Wenn** der Nutzer den Filter „Gerade am Lesen“ antippt
 - **Dann** ist „Gerade am Lesen“ aktiv dargestellt und „Für dich“ inaktiv
-- **Und** die „Gerade am Lesen“ in der Filterkonfiguration zugeordnete Filterlogik wurde ausgelöst
-- **Und** außer der Darstellung der Filter ändert sich auf der Seite „Bücher“ nichts
+- **Und** die „Gerade am Lesen“ in der Filterkonfiguration zugeordnete Filterlogik wurde ausgelöst (öffnet die Übersicht „Gerade am Lesen“, REQ-042; „Alle“: REQ-039)
 
 ### AK-11 „Für dich“ ist nach einem Seitenwechsel wieder aktiv
 - **Gegeben** auf der Seite „Bücher“ ist ein anderer Filter als „Für dich“ aktiv
@@ -175,3 +174,5 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp). Nur zur Orientierung,
 | 2026-11-09 | Antworten des CEO eingearbeitet. F1: Priorität „Must“ bestätigt, Vorläufigkeitsvermerk entfernt. F3: Farbzuordnungen eingetragen (aktiver Filter Tertiär / Schrift Hintergrund; inaktive Filter in den neuen Farbrubriken „Ghost“, „GhostFrame“, „Schrift tertiär“ mit Standardwerten aus dem Referenzbild). Die frühere Beschreibung „dunkelbraun mit heller Beschriftung“ bzw. „hellem, beigefarbenem Hintergrund, dezentem Rahmen, dunklerer Schrift“ und die gemessenen Werte des aktiven Filters entfallen zugunsten der Farbrubriken; Rahmenwert neu gemessen (`#DFD9CB`). AK-7 präzisiert, neu AK-12. F6: Aktivierung durch Antippen; außer der Darstellung passiert nichts, die Filterlogik bleibt als Anknüpfungspunkt (AK-10 präzisiert); „Für dich“ ist bei jedem Aufruf der Seite aktiv, auch nach Seitenwechsel (neu AK-11). F5 nach REQ-005 verschoben und dort als F10 neu formuliert; F5 blockiert diesen REQ nicht mehr. Zahl hinter Filtern in die Abgrenzung (CEO-Antwort 7). Neue offene Frage F11 (Rahmen des aktiven Filters) | Anforderungsmanager |
 | 2026-11-09 | Antworten des CEO eingearbeitet. F11: Aktiver Filter hat keinen Rahmen (Anforderung im Abschnitt „Farben“, AK-7 ergänzt). F10 (REQ-005): Bereich unterhalb der Filterleiste bleibt leer, Verweise in „Wischen“ und Abgrenzung angepasst. Vom CEO am 2026-11-09 bestätigt, Status „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-09 | CEO: „Merge bitte Schrift tertiär und tertiär“. Farbrubrik „Schrift tertiär“ (Standardwert `#685849`) entfällt und wird mit „Tertiär“ (Standardwert `#6B5849`, REQ-002) zusammengelegt. Beschriftung inaktiver Filter jetzt in Farbrubrik „Tertiär“ (Farbtabelle, Definition neuer Farbrubriken, Standardwerte, AK-7, AK-12 angepasst). Reine Farbzuordnung, Status bleibt „Implementiert“; Code und Akzeptanztest sind anzupassen | Anforderungsmanager |
+| 2026-11-12 | CEO-Antworten zu REQ-039/REQ-036 („an erster Stelle vor "Für Dich"“, „die Ansicht ändert sich entsprechend. Dies sind ja Filterpillen“): AK-2 auf vier Filter mit „Alle“ an erster Stelle; Ausnahme „Alle“ öffnet die Übersicht (Anforderung, AK-10). „Für dich“ bleibt Standard auf der Seite „Bücher“. REQ nicht eingefroren; Statuswechsel durch den Scrum Master | Anforderungsmanager |
+| 2026-11-12 | CEO-Antwort Runde 3: „Gerade am Lesen“ öffnet eine Übersicht (REQ-042); AK-10 entsprechend angepasst | Anforderungsmanager |

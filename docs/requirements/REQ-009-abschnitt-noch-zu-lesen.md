@@ -25,7 +25,7 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - Das System muss die Abschnittsüberschrift „Noch zu lesen“ linksbündig in großer Schrift darstellen (Größe und Schriftstärke: Orientierung am Referenzbild).
 - Das System muss die Abschnittsüberschrift in der Farbrolle „Abschnittsüberschriftfarbe“ darstellen, die ihren Wert aus der Farbrubrik „Tertiär“ bezieht (CEO: „mit der Farbe wie der große Titel 'Deine Bücher'“, REQ-005).
 - Das System muss rechts neben der Abschnittsüberschrift den Text „Alle ansehen ›“ dezent in der Farbrolle „Alle-ansehen-Farbe“ darstellen (CEO: „dezenter bordeauxfarbener Text“; Farbrubrik „Primär“).
-- Wenn der Nutzer „Alle ansehen ›“ antippt, darf sich in der App nichts ändern (CEO: „aktuell noch nichts.“). Die spätere Gesamtliste steht in der To-do-Liste (`docs/todo.md`).
+- Wenn der Nutzer „Alle ansehen ›“ antippt, muss das System die Übersicht „Noch zu lesen“ (REQ-040) öffnen (CEO 2026-11-12: „es soll eine gleiche Liste angezeigt werden mit den gleichen Ansichtsoptionen nur eben die Bücher im Status "noch zu lesen"“). Ersetzt die frühere Vorgabe „aktuell noch nichts.“
 
 **Buchauswahl**
 - Das System muss im Abschnitt „Noch zu lesen“ alle Bücher anzeigen, deren Lesestatus (REQ-008) dem Abschnitt „Noch zu lesen“ zugeordnet ist.
@@ -148,10 +148,11 @@ Schriftgröße und -stärke von Abschnittsüberschrift, „Alle ansehen ›“ u
 - **Wenn** die Seite „Bücher“ angezeigt wird
 - **Dann** sind alle Elemente mit dieser Farbrolle im geänderten Wert dargestellt
 
-### AK-14 „Alle ansehen ›“ bewirkt vorerst nichts
+### AK-14 „Alle ansehen ›“ öffnet die Übersicht „Noch zu lesen“
 - **Gegeben** die Seite „Bücher“ wird angezeigt
-- **Wenn** der Nutzer „Alle ansehen ›“ antippt
-- **Dann** ändert sich in der App nichts (kein neues Fenster, keine neue Ansicht, kein Wechsel des Menüpunkts, keine Änderung der Filterleiste oder der Buchliste)
+- **Wenn** der Nutzer im Abschnitt „Noch zu lesen“ „Alle ansehen ›“ antippt
+- **Dann** wird die Übersicht „Noch zu lesen“ (REQ-040) angezeigt
+- **Und** der Menüpunkt „Bücher“ bleibt aktiv
 
 ### AK-15 Buchtitel in Dunkelbraun, „Alle ansehen ›“ in Primär
 - **Gegeben** die Seite „Bücher“ zeigt mindestens einen Bucheintrag
@@ -167,7 +168,7 @@ Schriftgröße und -stärke von Abschnittsüberschrift, „Alle ansehen ›“ u
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Abschnitte „Sagas“ und „Sammlungen“ (Überschriften mit Platzhaltern: REQ-012; echte Saga-/Sammlungsfunktion nicht umgesetzt).
-- Die spätere Gesamtliste hinter „Alle ansehen ›“ (To-do, `docs/todo.md`).
+- Inhalt der Übersicht hinter „Alle ansehen ›“ (REQ-040).
 - Darstellung eines Buches ohne Cover im Detail (REQ-010) und der leeren Liste (REQ-011).
 - Anlegen von Büchern, Buchdetails, Antippen eines Bucheintrags.
 - Zusammenspiel mit der Filterlogik (REQ-007).
@@ -198,3 +199,4 @@ Schriftgröße und -stärke von Abschnittsüberschrift, „Alle ansehen ›“ u
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Vorgabe „Noch zu lesen“ und der Chat-Aussage zu den Abschnittsüberschriften) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten eingearbeitet: F1 Vorbelegung „ungelesen“ (neu AK-16). F3 „Alle ansehen ›“ bewirkt vorerst nichts (neu AK-14), Gesamtliste in To-do. F4 Sagas/Sammlungen ausgelagert in REQ-012. F5 Demodaten als Randbedingung. F6 „Alle ansehen ›“ = Primär, Buchtitel = neue Farbrubrik „Dunkelbraun“ (neu AK-15). F7 Must. Vom CEO bestätigt 2026-11-09, Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-12 | CEO-Antwort F2.4 (REQ-040): „Alle ansehen ›“ öffnet jetzt die Übersicht „Noch zu lesen“. Anforderung, AK-14 und Abgrenzung angepasst. REQ nicht eingefroren; Statuswechsel durch den Scrum Master | Anforderungsmanager |

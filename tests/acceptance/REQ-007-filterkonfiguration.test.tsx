@@ -45,7 +45,9 @@ function walk(dir: URL): URL[] {
 }
 
 type FilterDef = (typeof filterKonfiguration)[number];
-const STANDARD_NAMEN = ['Für dich', 'Gerade am Lesen', 'Noch zu lesen'];
+const ohneKommentare = (t: string) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1').replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
+// Fassung 2026-11-12: „Alle“ an Position 1 (REQ-039).
+const STANDARD_NAMEN = ['Alle', 'Für dich', 'Gerade am Lesen', 'Noch zu lesen'];
 
 function filter(name: string, reihenfolge: number, extra: Partial<FilterDef> = {}): FilterDef {
   return { ...filterKonfiguration[0], id: `test-${name}`, name, reihenfolge, standard: false, logik: vi.fn(), ...extra };
@@ -83,6 +85,7 @@ describe('REQ-007 Filterkonfiguration', () => {
     it('[REQ-007/AK-1] die zentrale Konfiguration entspricht der Tabelle des CEO (Name, Position, Standard)', () => {
       const s = [...filterKonfiguration].sort((a, b) => a.reihenfolge - b.reihenfolge);
       expect(s.map((f) => [f.name, !!f.standard])).toEqual([
+        ['Alle', false],
         ['Für dich', true],
         ['Gerade am Lesen', false],
         ['Noch zu lesen', false],
@@ -109,9 +112,9 @@ describe('REQ-007 Filterkonfiguration', () => {
   describe('AK-2 Filter hinzufügen nur über die Konfiguration', () => {
     it('[REQ-007/AK-2] ein in der zentralen Konfiguration ergänzter Filter erscheint an seiner Position', async () => {
       const n = await mitGeaenderterZentralkonfiguration((k) => {
-        k.push({ ...k[0], id: 'neu', name: 'Abgebrochen', reihenfolge: 2.5, standard: false });
+        k.push({ ...k[0], id: 'neu', name: 'Abgebrochen', reihenfolge: 3.5, standard: false });
       });
-      expect(n).toEqual(['Für dich', 'Gerade am Lesen', 'Abgebrochen', 'Noch zu lesen']);
+      expect(n).toEqual(['Alle', 'Für dich', 'Gerade am Lesen', 'Abgebrochen', 'Noch zu lesen']);
     });
 
     it('[REQ-007/AK-2] ein über die Prop übergebener zusätzlicher Filter erscheint am Anfang bzw. Ende', () => {
@@ -126,14 +129,14 @@ describe('REQ-007 Filterkonfiguration', () => {
       const n = await mitGeaenderterZentralkonfiguration((k) => {
         k.find((f) => f.name === 'Gerade am Lesen')!.name = 'Am Lesen';
       });
-      expect(n).toEqual(['Für dich', 'Am Lesen', 'Noch zu lesen']);
+      expect(n).toEqual(['Alle', 'Für dich', 'Am Lesen', 'Noch zu lesen']);
     });
 
     it('[REQ-007/AK-3] Umbenennen des Standardfilters: er bleibt aktiv und heißt neu', () => {
       const k = kopie();
       k.find((f) => f.standard)!.name = 'Empfohlen';
       render(<BuecherAnsicht buecher={[]} filter={k} />);
-      expect(namen()).toEqual(['Empfohlen', 'Gerade am Lesen', 'Noch zu lesen']);
+      expect(namen()).toEqual(['Alle', 'Empfohlen', 'Gerade am Lesen', 'Noch zu lesen']);
       expect(within(leiste()).getByRole('button', { name: 'Empfohlen' })).toHaveAttribute('aria-pressed', 'true');
       expect(screen.queryByRole('button', { name: 'Für dich' })).toBeNull();
     });
@@ -148,7 +151,7 @@ describe('REQ-007 Filterkonfiguration', () => {
           1,
         );
       });
-      expect(n).toEqual(['Für dich', 'Noch zu lesen']);
+      expect(n).toEqual(['Alle', 'Für dich', 'Noch zu lesen']);
     });
 
     it('[REQ-007/AK-4] Grenzfall: nur noch ein Filter', () => {
@@ -161,10 +164,10 @@ describe('REQ-007 Filterkonfiguration', () => {
   describe('AK-5 Filter neu sortieren nur über die Konfiguration', () => {
     it('[REQ-007/AK-5] geänderte Positionen in der zentralen Konfiguration ergeben die neue Reihenfolge', async () => {
       const n = await mitGeaenderterZentralkonfiguration((k) => {
-        const pos: Record<string, number> = { 'Für dich': 3, 'Gerade am Lesen': 1, 'Noch zu lesen': 2 };
+        const pos: Record<string, number> = { Alle: 4, 'Für dich': 3, 'Gerade am Lesen': 1, 'Noch zu lesen': 2 };
         for (const f of k) f.reihenfolge = pos[f.name];
       });
-      expect(n).toEqual(['Gerade am Lesen', 'Noch zu lesen', 'Für dich']);
+      expect(n).toEqual(['Gerade am Lesen', 'Noch zu lesen', 'Für dich', 'Alle']);
     });
 
     it('[REQ-007/AK-5] umgekehrte Reihenfolge über die Prop', () => {
@@ -214,7 +217,8 @@ describe('REQ-007 Filterkonfiguration', () => {
       // über die Darstellung der Leiste geprüft (nächster Test).
       const treffer = walk(SRC)
         .filter((f) => /\.(tsx?|css)$/.test(f.pathname) && f.href !== KONFIG_DATEI.href)
-        .filter((f) => /Für dich|Gerade am Lesen|fuer_dich|gerade_am_lesen/.test(fs.readFileSync(f, 'utf8')))
+        // Kommentare zählen nicht als eingebaute Filter (Fassung 2026-11-12: Verweise in Code-Kommentaren).
+        .filter((f) => /Für dich|Gerade am Lesen|fuer_dich|gerade_am_lesen/.test(ohneKommentare(fs.readFileSync(f, 'utf8'))))
         .map((f) => f.pathname.slice(SRC.pathname.length));
       expect(treffer).toEqual([]);
     });
@@ -236,20 +240,23 @@ describe('REQ-007 Filterkonfiguration', () => {
       for (const f of filterKonfiguration) expect(() => f.logik!([])).not.toThrow();
     });
 
-    it('[REQ-007/AK-8] beim Antippen wird genau die Filterlogik des angetippten Filters ausgelöst', () => {
-      const k = filterKonfiguration.map((f) => ({ ...f, logik: vi.fn() }));
-      render(<BuecherAnsicht buecher={[]} filter={k} />);
-      for (const ziel of k) {
-        const vorher = k.map((f) => (f.logik as ReturnType<typeof vi.fn>).mock.calls.length);
-        fireEvent.click(within(leiste()).getByRole('button', { name: ziel.name }));
+    it('[REQ-007/AK-8] beim Antippen wird die Filterlogik des angetippten Filters ausgelöst, keine andere', () => {
+      // Fassung 2026-11-12: Filter mit Übersicht werten ihre Logik beim Anzeigen ggf. erneut aus (≥ 1).
+      for (const zielName of STANDARD_NAMEN) {
+        const k = filterKonfiguration.map((f) => ({ ...f, logik: vi.fn((b: unknown[]) => b) }));
+        render(<BuecherAnsicht buecher={[]} filter={k as FilterDef[]} />);
+        const vorher = k.map((f) => f.logik.mock.calls.length);
+        fireEvent.click(within(leiste()).getByRole('button', { name: zielName }));
         k.forEach((f, i) => {
-          const n = (f.logik as ReturnType<typeof vi.fn>).mock.calls.length;
-          expect(n - vorher[i], `Logik von "${f.name}" beim Antippen von "${ziel.name}"`).toBe(f === ziel ? 1 : 0);
+          const n = f.logik.mock.calls.length - vorher[i];
+          if (f.name === zielName) expect(n, `Logik von "${f.name}"`).toBeGreaterThanOrEqual(1);
+          else expect(n, `Logik von "${f.name}" beim Antippen von "${zielName}"`).toBe(0);
         });
+        cleanup();
       }
     });
 
-    it('[REQ-007/AK-8] die echte Filterlogik bewirkt im Grundgerüst keine sichtbare Änderung außer aktiv/inaktiv', () => {
+    it('[REQ-007/AK-8] die echte Filterlogik bewirkt auf der Seite „Bücher“ keine sichtbare Änderung außer aktiv/inaktiv (Ausnahmen mit Übersicht)', () => {
       const { container } = render(<App />);
       fireEvent.click(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
       const ohneLeiste = () => {
@@ -258,10 +265,14 @@ describe('REQ-007 Filterkonfiguration', () => {
         return c.innerHTML;
       };
       const vorher = ohneLeiste();
-      for (const n of [...STANDARD_NAMEN].reverse()) {
+      // „Noch zu lesen“: bis zur CEO-Antwort (REQ-040, offene Frage) ohne Übersicht.
+      for (const n of ['Noch zu lesen', 'Für dich']) {
         fireEvent.click(within(leiste()).getByRole('button', { name: n }));
         expect(ohneLeiste(), `nach Antippen von "${n}"`).toBe(vorher);
       }
+      // Ausnahme „Alle“ (REQ-039): öffnet die Übersicht.
+      fireEvent.click(within(leiste()).getByRole('button', { name: 'Alle' }));
+      expect(container.querySelector('[data-uebersicht]')?.getAttribute('data-uebersicht')).toBe('alle');
     });
   });
 

@@ -20,3 +20,13 @@ it('[REQ-008/GROB] Buch mit/ohne Cover, eindeutige UUIDs, nur die fünf Lesestat
   expect(await repo.get(ohne.id)).toEqual(ohne);
   expect(await repo.get(mit.id)).toEqual(mit);
 });
+
+it('[REQ-008/GROB] optionaler Autor: genau ein Autor wird gespeichert, ohne Autor fehlt das Feld', async () => {
+  const repo = createBookRepository();
+  const mit = neuesBuch({ titel: 'Momo', status: 'ungelesen', autor: 'Michael Ende' });
+  const ohne = neuesBuch({ titel: 'Krabat', status: 'ungelesen' });
+  await repo.save(mit);
+  await repo.save(ohne);
+  expect((await repo.get(mit.id))?.autor).toBe('Michael Ende');
+  expect('autor' in ((await repo.get(ohne.id)) ?? {})).toBe(false);
+});

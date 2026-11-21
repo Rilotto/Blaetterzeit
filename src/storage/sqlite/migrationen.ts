@@ -26,6 +26,42 @@ export const MIGRATIONEN: readonly Migration[] = [
       )`,
     ],
   },
+  {
+    version: 2,
+    beschreibung: 'Bücher mit allen Angaben (REQ-034, REQ-008, REQ-033)',
+    anweisungen: [
+      `CREATE TABLE IF NOT EXISTS buch (
+        id TEXT NOT NULL PRIMARY KEY,
+        titel TEXT NOT NULL,
+        status TEXT NOT NULL,
+        autor TEXT,
+        erscheinungsjahr INTEGER,
+        erscheinungsdatum TEXT,
+        seitenanzahl INTEGER,
+        cover TEXT,
+        geaendert TEXT NOT NULL
+      )`,
+    ],
+  },
+  {
+    version: 3,
+    beschreibung: 'Lesefortschritt, Fortschrittsmodus und Sitzungen (REQ-024, REQ-026, REQ-027)',
+    anweisungen: [
+      'ALTER TABLE buch ADD COLUMN aktuelle_seite INTEGER',
+      'ALTER TABLE buch ADD COLUMN fortschritt_prozent INTEGER',
+      'ALTER TABLE buch ADD COLUMN fortschrittsmodus TEXT',
+      // Sitzungen als JSON-Liste [{ "zeitpunkt": "<ISO>" }]; NULL = keine.
+      'ALTER TABLE buch ADD COLUMN sitzungen TEXT',
+    ],
+  },
+  {
+    version: 4,
+    beschreibung: 'Eintragungsdatum (REQ-041)',
+    anweisungen: [
+      // ISO-Zeitpunkt des Anlegens; NULL bei vorhandenen Büchern (gelten als älter, Reihenfolge des Anlegens).
+      'ALTER TABLE buch ADD COLUMN eingetragen_am TEXT',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

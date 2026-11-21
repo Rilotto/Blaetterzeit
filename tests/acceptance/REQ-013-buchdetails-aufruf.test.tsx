@@ -14,11 +14,15 @@
  * Lage „oben links/rechts“ wird über die Reihenfolge in der Kopfzeile geprüft; Optik manuell.
  */
 import '@testing-library/jest-dom/vitest';
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import type { CSSProperties } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import App from '@/App';
 import BuchDetails from '@/views/BuchDetails';
+import BuecherAnsicht from '@/views/BuecherAnsicht';
+import { InMemoryAnsichtRepository } from '@/storage';
+import { InMemoryBookRepository } from '@/storage/InMemoryBookRepository';
+import { InMemoryImageStore } from '@/storage/InMemoryImageStore';
 import { farbrubriken, farbVariablen } from '@/theme';
 
 const T = vi.hoisted(() => {
@@ -310,5 +314,87 @@ describe('REQ-013 Buchdetails – Aufruf, Kopfzeile und Rückweg', () => {
         r.wert = alt;
       }
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fassung 2026-11-12: Aufruf auch aus „Alle Bücher“ (REQ-035) und den Übersichten; Rückweg in die Übersicht (AK-11).
+describe('REQ-013 Fassung 2026-11-12: Abschnitt „Alle Bücher“ und Übersichten', () => {
+  const B = [
+    { id: '13130000-0000-4000-8000-000000000001', titel: 'Ungelesenes', status: 'ungelesen' as const, eingetragenAm: '2026-01-01T00:00:00.000Z' },
+    { id: '13130000-0000-4000-8000-000000000002', titel: 'Gelesenes', status: 'gelesen' as const, eingetragenAm: '2026-01-02T00:00:00.000Z' },
+    { id: '13130000-0000-4000-8000-000000000003', titel: 'Lesendes', status: 'am_lesen' as const, eingetragenAm: '2026-01-03T00:00:00.000Z' },
+  ];
+  const uebersicht = () => document.querySelector<HTMLElement>('[data-uebersicht]');
+  const geladen = () => waitFor(() => expect(uebersicht()?.getAttribute('data-ansicht')).toMatch(/^(raster|liste)$/));
+  async function seite() {
+    const repository = new InMemoryBookRepository();
+    for (const b of B) await repository.save(b);
+    render(<BuecherAnsicht repository={repository} bildspeicher={new InMemoryImageStore()} ansichtRepository={new InMemoryAnsichtRepository()} />);
+    await waitFor(() => expect(document.querySelector('[data-abschnitt="alle-buecher"] ul')).not.toBeNull());
+  }
+  async function detailsVon(titel: string) {
+    const d = await screen.findByRole('region', { name: 'Buchdetails' });
+    await waitFor(() => expect(d.querySelector('[data-buchdetails-titel]')?.textContent?.trim()).toBe(titel));
+    return d;
+  }
+  const eintragAlle = (titel: string) =>
+    Array.from(document.querySelectorAll<HTMLElement>('[data-abschnitt="alle-buecher"] li[data-bucheintrag]')).find(
+      (l) => l.querySelector('[data-buchtitel]')?.textContent?.trim() === titel,
+    )!;
+
+  it('[REQ-013/AK-1] Cover im Abschnitt „Alle Bücher“ öffnet die Buchdetails genau dieses Buches', async () => {
+    await seite();
+    fireEvent.click(eintragAlle('Gelesenes').querySelector('img, [data-cover-platzhalter]')!);
+    await detailsVon('Gelesenes');
+  });
+
+  it('[REQ-013/AK-3] Titel im Abschnitt „Alle Bücher“ öffnet die Buchdetails genau dieses Buches', async () => {
+    await seite();
+    fireEvent.click(eintragAlle('Lesendes').querySelector('[data-buchtitel]')!);
+    await detailsVon('Lesendes');
+  });
+
+  it('[REQ-013/AK-6] aus „Alle Bücher“ geöffnet: Zurück führt zur Seite „Bücher“', async () => {
+    await seite();
+    fireEvent.click(eintragAlle('Gelesenes').querySelector('[data-buchtitel]')!);
+    const d = await detailsVon('Gelesenes');
+    fireEvent.click(within(d).getByRole('button', { name: 'Zurück' }));
+    await waitFor(() => expect(document.querySelector('[data-seite="buecher"]')).not.toBeNull());
+    expect(uebersicht()).toBeNull();
+  });
+
+  it.each([
+    ['alle', 'Alle'],
+    ['gerade_am_lesen', 'Gerade am Lesen'],
+    ['noch_zu_lesen', 'Noch zu lesen'],
+  ])('[REQ-013/AK-11] aus der Übersicht „%s“ geöffnet: Zurück führt wieder in diese Übersicht', async (id, pille) => {
+    await seite();
+    if (id === 'noch_zu_lesen') fireEvent.click(document.querySelector('[data-abschnitt="noch-zu-lesen"] [data-alle-ansehen]')!);
+    else fireEvent.click(within(screen.getByRole('group', { name: 'Filter' })).getByRole('button', { name: pille }));
+    await geladen();
+    const t = uebersicht()!.querySelector('ul[data-buecher] [data-buchtitel]')!;
+    const titel = t.textContent!.trim();
+    fireEvent.click(t);
+    const d = await detailsVon(titel);
+    fireEvent.click(within(d).getByRole('button', { name: 'Zurück' }));
+    await geladen();
+    expect(uebersicht()!.getAttribute('data-uebersicht')).toBe(id);
+    expect(document.querySelector('[data-seite="buecher"]')).toBeNull();
+  });
+
+  it('[REQ-013/AK-11] Negativfall: nach Rückkehr in die Übersicht und Wechsel zur Seite führt Zurück aus „Noch zu lesen“ wieder zur Seite', async () => {
+    await seite();
+    fireEvent.click(within(screen.getByRole('group', { name: 'Filter' })).getByRole('button', { name: 'Alle' }));
+    await geladen();
+    fireEvent.click(within(screen.getByRole('group', { name: 'Filter' })).getByRole('button', { name: 'Für dich' }));
+    const li = Array.from(document.querySelectorAll<HTMLElement>('[data-abschnitt="noch-zu-lesen"] li')).find(
+      (l) => l.querySelector('[data-buchtitel]')?.textContent?.trim() === 'Ungelesenes',
+    )!;
+    fireEvent.click(li.querySelector('[data-buchtitel]')!);
+    const d = await detailsVon('Ungelesenes');
+    fireEvent.click(within(d).getByRole('button', { name: 'Zurück' }));
+    await waitFor(() => expect(document.querySelector('[data-seite="buecher"]')).not.toBeNull());
+    expect(uebersicht()).toBeNull();
   });
 });

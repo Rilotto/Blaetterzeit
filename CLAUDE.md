@@ -85,7 +85,9 @@ Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Or
 - **CI auf GitHub:** führt immer die vollständige feine Suite aus (`npm run verify`). Sie ist das Sicherheitsnetz gegen verlorene Funktionen und muss vor jedem Merge grün sein. Agenten prüfen dort nur den Status (grün oder rot) und lesen das Log erst bei Rot.
 - **Kleine Änderungen ohne neues Verhalten** (z. B. ein anderer Farbwert): kein eigener Tester-Durchlauf. Es reichen der Entwickler mit `verify:grob` und die CI.
 - **Tester bei neuen Funktionen (CEO-Vorgabe 2026-11-10: „wie bisher auch, auch mit den Gegenproben“):** Neue Funktionen werden weiterhin gründlich getestet: mehrere Varianten je AK, Grenz- und Fehlerfälle, dazu eine **Gegenprobe**. Für die Gegenprobe werden in einer Wegwerfkopie Fehler absichtlich eingebaut, und die Tests müssen sie erkennen. Gespart wird nur bei abgenommenen Funktionen (grobe Tests) und bei der Länge von Ausgaben und Berichten.
+- **Gegenprobe minimal (CEO-Vorgabe 2026-11-15: „Setze bitte die Gegenproben beim Tester weiter runter. Er soll wirklich nur das aller wichtigste Gegenprüfen“):** Je Auftrag höchstens 3–5 eingebaute Fehler, nur für die Kernfunktion (z. B. Speichern, Hauptlogik). Keine Gegenprobe für Darstellung, Texte, Farben oder Randfälle. Ergebnis im Testbericht in einer Zeile.
 - **Beim Abnehmen eines REQ** schreibt der Tester dessen groben Test. Die feinen Tests bleiben unverändert erhalten.
+- **Verschärfung (CEO-Vorgabe 2026-11-12: „teste nachfolgend nur noch die jetzt zu implementierenden Funktionen und nicht mehr das bereits umgesetzte! … zwingend Token sparen“):** Entwickler und Tester führen lokal nur die Tests der REQs des laufenden Auftrags aus (`npx vitest run <Dateien/Filter> --reporter=dot`), dazu Typecheck und Lint. Bereits Umgesetztes wird lokal nicht mehr geprüft. Das Sicherheitsnetz ist allein die CI (`npm run verify`, volle Suite). Der Agent liest dort nur grün/rot und das Log erst bei Rot. Berichte bleiben kurz.
 
 ## Befehle
 
@@ -93,7 +95,8 @@ Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Or
 npm run verify        # Typecheck + Lint + alle Tests + Traceability – muss immer grün sein
 npm test              # Tests (schreibt test-results.json)
 npm run trace         # Traceability-Check allein
-npm run trace:write   # + docs/traceability.md aktualisieren
+npm run trace:write   # + docs/traceability.md aktualisieren – NUR nach `npm test` (volle Suite), nie nach verify:grob
+npm run verify:grob   # Alltag der Agenten: grob + Neues fein, bei Fehlschlag automatisch fein nach
 npm run dev           # App im Browser
 npm run android:sync  # Web-Build in das Android-Projekt übernehmen
 ```

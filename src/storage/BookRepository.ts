@@ -4,8 +4,9 @@ import type { Buch } from '../domain/buch';
  * Speicher-Schnittstelle für Bücher. UI und Fachlogik sprechen NUR mit dieser Schnittstelle.
  *
  * Implementierungen:
- *  - InMemoryBookRepository  (Tests, Entwicklung im Browser)
- *  - SqliteBookRepository    (Android-APK, folgt mit erstem Persistenz-REQ)
+ *  - InMemoryBookRepository  (Tests, Rückfall)
+ *  - IndexedDbBookRepository (Web/Prototyp, REQ-034)
+ *  - SqliteBookRepository    (Android-APK, REQ-034)
  *  - HttpBookRepository      (spätere Web-App, siehe ADR-0002)
  *
  * Jede Implementierung MUSS tests/contract/bookRepository.contract.ts bestehen.

@@ -7,9 +7,25 @@ Gepflegt vom Anforderungsmanager. Hier stehen Wünsche, die der CEO ausdrücklic
 | 2026-11-09 | Gesamtliste hinter „Alle ansehen ›“ | „Später soll eine Liste in einem neuen Fenster erscheinen mit allen Covern und Titeln, einer Such-Leiste, .. aber das kommt bitte später.“ | REQ-009 |
 | 2026-11-09 | Aktion des Leere-Liste-Platzhalters | Antippen soll später ein neues Buch anlegen; „Die genaue Aktion wird mit mir abgestimmt.“ Vorerst: „aktuell noch nichts.“ | REQ-011, REQ-005 |
 | 2026-11-09 | Fenster der Filter-/Einstellungen-Schaltfläche | Soll später ein eigenes Fenster öffnen; Inhalt noch nicht definiert. | REQ-005 |
-| 2026-11-09 | Fenster der Plus-Schaltfläche | Soll später ein eigenes Fenster zum Hinzufügen eines Buches öffnen; Funktion noch nicht definiert. | REQ-005 |
+| 2026-11-09 | ~~Fenster der Plus-Schaltfläche~~ | Erledigt am 2026-11-10: festgelegt in REQ-029 bis REQ-033 („Buch anlegen“). | REQ-005, REQ-029 |
+| 2026-11-10 | Funktion „+ Erscheinungsdatum hinzufügen“ | „'Erscheinungsdatum hinzufügen' bekommt noch keine Funktion. Nimm dies bitte auf die To-do-Liste mit auf.“ Format laut CEO: TT.MM.JJJJ. | REQ-030, REQ-033 |
+| 2026-11-10 | Weitere Optionen im Menü „Buch hinzufügen“ | „weitere Optionen im Menü werden später ergänzt“ (im Referenzbild: „Online suchen“, „Barcode scannen“, „Deine Bücher importieren“). | REQ-029 |
+| 2026-11-10 | APK-Updates ohne Datenverlust | Fester Signaturschlüssel für alle APKs, alle Buchdaten dauerhaft in SQLite mit Migrationen, Update-Test in der CI – als eigener kleiner Sprint; Zeitpunkt entscheidet der CEO später. | – |
+| 2026-11-10 | Testbücher in der echten App | Immer / nur bei leerer App / gar nicht – entscheidet der CEO später. | REQ-008 (Demodaten) |
 | 2026-11-09 | Themes | Auswahl eines Themes in den Einstellungen; Inhalt eines Themes noch offen. | REQ-001 (Entwurf) |
 | 2026-11-09 | Funktion „Cover online suchen“ | „Lass uns die Funktion 'Cover online suchen' umsetzen, aber ohne Funktion. Nimm das auf die To-Do-Liste bitte mit auf.“ Laut CEO auch der einzige Weg zu einem Bild, wenn der Zugriff auf Kamera/Galerie verweigert wurde. | REQ-015, REQ-016 |
+| 2026-11-12 | Sortierknopf „Zuletzt“ in der Übersicht | Sortierknopf ‚Zuletzt‘ in der Übersicht: Funktion nachrüsten, insbesondere nach Eintragungsdatum filtern/sortieren können. CEO: „bitte umsetzten, aber ohne Funktion (aufnehmen auf die To-Do liste mit Hinweis: hier auch nach Eintragungsdatum filtern zu können!)“ | REQ-036, REQ-041 |
+| 2026-11-12 | Filterpille „Für dich“ personalisierbar | „Die Pille für dich soll später einmal personalisierbar sein (über das Icon neben dem + oben rechts). Hier soll einfach erstmal die Übersicht wie gehabt bleiben.“ | REQ-005, REQ-007 |
+| 2026-11-13 | Filterfunktion der Bewertung (Rezension) | Über das Filtersymbol bei „Bewertung“: Kriterien aus der Liste ein-/ausblenden, Reihenfolge per Drag and Drop ändern („Sterne“ bleibt immer an erster Stelle), Einstellung dauerhaft speichern. Bis dahin: alle 14 Kriterien in der festgelegten Reihenfolge. Geschätzter Aufwand: etwa wie Sprint 04 Teil C (rund 0,5–0,6 Mio. Agenten-Tokens); Drag and Drop auf dem Handy ist der größte Posten. In % des Nutzungslimits: ca. 10–14 % (Basis: Teil C hat laut CEO „vermutlich um die 10-14%“ verbraucht); mit Pfeiltasten statt Drag and Drop eher am unteren Ende. | REQ-044 |
+| 2026-11-15 | Funktion „Teilen“ der eigenen Rezension | „optisch bitte das "Teilen" Symbol rechts (aktuell ohne Funktion, bitte auf To-Do Liste setzen!)“; Priorität laut CEO Could. | REQ-047, REQ-050 |
+| 2026-11-15 | Auswahlfenster Genres | „Hier soll man später reinklicken können und ein neues Fenster öffnet sich mit möglichen Auswahlfeldern. Diese Funktion soll später kommen, bitte auf die To-Do Liste schreiben -> Prio: Could“ | REQ-052, REQ-054 |
+| 2026-11-15 | Auswahlfenster Tropes | wie Genres (gleiche CEO-Aussage), Prio Could | REQ-052, REQ-054 |
+| 2026-11-15 | Auswahlfenster Inhaltswarnungen | „Das selbe gilt auch für die Inhaltswarnungen.“ Prio Could | REQ-053, REQ-054 |
+| 2026-11-15 | Unterauswahl für E-Book und Hörbuch im Fenster „Format“ | „Noch keine Funktion (auf To-Do Liste bitte -> Could)“ | REQ-058 |
+| 2026-11-15 | Funktion „Signiert“ und „Fotos“ | „signiert und fotos bleiben erstmal ohne Funktion (To-Do Liste)“; Prio Could | REQ-056 |
+| 2026-11-15 | Eingabe von Verlag und ISBN | „aktuell leer, bitte ohne Eingabe und setze beides auf die To-Do Liste“; Prio Could | REQ-056 |
+| 2026-11-15 | Funktion „Sammlungen und Bibliotheken“ (Reiter Details) | „keine Funktion aktuell, bitte auf die To-Do Liste“; Prio Could | REQ-055 |
+| 2026-11-15 | Funktion „Bearbeiten“ bei Genres, Tropes, Inhaltswarnungen | „ja, aber aktuell ohne Funktion (To-Do Liste -> Could)“ | REQ-051 |
 | 2026-11-09 | Buchdetails aus weiteren Listen öffnen | „Später auch noch aus diversen Listen, das fügen wir aber nachträglich mit ein, wenn es relevant wird.“ | REQ-013 |
 
 - 2026-11-09 (Scrum Master): REQ-016 um die CEO-Entscheidung ergänzen, dass der Hinweis „Kamera nicht verfügbar“ auch bei verweigertem Zugriff erscheint. Zitat: „Ja, der Hinweis soll weiterhin bestehen.“

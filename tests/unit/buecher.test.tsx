@@ -16,9 +16,9 @@ const filterNamen = () =>
     .map((b) => [b.textContent, b.getAttribute('aria-pressed')]);
 
 describe('Filterkonfiguration', () => {
-  it('enthält „Für dich“, „Gerade am Lesen“, „Noch zu lesen“, Standard „Für dich“, je mit Logik', () => {
+  it('enthält „Alle“, „Für dich“, „Gerade am Lesen“, „Noch zu lesen“, Standard „Für dich“, je mit Logik', () => {
     const sortiert = [...filterKonfiguration].sort((a, b) => a.reihenfolge - b.reihenfolge);
-    expect(sortiert.map((f) => f.name)).toEqual(['Für dich', 'Gerade am Lesen', 'Noch zu lesen']);
+    expect(sortiert.map((f) => f.name)).toEqual(['Alle', 'Für dich', 'Gerade am Lesen', 'Noch zu lesen']);
     expect(sortiert.filter((f) => f.standard).map((f) => f.name)).toEqual(['Für dich']);
     for (const f of sortiert) expect(typeof f.logik).toBe('function');
   });

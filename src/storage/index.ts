@@ -1,22 +1,47 @@
 import { Capacitor } from '@capacitor/core';
 import type { BookRepository } from './BookRepository';
+import { IndexedDbBookRepository } from './IndexedDbBookRepository';
 import { InMemoryBookRepository } from './InMemoryBookRepository';
 import type { ImageStore } from './ImageStore';
 import { InMemoryImageStore } from './InMemoryImageStore';
 import { IndexedDbImageStore } from './IndexedDbImageStore';
+import { RueckfallBookRepository } from './RueckfallBookRepository';
 import { RueckfallImageStore } from './RueckfallImageStore';
+import type { AnsichtRepository } from './AnsichtRepository';
+import { InMemoryAnsichtRepository } from './InMemoryAnsichtRepository';
+import { RueckfallAnsichtRepository, WebAnsichtRepository } from './WebAnsichtRepository';
 
-export type { BookRepository, ImageStore };
+export type { BookRepository, ImageStore, AnsichtRepository };
+export type { Uebersichtsansicht } from './AnsichtRepository';
+export { InMemoryAnsichtRepository } from './InMemoryAnsichtRepository';
 export type { Bildbereich } from './ImageStore';
 export { BILDBEREICHE } from './ImageStore';
 
 /**
  * Einzige Stelle, an der entschieden wird, welche Speicher-Implementierung läuft.
- * Bücher: In-Memory (Demodaten, IDs aus demo/testbuecher.json sind stabil).
- * Persistenz der Bücher per SQLite ist bewusst ein eigener REQ.
+ * Bücher (REQ-034):
+ *  - Android-APK: SQLite (Tabelle `buch`, Migrationen 2 und 3)
+ *  - Web/Prototyp: IndexedDB
+ *  - ohne IndexedDB (Testumgebung): Arbeitsspeicher
+ * Lässt sich der dauerhafte Speicher nicht einrichten, wird im Arbeitsspeicher weitergearbeitet.
  */
 export function createBookRepository(): BookRepository {
-  return new InMemoryBookRepository();
+  const meldung = (fehler: unknown) => console.warn('Buchspeicher nicht dauerhaft verfügbar:', fehler);
+  if (Capacitor.isNativePlatform()) {
+    return new RueckfallBookRepository(async () => {
+      const [{ sqliteOeffnen }, { SqliteBookRepository }] = await Promise.all([
+        import('./sqlite/capacitorSqlite'),
+        import('./SqliteBookRepository'),
+      ]);
+      return new SqliteBookRepository(await sqliteOeffnen());
+    }, meldung);
+  }
+  if (typeof indexedDB === 'undefined') return new InMemoryBookRepository();
+  return new RueckfallBookRepository(async () => {
+    const repo = new IndexedDbBookRepository(indexedDB);
+    await repo.bereit();
+    return repo;
+  }, meldung);
 }
 
 /**
@@ -44,4 +69,18 @@ export function createImageStore(): ImageStore {
     await store.bereit();
     return store;
   }, meldung);
+}
+
+/**
+ * Gemerkte Ansicht je Liste (REQ-037): dauerhaft im Schlüssel-Wert-Speicher der WebView bzw. des Browsers
+ * (bleibt im Web-Prototyp und in der APK über Neustarts erhalten). Ohne nutzbaren Speicher: Arbeitsspeicher.
+ */
+export function createAnsichtRepository(): AnsichtRepository {
+  let dauerhaft: AnsichtRepository | undefined;
+  try {
+    if (typeof localStorage !== 'undefined') dauerhaft = new WebAnsichtRepository(localStorage);
+  } catch (fehler) {
+    console.warn('Ansichtsspeicher nicht dauerhaft verfügbar:', fehler);
+  }
+  return new RueckfallAnsichtRepository(dauerhaft, new InMemoryAnsichtRepository());
 }

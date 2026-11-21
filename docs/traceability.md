@@ -35,7 +35,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-005 | Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-005-buecher-kopfbereich.test.tsx |
 | REQ-005 | Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen | Implementiert | AK-8 | 8 | 0 | tests/acceptance/REQ-005-buecher-kopfbereich.test.tsx |
 | REQ-005 | Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen | Implementiert | AK-9 | 8 | 0 | tests/acceptance/REQ-005-buecher-kopfbereich.test.tsx |
-| REQ-005 | Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen | Implementiert | AK-10 | 4 | 0 | tests/acceptance/REQ-005-buecher-kopfbereich.test.tsx |
+| REQ-005 | Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen | Implementiert | AK-10 | 3 | 0 | tests/acceptance/REQ-005-buecher-kopfbereich.test.tsx |
 | REQ-005 | Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen | Implementiert | AK-11 | 2 | 0 | tests/acceptance/REQ-005-buecher-kopfbereich.test.tsx |
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
@@ -43,10 +43,10 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
-| REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-7 | 4 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
+| REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
-| REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-10 | 4 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
+| REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-10 | 6 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-11 | 5 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
 | REQ-006 | Seite „Bücher“ – horizontal wischbare Filterleiste | Implementiert | AK-12 | 6 | 0 | tests/acceptance/REQ-006-buecher-filterleiste.test.tsx |
 | REQ-007 | Filterkonfiguration unabhängig von der Darstellung | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-007-filterkonfiguration.test.tsx |
@@ -63,6 +63,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-008 | Buchdaten und zentrale Definition der Lesestatus | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-008-buchdaten-lesestatus.test.tsx |
 | REQ-008 | Buchdaten und zentrale Definition der Lesestatus | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-008-buchdaten-lesestatus.test.tsx |
 | REQ-008 | Buchdaten und zentrale Definition der Lesestatus | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-008-buchdaten-lesestatus.test.tsx |
+| REQ-008 | Buchdaten und zentrale Definition der Lesestatus | Implementiert | AK-6 | 8 | 0 | tests/acceptance/REQ-008-buchdaten-lesestatus.test.tsx |
 | REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
 | REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
 | REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
@@ -76,7 +77,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-11 | 1 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
 | REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-12 | 2 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
 | REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-13 | 4 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
-| REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-14 | 2 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
+| REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-14 | 3 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
 | REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-15 | 3 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
 | REQ-009 | Seite „Bücher“ – Abschnitt „Noch zu lesen“ mit horizontaler Buchliste | Implementiert | AK-16 | 2 | 0 | tests/acceptance/REQ-009-abschnitt-noch-zu-lesen.test.tsx |
 | REQ-010 | Cover-Platzhalter für Bücher ohne Buchcover | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-010-cover-platzhalter.test.tsx |
@@ -103,16 +104,17 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
 | REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-10 | 4 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
 | REQ-012 | Seite „Bücher“ – Abschnitte „Sagas“ und „Sammlungen“ mit Platzhalter | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-012-abschnitte-sagas-sammlungen.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
 | REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
 | REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
 | REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
-| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-6 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
 | REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
 | REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
 | REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
 | REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
+| REQ-013 | Buchdetails – Aufruf, Kopfzeile und Rückweg | Implementiert | AK-11 | 4 | 0 | tests/acceptance/REQ-013-buchdetails-aufruf.test.tsx |
 | REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
 | REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
 | REQ-014 | Buchdetails – Buchdarstellung mit Buchrücken, Cover und Schnitt | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-014-buchdarstellung-drei-bereiche.test.tsx |
@@ -159,3 +161,253 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
 | REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
 | REQ-020 | Frontcover aus den Buchdetails ersetzt den Cover-Platzhalter in allen Buchlisten | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-020-frontcover-in-buchlisten.test.tsx |
+| REQ-021 | Buchdetails – Statuspille unter dem Buchtitel | Implementiert | AK-1 | 7 | 0 | tests/acceptance/REQ-021-statuspille.test.tsx |
+| REQ-021 | Buchdetails – Statuspille unter dem Buchtitel | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-021-statuspille.test.tsx |
+| REQ-021 | Buchdetails – Statuspille unter dem Buchtitel | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-021-statuspille.test.tsx |
+| REQ-021 | Buchdetails – Statuspille unter dem Buchtitel | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-021-statuspille.test.tsx |
+| REQ-021 | Buchdetails – Statuspille unter dem Buchtitel | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-021-statuspille.test.tsx |
+| REQ-021 | Buchdetails – Statuspille unter dem Buchtitel | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-021-statuspille.test.tsx |
+| REQ-021 | Buchdetails – Statuspille unter dem Buchtitel | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-021-statuspille.test.tsx |
+| REQ-021 | Buchdetails – Statuspille unter dem Buchtitel | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-021-statuspille.test.tsx |
+| REQ-022 | Buchdetails – Statusmenü zum Ändern des Lesestatus | Implementiert | AK-1 | 7 | 0 | tests/acceptance/REQ-022-statusmenue.test.tsx |
+| REQ-022 | Buchdetails – Statusmenü zum Ändern des Lesestatus | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-022-statusmenue.test.tsx |
+| REQ-022 | Buchdetails – Statusmenü zum Ändern des Lesestatus | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-022-statusmenue.test.tsx |
+| REQ-022 | Buchdetails – Statusmenü zum Ändern des Lesestatus | Implementiert | AK-4 | 7 | 0 | tests/acceptance/REQ-022-statusmenue.test.tsx |
+| REQ-022 | Buchdetails – Statusmenü zum Ändern des Lesestatus | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-022-statusmenue.test.tsx |
+| REQ-022 | Buchdetails – Statusmenü zum Ändern des Lesestatus | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-022-statusmenue.test.tsx |
+| REQ-022 | Buchdetails – Statusmenü zum Ändern des Lesestatus | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-022-statusmenue.test.tsx |
+| REQ-022 | Buchdetails – Statusmenü zum Ändern des Lesestatus | Implementiert | AK-8 | 1 | 0 | tests/acceptance/REQ-022-statusmenue.test.tsx |
+| REQ-023 | Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille | Implementiert | AK-1 | 5 | 0 | tests/acceptance/REQ-023-lesefortschritt-anzeige.test.tsx |
+| REQ-023 | Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-023-lesefortschritt-anzeige.test.tsx |
+| REQ-023 | Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-023-lesefortschritt-anzeige.test.tsx |
+| REQ-023 | Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-023-lesefortschritt-anzeige.test.tsx |
+| REQ-023 | Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-023-lesefortschritt-anzeige.test.tsx |
+| REQ-023 | Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille | Implementiert | AK-6 | 6 | 0 | tests/acceptance/REQ-023-lesefortschritt-anzeige.test.tsx |
+| REQ-023 | Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-023-lesefortschritt-anzeige.test.tsx |
+| REQ-023 | Buchdetails – Lesefortschrittsbalken bzw. Herz unter der Statuspille | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-023-lesefortschritt-anzeige.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-2 | 21 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-6 | 8 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-9 | 13 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-10 | 2 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-11 | 4 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-12 | 5 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-13 | 1 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-14 | 4 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-025 | Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx |
+| REQ-025 | Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl | Implementiert | AK-2 | 22 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx |
+| REQ-025 | Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx |
+| REQ-025 | Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx |
+| REQ-025 | Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx |
+| REQ-025 | Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx |
+| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
+| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-2 | 15 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
+| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-3 | 8 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
+| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
+| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
+| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-6 | 4 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
+| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-8 | 1 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-027 | Buchdetails – Lese-Streak „Tage in Folge“ in der Flamme | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-027-lese-streak.test.tsx |
+| REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
+| REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
+| REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
+| REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
+| REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
+| REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-5 | 18 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-8 | 1 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-5 | 37 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-10 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-11 | 1 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-12 | 7 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-9 | 1 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx<br>tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx<br>tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-12 | 5 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-13 | 4 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-14 | 4 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
+| REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
+| REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-3 | 6 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
+| REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
+| REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
+| REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
+| REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
+| REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
+| REQ-033 | Buchdaten – Erscheinungsjahr und Erscheinungsdatum | Implementiert | AK-1 | 6 | 0 | tests/acceptance/REQ-033-buchdaten-jahr-erscheinungsdatum.test.tsx |
+| REQ-033 | Buchdaten – Erscheinungsjahr und Erscheinungsdatum | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-033-buchdaten-jahr-erscheinungsdatum.test.tsx |
+| REQ-033 | Buchdaten – Erscheinungsjahr und Erscheinungsdatum | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-033-buchdaten-jahr-erscheinungsdatum.test.tsx |
+| REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
+| REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
+| REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
+| REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
+| REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
+| REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
+| REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
+| REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-9 | 4 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-035 | Seite „Bücher“ – Abschnitt „Alle Bücher“ mit „Alle ansehen ›“ | Implementiert | AK-10 | 3 | 0 | tests/acceptance/REQ-035-abschnitt-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-11 | 2 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-12 | 3 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-6 | 8 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-7 | 4 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-9 | 4 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
+| REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
+| REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-3 | 6 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
+| REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
+| REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
+| REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
+| REQ-039 | Filterleiste – neue Filterpille „Alle“ öffnet die Übersicht „Alle Bücher“ | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-039-filterpille-alle.test.tsx |
+| REQ-039 | Filterleiste – neue Filterpille „Alle“ öffnet die Übersicht „Alle Bücher“ | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-039-filterpille-alle.test.tsx |
+| REQ-039 | Filterleiste – neue Filterpille „Alle“ öffnet die Übersicht „Alle Bücher“ | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-039-filterpille-alle.test.tsx |
+| REQ-039 | Filterleiste – neue Filterpille „Alle“ öffnet die Übersicht „Alle Bücher“ | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-039-filterpille-alle.test.tsx |
+| REQ-040 | Übersicht „Noch zu lesen“ über „Alle ansehen ›“ | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-040-uebersicht-noch-zu-lesen.test.tsx |
+| REQ-040 | Übersicht „Noch zu lesen“ über „Alle ansehen ›“ | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-040-uebersicht-noch-zu-lesen.test.tsx |
+| REQ-040 | Übersicht „Noch zu lesen“ über „Alle ansehen ›“ | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-040-uebersicht-noch-zu-lesen.test.tsx |
+| REQ-041 | Buchdaten – Eintragungsdatum speichern | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-041-eintragungsdatum.test.tsx |
+| REQ-041 | Buchdaten – Eintragungsdatum speichern | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-041-eintragungsdatum.test.tsx |
+| REQ-042 | Übersicht „Gerade am Lesen“ über die Filterpille | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-042-uebersicht-gerade-am-lesen.test.tsx |
+| REQ-042 | Übersicht „Gerade am Lesen“ über die Filterpille | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-042-uebersicht-gerade-am-lesen.test.tsx |
+| REQ-042 | Übersicht „Gerade am Lesen“ über die Filterpille | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-042-uebersicht-gerade-am-lesen.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-8 | 0 | 0 |  |
+| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-8 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-9 | 0 | 0 |  |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-10 | 0 | 0 |  |
+| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-5 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-6 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-7 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-8 | 0 | 0 |  |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-9 | 0 | 0 |  |
+| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Entwurf | AK-1 | 0 | 0 |  |
+| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Entwurf | AK-2 | 0 | 0 |  |
+| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Entwurf | AK-3 | 0 | 0 |  |
+| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Entwurf | AK-4 | 0 | 0 |  |

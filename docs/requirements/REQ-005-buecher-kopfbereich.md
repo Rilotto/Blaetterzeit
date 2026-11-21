@@ -43,11 +43,11 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - Das System muss die Plus-Schaltfläche kreisförmig darstellen.
 - Das System muss den Hintergrund der Plus-Schaltfläche in der Farbrolle „Plusschaltfläche-Hintergrund“ darstellen (CEO: „Hintergrund in bereits genutztem Bordeaux-Ton“).
 - Das System muss in der Plus-Schaltfläche mittig das Plus-Icon (Abschnitt „Icons der Schaltflächen“) in der Farbrolle „Plusschaltfläche-Vordergrund“ darstellen (CEO: „das Plus selbst in der Farbe vom Seitenhintergrund“). Diese Aussage ersetzt die frühere Beschreibung des CEO „weißes Pluszeichen“.
-- Die Plus-Schaltfläche soll später zum Hinzufügen eines neuen Buches dienen und dafür ein eigenes Fenster öffnen (CEO). Die konkrete Funktion und das Fenster werden später definiert. Sie sind nicht Teil dieses REQ.
+- Die Wirkung der Plus-Schaltfläche beim Antippen legt REQ-029 fest (CEO 2026-11-10: „Ich möchte über das '+' in der Übersichtsseite 'Deine Bücher' ein neues Buch anlegen.“). Sie ist nicht Teil dieses REQ.
 
 *Antippen der Schaltflächen (Grundgerüst)*
-- Das System darf für keine der beiden Schaltflächen einen aktiven Zustand darstellen (CEO: „diese beiden Buttons haben keinen aktiven Status. Das entfällt bei beiden, da diese beide ein eigenes Fenster später öffnen werden.“).
-- Wenn der Nutzer eine der beiden Schaltflächen antippt, darf sich in der App nichts ändern, auch nicht die Darstellung der angetippten Schaltfläche (CEO: „auf der Seite ändert sich erstmal noch nichts“).
+- Das System darf für keine der beiden Schaltflächen einen aktiven Zustand darstellen (CEO: „diese beiden Buttons haben keinen aktiven Status. Das entfällt bei beiden, da diese beide ein eigenes Fenster später öffnen werden.“). Einzige Ausnahme: Solange das Menü „Buch hinzufügen“ geöffnet ist, zeigt die Plus-Schaltfläche „×“ statt des Plus-Icons (REQ-029, vom CEO am 2026-11-10 bestätigt). Dies ist der einzige Zustandswechsel der Plus-Schaltfläche.
+- Wenn der Nutzer die Filter-/Einstellungen-Schaltfläche antippt, darf sich in der App nichts ändern, auch nicht die Darstellung der Schaltfläche (CEO: „auf der Seite ändert sich erstmal noch nichts“). Für die Plus-Schaltfläche gilt ab 2026-11-10 REQ-029.
 
 **Bereich unterhalb der Filterleiste**
 - Der Inhalt des Bereichs unterhalb der Filterleiste (REQ-006) wird durch REQ-009 bis REQ-012 festgelegt (CEO, 2026-11-09: „Ich möchte eine weitere Funktion einbinden …“). Die frühere Vorgabe „bleibt leer“ entfällt.
@@ -141,9 +141,9 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 - **Dann** stammen beide nicht aus einer Icon-Bibliothek
 - **Und** beide sind einfarbige Linien-Icons auf transparentem Hintergrund, die von der App in der Farbe ihrer Farbrolle eingefärbt werden
 
-### AK-10 Antippen bewirkt nichts, kein aktiver Zustand
+### AK-10 Antippen der Filter-/Einstellungen-Schaltfläche bewirkt nichts, kein aktiver Zustand
 - **Gegeben** die Seite „Bücher“ wird angezeigt
-- **Wenn** der Nutzer die Filter-/Einstellungen-Schaltfläche oder die Plus-Schaltfläche antippt
+- **Wenn** der Nutzer die Filter-/Einstellungen-Schaltfläche antippt
 - **Dann** sieht die angetippte Schaltfläche danach genauso aus wie vorher (kein aktiver Zustand)
 - **Und** in der App ändert sich nichts (kein neues Fenster, keine neue Ansicht, kein Wechsel des Menüpunkts, keine Änderung der Filterleiste)
 
@@ -155,7 +155,8 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Die Filterleiste unterhalb der Überschrift (REQ-006, REQ-007).
-- Die eigenen Fenster, die beide Schaltflächen später öffnen sollen, und deren Inhalt (CEO: werden später definiert).
+- Das eigene Fenster der Filter-/Einstellungen-Schaltfläche (CEO: wird später definiert).
+- Wirkung der Plus-Schaltfläche beim Antippen (REQ-029 bis REQ-032).
 - Inhalte im Bereich unterhalb der Filterleiste (REQ-009 bis REQ-012).
 - Konkrete Farbwerte, Maße und Schriftgrößen als Akzeptanzkriterium.
 - Optische Übereinstimmung der Icons mit dem Referenzbild als Akzeptanzkriterium (Prüfung durch den CEO im Prototyp).
@@ -175,7 +176,6 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 
 <!-- Muss vor Status "Abgestimmt" leer sein. -->
 
-- Keine. Die späteren Fenster beider Schaltflächen stehen in der To-do-Liste (`docs/todo.md`).
 
 ## Änderungshistorie
 
@@ -186,3 +186,5 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 | 2026-11-09 | Antworten des CEO eingearbeitet. F8: Rahmen und Icon der Filter-/Einstellungen-Schaltfläche in Farbrubrik „Tertiär“ (Farbtabelle, AK-4 ergänzt). F9: Beide Schaltflächen haben keinen aktiven Zustand; Antippen bewirkt derzeit nichts; beide öffnen später je ein eigenes Fenster (Anforderung und AK-10 neu gefasst, Abgrenzung ergänzt). Die frühere Anforderung „angetippte Schaltfläche wird als aktiv dargestellt“ entfällt. F10: Bereich unterhalb der Filterleiste bleibt leer, kein Platzhaltertext auf der Seite „Bücher“ (neuer Abschnitt, neu AK-11, Abgrenzung und Abhängigkeiten ergänzt). Vom CEO am 2026-11-09 bestätigt, Status „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-09 | Neue CEO-Vorgabe „Noch zu lesen“: Bereich unterhalb der Filterleiste wird durch REQ-009 bis REQ-011 belegt. Anforderung „bleibt leer“ entfernt, AK-11 auf das Nichtanzeigen von „under construction :)“ reduziert, Abgrenzung angepasst. AK-1 bis AK-10 unverändert. Status zurück auf „Entwurf“ bis zur Bestätigung durch den CEO (F7). Begründung für Anpassung statt neuem REQ: REQ-005 ist nicht freigegeben; ein `ersetzt`-REQ ist nur für eingefrorene REQs vorgesehen und würde hier zwei widersprüchliche gültige Texte erzeugen | Anforderungsmanager |
 | 2026-11-09 | F7 vom CEO bestätigt („alles unter Must, ja bestätige ich“). Verweis auf REQ-012 (Abschnitte „Sagas“/„Sammlungen“) ergänzt. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-10 | CEO-Vorgabe „Buch anlegen“: Wirkung der Plus-Schaltfläche geht an REQ-029 über. Anforderung „Antippen bewirkt nichts“ und AK-10 gelten nur noch für die Filter-/Einstellungen-Schaltfläche; Abgrenzung angepasst. AK-1 bis AK-9 und AK-11 unverändert. Status von „Implementiert“ auf „Entwurf“ bis zur Bestätigung durch den CEO. Anpassung statt `ersetzt`-REQ, da REQ-005 nicht freigegeben ist (wie 2026-11-09) | Anforderungsmanager |
+| 2026-11-10 | CEO-Antwort F5 (REQ-029): Plus-Schaltfläche öffnet das Menü „Buch hinzufügen“ und zeigt bei geöffnetem Menü „×“; als einziger Zustandswechsel der Plus-Schaltfläche vermerkt. Offene Frage entfernt. AK-1 bis AK-11 unverändert. Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |

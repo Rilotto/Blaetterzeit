@@ -5,7 +5,7 @@ import App from '@/App';
 
 afterEach(() => cleanup());
 
-it('[REQ-005/GROB] Seite „Bücher“ zeigt Überschrift und zwei wirkungslose Schaltflächen in fester Reihenfolge', () => {
+it('[REQ-005/GROB] Seite „Bücher“ zeigt Überschrift und zwei Schaltflächen in fester Reihenfolge, Filter ohne Wirkung, Plus öffnet ein Menü', () => {
   render(<App />);
   fireEvent.click(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
   const main = screen.getByRole('main');
@@ -17,6 +17,8 @@ it('[REQ-005/GROB] Seite „Bücher“ zeigt Überschrift und zwei wirkungslose 
   expect(within(main).queryByText('under construction :)')).toBeNull();
   const vorher = main.innerHTML;
   fireEvent.click(filter);
-  fireEvent.click(plus);
   expect(main.innerHTML).toBe(vorher);
+  // Plus: Wirkung laut REQ-029 (Menü „Buch hinzufügen“), nicht mehr „ohne Wirkung“
+  fireEvent.click(plus);
+  expect(screen.getByRole('menu', { name: 'Buch hinzufügen' })).toBeInTheDocument();
 });

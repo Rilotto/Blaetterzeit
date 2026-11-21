@@ -48,7 +48,8 @@ function walk(dir: URL): URL[] {
 
 // ---------------------------------------------------------------------------
 type FilterDef = (typeof filterKonfiguration)[number];
-const STANDARD_NAMEN = ['Für dich', 'Gerade am Lesen', 'Noch zu lesen'];
+// Fassung 2026-11-12: „Alle“ an erster Stelle (REQ-039), vier Filter.
+const STANDARD_NAMEN = ['Alle', 'Für dich', 'Gerade am Lesen', 'Noch zu lesen'];
 const FARB_LITERAL =
   /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|oklch|oklab|lab|lch|color)\(|\b(?:black|white|red|green|blue|gray|grey|silver|maroon|brown|beige|ivory|navy|purple|orange|yellow|pink|tan|wheat|linen|khaki)\b/i;
 const rubriken = farbrubriken as unknown as Record<string, { wert: string } | undefined>;
@@ -205,12 +206,12 @@ describe('REQ-006 Seite „Bücher“ – Filterleiste', () => {
 
   // ---------------------------------------------------------------- AK-2
   describe('AK-2 Filter gemäß Filterkonfiguration', () => {
-    it('[REQ-006/AK-2] die aktuelle Konfiguration enthält „Für dich“, „Gerade am Lesen“, „Noch zu lesen“ in dieser Reihenfolge', () => {
+    it('[REQ-006/AK-2] die aktuelle Konfiguration enthält „Alle“, „Für dich“, „Gerade am Lesen“, „Noch zu lesen“ in dieser Reihenfolge', () => {
       const sortiert = [...filterKonfiguration].sort((a, b) => a.reihenfolge - b.reihenfolge);
       expect(sortiert.map((f) => f.name)).toEqual(STANDARD_NAMEN);
     });
 
-    it('[REQ-006/AK-2] die Leiste zeigt genau diese drei Filter von links nach rechts mit genau diesen Beschriftungen', () => {
+    it('[REQ-006/AK-2] die Leiste zeigt genau diese vier Filter von links nach rechts mit genau diesen Beschriftungen', () => {
       zeige();
       expect(namen()).toEqual(STANDARD_NAMEN);
       STANDARD_NAMEN.forEach((n, i) => expect(within(leiste()).getByRole('button', { name: n })).toBe(filterButtons()[i]));
@@ -458,21 +459,42 @@ describe('REQ-006 Seite „Bücher“ – Filterleiste', () => {
       expect(spion('Noch zu lesen').mock.calls.length).toBe(vorher['Noch zu lesen']);
     });
 
-    it('[REQ-006/AK-10] außer der Darstellung der Filter ändert sich auf der Seite nichts', () => {
+    it('[REQ-006/AK-10] „Gerade am Lesen“ öffnet die Übersicht „Gerade am Lesen“ mit dieser Pille als aktivem Filter (REQ-042)', () => {
       const w = zeige();
-      const vorher = seiteOhneLeiste(w);
       fireEvent.click(within(leiste()).getByRole('button', { name: 'Gerade am Lesen' }));
-      expect(seiteOhneLeiste(w)).toBe(vorher);
+      const u = w.querySelector('[data-uebersicht]');
+      expect(u?.getAttribute('data-uebersicht')).toBe('gerade_am_lesen');
+      expect(w.querySelector('[data-seite="buecher"]')).toBeNull();
+      expectNurAktiv('Gerade am Lesen');
       expect(namen()).toEqual(STANDARD_NAMEN); // Reihenfolge und Beschriftung unverändert
     });
 
-    it('[REQ-006/AK-10] auch in der App: Menüpunkt bleibt „Bücher“, Rest der Seite unverändert', () => {
+    it('[REQ-006/AK-10] Ausnahme „Alle“: öffnet die Übersicht „Alle Bücher“ (REQ-039)', () => {
+      const w = zeige();
+      fireEvent.click(within(leiste()).getByRole('button', { name: 'Alle' }));
+      expect(w.querySelector('[data-uebersicht]')?.getAttribute('data-uebersicht')).toBe('alle');
+      expectNurAktiv('Alle');
+    });
+
+    it('[REQ-006/AK-10] Filter ohne Übersicht („Für dich“, „Noch zu lesen“): außer der Darstellung der Filter ändert sich auf der Seite nichts', () => {
+      const w = zeige();
+      const vorher = seiteOhneLeiste(w);
+      fireEvent.click(within(leiste()).getByRole('button', { name: 'Noch zu lesen' }));
+      expectNurAktiv('Noch zu lesen');
+      expect(seiteOhneLeiste(w)).toBe(vorher);
+      fireEvent.click(within(leiste()).getByRole('button', { name: 'Für dich' }));
+      expectNurAktiv('Für dich');
+      expect(seiteOhneLeiste(w)).toBe(vorher);
+      expect(namen()).toEqual(STANDARD_NAMEN);
+    });
+
+    it('[REQ-006/AK-10] auch in der App: „Gerade am Lesen“ öffnet die Übersicht, Menüpunkt bleibt „Bücher“', () => {
       render(<App />);
       tapMenue('Bücher');
       const main = screen.getByRole('main');
-      const vorher = seiteOhneLeiste(main);
       fireEvent.click(within(leiste()).getByRole('button', { name: 'Gerade am Lesen' }));
-      expect(seiteOhneLeiste(main)).toBe(vorher);
+      expect(main.querySelector('[data-uebersicht]')?.getAttribute('data-uebersicht')).toBe('gerade_am_lesen');
+      expectNurAktiv('Gerade am Lesen');
       const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
       expect(within(nav).getByRole('button', { name: 'Bücher' })).toHaveAttribute('aria-current', 'page');
     });

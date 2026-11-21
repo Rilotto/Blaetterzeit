@@ -23,9 +23,11 @@ interface Props {
   frontcover?: Record<string, string>;
   /** Antippen von Cover oder Titel öffnet die Buchdetails (REQ-013). */
   onBuchAntippen?: (buch: Buch) => void;
+  /** „Alle ansehen ›“ angetippt: Übersicht „Noch zu lesen“ (REQ-009 AK-14, REQ-040). */
+  onAlleAnsehen?: () => void;
 }
 
-const alleAnsehenStil: CSSProperties = {
+export const alleAnsehenStil: CSSProperties = {
   flex: '0 0 auto',
   margin: 0,
   padding: 0,
@@ -85,10 +87,14 @@ const leerFlaecheStil: CSSProperties = {
   backgroundColor: buecherFarbe('leerplatzhalterFlaeche'),
 };
 
-function Bucheintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: string; onAntippen?: (buch: Buch) => void }) {
-  // Cover und Titel öffnen die Buchdetails (REQ-013, AK-1 bis AK-3).
+/** Horizontale Buchliste der Abschnitte (REQ-009, REQ-035). */
+export const buchreiheStil = listeStil;
+
+/** Bucheintrag aus Cover (bzw. Cover-Platzhalter) und Buchtitel; gemeinsam für „Noch zu lesen“ und „Alle Bücher“. */
+export function Bucheintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: string; onAntippen?: (buch: Buch) => void }) {
+  // Cover und Titel öffnen die Buchdetails (REQ-013, AK-1 bis AK-3; REQ-035, AK-10).
   return (
-    <li style={eintragStil} onClick={onAntippen ? () => onAntippen(buch) : undefined}>
+    <li data-bucheintrag={buch.id} style={eintragStil} onClick={onAntippen ? () => onAntippen(buch) : undefined}>
       {cover ? <img src={cover} alt={buch.titel} style={coverStil} /> : <CoverPlatzhalter />}
       <p data-buchtitel="" style={titelStil}>
         {buch.titel}
@@ -97,30 +103,30 @@ function Bucheintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: string; 
   );
 }
 
-/** Leere-Liste-Platzhalter (REQ-011). Antippen bewirkt noch nichts. */
-function LeereListePlatzhalter() {
+/** Leere-Liste-Platzhalter (REQ-011) mit Text an der Titelstelle (REQ-035: eigener Text). Antippen bewirkt nichts. */
+export function LeereListePlatzhalter({ text = 'Wie wäre es mit einem neuen Buch?' }: { text?: string }) {
   return (
     <div style={leerBereichStil}>
       <div data-leere-liste="" style={{ width: `${coverBreite}px` }}>
         <div style={leerFlaecheStil}>
           <Icon datei="icon-herz.png" url={iconHerz} farbe={buecherFarbe('leerplatzhalterIcon')} groesse={40} />
         </div>
-        <PlatzhalterText farbe={buecherFarbe('leerplatzhalterText')}>Wie wäre es mit einem neuen Buch?</PlatzhalterText>
+        <PlatzhalterText farbe={buecherFarbe('leerplatzhalterText')}>{text}</PlatzhalterText>
       </div>
     </div>
   );
 }
 
 /** Abschnitt „Noch zu lesen“ mit horizontal wischbarer Buchliste (REQ-009). */
-export default function AbschnittNochZuLesen({ buecher, frontcover, onBuchAntippen }: Props) {
+export default function AbschnittNochZuLesen({ buecher, frontcover, onBuchAntippen, onAlleAnsehen }: Props) {
   const { titel } = abschnittKonfiguration.nochZuLesen;
   const auswahl = buecher === undefined ? undefined : buecherNochZuLesen(buecher);
 
   return (
-    <section aria-label={titel} style={abschnittStil}>
+    <section aria-label={titel} data-abschnitt="noch-zu-lesen" style={abschnittStil}>
       <div style={abschnittKopfStil}>
         <h2 style={abschnittsueberschriftStil}>{titel}</h2>
-        <button type="button" style={alleAnsehenStil}>
+        <button type="button" data-alle-ansehen="" onClick={onAlleAnsehen} style={alleAnsehenStil}>
           Alle ansehen ›
         </button>
       </div>
