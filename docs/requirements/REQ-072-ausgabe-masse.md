@@ -1,7 +1,7 @@
 ---
 id: REQ-072
 titel: Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

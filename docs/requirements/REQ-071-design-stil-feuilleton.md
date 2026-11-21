@@ -1,7 +1,7 @@
 ---
 id: REQ-071
 titel: Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

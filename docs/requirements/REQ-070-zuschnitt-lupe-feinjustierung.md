@@ -1,7 +1,7 @@
 ---
 id: REQ-070
 titel: Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
