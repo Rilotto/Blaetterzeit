@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import CoverPlatzhalter from '@/components/CoverPlatzhalter';
 import { coverBreite } from '@/components/coverFlaeche';
-import { buecherFarbe, textformatAlleAnsehen } from '@/theme';
+import { buecherFarbe, textformatAlleAnsehen, abstand } from '@/theme';
 import { abschnittKopfStil, abschnittStil, abschnittsueberschriftStil, seitenRand } from './layout';
 import PlatzhalterText from './PlatzhalterText';
 
@@ -23,7 +23,7 @@ const platzhaltertextStil: CSSProperties = {
 
 const inhaltStil: CSSProperties = {
   display: 'flex',
-  padding: `4px ${seitenRand}px 8px`,
+  padding: `${abstand('xs')} ${seitenRand}px ${abstand('s')}`,
 };
 
 /**

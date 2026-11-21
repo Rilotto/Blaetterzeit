@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { navFarbe } from '@/theme';
+import { navFarbe, abstand, navIconGroesse, textstufe } from '@/theme';
 import { menuePunkte, type MenuePunktId } from './menu';
 
 interface Props {
@@ -23,10 +23,10 @@ const punktStil: CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '4px',
+  gap: abstand('xs'),
   minWidth: 0,
   margin: 0,
-  padding: '12px 0 16px',
+  padding: `${abstand('s')} 0 ${abstand('m')}`,
   border: 'none',
   background: 'none',
   font: 'inherit',
@@ -37,17 +37,17 @@ const hervorhebungStil = (aktiv: boolean): CSSProperties => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '64px',
-  height: '32px',
-  borderRadius: '16px',
+  width: '56px',
+  height: '28px',
+  borderRadius: '14px',
   // Inaktiv: keine Hintergrundfarbe, also keine sichtbare Hervorhebung.
   ...(aktiv ? { backgroundColor: navFarbe('hervorhebungsfarbe') } : {}),
 });
 
 const iconStil = (url: string, farbe: string): CSSProperties => ({
   display: 'block',
-  width: '24px',
-  height: '24px',
+  width: navIconGroesse,
+  height: navIconGroesse,
   // Das PNG dient als Maske, die Farbe kommt aus der Farbrolle.
   backgroundColor: farbe,
   maskImage: `url("${url}")`,
@@ -62,7 +62,7 @@ const iconStil = (url: string, farbe: string): CSSProperties => ({
 
 const beschriftungStil = (farbe: string): CSSProperties => ({
   color: farbe,
-  fontSize: '0.75rem',
+  ...textstufe('meta'),
 });
 
 export default function Hauptnavigation({ aktiv, onAuswahl }: Props) {

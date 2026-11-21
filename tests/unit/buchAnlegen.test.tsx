@@ -34,14 +34,15 @@ describe('Eingaberegeln Manueller Eintrag', () => {
   });
 
   it('baut ein Buch ohne Platzhalterwerte und mit Status „ungelesen“', () => {
-    const b = buchAusEingaben({ titel: ' Testbuch ', autor: '', jahr: '', seiten: '' }, new Date('2026-11-12T10:00:00.000Z'));
-    expect(Object.keys(b).sort()).toEqual(['eingetragenAm', 'id', 'status', 'titel']);
+    const b = buchAusEingaben({ titel: ' Testbuch ', autor: '', jahr: '', seiten: '12' }, new Date('2026-11-12T10:00:00.000Z'));
+    expect(Object.keys(b).sort()).toEqual(['eingetragenAm', 'id', 'seitenanzahl', 'status', 'titel']);
     expect(b.eingetragenAm).toBe('2026-11-12T10:00:00.000Z');
     expect(b).toMatchObject({ titel: 'Testbuch', status: 'ungelesen' });
     const v = buchAusEingaben({ titel: 'T', autor: 'A B', jahr: '2019', seiten: '350' });
     expect(v).toMatchObject({ autor: 'A B', erscheinungsjahr: 2019, seitenanzahl: 350 });
     expect(v.erscheinungsdatum).toBeUndefined();
-    expect(() => buchAusEingaben({ ...LEERE_EINGABEN, titel: 'T', jahr: '19' })).toThrow();
+    expect(() => buchAusEingaben({ ...LEERE_EINGABEN, titel: 'T', seiten: '1', jahr: '19' })).toThrow();
+    expect(() => buchAusEingaben({ ...LEERE_EINGABEN, titel: 'T' })).toThrow('Seitenzahl fehlt');
   });
 
   it('Erscheinungsdatum TT.MM.JJJJ und Datensätze ohne Ersatzwerte', () => {
@@ -90,7 +91,7 @@ describe('Buch anlegen über das Plus-Menü', () => {
   }
   function oeffneBlatt() {
     fireEvent.click(plus());
-    fireEvent.click(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+    fireEvent.click(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
     return blatt()!;
   }
 
@@ -98,7 +99,7 @@ describe('Buch anlegen über das Plus-Menü', () => {
     starte();
     fireEvent.click(plus());
     const menue = screen.getByRole('menu', { name: 'Buch hinzufügen' });
-    expect(within(menue).getAllByRole('menuitem')).toHaveLength(1);
+    expect(within(menue).getAllByRole('menuitem')).toHaveLength(2);
     expect(menue.querySelector('[data-icon="icon-hand-eintragen.png"]')).not.toBeNull();
     const x = screen.getByRole('button', { name: 'Menü schließen' });
     expect(x.querySelector('[data-icon="icon-x.png"]')).not.toBeNull();

@@ -1,4 +1,15 @@
-// Eingaberegeln des Blatts „Manueller Eintrag“ (REQ-030, REQ-031). Ohne UI, damit sie einzeln testbar sind.
+// Eingaberegeln des Blatts „Manueller Eintrag“ (REQ-030, REQ-031, REQ-060). Ohne UI, damit sie einzeln testbar sind.
+import {
+  eintragungsdatumAusText,
+  erschienenPruefen,
+  formatangabenBereinigen,
+  isbnFiltern,
+  isbnGueltig,
+  type ExemplarId,
+  type FormatId,
+  type SonderausgabeId,
+  type UnterformatId,
+} from '@/domain/ausgabe';
 import { neuesBuch, STANDARD_LESESTATUS, type Buch } from '@/domain/buch';
 
 export interface Eingaben {
@@ -6,9 +17,44 @@ export interface Eingaben {
   autor: string;
   jahr: string;
   seiten: string;
+  /** Angaben der Karte „Ausgabe“ (REQ-060); fehlend = nicht eingegeben. */
+  format?: FormatId;
+  unterformat?: UnterformatId;
+  sonderausgabe?: SonderausgabeId;
+  exemplar?: ExemplarId;
+  preisCent?: number;
+  verlag?: string;
+  isbn?: string;
+  /** „Erschienen“ als TT.MM.JJJJ (REQ-060, AK-3). */
+  erschienen?: string;
+  /** Überschriebenes „Hinzugefügt“ als TT.MM.JJJJ (REQ-060, AK-9); fehlend = Zeitpunkt des Anlegens. */
+  hinzugefuegt?: string;
 }
 
 export const LEERE_EINGABEN: Eingaben = { titel: '', autor: '', jahr: '', seiten: '' };
+
+/**
+ * Vorbelegung des Blatts „Manueller Eintrag“, z. B. aus einem Barcode-Treffer (REQ-062, Teil B).
+ * Alle Angaben optional; ungültige Werte werden beim Öffnen verworfen bzw. gefiltert.
+ */
+export interface Vorbelegung {
+  titel?: string;
+  autor?: string;
+  erscheinungsjahr?: number;
+  seitenanzahl?: number;
+  /** TT.MM.JJJJ */
+  erscheinungsdatum?: string;
+  verlag?: string;
+  /** ISBN-10/-13; Trennzeichen werden entfernt, ungültige Prüfziffer wird verworfen. */
+  isbn?: string;
+  format?: FormatId;
+  unterformat?: UnterformatId;
+  sonderausgabe?: SonderausgabeId;
+  exemplar?: ExemplarId;
+  preisCent?: number;
+  /** Frontcover als Data-URL (wird beim Anlegen im Bildspeicher abgelegt, REQ-019). */
+  cover?: string;
+}
 
 /** Feld „JAHR“: nur Ziffern, höchstens vier (REQ-030, AK-12). */
 export const jahrFiltern = (wert: string): string => wert.replace(/\D/g, '').slice(0, 4);
@@ -19,27 +65,53 @@ export const seitenFiltern = (wert: string): string => wert.replace(/\D/g, '').s
 /** Titel fehlt, wenn leer oder nur aus Leerzeichen (REQ-031, AK-4/AK-11). */
 export const titelFehlt = (e: Eingaben): boolean => e.titel.trim() === '';
 
+/** Seitenzahl ist Pflicht (REQ-060, AK-5); 0 gilt als keine Angabe. */
+export const seitenFehlen = (e: Eingaben): boolean => e.seiten === '' || Number(e.seiten) <= 0;
+
 /** Jahr ist ungültig bei einer bis drei Ziffern; leer ist gültig (REQ-031, AK-12/AK-13). */
 export const jahrUngueltig = (e: Eingaben): boolean => e.jahr !== '' && !/^\d{4}$/.test(e.jahr);
 
+/** Eingaben aus einer Vorbelegung; ungültige Angaben fehlen. */
+export function eingabenAusVorbelegung(v: Vorbelegung | undefined): Eingaben {
+  const e: Eingaben = { ...LEERE_EINGABEN };
+  if (!v) return e;
+  if (v.titel) e.titel = v.titel;
+  if (v.autor) e.autor = v.autor;
+  if (v.erscheinungsjahr !== undefined) e.jahr = jahrFiltern(String(v.erscheinungsjahr));
+  if (v.seitenanzahl !== undefined && Number.isInteger(v.seitenanzahl) && v.seitenanzahl > 0) e.seiten = seitenFiltern(String(v.seitenanzahl));
+  if (v.erscheinungsdatum && erschienenPruefen(v.erscheinungsdatum).ok) e.erschienen = v.erscheinungsdatum;
+  if (v.verlag?.trim()) e.verlag = v.verlag.trim();
+  if (v.isbn) {
+    const isbn = isbnFiltern(v.isbn.replace(/[^0-9Xx]/g, ''));
+    if (isbnGueltig(isbn)) e.isbn = isbn;
+  }
+  Object.assign(e, formatangabenBereinigen(v));
+  if (v.preisCent !== undefined && Number.isInteger(v.preisCent) && v.preisCent >= 0) e.preisCent = v.preisCent;
+  return e;
+}
+
 /**
- * Baut aus gültigen Eingaben ein neues Buch mit neuer UUID und Lesestatus „ungelesen“ (REQ-031).
- * Leere optionale Felder fehlen im Buch – Platzhaltertexte werden nie gespeichert (AK-2).
- * Ein Erscheinungsdatum gibt es noch nicht (REQ-033, AK-3). Das Eintragungsdatum ist `jetzt` (REQ-041).
+ * Baut aus gültigen Eingaben ein neues Buch mit neuer UUID und Lesestatus „ungelesen“ (REQ-031, REQ-060).
+ * Leere optionale Felder fehlen im Buch – Platzhaltertexte werden nie gespeichert.
+ * Das Eintragungsdatum ist `jetzt` (REQ-041) oder das überschriebene Datum (REQ-060, AK-9).
  */
 export function buchAusEingaben(e: Eingaben, jetzt: Date = new Date()): Buch {
   if (titelFehlt(e)) throw new Error('Titel fehlt');
+  if (seitenFehlen(e)) throw new Error('Seitenzahl fehlt');
   if (jahrUngueltig(e)) throw new Error('Jahr ungültig');
   const autor = e.autor.trim();
-  const seiten = e.seiten === '' ? undefined : Number(e.seiten);
-  return neuesBuch({
+  const buch = neuesBuch({
     titel: e.titel.trim(),
     status: STANDARD_LESESTATUS,
     ...(autor ? { autor } : {}),
     ...(e.jahr ? { erscheinungsjahr: Number(e.jahr) } : {}),
-    // Eine Seitenanzahl von 0 ist keine Angabe (Annahme des Entwicklers).
-    ...(seiten !== undefined && seiten > 0 ? { seitenanzahl: seiten } : {}),
-    // Eintragungsdatum = Zeitpunkt des Anlegens (REQ-041, AK-1).
-    eingetragenAm: jetzt.toISOString(),
+    ...(e.erschienen ? { erscheinungsdatum: e.erschienen } : {}),
+    seitenanzahl: Number(e.seiten),
+    eingetragenAm: e.hinzugefuegt ? eintragungsdatumAusText(e.hinzugefuegt) : jetzt.toISOString(),
   });
+  Object.assign(buch, formatangabenBereinigen(e));
+  if (e.preisCent !== undefined) buch.preisCent = e.preisCent;
+  if (e.verlag) buch.verlag = e.verlag;
+  if (e.isbn) buch.isbn = e.isbn;
+  return buch;
 }

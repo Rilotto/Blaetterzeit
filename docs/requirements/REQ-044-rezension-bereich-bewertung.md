@@ -1,7 +1,7 @@
 ---
 id: REQ-044
 titel: Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien
-status: Entwurf
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -76,3 +76,4 @@ Referenzbild: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezensi
 |---|---|---|
 | 2026-11-13 | Erstellt (Entwurf aus CEO-Vorgabe „Pille Rezension“) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten 3, 7, 8: Gestaltung wie Screenshot, Filtersymbol aus Material Symbols (REQ-046), Must | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

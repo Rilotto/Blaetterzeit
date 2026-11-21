@@ -2,6 +2,18 @@
  * Fachliches Kernmodell „Buch“ (REQ-008). Keine Abhängigkeit zu UI oder Speicher.
  * Begriffe siehe docs/glossary.md.
  */
+import {
+  istExemplarId,
+  istFormatId,
+  istSonderausgabeId,
+  istUnterformatId,
+  namenListeAusDaten,
+  type ExemplarId,
+  type FormatId,
+  type SonderausgabeId,
+  type UnterformatId,
+} from './ausgabe';
+import { bewertungenAusDaten, type Bewertungen } from './bewertung';
 
 /**
  * Zentrale, geordnete Definition der Lesestatus (REQ-008).
@@ -58,6 +70,25 @@ export interface Buch {
    * Optional, damit ältere Datensätze ohne Datum gelesen werden können (sie gelten als älter als alle datierten).
    */
   eingetragenAm?: string;
+  /** Bewertungen je Kriterium, ganzzahlig 1–5; fehlender Eintrag = keine Bewertung (REQ-045). */
+  bewertungen?: Bewertungen;
+  /** Eigene Rezension, ungekürzt und ohne Längenbegrenzung (REQ-047, REQ-049). */
+  rezension?: string;
+  /** Festgelegte Genres, Tropes, markierte Inhaltswarnungen (REQ-052, REQ-053); fehlend = keine. */
+  genres?: string[];
+  tropes?: string[];
+  inhaltswarnungen?: string[];
+  /** Ausgabe (REQ-058): Format, Unterformat (nur Print), Sonderausgabe (nur Print), Exemplar; fehlend = nicht gewählt. */
+  format?: FormatId;
+  unterformat?: UnterformatId;
+  sonderausgabe?: SonderausgabeId;
+  exemplar?: ExemplarId;
+  /** Bezahlter Preis in Euro-Cent, ganzzahlig ≥ 0 (REQ-059); fehlend = kein Preis gespeichert. */
+  preisCent?: number;
+  /** Verlag, nicht leer (REQ-063); fehlend = kein Verlag. */
+  verlag?: string;
+  /** ISBN-10 oder ISBN-13 ohne Trennzeichen, Prüfziffer gültig (REQ-063); fehlend = keine ISBN. */
+  isbn?: string;
 }
 
 export type Fortschrittsmodus = 'seite' | 'prozent';
@@ -80,6 +111,18 @@ export const OPTIONALE_BUCHFELDER = [
   'fortschrittsmodus',
   'sitzungen',
   'eingetragenAm',
+  'bewertungen',
+  'rezension',
+  'genres',
+  'tropes',
+  'inhaltswarnungen',
+  'format',
+  'unterformat',
+  'sonderausgabe',
+  'exemplar',
+  'preisCent',
+  'verlag',
+  'isbn',
 ] as const;
 
 export interface NeuesBuch {
@@ -147,5 +190,22 @@ export function buchAusDaten(daten: unknown): Buch {
   }
   // Fehlt das Eintragungsdatum oder ist es ungültig, fehlt es im Ergebnis (robust für ältere Datensätze, REQ-041).
   if (istZeitpunkt(e.eingetragenAm)) buch.eingetragenAm = e.eingetragenAm;
+  const bewertungen = bewertungenAusDaten(e.bewertungen);
+  if (bewertungen) buch.bewertungen = bewertungen;
+  // Rezension: nur nicht leerer Text (REQ-049, AK-8).
+  if (typeof e.rezension === 'string' && e.rezension.trim() !== '') buch.rezension = e.rezension;
+  const genres = namenListeAusDaten(e.genres);
+  if (genres) buch.genres = genres;
+  const tropes = namenListeAusDaten(e.tropes);
+  if (tropes) buch.tropes = tropes;
+  const warnungen = namenListeAusDaten(e.inhaltswarnungen);
+  if (warnungen) buch.inhaltswarnungen = warnungen;
+  if (istFormatId(e.format)) buch.format = e.format;
+  if (istUnterformatId(e.unterformat)) buch.unterformat = e.unterformat;
+  if (istSonderausgabeId(e.sonderausgabe)) buch.sonderausgabe = e.sonderausgabe;
+  if (istExemplarId(e.exemplar)) buch.exemplar = e.exemplar;
+  if (typeof e.preisCent === 'number' && Number.isInteger(e.preisCent) && e.preisCent >= 0) buch.preisCent = e.preisCent;
+  if (typeof e.verlag === 'string' && e.verlag.trim() !== '') buch.verlag = e.verlag;
+  if (typeof e.isbn === 'string' && e.isbn !== '') buch.isbn = e.isbn;
   return buch;
 }

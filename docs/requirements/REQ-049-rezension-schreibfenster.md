@@ -1,7 +1,7 @@
 ---
 id: REQ-049
 titel: Reiter „Rezension“ – Schreibfenster für die eigene Rezension
-status: Entwurf
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -118,3 +118,4 @@ Referenzbilder: [referenzen/REF-rezension-03-schreiben-tastatur.png](referenzen/
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Antwort 6 und Referenzbildern 03/04 | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten eingearbeitet: Verwerfen ohne Sichern, Bearbeiten, leeres Feld bewirkt nichts, dauerhafte Speicherung, Sterne nur Anzeige bzw. ohne Bewertung nichts, Kreis/„Noch nicht geschrieben“ entfällt (neu AK-3, AK-6 bis AK-9) | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

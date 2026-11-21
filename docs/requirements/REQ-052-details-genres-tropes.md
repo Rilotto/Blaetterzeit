@@ -1,7 +1,7 @@
 ---
 id: REQ-052
 titel: Reiter „Details“ – Genres und Tropes als Pillen
-status: Entwurf
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -72,3 +72,4 @@ Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Vorgabe „Reiter Details“ | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

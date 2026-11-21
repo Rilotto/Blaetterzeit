@@ -7,6 +7,8 @@ import { standardBildspeicher, standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattAktuelleSeite from '@/buchdetails/BlattAktuelleSeite';
 import BlattBuchlaenge from '@/buchdetails/BlattBuchlaenge';
+import { BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
+import BlattPreis from '@/buchdetails/BlattPreis';
 import Buchdarstellung, { type Bilder } from '@/buchdetails/Buchdarstellung';
 import Fortschritt from '@/buchdetails/Fortschritt';
 import KameraAnsicht from '@/buchdetails/KameraAnsicht';
@@ -15,12 +17,19 @@ import Statistik from '@/buchdetails/Statistik';
 import Statuspille from '@/buchdetails/Statuspille';
 import { kopfSchaltflaecheStil } from '@/buchdetails/stile';
 import { BUCH_HOEHE, KOPF_ICON, KOPF_SCHALTFLAECHE, RAND, seitenverhaeltnis } from '@/buchdetails/masse';
+import ReiterBereich from '@/buchdetails/reiter/ReiterBereich';
+import Reiterleiste from '@/buchdetails/reiter/Reiterleiste';
+import { START_REITER, type ReiterId } from '@/buchdetails/reiter/rezension';
+import FensterFormat from '@/buchdetails/reiter/FensterFormat';
+import Schreibfenster from '@/buchdetails/reiter/Schreibfenster';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
+import { eintragungsdatumAusText, type Formatangaben } from '@/domain/ausgabe';
+import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
 import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
 import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
 import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore } from '@/storage';
-import { buchdetailsFarbe, fortschrittFarbe } from '@/theme';
+import { buchdetailsFarbe, fortschrittFarbe, textstufe, abstand, bildschirmrand } from '@/theme';
 
 export interface BuchDetailsProps {
   buchId: string;
@@ -38,7 +47,7 @@ export interface BuchDetailsProps {
   onZurueck: () => void;
 }
 
-type Blatt = 'buchlaenge' | 'aktuelleSeite' | null;
+type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | 'verlag' | 'isbn' | 'hinzugefuegt' | null;
 
 const systemzeit = () => new Date();
 
@@ -49,7 +58,7 @@ type Schritt =
 
 const ansichtStil: CSSProperties = {
   position: 'relative',
-  paddingBottom: '24px',
+  paddingBottom: abstand('xl'),
 };
 
 // Kopfzeile (8 + 40) + Abstand (10) + Buch + 8 px: Oberkante des Auswahlmenüs (Referenzbild: direkt unter dem Buch).
@@ -57,8 +66,8 @@ const MENUE_OBEN = 8 + KOPF_SCHALTFLAECHE + 10 + BUCH_HOEHE + 8;
 
 // Buchtitel unter der Buchdarstellung (REQ-018): mittig, höchstens zwei Zeilen mit „…“.
 const titelStil: CSSProperties = {
-  margin: `24px ${RAND}px 0`,
-  fontSize: '22px',
+  margin: `${abstand('xl')} ${RAND}px 0`,
+  ...textstufe('titel'),
   fontWeight: 700,
   lineHeight: 1.25,
   textAlign: 'center',
@@ -72,8 +81,9 @@ const titelStil: CSSProperties = {
 
 // Autor unter dem Titel (REQ-028): eine Zeile mit „…“, kleiner als der Titel, Tertiär.
 const autorStil: CSSProperties = {
-  margin: `4px ${RAND}px 0`,
-  fontSize: '17px',
+  margin: `${abstand('xs')} ${RAND}px 0`,
+  ...textstufe('meta'),
+  fontStyle: 'italic',
   fontWeight: 400,
   lineHeight: 1.3,
   textAlign: 'center',
@@ -86,7 +96,7 @@ const autorStil: CSSProperties = {
 const pillenBereichStil: CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
-  margin: `20px ${RAND}px 0`,
+  margin: `${bildschirmrand} ${RAND}px 0`,
 };
 
 /** Bilder aller Bereiche eines Buches aus dem Bildspeicher. */
@@ -100,7 +110,7 @@ async function ladeBilder(speicher: ImageStore, buchId: string): Promise<Bilder>
   return bilder;
 }
 
-/** Fenster „Buchdetails“ (REQ-013 bis REQ-019). */
+/** Fenster „Buchdetails“ (REQ-013 bis REQ-028) mit Reiterleiste, Reiter „Rezension“ (REQ-043 bis REQ-049) und „Details“ (REQ-051 bis REQ-059). */
 export default function BuchDetails({
   buchId,
   buch: vorgegeben,
@@ -117,6 +127,8 @@ export default function BuchDetails({
   const basis = vorgegeben && vorgegeben.id === buchId ? vorgegeben : geladen;
   const buch = geaendert && geaendert.id === buchId ? geaendert : basis;
   const [blatt, setBlatt] = useState<Blatt>(null);
+  // Aktiver Reiter; beim Öffnen „Rezension“ (REQ-043, AK-3).
+  const [reiter, setReiter] = useState<ReiterId>(START_REITER);
   const ausstehend = useRef<Promise<void> | null>(null);
   const [bilder, setBilder] = useState<Bilder>({});
   const [menue, setMenue] = useState<Bildbereich | null>(null);
@@ -199,6 +211,69 @@ export default function BuchDetails({
   const fortschrittSpeichern = (modus: Fortschrittsmodus, wert: number) => {
     if (!buch) return;
     speichern(fortschrittSichern(buch, modus, wert, jetzt()));
+    setBlatt(null);
+  };
+
+  // Bewertung setzen bzw. zurücksetzen und sofort speichern (REQ-045).
+  const bewerten = (kriterium: KriteriumId, n: number) => {
+    if (!buch) return;
+    speichern(bewertungAntippen(buch, kriterium, n));
+  };
+
+  // Rezension sichern (REQ-049); leerer Text wird bereits im Schreibfenster abgewiesen.
+  const rezensionSpeichern = (text: string) => {
+    if (!buch) return;
+    const neu = rezensionSichern(buch, text);
+    if (neu) speichern(neu);
+    setBlatt(null);
+  };
+
+  // Seitenanzahl über die Zeile „Seiten“ ändern: kein Menü „Aktuelle Seite“ danach (REQ-057).
+  const seitenSichern = (seitenanzahl: number) => {
+    if (!buch) return;
+    speichern({ ...buch, seitenanzahl });
+    setBlatt(null);
+  };
+
+  // Fenster „Format“ sichern (REQ-058): nicht gewählte Angaben fehlen im Buch.
+  const formatSpeichern = (a: Formatangaben) => {
+    if (!buch) return;
+    const neu: Buch = { ...buch };
+    delete neu.format;
+    delete neu.unterformat;
+    delete neu.sonderausgabe;
+    delete neu.exemplar;
+    speichern({ ...neu, ...a });
+    setBlatt(null);
+  };
+
+  // Preis sichern (REQ-059).
+  const preisSpeichern = (preisCent: number) => {
+    if (!buch) return;
+    speichern({ ...buch, preisCent });
+    setBlatt(null);
+  };
+
+  // Verlag sichern (REQ-063); leer entfernt den Verlag.
+  const verlagSpeichern = (verlag: string) => {
+    if (!buch) return;
+    const neu: Buch = { ...buch };
+    delete neu.verlag;
+    speichern(verlag ? { ...neu, verlag } : neu);
+    setBlatt(null);
+  };
+
+  // ISBN sichern (REQ-063); das Blatt lässt nur gültige ISBN durch.
+  const isbnSpeichern = (isbn: string) => {
+    if (!buch) return;
+    speichern({ ...buch, isbn });
+    setBlatt(null);
+  };
+
+  // Eintragungsdatum ändern (REQ-064); gleicher Tag behält den bisherigen Zeitpunkt.
+  const hinzugefuegtSpeichern = (datum: string) => {
+    if (!buch) return;
+    speichern({ ...buch, eingetragenAm: eintragungsdatumAusText(datum, buch.eingetragenAm) });
     setBlatt(null);
   };
 
@@ -307,6 +382,19 @@ export default function BuchDetails({
           </div>
           <Fortschritt buch={buch} onAktuelleSeite={fortschrittOeffnen} onBuchlaenge={fortschrittOeffnen} />
           <Statistik buch={buch} jetzt={jetzt()} />
+          <Reiterleiste aktiv={reiter} onWaehlen={setReiter} />
+          <ReiterBereich
+            reiter={reiter}
+            buch={buch}
+            onBewertungAntippen={bewerten}
+            onSchreiben={() => setBlatt('rezension')}
+            onSeiten={() => setBlatt('seiten')}
+            onFormat={() => setBlatt('format')}
+            onPreis={() => setBlatt('preis')}
+            onVerlag={() => setBlatt('verlag')}
+            onIsbn={() => setBlatt('isbn')}
+            onHinzugefuegt={() => setBlatt('hinzugefuegt')}
+          />
         </>
       ) : null}
       {buch && blatt === 'buchlaenge' ? (
@@ -320,6 +408,37 @@ export default function BuchDetails({
           onSichern={fortschrittSpeichern}
           onSchliessen={() => setBlatt(null)}
         />
+      ) : null}
+      {buch && blatt === 'rezension' ? (
+        <Schreibfenster
+          titel={buch.titel}
+          autor={buch.autor}
+          sterne={buch.bewertungen?.sterne}
+          rezension={buch.rezension}
+          onSichern={rezensionSpeichern}
+          onSchliessen={() => setBlatt(null)}
+        />
+      ) : null}
+      {buch && blatt === 'seiten' ? (
+        <BlattBuchlaenge
+          startWert={buch.seitenanzahl}
+          aktuelleSeite={buch.aktuelleSeite}
+          onSichern={seitenSichern}
+          onSchliessen={() => setBlatt(null)}
+        />
+      ) : null}
+      {buch && blatt === 'format' ? (
+        <FensterFormat
+          start={{ format: buch.format, unterformat: buch.unterformat, sonderausgabe: buch.sonderausgabe, exemplar: buch.exemplar }}
+          onSichern={formatSpeichern}
+          onSchliessen={() => setBlatt(null)}
+        />
+      ) : null}
+      {buch && blatt === 'preis' ? <BlattPreis preisCent={buch.preisCent} onSichern={preisSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'verlag' ? <BlattVerlag verlag={buch.verlag} onSichern={verlagSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'isbn' ? <BlattIsbn isbn={buch.isbn} onSichern={isbnSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'hinzugefuegt' ? (
+        <BlattHinzugefuegt eingetragenAm={buch.eingetragenAm} jetzt={jetzt} onSichern={hinzugefuegtSpeichern} onSchliessen={() => setBlatt(null)} />
       ) : null}
       {menue !== null ? (
         <Auswahlmenue

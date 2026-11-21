@@ -62,6 +62,43 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN eingetragen_am TEXT',
     ],
   },
+  {
+    version: 5,
+    beschreibung: 'Bewertungen je Kriterium und eigene Rezension (REQ-045, REQ-049)',
+    anweisungen: [
+      // JSON-Objekt { "<kriterium>": 1..5 }; NULL = keine Bewertung.
+      'ALTER TABLE buch ADD COLUMN bewertungen TEXT',
+      // Volltext ohne Längenbegrenzung; NULL = keine Rezension.
+      'ALTER TABLE buch ADD COLUMN rezension TEXT',
+    ],
+  },
+  {
+    version: 6,
+    beschreibung: 'Genres, Tropes, Inhaltswarnungen und Ausgabe: Format, Exemplar, Sonderausgabe, Preis (REQ-052, REQ-053, REQ-058, REQ-059)',
+    anweisungen: [
+      // JSON-Listen von Namen; NULL = keine.
+      'ALTER TABLE buch ADD COLUMN genres TEXT',
+      'ALTER TABLE buch ADD COLUMN tropes TEXT',
+      'ALTER TABLE buch ADD COLUMN inhaltswarnungen TEXT',
+      // IDs aus src/domain/ausgabe.ts; NULL = nicht gewählt.
+      'ALTER TABLE buch ADD COLUMN format TEXT',
+      'ALTER TABLE buch ADD COLUMN unterformat TEXT',
+      'ALTER TABLE buch ADD COLUMN sonderausgabe TEXT',
+      'ALTER TABLE buch ADD COLUMN exemplar TEXT',
+      // Euro-Cent, ganzzahlig; NULL = kein Preis.
+      'ALTER TABLE buch ADD COLUMN preis_cent INTEGER',
+    ],
+  },
+  {
+    version: 7,
+    beschreibung: 'Ausgabe: Verlag und ISBN (REQ-060, REQ-063)',
+    anweisungen: [
+      // Freitext; NULL = kein Verlag.
+      'ALTER TABLE buch ADD COLUMN verlag TEXT',
+      // ISBN-10/-13 ohne Trennzeichen; NULL = keine ISBN.
+      'ALTER TABLE buch ADD COLUMN isbn TEXT',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

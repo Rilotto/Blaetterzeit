@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from 'react';
+import { seitenanzahlErlaubt } from '@/domain/ausgabe';
 import { seitenanzahlPruefen } from '@/domain/fortschritt';
-import { fortschrittFarbe } from '@/theme';
+import { fortschrittFarbe, textstufe, abstand } from '@/theme';
 import BlattUnten, { blattEingabeStil, blattHinweisStil, sichernStil } from './BlattUnten';
 
 interface Props {
@@ -8,24 +9,32 @@ interface Props {
   onSichern: (seitenanzahl: number) => void;
   /** X oder Tippen außerhalb: nichts speichern (REQ-025, AK-5). */
   onSchliessen: () => void;
+  /** Vorhandene Seitenanzahl im Eingabefeld (Öffnen über die Zeile „Seiten“, REQ-057, AK-1). */
+  startWert?: number;
+  /** Gespeicherte aktuelle Seite: kleinere Seitenanzahl ist nicht sicherbar (REQ-057, AK-5). */
+  aktuelleSeite?: number;
 }
 
 const untertitelStil: CSSProperties = {
-  margin: '6px 0 14px',
-  fontSize: '17px',
+  margin: `${abstand('s')} 0 ${abstand('m')}`,
+  ...textstufe('text'),
   lineHeight: 1.3,
   color: fortschrittFarbe('blattUntertitel'),
 };
 
 /** Blatt „Buchlänge“: einmalige Eingabe der Seitenanzahl (REQ-025). Feld beim Öffnen leer (Annahme). */
-export default function BlattBuchlaenge({ onSichern, onSchliessen }: Props) {
-  const [eingabe, setEingabe] = useState('');
+export default function BlattBuchlaenge({ onSichern, onSchliessen, startWert, aktuelleSeite }: Props) {
+  const [eingabe, setEingabe] = useState(startWert !== undefined ? String(startWert) : '');
   const [hinweis, setHinweis] = useState<string | null>(null);
 
   const sichern = () => {
     const p = seitenanzahlPruefen(eingabe);
     if (!p.ok) {
       setHinweis(p.grund === 'leer' ? 'Bitte gib die Seitenanzahl ein.' : 'Bitte gib eine ganze Zahl ab 1 ein.');
+      return;
+    }
+    if (!seitenanzahlErlaubt(p.wert, aktuelleSeite)) {
+      setHinweis(`Die Seitenanzahl darf nicht kleiner als die aktuelle Seite (${aktuelleSeite}) sein.`);
       return;
     }
     onSichern(p.wert);

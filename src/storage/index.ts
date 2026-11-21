@@ -10,8 +10,13 @@ import { RueckfallImageStore } from './RueckfallImageStore';
 import type { AnsichtRepository } from './AnsichtRepository';
 import { InMemoryAnsichtRepository } from './InMemoryAnsichtRepository';
 import { RueckfallAnsichtRepository, WebAnsichtRepository } from './WebAnsichtRepository';
+import type { EinstellungRepository } from './EinstellungRepository';
+import { InMemoryEinstellungRepository } from './InMemoryEinstellungRepository';
+import { RueckfallEinstellungRepository, WebEinstellungRepository } from './WebEinstellungRepository';
 
-export type { BookRepository, ImageStore, AnsichtRepository };
+export type { BookRepository, ImageStore, AnsichtRepository, EinstellungRepository };
+export type { EinstellungSchluessel } from './EinstellungRepository';
+export { InMemoryEinstellungRepository } from './InMemoryEinstellungRepository';
 export type { Uebersichtsansicht } from './AnsichtRepository';
 export { InMemoryAnsichtRepository } from './InMemoryAnsichtRepository';
 export type { Bildbereich } from './ImageStore';
@@ -83,4 +88,18 @@ export function createAnsichtRepository(): AnsichtRepository {
     console.warn('Ansichtsspeicher nicht dauerhaft verfügbar:', fehler);
   }
   return new RueckfallAnsichtRepository(dauerhaft, new InMemoryAnsichtRepository());
+}
+
+/**
+ * App-Einstellungen (REQ-068 Farbdesign, REQ-069 Schrift): dauerhaft im Schlüssel-Wert-Speicher der WebView
+ * bzw. des Browsers (wie REQ-037). Ohne nutzbaren Speicher: Arbeitsspeicher.
+ */
+export function createEinstellungRepository(): EinstellungRepository {
+  let dauerhaft: EinstellungRepository | undefined;
+  try {
+    if (typeof localStorage !== 'undefined') dauerhaft = new WebEinstellungRepository(localStorage);
+  } catch (fehler) {
+    console.warn('Einstellungsspeicher nicht dauerhaft verfügbar:', fehler);
+  }
+  return new RueckfallEinstellungRepository(dauerhaft, new InMemoryEinstellungRepository());
 }

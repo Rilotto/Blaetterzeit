@@ -6,9 +6,11 @@ prioritaet: Could
 art: funktional
 quelle: CEO
 ersetzt: []
-ersetzt_durch:
+ersetzt_durch: REQ-068
 freigegeben_in:
 ---
+
+> **Abgelöst (2026-11-18), nicht umsetzen.** CEO, wörtlich: „Ja das wird durch die jetzige Funktion abgelöst und ist somit nicht mehr relevant.“ Nachfolger: REQ-068 (Farbdesigns), dazu REQ-066, REQ-067 und REQ-069. Der Status bleibt „Entwurf“, weil „Ersetzt“ nur das Release-Skript setzt.
 
 <!-- Priorität "Could": Der CEO sagt, die konkrete Ausarbeitung von Themes "ist für einen späteren Prototypen angedacht und hat erstmal keine Priorität". -->
 
@@ -76,3 +78,4 @@ Grundlage ist ausschließlich diese Aussage des CEO (2026-11-09):
 |---|---|---|
 | 2026-11-08 | Erstellt (Entwurf aus Grundanforderung des CEO) | Anforderungsmanager |
 | 2026-11-09 | Vollständig neu geschrieben, ausschließlich auf Basis der CEO-Aussage vom 2026-11-09 (Profil → Einstellungen → Rubrik „Themes“, wachsende Auswahl vom CEO, Auswahl ändert das Aussehen). Entfernt wurden alle nicht vom CEO stammenden Inhalte (vier frei wählbare Farbrollen, Farbwahl je Rolle, Zurücksetzen auf Standard, Persistenz, Kontrastprüfung, Zeitvorgaben). Priorität von „Should“ auf „Could“ (CEO: „hat erstmal keine Priorität“) | Anforderungsmanager |
+| 2026-11-18 | Als abgelöst gekennzeichnet, `ersetzt_durch: REQ-068` (CEO: „Ja das wird durch die jetzige Funktion abgelöst und ist somit nicht mehr relevant.“) | Anforderungsmanager |

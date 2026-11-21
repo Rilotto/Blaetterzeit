@@ -40,7 +40,7 @@ async function tippe(el: Element) {
 }
 async function oeffneBlatt() {
   await tippe(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   return screen.getByRole('dialog', { name: 'Manueller Eintrag' });
 }
 const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(`^\\s*${n}\\s*$`, 'i')) as HTMLInputElement;
@@ -63,6 +63,7 @@ it('[REQ-033/GROB] Jahr und Erscheinungsdatum optional, über das Repository unv
   const f = await zeige();
   const d = await oeffneBlatt();
   fireEvent.change(feld(d, 'Titel'), { target: { value: 'Neu' } });
+  fireEvent.change(feld(d, 'Seiten'), { target: { value: '100' } }); // Pflicht seit REQ-060
   fireEvent.change(feld(d, 'Jahr'), { target: { value: '2024' } });
   await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
   await screen.findByRole('region', { name: 'Buchdetails' });

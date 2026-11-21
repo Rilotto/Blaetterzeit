@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import type { Buch } from '@/domain/buch';
-import { buecherFarbe } from '@/theme';
+import { buecherFarbe, textstufe, pillenhoehePx, abstand } from '@/theme';
 import type { FilterDefinition } from './filterKonfiguration';
 import { horizontalScrollStil } from './layout';
 
@@ -14,12 +14,12 @@ interface Props {
 }
 
 // Höhe eines Filters laut Orientierungswert in REQ-006 (≈ 30 dp).
-const HOEHE = 30;
+const HOEHE = pillenhoehePx;
 
 const leisteStil: CSSProperties = {
   ...horizontalScrollStil,
-  gap: '8px',
-  marginTop: '16px',
+  gap: abstand('s'),
+  marginTop: abstand('l'),
 };
 
 const kapselStil = (aktiv: boolean): CSSProperties => ({
@@ -27,11 +27,11 @@ const kapselStil = (aktiv: boolean): CSSProperties => ({
   flex: '0 0 auto',
   height: `${HOEHE}px`,
   margin: 0,
-  padding: '0 16px',
+  padding: `0 ${abstand('l')}`,
   borderRadius: '9999px',
   whiteSpace: 'nowrap',
   fontFamily: 'inherit',
-  fontSize: '15px',
+  ...textstufe('text'),
   fontWeight: 500,
   lineHeight: 1,
   cursor: 'pointer',

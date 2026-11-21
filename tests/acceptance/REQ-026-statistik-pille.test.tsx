@@ -205,7 +205,7 @@ describe('REQ-026 Statistik-Pille', () => {
   describe('AK-2 Farben und Rahmen', () => {
     const FAELLE: [string, string, Art, () => HTMLElement][] = [
       ['ghost', 'Hintergrund', 'hintergrund', () => mitFlaeche(statistik()!)],
-      ['ghostframe', 'Rahmen', 'rahmen', () => mitFlaeche(statistik()!)],
+      // Seit REQ-065 AK-11 ist die Karte durch einen weichen Schatten statt eines Rahmens abgesetzt (Test unten).
       ['dunkelbraun', 'Prozentzahl', 'text', () => textElement(teil('prozent'), /^\d+ ?%$/)],
       ['dunkelbraun', 'Sitzungszahl', 'text', () => textElement(teil('sitzungen'), /^\d+$/)],
       ['dunkelbraun', '„Tage in Folge“', 'text', () => textElement(teil('streak'), 'Tage in Folge')],
@@ -222,10 +222,12 @@ describe('REQ-026 Statistik-Pille', () => {
         expect(ist(finde(), art), wo).toContain(farbeVon(wurzel, '#0A1B2C'));
       });
     });
-    it('[REQ-026/AK-2] Rahmen durchgehend (solid), zwei Trennlinien in „GhostFrame“ zwischen den Teilen', async () => {
+    // Angepasst Sprint 06 Teil C (REQ-065 AK-11): weicher Schatten statt Rahmen; die Trennlinien bleiben „GhostFrame“.
+    it('[REQ-026/AK-2] Karte durch weichen Schatten statt Rahmen abgesetzt, zwei Trennlinien in „GhostFrame“ zwischen den Teilen', async () => {
       const { wurzel } = await details(await starte(), buchB());
       const p = mitFlaeche(statistik()!);
-      expect(getComputedStyle(p).borderTopStyle).toBe('solid');
+      expect(['', 'none']).toContain(getComputedStyle(p).borderTopStyle);
+      expect(p.style.boxShadow).toContain('var(--bz-schattenfarbe)');
       const gf = rubrik(wurzel, 'ghostframe');
       const trenner = (a: HTMLElement, b: HTMLElement) => {
         const ca = getComputedStyle(a);
@@ -309,8 +311,15 @@ describe('REQ-026 Statistik-Pille', () => {
     it('[REQ-026/AK-7] unter der Statistik-Pille steht kein Text (kein Zitat)', async () => {
       await details(await starte(), buchB({ autor: 'Michael Ende', seitenanzahl: 400, aktuelleSeite: 42 }));
       const s = statistik()!;
+      // Seit REQ-043 (bestätigt) folgen unter der Pille die Reiterleiste und der Reiterbereich mit eigenem Inhalt;
+      // geprüft wird freier Text unter der Pille außerhalb dieser Bereiche (dort stand im Referenzbild das Zitat).
       const danach = Array.from(sek().querySelectorAll<HTMLElement>('*')).filter(
-        (e) => vor(s, e) && !s.contains(e) && e.children.length === 0 && norm(e.textContent),
+        (e) =>
+          vor(s, e) &&
+          !s.contains(e) &&
+          !e.closest('[data-reiterleiste], [data-reiter-bereich], [role="dialog"]') &&
+          e.children.length === 0 &&
+          norm(e.textContent),
       );
       expect(danach.map((e) => norm(e.textContent))).toEqual([]);
       expect(sek().querySelector('blockquote, q, [data-zitat]')).toBeNull();

@@ -20,7 +20,8 @@ html[data-kamera-aktiv] main {
 
 /* REQ-030: Platzhaltertexte der Eingabefelder in der Farbrolle des Feldes
    (Variable inline gesetzt, Wert aus src/theme/farben.ts). */
-input[data-bz-eingabe]::placeholder {
+input[data-bz-eingabe]::placeholder,
+textarea[data-rezension-eingabe]::placeholder {
   color: var(--bz-platzhalterfarbe);
   opacity: 1;
 }
@@ -69,4 +70,42 @@ input[data-suchfeld]::-webkit-search-cancel-button {
 /* Blätter von unten halten die Gestenleiste frei (REQ-024, REQ-025). */
 [data-blatt-unten] {
   padding-bottom: calc(24px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+}
+
+/* REQ-061: Solange der Barcode-Scanner (ML Kit) das Kamerabild HINTER der WebView zeigt, ist nur
+   der Scan-Bildschirm sichtbar; alle übrigen Flächen sind durchsichtig bzw. ausgeblendet
+   (Attribut gesetzt von src/barcode/scanner.ts). */
+html[data-barcode-aktiv],
+html[data-barcode-aktiv] body,
+html[data-barcode-aktiv] [data-app-wurzel],
+html[data-barcode-aktiv] main {
+  background: transparent !important;
+}
+html[data-barcode-aktiv] body * {
+  visibility: hidden;
+}
+html[data-barcode-aktiv] [data-scan-bildschirm],
+html[data-barcode-aktiv] [data-scan-bildschirm] * {
+  visibility: visible;
+}
+html[data-barcode-aktiv] [data-scan-bildschirm] {
+  background: transparent !important;
+}
+
+/* REQ-065 AK-9: Jede Schaltfläche (button) und jedes Element mit data-tippflaeche erhält eine unsichtbar
+   erweiterte Tippfläche von mindestens 44 × 44 px, auch wenn die sichtbare Fläche kleiner ist
+   (Wert: --bz-tippflaeche aus src/theme/typografie.ts). Inline gesetztes position hat Vorrang. */
+button,
+[data-tippflaeche] {
+  position: relative;
+}
+button::before,
+[data-tippflaeche]::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--bz-tippflaeche, 44px));
+  height: max(100%, var(--bz-tippflaeche, 44px));
+  transform: translate(-50%, -50%);
 }

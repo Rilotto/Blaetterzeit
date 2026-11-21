@@ -6,7 +6,7 @@
  *  - App-Schrift genau an einer Stelle definiert (src/theme/schrift.ts) als
  *    CSS-Variable --bz-schrift an der App-Wurzel
  *  - Wert endet mit einer generischen Ersatzschrift
- *  - kein @font-face, keine Schriftdatei
+ *  - kein Schrift-CDN (Schriftdatei seit REQ-065 erlaubt, lokal ausgeliefert)
  *
  * Bewusst NICHT geprüft: der konkrete Schriftname (laut REQ kein AK, wird
  * später durch den CEO ersetzt).
@@ -39,7 +39,6 @@ const { cwd } = (await import(/* @vite-ignore */ NODE_PROCESS)) as { cwd(): stri
 
 const ROOT = pathToFileURL(`${cwd()}/`);
 const SRC = new URL('src/', ROOT);
-const PUBLIC = new URL('public/', ROOT);
 
 function walk(dir: URL): URL[] {
   if (!fs.existsSync(dir)) return [];
@@ -259,21 +258,14 @@ describe('REQ-003 Zentral definierte App-Schrift', () => {
       }
     });
 
-    it('[REQ-003/AK-2] keine weitere Schriftquelle: kein @font-face, kein Schrift-CDN, keine Schriftdatei unter src/ oder public/', () => {
-      // Randbedingung REQ-003 + Absprache: keine Schriftdatei, kein @font-face.
-      // Prüft nur versionierte Quellorte; der Test hängt NICHT von lokalen,
-      // ignorierten Dateien ab (public/fonts/ wird nur auf Fehlen geprüft).
+    // Angepasst Sprint 06 Teil C: Mit REQ-065 gilt die Randbedingung „keine Schriftdatei“ nicht mehr (Fraunces wird
+    // lokal ausgeliefert, geprüft in REQ-065 AK-1/AK-2). Bestehen bleibt: keine Schrift aus dem Internet (kein CDN).
+    it('[REQ-003/AK-2] keine weitere Schriftquelle aus dem Internet: kein Schrift-CDN in src/ oder index.html', () => {
       const quellen = [...walk(SRC), new URL('index.html', ROOT)].filter((f) => /\.(tsx?|css|scss|html)$/.test(f.pathname));
-      const fontFace = quellen.filter((f) => /@font-face/i.test(lies(f))).map((f) => relTo(ROOT, f));
-      expect(fontFace, '@font-face gefunden').toEqual([]);
       const cdn = quellen
         .filter((f) => /fonts\.googleapis|fonts\.gstatic|use\.typekit|fonts\.bunny|cdnfonts/i.test(lies(f)))
         .map((f) => relTo(ROOT, f));
       expect(cdn, 'Schrift-CDN gefunden').toEqual([]);
-      const dateien = [...walk(SRC), ...walk(PUBLIC)]
-        .filter((f) => /\.(ttf|otf|woff2?|eot)$/i.test(f.pathname))
-        .map((f) => relTo(ROOT, f));
-      expect(dateien, 'Schriftdateien gefunden').toEqual([]);
     });
   });
 

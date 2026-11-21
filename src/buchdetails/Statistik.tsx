@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Buch } from '@/domain/buch';
 import { fortschrittGerundet, streak } from '@/domain/fortschritt';
-import { fortschrittFarbe } from '@/theme';
+import { fortschrittFarbe, textstufe, kartenSchatten, abstand } from '@/theme';
 import Flamme from './Flamme';
 import { RAND } from './masse';
 
@@ -17,11 +17,13 @@ const pilleStil: CSSProperties = {
   display: 'flex',
   alignItems: 'stretch',
   boxSizing: 'border-box',
-  margin: `32px ${RAND}px 0`,
+  margin: `calc(${abstand('xl')} + ${abstand('s')}) ${RAND}px 0`,
   minHeight: '84px',
-  padding: '12px 4px',
+  padding: `${abstand('m')} ${abstand('xs')}`,
   borderRadius: '28px',
-  border: `2px solid ${fortschrittFarbe('statistikRahmen')}`,
+  // Weicher, warmer Schatten statt hartem Rahmen (REQ-065 AK-11).
+  border: 'none',
+  boxShadow: kartenSchatten,
   backgroundColor: fortschrittFarbe('statistikFlaeche'),
   color: fortschrittFarbe('statistikText'),
 };
@@ -33,7 +35,7 @@ const teilStil: CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: '6px',
+  gap: abstand('s'),
 };
 
 const trennlinieStil: CSSProperties = {
@@ -48,14 +50,14 @@ const zahlStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   height: '38px',
-  fontSize: '30px',
+  ...textstufe('abschnitt'),
   fontWeight: 600,
   lineHeight: 1,
   color: fortschrittFarbe('statistikText'),
 };
 
 const beschriftungStil: CSSProperties = {
-  fontSize: '15px',
+  ...textstufe('meta'),
   lineHeight: 1.2,
   whiteSpace: 'nowrap',
   color: fortschrittFarbe('statistikText'),

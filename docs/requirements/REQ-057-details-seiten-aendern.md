@@ -1,7 +1,7 @@
 ---
 id: REQ-057
 titel: Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern
-status: Entwurf
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -18,10 +18,10 @@ Vorgabe des CEO (wörtlich, 2026-11-15): „Wenn ich auf "Seiten" klicke, öffne
 
 ## Anforderung (Satzschablone)
 
-- Wenn der Nutzer die Zeile „Seiten“ (REQ-056) antippt, muss das System das Menü „Buchlänge“ (REQ-025) über abgedunkelten Buchdetails öffnen; ist eine Seitenanzahl hinterlegt, steht sie im Eingabefeld.
+- Wenn der Nutzer die Zeile „Seiten“ (REQ-056) antippt, muss das System das Menü „Buchlänge“ ([REQ-025](REQ-025-seitenanzahl-abfragen.md)) über abgedunkelten Buchdetails öffnen; ist eine Seitenanzahl hinterlegt, steht sie im Eingabefeld.
 - Wenn der Nutzer „Sichern“ mit einer gültigen Seitenanzahl (ganze Zahl ≥ 1, wie REQ-025) antippt, muss das System sie dauerhaft speichern und das Menü schließen (übertragen aus REQ-025; anders als dort folgt kein Menü „Aktuelle Seite“).
 - Wenn der Nutzer das Menü über X oder Tippen außerhalb schließt, darf das System nichts speichern (wie REQ-025).
-- Wenn die eingegebene Seitenanzahl kleiner ist als die gespeicherte aktuelle Seite (REQ-024), darf das System nicht sichern (CEO 2026-11-15: „sollte nicht möglich sein“). **Auslegung:** „Sichern“ bewirkt dann nichts, das Menü bleibt offen. Das Menü „Buchlänge“ (REQ-025) kennt bisher nur die Regel „ganze Zahl ≥ 1“; diese Prüfung kommt hinzu.
+- Wenn die eingegebene Seitenanzahl kleiner ist als die gespeicherte aktuelle Seite (REQ-024), darf das System nicht sichern (CEO 2026-11-15: „sollte nicht möglich sein“). Verhalten wie bei ungültiger Eingabe in [REQ-025](REQ-025-seitenanzahl-abfragen.md) (AK-4): nichts wird gespeichert, das Menü bleibt offen. REQ-025 enthält keine Regel zu „kleiner als aktuelle Seite“ (dort gibt es bei der Erstangabe noch keine aktuelle Seite); diese Prüfung kommt hier hinzu.
 - Nach dem Sichern muss das System die neue Seitenanzahl überall verwenden: Zeile „Seiten“, Lesefortschrittsbalken (REQ-023), Prozentwert der Statistik-Pille (REQ-026).
 
 ## Akzeptanzkriterien
@@ -75,3 +75,4 @@ Vorgabe des CEO (wörtlich, 2026-11-15): „Wenn ich auf "Seiten" klicke, öffne
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Vorgabe „Reiter Details“ | Anforderungsmanager |
 | 2026-11-15 | CEO-Antwort 6: Seitenanzahl kleiner als aktuelle Seite nicht sicherbar (Auslegung: Sichern ohne Wirkung), neu AK-5 | Anforderungsmanager |
+| 2026-11-15 | Verweis auf REQ-025-seitenanzahl-abfragen.md ergänzt; Verhalten an REQ-025 AK-4 angelehnt. Status „Abgestimmt“ (CEO 2026-11-15: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

@@ -50,6 +50,7 @@ Siehe `docs/release-prozess.md`: `npm run release:freeze -- <version> <REQ-IDs>`
 
 Der CEO bekommt in dem Takt, den er in `docs/vision.md` unter „Prozessvorgaben“ festlegt, einen ansehbaren Prototyp. Ändert er den Takt im Chat, trägst du den neuen Wert dort ein.
 
+- **Nur auf ausdrückliche Bitte (CEO-Vorgabe 2026-11-18):** Ein neuer Prototyp (Artefakt und Hinweis auf die APK) wird nur gebaut und veröffentlicht, wenn der CEO es im Chat ausdrücklich verlangt. Fixes und Änderungen werden bis dahin nur committet und per CI geprüft.
 - **Form:** Der aktuelle Web-Build (`npm run build`) mit Demodaten wird als interaktives Artefakt veröffentlicht, sodass der CEO ihn im Browser oder auf dem Handy öffnen kann. Wenn es sinnvoll ist, kommt zusätzlich die Debug-APK aus der CI dazu.
 - **Inhalt jeder Lieferung:** Was neu ist (REQ-IDs), was bewusst noch fehlt oder nur Platzhalter ist, und was der CEO konkret prüfen soll.
 - **Ehrlichkeit:** Nicht abgenommene Funktionen werden im Prototyp als „Entwurf“ gekennzeichnet. Ein Prototyp ist keine Freigabe.

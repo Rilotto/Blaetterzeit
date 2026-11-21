@@ -1,7 +1,7 @@
 ---
 id: REQ-043
 titel: Buchdetails – Reiterleiste mit wandernder Pille
-status: Entwurf
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -105,3 +105,4 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 | 2026-11-15 | CEO-Antworten 1, 2, 3, 8 eingearbeitet: vier Reiter, Lage, Startreiter, fließende Bewegung, Bezeichnung nur aktiv, Farben wie Screenshot, Must (neu AK-2 bis AK-4, AK-7) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antwort: übrige Reiter zeigen „under construction :)“ (neu AK-8) | Anforderungsmanager |
 | 2026-11-15 | Reiter „Details“ erhält Inhalt (REQ-051 ff.) und zeigt kein „under construction :)“ mehr (AK-8 angepasst); Referenzbild REF-rezension-02-details.png (vom CEO gelöscht) durch REF-details-01-uebersicht.png ersetzt | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

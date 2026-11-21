@@ -1,4 +1,5 @@
 import type { Bildbereich } from '@/storage/ImageStore';
+import { bildschirmrandPx, pillenhoehePx } from '@/theme/typografie';
 
 // Maße der Buchdarstellung (REQ-014), aus dem Referenzbild REF-buchdetails-01.png
 // (1080 px breit, ≈ 2,81 px je dp): Cover ≈ 525 × 787 px, Rücken/Schnitt ≈ 98 × 787 px,
@@ -6,7 +7,7 @@ import type { Bildbereich } from '@/storage/ImageStore';
 export const BUCH_HOEHE = 280;
 export const COVER_BREITE = 186;
 export const SCHMAL_BREITE = 35;
-export const BEREICH_ABSTAND = 12;
+export const BEREICH_ABSTAND = 12; // = Rasterabstand m (REQ-065)
 
 /** Breite eines Bereichs in px. */
 export const bereichBreite = (bereich: Bildbereich): number => (bereich === 'cover' ? COVER_BREITE : SCHMAL_BREITE);
@@ -21,8 +22,8 @@ export const bereichName: Record<Bildbereich, string> = {
   schnitt: 'Schnitt',
 };
 
-/** Seitenrand der Buchdetails (Referenzbild ≈ 24 dp, wie Seite „Bücher“). */
-export const RAND = 24;
+/** Seitenrand der Buchdetails: zentraler Bildschirmrand (REQ-065). */
+export const RAND = bildschirmrandPx;
 /** Kantenlänge der Kopfzeilen-Schaltflächen und ihrer Icons. */
-export const KOPF_SCHALTFLAECHE = 40;
-export const KOPF_ICON = 24;
+export const KOPF_SCHALTFLAECHE = pillenhoehePx;
+export const KOPF_ICON = 20;

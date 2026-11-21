@@ -3,29 +3,29 @@ import iconPlus from '@/assets/icons/icon-plus.png';
 import iconRegler from '@/assets/icons/icon-regler.png';
 import iconX from '@/assets/icons/icon-x.png';
 import Icon from '@/components/Icon';
-import { buecherFarbe } from '@/theme';
+import { buecherFarbe, textstufe, pillenhoehePx, navIconPx, abstand } from '@/theme';
 import { seitenRand } from './layout';
 import PlusMenue from './PlusMenue';
 
 // Kopfbereich der Seite „Bücher“ (REQ-005). Maße nach Referenzbild:
 // Überschrift ≈ 28–32 dp, Schaltflächen ≈ 40 dp, Abstand ≈ 11 dp.
-const SCHALTFLAECHE = 40;
-// Icon-Größe wie in der Hauptnavigation (24 px), damit die Strichstärke gleich wirkt.
-const ICON = 24;
+const SCHALTFLAECHE = pillenhoehePx;
+// Icon-Größe wie in der Hauptnavigation, damit die Strichstärke gleich wirkt.
+const ICON = navIconPx;
 
 const kopfStil: CSSProperties = {
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
-  gap: '16px',
-  padding: `16px ${seitenRand}px 0`,
+  gap: abstand('l'),
+  padding: `${abstand('l')} ${seitenRand}px 0`,
 };
 
 const ueberschriftStil: CSSProperties = {
   flex: '1 1 auto',
   minWidth: 0,
   margin: 0,
-  fontSize: '30px',
+  ...textstufe('seite'),
   fontWeight: 700,
   lineHeight: 1.2,
   color: buecherFarbe('ueberschrift'),
@@ -34,7 +34,7 @@ const ueberschriftStil: CSSProperties = {
 const schaltflaechenStil: CSSProperties = {
   flex: '0 0 auto',
   display: 'flex',
-  gap: '11px',
+  gap: abstand('m'),
 };
 
 const rundStil: CSSProperties = {
@@ -74,6 +74,8 @@ interface Props {
   menueOffen?: boolean;
   /** Plus-Schaltfläche bzw. „ד angetippt. */
   onPlus?: () => void;
+  /** Option „Barcode scannen“ gewählt (REQ-061). */
+  onBarcode?: () => void;
   /** Option „Von Hand eintragen“ gewählt. */
   onVonHand?: () => void;
   /** Tippen außerhalb des Menüs. */
@@ -85,7 +87,7 @@ interface Props {
  * Die Filter-/Einstellungen-Schaltfläche bewirkt noch nichts; die Plus-Schaltfläche öffnet das
  * Menü „Buch hinzufügen“ und zeigt „ד, solange es offen ist (REQ-029).
  */
-export default function Kopfbereich({ menueOffen = false, onPlus, onVonHand, onMenueSchliessen }: Props) {
+export default function Kopfbereich({ menueOffen = false, onPlus, onBarcode, onVonHand, onMenueSchliessen }: Props) {
   return (
     <header style={kopfStil}>
       <h1 style={ueberschriftStil}>Deine Bücher</h1>
@@ -115,6 +117,7 @@ export default function Kopfbereich({ menueOffen = false, onPlus, onVonHand, onM
         <PlusMenue
           oben={MENUE_OBEN}
           rechts={seitenRand}
+          onBarcode={() => onBarcode?.()}
           onVonHand={() => onVonHand?.()}
           onSchliessen={() => onMenueSchliessen?.()}
         />

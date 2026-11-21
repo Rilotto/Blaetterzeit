@@ -40,7 +40,7 @@ async function tippe(el: Element) {
 }
 async function oeffneBlatt() {
   await tippe(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   return screen.getByRole('dialog', { name: 'Manueller Eintrag' });
 }
 const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(`^\\s*${n}\\s*$`, 'i')) as HTMLInputElement;
@@ -48,14 +48,14 @@ const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(
 afterEach(() => cleanup());
 void feld; // gemeinsamer Kopf, hier nicht genutzt
 
-it('[REQ-029/GROB] Plus öffnet das Menü mit genau „Von Hand eintragen“, außerhalb schließt, die Option öffnet „Manueller Eintrag“', async () => {
+// Seit REQ-061 enthält das Menü zusätzlich „Barcode scannen“ (REQ-029/AK-2 hinfällig).
+it('[REQ-029/GROB] Plus öffnet das Menü mit „Von Hand eintragen“ (und „Barcode scannen“), außerhalb schließt, die Option öffnet „Manueller Eintrag“', async () => {
   await zeige();
   await tippe(screen.getByRole('button', { name: 'Buch hinzufügen' }));
   const m = screen.getByRole('menu', { name: 'Buch hinzufügen' });
-  const opt = within(m).getAllByRole('menuitem');
-  expect(opt).toHaveLength(1);
-  expect(opt[0].textContent).toContain('Von Hand eintragen');
-  expect(opt[0].textContent).toContain('Wenn deine Ausgabe fehlt');
+  expect(within(m).getAllByRole('menuitem')).toHaveLength(2);
+  const opt = within(m).getByRole('menuitem', { name: /Von Hand eintragen/ });
+  expect(opt.textContent).toContain('Wenn deine Ausgabe fehlt');
   expect(screen.getByRole('button', { name: 'Menü schließen' })).toBeInTheDocument();
   await tippe(document.querySelector('[data-menue-hintergrund]')!);
   expect(screen.queryByRole('menu', { name: 'Buch hinzufügen' })).toBeNull();

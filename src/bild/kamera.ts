@@ -11,6 +11,8 @@ export interface Kamerasitzung {
 }
 
 let aktiv: Kamerasitzung | null = null;
+/** Läuft gerade ein natives CameraPreview.stop()? Andere Kameranutzer (Barcode-Scanner) warten darauf. */
+let stoppt: Promise<void> = Promise.resolve();
 
 /** Läuft die Vorschau als native Ebene hinter der WebView (Android-APK)? */
 export const kameraNativ = (): boolean => Capacitor.isNativePlatform();
@@ -42,7 +44,10 @@ async function starteGeraet(): Promise<Kamerasitzung> {
       if (beendet) return;
       beendet = true;
       document.documentElement.removeAttribute(KAMERA_AKTIV_ATTRIBUT);
-      void CameraPreview.stop().catch(() => undefined);
+      stoppt = CameraPreview.stop().then(
+        () => undefined,
+        () => undefined,
+      );
     },
   };
 }
@@ -93,6 +98,15 @@ export async function kameraStarten(video: HTMLVideoElement | null): Promise<Kam
 /** Beendet eine laufende Vorschau (ohne Fehler, wenn keine läuft). */
 export function kameraBeenden(): void {
   aktiv?.beenden();
+}
+
+/**
+ * Gibt die Kamera vollständig frei: beendet eine laufende Vorschau und wartet, bis das native Stoppen
+ * abgeschlossen ist. Für andere Kameranutzer (Barcode-Scanner, REQ-061), die sonst keine Kamera bekämen.
+ */
+export async function kameraFreigeben(): Promise<void> {
+  kameraBeenden();
+  await stoppt;
 }
 
 /** Nimmt ein Foto aus der laufenden Vorschau auf; `null`, wenn keine läuft oder die Aufnahme scheitert. */

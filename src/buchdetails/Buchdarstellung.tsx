@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { BILDBEREICHE, type Bildbereich } from '@/storage/ImageStore';
-import { buchdetailsCoverSchatten, buchdetailsFarbe, textformatAlleAnsehen } from '@/theme';
+import { buchdetailsCoverSchatten, buchdetailsFarbe, textformatAlleAnsehen, textstufe, abstand } from '@/theme';
 import { BEREICH_ABSTAND, BUCH_HOEHE, bereichBreite, bereichName } from './masse';
 
 export type Bilder = Partial<Record<Bildbereich, string>>;
@@ -16,7 +16,7 @@ const reiheStil: CSSProperties = {
   justifyContent: 'center',
   alignItems: 'stretch',
   gap: `${BEREICH_ABSTAND}px`,
-  marginTop: '10px',
+  marginTop: abstand('s'),
 };
 
 const grundStil = (bereich: Bildbereich): CSSProperties => ({
@@ -67,7 +67,7 @@ const coverTitelStil: CSSProperties = {
   top: '14px',
   left: '12px',
   right: '12px',
-  fontSize: '16px',
+  ...textstufe('titel'),
   fontWeight: 700,
   lineHeight: 1.25,
   textAlign: 'left',

@@ -40,7 +40,7 @@ async function tippe(el: Element) {
 }
 async function oeffneBlatt() {
   await tippe(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   return screen.getByRole('dialog', { name: 'Manueller Eintrag' });
 }
 const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(`^\\s*${n}\\s*$`, 'i')) as HTMLInputElement;
@@ -53,7 +53,8 @@ it('[REQ-030/GROB] Blatt mit X, Ziehgriff, „Cover hinzufügen“, vier Feldern
   expect(d.querySelector('[data-ziehgriff]')).not.toBeNull();
   expect(d.querySelector('[data-cover-hinzufuegen]')?.textContent).toContain('Cover hinzufügen');
   for (const [n, p] of [['Titel', 'Buchtitel'], ['Autor', 'Autor'], ['Jahr', '2024'], ['Seiten', '496']]) expect(feld(d, n)).toHaveAttribute('placeholder', p);
-  expect(within(d).getByRole('button', { name: '+ Erscheinungsdatum hinzufügen' })).toBeInTheDocument();
+  // Seit REQ-060: statt „+ Erscheinungsdatum hinzufügen“ die Zeile „Erschienen“ der Karte „Ausgabe“.
+  expect(d.querySelector('[data-ausgabe-zeile="erschienen"]')).not.toBeNull();
   expect(within(d).getByRole('button', { name: 'Hinzufügen' })).toBeInTheDocument();
   fireEvent.change(feld(d, 'Titel'), { target: { value: 'Verworfen' } });
   await tippe(within(d).getByRole('button', { name: 'Schließen' }));

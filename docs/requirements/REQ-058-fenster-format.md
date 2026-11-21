@@ -1,7 +1,7 @@
 ---
 id: REQ-058
 titel: Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar
-status: Entwurf
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -113,3 +113,4 @@ Referenzbild: [referenzen/REF-details-03-format.png](referenzen/REF-details-03-f
 |---|---|---|
 | 2026-11-15 | Erstellt aus CEO-Vorgabe „Reiter Details“ und Referenzbild REF-details-03-format.png | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten 1.1–1.4 eingearbeitet: keine Unterauswahl E-Book/Hörbuch (Auslegung: keine Karte), eine Sonderausgabe abwählbar, genau drei Sonderausgaben, keine Vorauswahl (neu AK-2, AK-5, AK-6) | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

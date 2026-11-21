@@ -185,6 +185,8 @@ describe('Eintragungsdatum beim Anlegen (REQ-041)', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
     fireEvent.click(await screen.findByText('Von Hand eintragen'));
     fireEvent.change(await screen.findByLabelText(/titel/i), { target: { value: 'Neu' } });
+    // Seitenzahl ist Pflicht (REQ-060).
+    fireEvent.change(screen.getByLabelText('Seiten'), { target: { value: '100' } });
     fireEvent.click(screen.getByRole('button', { name: 'Hinzufügen' }));
     await waitFor(async () => expect((await repository.list())[0]?.eingetragenAm).toBe(jetzt.toISOString()));
   });

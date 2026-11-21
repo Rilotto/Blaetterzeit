@@ -1,7 +1,7 @@
 ---
 id: REQ-055
 titel: Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion
-status: Entwurf
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -58,3 +58,4 @@ Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-
 |---|---|---|
 | 2026-11-15 | Erstellt (Platzhalter für offenen Inhalt) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antwort 4: sichtbar ohne Funktion (Auslegung), kein Bibliotheksname; AKs ergänzt | Anforderungsmanager |
+| 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |

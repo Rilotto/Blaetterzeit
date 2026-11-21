@@ -20,6 +20,8 @@ Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/
 
 Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
+> **Hinweis (2026-11-16):** Der Änderungsantrag REQ-060 (Entwurf) macht die Seitenzahl zur Pflichtangabe. Nach dessen Umsetzung sind hier AK-2, AK-5 und AK-9 hinfällig. Bis dahin gilt dieser REQ unverändert.
+
 ## Anforderung (Satzschablone)
 
 **Pflichtangabe**
@@ -157,3 +159,4 @@ CEO (wörtlich, 2026-11-10, zur Frage, was bei „Hinzufügen“ mit nur 1–3 Z
 | 2026-11-10 | Vom CEO mit „Ja“ bestätigt: Hinweis verschwindet bei Eingabe im Titel (neu AK-10), Titel nur aus Leerzeichen gilt als leer (neu AK-11). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-10 | CEO-Antwort zu „JAHR“ mit 1–3 Ziffern eingearbeitet: Feld „JAHR“ wird bei „Hinzufügen“ in Primär hervorgehoben, kein Hinweistext (neu AK-12). Annahme „kein Buch anlegen, solange ungültig“ gekennzeichnet (neu AK-13), Bestätigung durch den CEO ausstehend. Frage geschlossen. Status bleibt „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-10 | CEO zum Ende der Hervorhebung von „JAHR“: „wenn ich etwas im Feld Jahr ändere“ (neu AK-14). Annahme zu AK-13 (kein Anlegen bei ungültigem Jahr) gilt als bestätigt: Der CEO wurde ausdrücklich darauf hingewiesen und hat nicht widersprochen; Annahme-Vermerk entfernt. Status bleibt „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-16 | Hinweis auf REQ-060 (Seitenzahl wird Pflicht) ergänzt; Inhalt unverändert | Anforderungsmanager |

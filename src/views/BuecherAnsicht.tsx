@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import BarcodeAblauf from '@/barcode/BarcodeAblauf';
+import { standardBarcodeScanner, type BarcodeScanner } from '@/barcode/scanner';
+import { standardIsbnSuche, type IsbnSuche } from '@/barcode/suche';
 import type { Bildquelle } from '@/bild/bildquelle';
+import type { Vorbelegung } from '@/buchanlegen/eingabe';
 import ManuellerEintrag from '@/buchanlegen/ManuellerEintrag';
 import AbschnittAlleBuecher from '@/buecher/AbschnittAlleBuecher';
 import AbschnittNochZuLesen from '@/buecher/AbschnittNochZuLesen';
@@ -13,6 +17,7 @@ import Uebersicht from '@/buecher/Uebersicht';
 import type { Buch } from '@/domain/buch';
 import type { AnsichtRepository, BookRepository, ImageStore } from '@/storage';
 import BuchDetails from './BuchDetails';
+import { abstand } from '@/theme';
 
 interface Props {
   /** Filter der Filterleiste; ohne Angabe die zentrale Filterkonfiguration (REQ-007). */
@@ -29,10 +34,14 @@ interface Props {
   jetzt?: () => Date;
   /** Speicher der gemerkten Ansicht je Liste (REQ-037); ohne Angabe der dauerhafte Speicher der App. In Tests ersetzbar. */
   ansichtRepository?: AnsichtRepository;
+  /** Barcode-Scanner (REQ-061); ohne Angabe der der Plattform. In Tests ersetzbar. */
+  barcodeScanner?: BarcodeScanner;
+  /** ISBN-Suche (REQ-062); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
+  isbnSuche?: IsbnSuche;
 }
 
 const seiteStil: CSSProperties = {
-  paddingBottom: '24px',
+  paddingBottom: abstand('xl'),
 };
 
 /** Lädt die Bücher über die Repository-Schnittstelle, sofern keine übergeben wurden; `stand` erzwingt ein Neuladen. */
@@ -88,7 +97,11 @@ function useFrontcover(
   return [cover, verwerfen];
 }
 
-type Ansicht = { art: 'liste' } | { art: 'eintrag' } | { art: 'details'; buch: Buch };
+type Ansicht =
+  | { art: 'liste' }
+  | { art: 'scan' }
+  | { art: 'eintrag'; vorbelegung?: Vorbelegung }
+  | { art: 'details'; buch: Buch };
 
 /** Wo der Nutzer im Reiter „Bücher“ steht: Seite „Bücher“ oder eine Übersicht (REQ-036, REQ-040, REQ-042). */
 type Ort = { art: 'seite' } | { art: 'uebersicht'; liste: string };
@@ -109,11 +122,15 @@ export default function BuecherAnsicht({
   bildspeicher,
   jetzt,
   ansichtRepository,
+  barcodeScanner,
+  isbnSuche,
 }: Props) {
   const filterliste = filter ?? filterKonfiguration;
   const [stand, setStand] = useState(0);
   const alle = useBuecher(buecher, repository, stand);
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
+  const scanner = useMemo(() => barcodeScanner ?? standardBarcodeScanner(), [barcodeScanner]);
+  const isbnSucheAktiv = useMemo(() => isbnSuche ?? standardIsbnSuche(), [isbnSuche]);
   const ansichtSpeicher = useMemo(() => ansichtRepository ?? standardAnsichtRepository(), [ansichtRepository]);
   const [ansicht, setAnsicht] = useState<Ansicht>({ art: 'liste' });
   const [ort, setOrt] = useState<Ort>({ art: 'seite' });
@@ -169,9 +186,26 @@ export default function BuecherAnsicht({
     );
   }
 
+  if (ansicht.art === 'scan') {
+    return (
+      <BarcodeAblauf
+        scanner={scanner}
+        suche={isbnSucheAktiv}
+        // Abbruch, Kamera verweigert, kein Internet, nichts gefunden: Seite „Bücher“ (REQ-061, REQ-062).
+        onAbbruch={() => {
+          setOrt({ art: 'seite' });
+          setSeitenFilterId(standardFilterId(filterliste));
+          setAnsicht({ art: 'liste' });
+        }}
+        onUebernehmen={(vorbelegung) => setAnsicht({ art: 'eintrag', vorbelegung })}
+      />
+    );
+  }
+
   if (ansicht.art === 'eintrag') {
     return (
       <ManuellerEintrag
+        vorbelegung={ansicht.vorbelegung}
         repository={repository}
         bildspeicher={speicher}
         bildquelle={bildquelle}
@@ -190,6 +224,10 @@ export default function BuecherAnsicht({
     <Kopfbereich
       menueOffen={menueOffen}
       onPlus={() => setMenueOffen((offen) => !offen)}
+      onBarcode={() => {
+        setMenueOffen(false);
+        setAnsicht({ art: 'scan' });
+      }}
       onVonHand={() => {
         setMenueOffen(false);
         setAnsicht({ art: 'eintrag' });

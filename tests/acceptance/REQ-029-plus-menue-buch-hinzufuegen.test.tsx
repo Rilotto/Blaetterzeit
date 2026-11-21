@@ -3,7 +3,7 @@
  *
  * Abgeleitet aus dem REQ-Text und der Schnittstellen-Absprache (sprints/sprint-04/plan.md, Teil A):
  *  - Plus: <button aria-label="Buch hinzufügen"> öffnet role="menu" aria-label="Buch hinzufügen"
- *  - genau ein role="menuitem" „Von Hand eintragen“ / „Wenn deine Ausgabe fehlt“, data-icon="icon-hand-eintragen.png"
+ *  - (seit REQ-061 zwei Optionen) role="menuitem" „Von Hand eintragen“ / „Wenn deine Ausgabe fehlt“, data-icon="icon-hand-eintragen.png"
  *  - bei offenem Menü: Schaltfläche aria-label="Menü schließen", data-icon="icon-x.png";
  *    Tippen darauf oder auf [data-menue-hintergrund] schließt
  *  - Blatt: role="dialog" aria-label="Manueller Eintrag"
@@ -171,25 +171,30 @@ describe('REQ-029 Menü „Buch hinzufügen“', () => {
     });
   });
 
-  describe('AK-2 Genau eine Option mit Titel und Untertitel', () => {
-    it('[REQ-029/AK-2] genau ein Menüpunkt mit Titel „Von Hand eintragen“ und Untertitel „Wenn deine Ausgabe fehlt“', async () => {
+  // REQ-029/AK-2 („genau eine Option“) ist laut Hinweis in REQ-029 mit REQ-061 hinfällig.
+  // Die Tests prüfen deshalb das neue Verhalten: zwei Optionen, „Von Hand eintragen“ unverändert mit Untertitel.
+  describe('AK-2 (überführt in REQ-061/AK-1) Optionen mit Titel und Untertitel', () => {
+    it('[REQ-029/AK-2] „Von Hand eintragen“ mit Untertitel „Wenn deine Ausgabe fehlt“ ist weiterhin ein Menüpunkt', async () => {
       await zeige();
       const m = await oeffne();
       const items = within(m).getAllByRole('menuitem');
-      expect(items).toHaveLength(1);
-      const t = textElement(items[0], 'Von Hand eintragen');
-      const u = textElement(items[0], 'Wenn deine Ausgabe fehlt');
+      expect(items).toHaveLength(2);
+      const vonHand = within(m).getByRole('menuitem', { name: /Von Hand eintragen/ });
+      const t = textElement(vonHand, 'Von Hand eintragen');
+      const u = textElement(vonHand, 'Wenn deine Ausgabe fehlt');
       expect(t.compareDocumentPosition(u) & Node.DOCUMENT_POSITION_FOLLOWING, 'Untertitel unter dem Titel').toBeTruthy();
     });
 
-    it('[REQ-029/AK-2] die übrigen Optionen des Referenzbilds und eine Überschrift fehlen', async () => {
+    it('[REQ-029/AK-2] genau die Optionen „Von Hand eintragen“ und „Barcode scannen“; übrige Optionen des Referenzbilds und eine Überschrift fehlen', async () => {
       await zeige();
       const m = await oeffne();
-      for (const t of ['Online suchen', 'Barcode scannen', 'Deine Bücher importieren']) {
+      const items = within(m).getAllByRole('menuitem');
+      expect(items.map((i) => i.textContent ?? '').some((t) => t.includes('Barcode scannen'))).toBe(true);
+      expect(items.map((i) => i.textContent ?? '').some((t) => t.includes('Von Hand eintragen'))).toBe(true);
+      for (const t of ['Online suchen', 'Deine Bücher importieren']) {
         expect(screen.queryByText(t), t).toBeNull();
       }
       expect(within(m).queryByRole('heading')).toBeNull();
-      expect(m.textContent?.replace(/\s+/g, '')).toBe('VonHandeintragenWenndeineAusgabefehlt');
     });
   });
 
@@ -197,7 +202,7 @@ describe('REQ-029 Menü „Buch hinzufügen“', () => {
     it('[REQ-029/AK-3] die Option zeigt genau ein Icon icon-hand-eintragen.png per Maske in einer Farbrubrik (kein <img>/<svg>)', async () => {
       await zeige();
       const m = await oeffne();
-      const item = within(m).getByRole('menuitem');
+      const item = within(m).getByRole('menuitem', { name: /Von Hand eintragen/ });
       const icons = item.querySelectorAll<HTMLElement>('[data-icon]');
       expect(icons).toHaveLength(1);
       expect(icons[0]).toHaveAttribute('data-icon', ICON_HAND);
@@ -293,7 +298,7 @@ describe('REQ-029 Menü „Buch hinzufügen“', () => {
     it('[REQ-029/AK-4] Antippen des Untertitels gehört zur Option und öffnet ebenfalls das Blatt', async () => {
       await zeige();
       const m = await oeffne();
-      fireEvent.click(textElement(within(m).getByRole('menuitem'), 'Wenn deine Ausgabe fehlt'));
+      fireEvent.click(textElement(within(m).getByRole('menuitem', { name: /Von Hand eintragen/ }), 'Wenn deine Ausgabe fehlt'));
       expect(await screen.findByRole('dialog', { name: 'Manueller Eintrag' })).toBeVisible();
       expect(menue()).toBeNull();
     });
@@ -303,8 +308,8 @@ describe('REQ-029 Menü „Buch hinzufügen“', () => {
     const FAELLE: [string, string, Art, () => HTMLElement][] = [
       ['hintergrund', 'Menüfläche', 'hintergrund', () => menue()!],
       ['ghostframe', 'Rahmen des Menüs', 'rahmen', () => menue()!],
-      ['ghost', 'Icon-Kachel', 'hintergrund', () => kachel(within(menue()!).getByRole('menuitem'))],
-      ['primaer', 'Icon', 'icon', () => within(menue()!).getByRole('menuitem').querySelector<HTMLElement>('[data-icon]')!],
+      ['ghost', 'Icon-Kachel', 'hintergrund', () => kachel(within(menue()!).getByRole('menuitem', { name: /Von Hand eintragen/ }))],
+      ['primaer', 'Icon', 'icon', () => within(menue()!).getByRole('menuitem', { name: /Von Hand eintragen/ }).querySelector<HTMLElement>('[data-icon]')!],
       ['dunkelbraun', 'Titel', 'text', () => textElement(menue()!, 'Von Hand eintragen')],
       ['tertiaer', 'Untertitel', 'text', () => textElement(menue()!, 'Wenn deine Ausgabe fehlt')],
       ['primaer', '„×“-Schaltfläche (wie Plus)', 'hintergrund', schliessenBtn],
@@ -382,7 +387,7 @@ describe('REQ-029 Menü „Buch hinzufügen“', () => {
     it('[REQ-029/AK-6] nach Schließen über die Option und Schließen des Blatts zeigt die Schaltfläche wieder das Plus-Icon', async () => {
       await zeige();
       const m = await oeffne();
-      tippe(within(m).getByRole('menuitem'));
+      tippe(within(m).getByRole('menuitem', { name: /Von Hand eintragen/ }));
       const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
       fireEvent.click(within(d).getByRole('button', { name: 'Schließen' }));
       await screen.findByRole('heading', { name: 'Deine Bücher' });

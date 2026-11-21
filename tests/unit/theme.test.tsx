@@ -13,17 +13,35 @@ const rgb = (hex: string) => {
 
 describe('Farbrubriken', () => {
   it('führt die Rubriken mit Namen und Wert', () => {
-    expect(Object.keys(farbrubriken).sort()).toEqual([
-      'dunkelbraun',
-      'flammeorange',
-      'flammerot',
-      'ghost',
-      'ghostframe',
-      'hintergrund',
-      'primaer',
-      'sekundaer',
-      'tertiaer',
-    ]);
+    expect(Object.keys(farbrubriken).sort()).toEqual(
+      [
+        'dunkelbraun',
+        'flammeorange',
+        'flammerot',
+        'ghost',
+        'ghostframe',
+        'hintergrund',
+        'kartenflaeche',
+        'primaer',
+        'sekundaer',
+        'tertiaer',
+        // REQ-046: Bewertungskriterien
+        'sterne',
+        'tempo',
+        'weltenbau',
+        'spice',
+        'spannung',
+        'action',
+        'hauptfiguren',
+        'nebenfiguren',
+        'plottwist',
+        'traenen',
+        'romantik',
+        'humor',
+        'grusel',
+        'dialoge',
+      ].sort(),
+    );
     for (const r of Object.values(farbrubriken)) {
       expect(r.name).not.toBe('');
       expect(r.wert).toMatch(/^#[0-9A-Fa-f]{6}$/);

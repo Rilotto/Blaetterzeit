@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 import { startEcken, type Ecken, type Punkt } from '@/bild/entzerren';
 import type { Bildbereich } from '@/storage/ImageStore';
-import { buchdetailsFarbe } from '@/theme';
+import { buchdetailsFarbe, textstufe, abstand } from '@/theme';
 import Kopfzeile from './Kopfzeile';
 import { RAND, seitenverhaeltnis } from './masse';
 
@@ -28,7 +28,7 @@ const flaecheStil: CSSProperties = {
   position: 'relative',
   flex: '1 1 auto',
   minHeight: 0,
-  margin: `16px ${RAND}px 0`,
+  margin: `${abstand('l')} ${RAND}px 0`,
 };
 
 const bildStil: CSSProperties = {
@@ -55,18 +55,18 @@ const eckpunktStil = (p: Punkt): CSSProperties => ({
 const fussStil: CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
-  padding: `16px ${RAND}px 24px`,
+  padding: `${abstand('l')} ${RAND}px ${abstand('xl')}`,
 };
 
 const bestaetigenStil: CSSProperties = {
   minWidth: '180px',
   height: '44px',
   margin: 0,
-  padding: '0 24px',
+  padding: `0 ${abstand('xl')}`,
   border: 'none',
   borderRadius: '9999px',
   fontFamily: 'inherit',
-  fontSize: '16px',
+  ...textstufe('text'),
   fontWeight: 600,
   backgroundColor: buchdetailsFarbe('bestaetigenFlaeche'),
   color: buchdetailsFarbe('bestaetigenSchrift'),

@@ -12,7 +12,7 @@ import type { ComponentType, CSSProperties } from 'react';
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Buch } from '@/domain/buch';
 import type { BookRepository, ImageStore } from '@/storage';
-import { farbrubriken, farbVariablen } from '@/theme';
+import { farbrubriken, farbVariablen, typografieVariablen } from '@/theme';
 
 // ----------------------------------------------------------------------------- gemeinsamer Aufbau Teil B
 // Speicher: Standard-Speicher der App (IndexedDB, hier fake-indexeddb). „Neustart“ = Module neu laden,
@@ -230,10 +230,22 @@ describe('REQ-028 Autor unter dem Buchtitel', () => {
   });
 
   describe('AK-4 Kleinere Schrift als der Titel', () => {
+    /** Wirksame Schriftgröße in px: nächste Inline-Angabe (Element oder Vorfahr), Variablen über die zentrale Definition aufgelöst. */
+    const schriftPx = (el: HTMLElement): number => {
+      const vars = typografieVariablen();
+      for (let n: HTMLElement | null = el; n; n = n.parentElement) {
+        const f = n.style.fontSize;
+        if (!f) continue;
+        const m = /^var\((--[\w-]+)\)$/.exec(f.trim());
+        return parseFloat(m ? vars[m[1]] : f);
+      }
+      return parseFloat(getComputedStyle(el).fontSize);
+    };
     it('[REQ-028/AK-4] Schriftgröße Autor < Schriftgröße Titel', async () => {
       await details(await starte(), buchB({ autor: 'Michael Ende' }));
-      const a = parseFloat(getComputedStyle(autor()!).fontSize);
-      const t = parseFloat(getComputedStyle(titel()).fontSize);
+      // Angepasst Sprint 06 Teil C (REQ-065): Größen sind Stufen-Variablen; jsdom löst var() nicht auf.
+      const a = schriftPx(autor()!);
+      const t = schriftPx(titel());
       expect(a).toBeGreaterThan(0);
       expect(a).toBeLessThan(t);
     });
@@ -263,9 +275,11 @@ describe('REQ-028 Autor unter dem Buchtitel', () => {
       render(<BA bildspeicher={bilderFake()} bildquelle={{ scannen: async () => null, galerie: async () => null }} />);
       await screen.findByRole('heading', { name: 'Deine Bücher' });
       fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-      fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+      fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
       const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
       fireEvent.change(within(d).getByLabelText(/^\s*Titel\s*$/i), { target: { value: 'Ohne Autor' } });
+      // Seitenzahl ist seit REQ-060 Pflicht.
+      fireEvent.change(within(d).getByLabelText(/^\s*Seiten\s*$/i), { target: { value: '100' } });
       await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
       await screen.findByRole('region', { name: 'Buchdetails' });
       await vi.waitFor(() => expect(pille()).not.toBeNull());

@@ -18,7 +18,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-9 | 1 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
-| REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-12 | 6 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
+| REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-12 | 5 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-13 | 8 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-003 | Zentral definierte App-Schrift | Implementiert | AK-1 | 8 | 0 | tests/acceptance/REQ-003-schriftart.test.tsx |
 | REQ-003 | Zentral definierte App-Schrift | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-003-schriftart.test.tsx |
@@ -206,7 +206,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-025 | Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx |
 | REQ-025 | Buchdetails – Menü „Buchlänge“ zur einmaligen Eingabe der Seitenanzahl | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx |
 | REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
-| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-2 | 15 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
+| REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-2 | 13 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
 | REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-3 | 8 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
 | REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
 | REQ-026 | Buchdetails – Statistik-Pille mit Tagen in Folge, Fortschritt in % und Sitzungen | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-026-statistik-pille.test.tsx |
@@ -240,7 +240,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
-| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-5 | 37 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-5 | 34 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
@@ -254,7 +254,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
-| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx<br>tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
@@ -330,84 +330,183 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-042 | Übersicht „Gerade am Lesen“ über die Filterpille | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-042-uebersicht-gerade-am-lesen.test.tsx |
 | REQ-042 | Übersicht „Gerade am Lesen“ über die Filterpille | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-042-uebersicht-gerade-am-lesen.test.tsx |
 | REQ-042 | Übersicht „Gerade am Lesen“ über die Filterpille | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-042-uebersicht-gerade-am-lesen.test.tsx |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-5 | 0 | 0 |  |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-6 | 0 | 0 |  |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-7 | 0 | 0 |  |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Entwurf | AK-8 | 0 | 0 |  |
-| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-5 | 0 | 0 |  |
-| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-6 | 0 | 0 |  |
-| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Entwurf | AK-7 | 0 | 0 |  |
-| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-5 | 0 | 0 |  |
-| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-6 | 0 | 0 |  |
-| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Entwurf | AK-7 | 0 | 0 |  |
-| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-5 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-6 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-7 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-8 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-9 | 0 | 0 |  |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Entwurf | AK-10 | 0 | 0 |  |
-| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-5 | 0 | 0 |  |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-6 | 0 | 0 |  |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Entwurf | AK-7 | 0 | 0 |  |
-| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Entwurf | AK-5 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-4 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-5 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-6 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-7 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-8 | 0 | 0 |  |
-| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Entwurf | AK-9 | 0 | 0 |  |
-| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Entwurf | AK-1 | 0 | 0 |  |
-| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Entwurf | AK-2 | 0 | 0 |  |
-| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Entwurf | AK-3 | 0 | 0 |  |
-| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Entwurf | AK-4 | 0 | 0 |  |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-8 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-044-rezension-bereich-bewertung.test.tsx |
+| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-044-rezension-bereich-bewertung.test.tsx |
+| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-044-rezension-bereich-bewertung.test.tsx |
+| REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-044-rezension-bereich-bewertung.test.tsx |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-045-bewertung-setzen.test.tsx |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-045-bewertung-setzen.test.tsx |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-045-bewertung-setzen.test.tsx |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-045-bewertung-setzen.test.tsx |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-045-bewertung-setzen.test.tsx |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-045-bewertung-setzen.test.tsx |
+| REQ-045 | Reiter „Rezension“ – Bewertung je Kriterium setzen, zurücksetzen und dauerhaft speichern | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-045-bewertung-setzen.test.tsx |
+| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-046-bewertungskriterien-icons-farben.test.tsx |
+| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-046-bewertungskriterien-icons-farben.test.tsx |
+| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-046-bewertungskriterien-icons-farben.test.tsx |
+| REQ-046 | Bewertungskriterien – eigenes Icon und eigene Farbrubrik je Kriterium (voll und blass) | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-046-bewertungskriterien-icons-farben.test.tsx |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-047-eigene-rezension-textfeld.test.tsx |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-047-eigene-rezension-textfeld.test.tsx |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-047-eigene-rezension-textfeld.test.tsx |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-047-eigene-rezension-textfeld.test.tsx |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-047-eigene-rezension-textfeld.test.tsx |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-047-eigene-rezension-textfeld.test.tsx |
+| REQ-047 | Reiter „Rezension“ – Bereich „Deine Rezension“ mit Schreibfeld und Teilen-Symbol ohne Funktion | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-047-eigene-rezension-textfeld.test.tsx |
+| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-048-bewertung-stufentexte.test.tsx |
+| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-048-bewertung-stufentexte.test.tsx |
+| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-048-bewertung-stufentexte.test.tsx |
+| REQ-048 | Reiter „Rezension“ – Stufentext unter dem Kriteriennamen | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-048-bewertung-stufentexte.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-9 | 9 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-051-details-aufbau-ueberschriften.test.tsx |
+| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-051-details-aufbau-ueberschriften.test.tsx |
+| REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-051-details-aufbau-ueberschriften.test.tsx |
+| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-052-details-genres-tropes.test.tsx |
+| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-052-details-genres-tropes.test.tsx |
+| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-052-details-genres-tropes.test.tsx |
+| REQ-052 | Reiter „Details“ – Genres und Tropes als Pillen | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-052-details-genres-tropes.test.tsx |
+| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-053-details-inhaltswarnungen.test.tsx |
+| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-053-details-inhaltswarnungen.test.tsx |
+| REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-053-details-inhaltswarnungen.test.tsx |
+| REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
+| REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zehn Zeilen | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
+| REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-058 | Reiter „Details“ – Fenster „Format“ für Format, Sonderausgabe und Exemplar | Implementiert | AK-9 | 5 | 0 | tests/acceptance/REQ-058-fenster-format.test.tsx |
+| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-059-details-preis.test.tsx |
+| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-059-details-preis.test.tsx |
+| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-059-details-preis.test.tsx |
+| REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-059-details-preis.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-8 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-9 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
+| REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
+| REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
+| REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
+| REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
+| REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
+| REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
+| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
+| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-3 | 7 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
+| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
+| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
+| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
+| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
+| REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
+| REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
+| REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
+| REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-4 | 7 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
+| REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-11 | 4 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-12 | 5 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
+| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
+| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
+| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
+| REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
+| REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
+| REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
+| REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-1 | 5 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
+| REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
+| REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
+| REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
+| REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-2 | 0 | 0 |  |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-3 | 0 | 0 |  |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-4 | 0 | 0 |  |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-5 | 0 | 0 |  |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-6 | 0 | 0 |  |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-7 | 0 | 0 |  |
+| REQ-070 | Zuschnitt – Lupe und Feinjustierung beim Ziehen eines Eckpunkts | Abgestimmt | AK-8 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-2 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-3 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-4 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-5 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-6 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-7 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-8 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-9 | 0 | 0 |  |
+| REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Abgestimmt | AK-10 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-2 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-3 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-4 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-5 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-6 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-7 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Abgestimmt | AK-8 | 0 | 0 |  |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-2 | 0 | 0 |  |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-3 | 0 | 0 |  |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-4 | 0 | 0 |  |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-5 | 0 | 0 |  |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Abgestimmt | AK-6 | 0 | 0 |  |

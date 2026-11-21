@@ -4,7 +4,7 @@ import iconKamera from '@/assets/icons/icon-kamera.png';
 import iconLupe from '@/assets/icons/icon-lupe.png';
 import iconX from '@/assets/icons/icon-x.png';
 import Icon from '@/components/Icon';
-import { auswahlmenueFlaeche, auswahlmenueSchatten, buchdetailsFarbe } from '@/theme';
+import { auswahlmenueFlaeche, auswahlmenueSchatten, buchdetailsFarbe, textstufe, abstand, bildschirmrand } from '@/theme';
 
 export type MenueAktion = 'scannen' | 'galerie' | 'online' | 'entfernen';
 
@@ -45,7 +45,7 @@ export const menueFlaecheStil: CSSProperties = {
   boxSizing: 'border-box',
   width: '250px',
   maxWidth: 'calc(100% - 32px)',
-  padding: '10px 0',
+  padding: `${abstand('s')} 0`,
   borderRadius: '16px',
   backgroundColor: auswahlmenueFlaeche,
   boxShadow: auswahlmenueSchatten,
@@ -70,16 +70,16 @@ export const eintragStil: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: '12px',
+  gap: abstand('m'),
   boxSizing: 'border-box',
   width: '100%',
   height: '48px',
   margin: 0,
-  padding: '0 20px',
+  padding: `0 ${bildschirmrand}`,
   border: 'none',
   background: 'none',
   fontFamily: 'inherit',
-  fontSize: '17px',
+  ...textstufe('text'),
   fontWeight: 400,
   textAlign: 'left',
   color: buchdetailsFarbe('auswahlmenueSchrift'),

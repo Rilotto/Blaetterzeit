@@ -66,9 +66,10 @@ async function warte(ms = 30) {
 }
 async function legeAn(felder: Record<string, string>, mitCover = false) {
   fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-  fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+  fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
-  for (const [k, v] of Object.entries(felder)) {
+  // Seitenzahl ist seit REQ-060 Pflicht: ohne Angabe wird „100“ eingetragen.
+  for (const [k, v] of Object.entries({ Seiten: '100', ...felder })) {
     fireEvent.change(within(d).getByLabelText(new RegExp(`^\\s*${k}\\s*$`, 'i')), { target: { value: v } });
   }
   if (mitCover) {
@@ -176,16 +177,17 @@ describe('REQ-034 Buchdaten dauerhaft speichern', () => {
   });
 
   describe('AK-2 Buch nur mit Pflichtangabe', () => {
-    it('[REQ-034/AK-2] nur Titel: nach Neustart vorhanden, optionale Angaben fehlen, keine Ersatzwerte', async () => {
+    // Pflichtangaben seit REQ-060: Titel und Seitenzahl.
+    it('[REQ-034/AK-2] nur Pflichtangaben (Titel, Seiten): nach Neustart vorhanden, optionale Angaben fehlen, keine Ersatzwerte', async () => {
       const s1 = await starte();
       await zeige(s1);
-      await legeAn({ Titel: 'Nur Titel' });
+      await legeAn({ Titel: 'Nur Titel', Seiten: '100' });
       cleanup();
       const s2 = await starte();
       const [b] = await finde(s2.repo, 'Nur Titel');
       expect(b).toBeDefined();
       // Eintragungsdatum wird seit 2026-11-12 automatisch gesetzt (REQ-041), ist keine Ersatzangabe des Nutzers.
-      expect(Object.keys(b).sort()).toEqual(['eingetragenAm', 'id', 'status', 'titel']);
+      expect(Object.keys(b).sort()).toEqual(['eingetragenAm', 'id', 'seitenanzahl', 'status', 'titel']);
       expect(b.status).toBe('ungelesen');
       expect(await s2.bilder.get(b.id, 'cover')).toBeUndefined();
     });
@@ -237,7 +239,7 @@ describe('REQ-034 Buchdaten dauerhaft speichern', () => {
       const alle = await s2.repo.list();
       const erwartet = {
         Erstes: { autor: 'A', erscheinungsjahr: 2001, seitenanzahl: 100 },
-        Zweites: { autor: 'B' },
+        Zweites: { autor: 'B', seitenanzahl: 100 }, // Seiten seit REQ-060 Pflicht (Hilfsablauf trägt 100 ein)
         Drittes: { seitenanzahl: 300 },
       } as Record<string, Partial<Buch>>;
       for (const [titel, felder] of Object.entries(erwartet)) {

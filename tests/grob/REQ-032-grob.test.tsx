@@ -40,7 +40,7 @@ async function tippe(el: Element) {
 }
 async function oeffneBlatt() {
   await tippe(screen.getByRole('button', { name: 'Buch hinzufügen' }));
-  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem'));
+  await tippe(within(screen.getByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
   return screen.getByRole('dialog', { name: 'Manueller Eintrag' });
 }
 const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(`^\\s*${n}\\s*$`, 'i')) as HTMLInputElement;
@@ -51,6 +51,7 @@ it('[REQ-032/GROB] Cover über Galerie, Zuschnitt im Cover-Format, beim Anlegen 
   const { repo, s } = await zeige();
   const d = await oeffneBlatt();
   fireEvent.change(feld(d, 'Titel'), { target: { value: 'Mit Cover' } });
+  fireEvent.change(feld(d, 'Seiten'), { target: { value: '100' } }); // Pflicht seit REQ-060
   await tippe(d.querySelector('[data-cover-hinzufuegen]')!);
   await tippe(within(screen.getByRole('menu', { name: 'Bild hinzufügen' })).getByRole('menuitem', { name: 'Aus Galerie auswählen' }));
   const z = await screen.findByRole('region', { name: 'Zuschnitt' });
