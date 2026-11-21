@@ -13,7 +13,7 @@ import {
   type UnterformatId,
 } from '@/domain/ausgabe';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
-import { abdunklung, buchHellFlaeche, detailsFarbe, rezensionFarbe, sichernKante, sonderPilleGewaehltFlaeche, schriftgroesse, textstufe, bildschirmrandPx, pillenhoehe, abstand } from '@/theme';
+import { abdunklung, buchHellFlaeche, detailsFarbe, rezensionFarbe, sichernKante, sonderPilleGewaehltFlaeche, schriftgroesse, textstufe, bildschirmrandPx, pillenhoehe, abstand, stilRolle } from '@/theme';
 import { SCHREIBFENSTER_ZUG_SCHWELLE } from './rezension';
 
 const RAND_FENSTER = bildschirmrandPx;
@@ -319,7 +319,7 @@ export default function FensterFormat({ start, onSichern, onSchliessen }: Props)
   return (
     <>
       <div data-format-hintergrund="" onClick={schliessen} style={hintergrundStil} />
-      <div role="dialog" aria-modal="true" aria-label="Format" data-fenster-format="" style={fensterStil(versatz)}>
+      <div role="dialog" aria-modal="true" aria-label="Format" data-fenster-format="" {...stilRolle('blatt')} style={fensterStil(versatz)}>
         <div
           data-ziehgriff=""
           onPointerDown={zugStart}
@@ -350,7 +350,7 @@ export default function FensterFormat({ start, onSichern, onSchliessen }: Props)
                 data-format-kachel={f.id}
                 data-gewaehlt={gewaehlt ? 'true' : 'false'}
                 onClick={() => setWahl((w) => ({ ...w, format: f.id }))}
-                style={kachelStil(gewaehlt)}
+                {...stilRolle('eintrag')} style={kachelStil(gewaehlt)}
               >
                 {gewaehlt ? (
                   <span data-haken="" style={{ ...markeStil, backgroundColor: detailsFarbe('hakenFlaeche') }}>
@@ -367,7 +367,7 @@ export default function FensterFormat({ start, onSichern, onSchliessen }: Props)
         </div>
 
         {wahl.format === 'print' ? (
-          <div data-print-karte="" style={karteStil}>
+          <div data-print-karte="" {...stilRolle('karte')} style={karteStil}>
             <div style={karteKopfStil}>
               <Symbolbild name="buchPrint" farbe={detailsFarbe('buchDunkel')} groesse={24} />
               <span>Print</span>
@@ -383,7 +383,7 @@ export default function FensterFormat({ start, onSichern, onSchliessen }: Props)
                     data-unterformat={u.id}
                     data-gewaehlt={gewaehlt ? 'true' : 'false'}
                     onClick={() => setWahl((w) => ({ ...w, unterformat: u.id }))}
-                    style={unterKachelStil(gewaehlt)}
+                    {...stilRolle('reiter')} style={unterKachelStil(gewaehlt)}
                   >
                     <UnterformatBild id={u.id} />
                     <span>{u.name}</span>
@@ -408,7 +408,7 @@ export default function FensterFormat({ start, onSichern, onSchliessen }: Props)
                     data-sonderausgabe={s.id}
                     data-gewaehlt={gewaehlt ? 'true' : 'false'}
                     onClick={() => setWahl((w) => ({ ...w, sonderausgabe: sonderausgabeAntippen(w.sonderausgabe, s.id) }))}
-                    style={sonderPilleStil(gewaehlt)}
+                    {...stilRolle('reiter')} style={sonderPilleStil(gewaehlt)}
                   >
                     {s.name}
                   </button>
@@ -432,7 +432,7 @@ export default function FensterFormat({ start, onSichern, onSchliessen }: Props)
                 data-exemplar={x.id}
                 data-gewaehlt={gewaehlt ? 'true' : 'false'}
                 onClick={() => setWahl((w) => ({ ...w, exemplar: x.id }))}
-                style={exemplarStil(gewaehlt)}
+                {...stilRolle('reiter')} style={exemplarStil(gewaehlt)}
               >
                 {x.name}
               </button>

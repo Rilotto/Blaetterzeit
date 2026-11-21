@@ -2,7 +2,7 @@ import { useRef, useState, type CSSProperties } from 'react';
 import iconAufAb from '@/assets/icons/icon-auf-ab.png';
 import Icon from '@/components/Icon';
 import { LESESTATUS, type LesestatusId } from '@/domain/buch';
-import { fortschrittFarbe, textstufe, pillenhoehePx, abstand } from '@/theme';
+import { fortschrittFarbe, textstufe, pillenhoehePx, abstand, stilRolle } from '@/theme';
 import { eintragStil, hintergrundStil, menueFlaecheStil } from './Auswahlmenue';
 import { statusIcon } from './statusIcons';
 
@@ -114,6 +114,7 @@ export default function Statuspille({ status, onWaehlen }: Props) {
         aria-haspopup="menu"
         aria-expanded={menue !== null}
         onClick={oeffnen}
+        {...stilRolle('chip')}
         style={pilleStil}
       >
         <Icon datei={icon.datei} url={icon.url} farbe={fortschrittFarbe('statuspilleIcon')} groesse={18} />
@@ -125,7 +126,7 @@ export default function Statuspille({ status, onWaehlen }: Props) {
       {menue !== null ? (
         <>
           <div data-menue-hintergrund="" onClick={() => setMenue(null)} style={hintergrundStil} />
-          <div role="menu" aria-label="Status wählen" data-lage={menue.lage} style={menueStil(menue.lage, menue.pille)}>
+          <div role="menu" aria-label="Status wählen" data-lage={menue.lage} {...stilRolle('blatt')} style={menueStil(menue.lage, menue.pille)}>
             {LESESTATUS.map((s) => {
               const i = statusIcon(s.id);
               return (

@@ -1,39 +1,59 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from 'react';
 import type { EinstellungRepository } from '@/storage';
 import {
   farbVariablenAnwenden,
   istFarbdesignId,
   istSchriftId,
+  istStilId,
   schriftVariable,
   schriftVariablen,
   standardFarbdesign,
   standardSchrift,
+  standardStil,
+  stilRegeln,
   typografieVariablen,
   type FarbdesignId,
   type SchriftId,
+  type StilId,
 } from '@/theme';
 
-/** Aktuelle Wahl von Farbdesign (REQ-068) und Schrift (REQ-069). */
+/** Bindet das Stylesheet der Stile (REQ-071) einmal als <style data-stil-regeln> in <head> ein. */
+function stilRegelnEinbinden(): void {
+  if (document.head.querySelector('style[data-stil-regeln]')) return;
+  const el = document.createElement('style');
+  el.setAttribute('data-stil-regeln', '');
+  el.textContent = stilRegeln();
+  document.head.appendChild(el);
+}
+
+/** Aktuelle Wahl von Farbdesign (REQ-068), Schrift (REQ-069) und Stil (REQ-071). */
 export interface Designwahl {
   farbdesign: FarbdesignId;
   schrift: SchriftId;
+  stil: StilId;
 }
 
 interface DesignKontext extends Designwahl {
   farbdesignWaehlen: (id: FarbdesignId) => void;
   schriftWaehlen: (id: SchriftId) => void;
+  stilWaehlen: (id: StilId) => void;
 }
 
-const standardWahl: Designwahl = { farbdesign: standardFarbdesign, schrift: standardSchrift };
+const standardWahl: Designwahl = { farbdesign: standardFarbdesign, schrift: standardSchrift, stil: standardStil };
 
-const Kontext = createContext<DesignKontext>({ ...standardWahl, farbdesignWaehlen: () => {}, schriftWaehlen: () => {} });
+const Kontext = createContext<DesignKontext>({
+  ...standardWahl,
+  farbdesignWaehlen: () => {},
+  schriftWaehlen: () => {},
+  stilWaehlen: () => {},
+});
 
 /** Zugriff auf die aktuelle Designwahl und die Wahlfunktionen. */
 export const useDesign = (): DesignKontext => useContext(Kontext);
 
 /**
  * Hält die Designwahl, lädt sie beim Start aus dem EinstellungRepository und speichert jede Änderung
- * dauerhaft (REQ-068 AK-4, REQ-069 AK-4). Ungültige gespeicherte Werte gelten als „nicht gewählt“.
+ * dauerhaft (REQ-068 AK-4, REQ-069 AK-4, REQ-071 AK-5). Ungültige gespeicherte Werte gelten als „nicht gewählt“.
  * Zusätzlich setzt er Farb-, Schrift- und Typografie-Variablen an <html>, damit auch html/body
  * (Hintergrund) und Bereiche außerhalb der App-Wurzel sofort dem Design folgen (REQ-068 AK-3).
  */
@@ -42,12 +62,13 @@ export function DesignAnbieter({ repository, children }: { repository: Einstellu
 
   useEffect(() => {
     let aktiv = true;
-    void Promise.all([repository.lesen('farbdesign'), repository.lesen('schrift')])
-      .then(([farbdesign, schrift]) => {
+    void Promise.all([repository.lesen('farbdesign'), repository.lesen('schrift'), repository.lesen('stil')])
+      .then(([farbdesign, schrift, stil]) => {
         if (!aktiv) return;
         setWahl((w) => ({
           farbdesign: istFarbdesignId(farbdesign) ? farbdesign : w.farbdesign,
           schrift: istSchriftId(schrift) ? schrift : w.schrift,
+          stil: istStilId(stil) ? stil : w.stil,
         }));
       })
       .catch((fehler: unknown) => console.warn('Designwahl nicht lesbar:', fehler));
@@ -56,6 +77,9 @@ export function DesignAnbieter({ repository, children }: { repository: Einstellu
     };
   }, [repository]);
 
+  // Regeln aller Stile einmal in <head>; sie greifen nur unter [data-stil="…"] bzw. [data-stil-skizze="…"] (REQ-071).
+  useLayoutEffect(() => stilRegelnEinbinden(), []);
+
   useEffect(() => {
     const html = document.documentElement;
     farbVariablenAnwenden(html, wahl.farbdesign);
@@ -63,6 +87,7 @@ export function DesignAnbieter({ repository, children }: { repository: Einstellu
     for (const [name, wert] of Object.entries(typografieVariablen())) html.style.setProperty(name, wert);
     html.dataset.farbdesign = wahl.farbdesign;
     html.dataset.schrift = wahl.schrift;
+    html.dataset.stil = wahl.stil;
   }, [wahl]);
 
   const farbdesignWaehlen = useCallback(
@@ -80,6 +105,17 @@ export function DesignAnbieter({ repository, children }: { repository: Einstellu
     [repository],
   );
 
-  const wert = useMemo(() => ({ ...wahl, farbdesignWaehlen, schriftWaehlen }), [wahl, farbdesignWaehlen, schriftWaehlen]);
+  const stilWaehlen = useCallback(
+    (id: StilId) => {
+      setWahl((w) => ({ ...w, stil: id }));
+      void repository.speichern('stil', id).catch((f: unknown) => console.warn('Stil nicht gespeichert:', f));
+    },
+    [repository],
+  );
+
+  const wert = useMemo(
+    () => ({ ...wahl, farbdesignWaehlen, schriftWaehlen, stilWaehlen }),
+    [wahl, farbdesignWaehlen, schriftWaehlen, stilWaehlen],
+  );
   return <Kontext.Provider value={wert}>{children}</Kontext.Provider>;
 }

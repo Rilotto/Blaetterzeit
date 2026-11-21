@@ -1,5 +1,5 @@
-/** Schlüssel der App-Einstellungen (REQ-068: Farbdesign, REQ-069: Schrift). */
-export type EinstellungSchluessel = 'farbdesign' | 'schrift';
+/** Schlüssel der App-Einstellungen (REQ-068: Farbdesign, REQ-069: Schrift, REQ-071: Stil). */
+export type EinstellungSchluessel = 'farbdesign' | 'schrift' | 'stil';
 
 /**
  * Speicher-Schnittstelle für App-Einstellungen (ADR-0002). Werte sind Zeichenketten (z. B. die ID des

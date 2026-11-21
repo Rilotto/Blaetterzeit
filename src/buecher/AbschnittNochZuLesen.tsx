@@ -4,7 +4,7 @@ import CoverPlatzhalter from '@/components/CoverPlatzhalter';
 import Icon from '@/components/Icon';
 import { coverBreite, coverFlaecheStil } from '@/components/coverFlaeche';
 import type { Buch } from '@/domain/buch';
-import { buecherFarbe, textformatAlleAnsehen, abstand } from '@/theme';
+import { buecherFarbe, textformatAlleAnsehen, abstand, stilRolle } from '@/theme';
 import { abschnittKonfiguration, buecherNochZuLesen } from './abschnittKonfiguration';
 import PlatzhalterText from './PlatzhalterText';
 import {
@@ -96,7 +96,7 @@ export function Bucheintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: s
   return (
     <li data-bucheintrag={buch.id} style={eintragStil} onClick={onAntippen ? () => onAntippen(buch) : undefined}>
       {cover ? <img src={cover} alt={buch.titel} style={coverStil} /> : <CoverPlatzhalter />}
-      <p data-buchtitel="" style={titelStil}>
+      <p data-buchtitel="" {...stilRolle('buchtitel')} style={titelStil}>
         {buch.titel}
       </p>
     </li>

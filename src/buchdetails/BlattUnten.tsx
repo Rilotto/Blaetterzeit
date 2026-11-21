@@ -1,8 +1,8 @@
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import iconX from '@/assets/icons/icon-x.png';
 import Icon from '@/components/Icon';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
-import { abdunklung, fortschrittFarbe, sichernKante, textstufe, bildschirmrandPx, pillenhoehe, abstand, bildschirmrand } from '@/theme';
+import { abdunklung, fortschrittFarbe, sichernKante, textstufe, bildschirmrandPx, pillenhoehe, abstand, bildschirmrand, stilRolle } from '@/theme';
 
 interface Props {
   /** Überschrift und Name des Dialogs, z. B. „Aktuelle Seite“. */
@@ -10,7 +10,12 @@ interface Props {
   /** X-Schaltfläche oder Tippen auf die Abdunklung: schließen ohne Speichern. */
   onSchliessen: () => void;
   children: ReactNode;
+  /** Herunterziehen am Ziehgriff schließt ohne Speichern (z. B. Blatt „Maße“, REQ-072 AK-6); sonst nur optisch. */
+  ziehbar?: boolean;
 }
+
+/** Ab dieser Zugstrecke nach unten schließt ein ziehbares Blatt (wie der Manuelle Eintrag, REQ-030 AK-11). */
+export const BLATT_ZUG_SCHWELLE = 80;
 
 // Maße nach REF-buchdetails-03-aktuelle-seite.png und REF-buchdetails-04-buchlaenge.png (≈ 2,26 px je dp):
 // Ecken oben ≈ 28 dp, Seitenrand ≈ 26 dp, X ≈ 34 dp. Orientierungswerte, kein Akzeptanzkriterium.
@@ -141,7 +146,9 @@ export const sichernStil: CSSProperties = {
 };
 
 /** Blatt von unten mit Abdunklung der Buchdetails, Ziehgriff (nur optisch), Überschrift und X (REQ-024, REQ-025). */
-export default function BlattUnten({ titel, onSchliessen, children }: Props) {
+export default function BlattUnten({ titel, onSchliessen, children, ziehbar = false }: Props) {
+  const [versatz, setVersatz] = useState(0);
+  const zug = useRef<{ start: number; strecke: number } | null>(null);
   // Android-Zurück-Taste schließt das Blatt ohne Speichern (REQ-059 AK-4, REQ-063 AK-6).
   const verlassen = useZurueckTaste(() => {
     onSchliessen();
@@ -155,11 +162,41 @@ export default function BlattUnten({ titel, onSchliessen, children }: Props) {
     verlassen();
     onSchliessen();
   };
+  const zugStart = (e: ReactPointerEvent<HTMLDivElement>) => {
+    zug.current = { start: e.clientY, strecke: 0 };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const zugBewegen = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (!zug.current) return;
+    zug.current.strecke = Math.max(0, e.clientY - zug.current.start);
+    setVersatz(zug.current.strecke);
+  };
+  const zugEnde = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (!zug.current) return;
+    const strecke = Math.max(zug.current.strecke, e.clientY - zug.current.start);
+    zug.current = null;
+    setVersatz(0);
+    if (Number.isFinite(strecke) && strecke >= BLATT_ZUG_SCHWELLE) schliessen();
+  };
+  const zugAbbrechen = () => {
+    zug.current = null;
+    setVersatz(0);
+  };
+  const ziehen = ziehbar
+    ? { onPointerDown: zugStart, onPointerMove: zugBewegen, onPointerUp: zugEnde, onPointerCancel: zugAbbrechen }
+    : {};
   return (
     <>
       <div data-blatt-hintergrund="" onClick={schliessen} style={hintergrundStil} />
-      <div role="dialog" aria-modal="true" aria-label={titel} data-blatt-unten="" style={blattStil}>
-        <div style={griffBereichStil}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={titel}
+        data-blatt-unten=""
+        {...stilRolle('blatt')}
+        style={{ ...blattStil, ...(versatz > 0 ? { transform: `translateY(${versatz}px)` } : {}) }}
+      >
+        <div {...ziehen} style={{ ...griffBereichStil, ...(ziehbar ? { touchAction: 'none', cursor: 'grab' } : {}) }}>
           <div data-ziehgriff="" style={griffStil} />
         </div>
         <div style={kopfStil}>

@@ -72,13 +72,14 @@ async function zustand(w: Welt, d: HTMLElement, id: string) {
 }
 import { neuesBuch } from '@/domain/buch';
 
-const ZEILEN = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt'];
-const NAMEN = ['Seiten', 'Format', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'];
+// REQ-072/AK-1: Zeile „Maße“ direkt unter „Format“ (Anpassung Sprint 07)
+const ZEILEN = ['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt'];
+const NAMEN = ['Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'];
 const karte = (d: HTMLElement) => abschnitt(d, 'ausgabe').querySelector<HTMLElement>('[data-ausgabe-karte]')!;
 const zeilen = (d: HTMLElement) => Array.from(karte(d).querySelectorAll<HTMLElement>('[data-ausgabe-zeile]'));
 
 describe('REQ-056 Karte „Ausgabe“', () => {
-  it('[REQ-056/AK-1] zehn Zeilen in fester Reihenfolge, links Bezeichnung, kein „Signiert“', async () => {
+  it('[REQ-056/AK-1] elf Zeilen (mit „Maße“ laut REQ-072) in fester Reihenfolge, links Bezeichnung, kein „Signiert“', async () => {
     const { d } = await mitBuch();
     expect(zeilen(d).map((z) => z.getAttribute('data-ausgabe-zeile'))).toEqual(ZEILEN);
     expect(zeilen(d).map((z) => norm(z.querySelector('[data-zeile-bezeichnung]')?.textContent))).toEqual(NAMEN);

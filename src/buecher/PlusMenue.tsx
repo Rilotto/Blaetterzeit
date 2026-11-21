@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import iconBarcode from '@/assets/icons/icon-barcode.png';
 import iconHandEintragen from '@/assets/icons/icon-hand-eintragen.png';
 import Icon from '@/components/Icon';
-import { abdunklung, buchAnlegenFarbe, plusMenueSchatten, textformatAlleAnsehen, textstufe, abstand } from '@/theme';
+import { abdunklung, buchAnlegenFarbe, plusMenueSchatten, textformatAlleAnsehen, textstufe, abstand, stilRolle } from '@/theme';
 
 interface Props {
   /** Oberkante des Menüs in px, relativ zum Kopfbereich. */
@@ -94,7 +94,7 @@ export default function PlusMenue({ oben, rechts, onBarcode, onVonHand, onSchlie
   return (
     <>
       <div data-menue-hintergrund="" onClick={onSchliessen} style={hintergrundStil} />
-      <div role="menu" aria-label="Buch hinzufügen" style={menueStil(oben, rechts)}>
+      <div role="menu" aria-label="Buch hinzufügen" {...stilRolle('blatt')} style={menueStil(oben, rechts)}>
         <button type="button" role="menuitem" data-option="barcode" onClick={onBarcode} style={optionStil}>
           <span style={kachelStil}>
             <Icon datei="icon-barcode.png" url={iconBarcode} farbe={buchAnlegenFarbe('menueIcon')} groesse={22} />

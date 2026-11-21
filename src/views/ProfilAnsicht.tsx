@@ -2,7 +2,7 @@ import { useState, type CSSProperties } from 'react';
 import { KartenZeile, karteDetails } from '@/buchdetails/reiter/DetailsBereich';
 import { useDesign } from '@/design/designwahl';
 import FensterDesign from '@/profil/FensterDesign';
-import { abstand, bildschirmrand, farbdesigns, rezensionFarbe, schriften, textstufe } from '@/theme';
+import { abstand, bildschirmrand, farbdesigns, rezensionFarbe, schriften, stile, stilRolle, textstufe } from '@/theme';
 
 const seiteStil: CSSProperties = { padding: `${abstand('xl')} ${bildschirmrand}` };
 
@@ -16,7 +16,7 @@ const ueberschriftStil: CSSProperties = {
 
 /** Zielansicht des Menüpunkts „Profil“ mit Abschnitt „App“ und Zeile „Design“ (REQ-066). */
 export default function ProfilAnsicht() {
-  const { farbdesign, schrift } = useDesign();
+  const { farbdesign, schrift, stil } = useDesign();
   const [offen, setOffen] = useState(false);
   return (
     <div data-profil-seite="" style={seiteStil}>
@@ -25,12 +25,12 @@ export default function ProfilAnsicht() {
           App
         </h2>
         {/* Karte und Zeile exakt wie die Karte „Ausgabe“ der Buchdetails (gleiche Komponente und Stile). */}
-        <div data-profil-karte="" style={karteDetails}>
+        <div data-profil-karte="" {...stilRolle('karte')} style={karteDetails}>
           <KartenZeile
             zeilenAttribute={{ 'data-profil-zeile': 'design' }}
             anzeigeAttribute={{ 'data-design-anzeige': '' }}
             beschriftung="Design"
-            wert={`${farbdesigns[farbdesign].name} · ${schriften[schrift].name} `}
+            wert={`${farbdesigns[farbdesign].name} · ${schriften[schrift].name} · ${stile[stil].name} `}
             pfeil
             letzte
             onAntippen={() => setOffen(true)}

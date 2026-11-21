@@ -114,6 +114,58 @@ export function preisPruefen(eingabe: string): PreisPruefung {
   return { ok: true, cent };
 }
 
+/** Maße eines Buches in Millimetern (REQ-072); fehlend = kein Wert. */
+export interface Masse {
+  breiteMm?: number;
+  hoeheMm?: number;
+  dickeMm?: number;
+}
+
+/** Gespeicherter Maßwert: ganzzahlige Millimeter > 0. */
+export const istMassMm = (w: unknown): w is number => typeof w === 'number' && Number.isInteger(w) && w > 0;
+
+/** Text der Zeile „Maße“ ohne hinterlegte Werte (REQ-072, AK-2). */
+export const MASSE_LEER = 'Trag die Maße ein';
+
+/** Millimeter → Zentimeter mit genau einer Nachkommastelle und Komma, z. B. 210 → „21,0“. */
+export const mmText = (mm: number): string => `${Math.floor(mm / 10)},${mm % 10}`;
+
+/** Millimeter → Eingabetext im Blatt „Maße“ (wie die Anzeige); fehlend → leer. */
+export const massEingabeText = (mm: number | undefined): string => (mm === undefined ? '' : mmText(mm));
+
+/** Hat das Buch mindestens einen Maßwert? */
+export const hatMasse = (m: Masse): boolean => m.breiteMm !== undefined || m.hoeheMm !== undefined || m.dickeMm !== undefined;
+
+/** Wert der Zeile „Maße“: „13,5 × 21,0 × 3,2 cm“, fehlender Einzelwert „–“; ohne Werte leer (REQ-072, AK-2). */
+export function masseText(m: Masse): string {
+  if (!hatMasse(m)) return '';
+  const t = (mm: number | undefined) => (mm === undefined ? '–' : mmText(mm));
+  return `${t(m.breiteMm)} × ${t(m.hoeheMm)} × ${t(m.dickeMm)} cm`;
+}
+
+export type MassPruefung = { ok: true; mm?: number } | { ok: false };
+
+/**
+ * Ein Feld im Blatt „Maße“ prüfen (REQ-072): leer = kein Wert; sonst Zahl > 0 in Zentimetern mit höchstens einer
+ * Nachkommastelle, Komma oder Punkt als Trennzeichen. Leerzeichen am Rand werden ignoriert. Liefert Millimeter.
+ * Annahme des Entwicklers: höchstens vier Stellen vor dem Komma.
+ */
+export function massPruefen(eingabe: string): MassPruefung {
+  const text = eingabe.trim();
+  if (text === '') return { ok: true };
+  const m = /^(\d{1,4})(?:[,.](\d))?$/.exec(text);
+  if (!m) return { ok: false };
+  const mm = Number(m[1]) * 10 + Number(m[2] ?? '0');
+  return mm > 0 ? { ok: true, mm } : { ok: false };
+}
+
+/** Zentimeter (z. B. aus einer Quelle) → ganze Millimeter, gerundet auf eine Nachkommastelle; ungültig → undefined. */
+export function cmZuMm(cm: number): number | undefined {
+  if (!Number.isFinite(cm)) return undefined;
+  const mm = Math.round(cm * 10);
+  return mm > 0 ? mm : undefined;
+}
+
 /** Seitenanzahl ändern (REQ-057, AK-5): kleiner als die gespeicherte aktuelle Seite ist nicht möglich. */
 export const seitenanzahlErlaubt = (seitenanzahl: number, aktuelleSeite: number | undefined): boolean =>
   aktuelleSeite === undefined || seitenanzahl >= aktuelleSeite;

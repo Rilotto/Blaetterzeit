@@ -103,7 +103,7 @@ describe('Reiter „Details“', () => {
     expect(q('[data-pillen="inhaltswarnungen"] [data-pille-gestrichelt]')).toHaveTextContent('+ Warnungen markieren');
     const zeilen = [...document.querySelectorAll('[data-ausgabe-zeile]')];
     expect(zeilen.map((z) => z.querySelector('[data-zeile-bezeichnung]')!.textContent)).toEqual([
-      'Seiten', 'Format', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt',
+      'Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt',
     ]);
     expect(zeilen.filter((z) => z.querySelector('[data-zeile-pfeil]')).map((z) => z.getAttribute('data-ausgabe-zeile'))).toEqual([
       'seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis',

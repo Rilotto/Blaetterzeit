@@ -39,11 +39,11 @@ async function profil() {
 }
 const anzeige = () => (document.querySelector('[data-profil-zeile="design"] [data-design-anzeige]')?.textContent ?? '').replace(/\s+/g, ' ').trim();
 
-it('[REQ-066/GROB] Profil zeigt Zeile „Design“ mit „Klassisch · Fraunces ›“; Antippen öffnet das Fenster „Design“', async () => {
+it('[REQ-066/GROB] Profil zeigt Zeile „Design“ mit „Klassisch · Fraunces · Klassisch ›“; Antippen öffnet das Fenster „Design“', async () => {
   starte();
   const zeile = await profil();
   expect(within(screen.getByRole('main')).getByText(/^App$/i)).toBeInTheDocument();
-  await vi.waitFor(() => expect(anzeige()).toBe('Klassisch · Fraunces ›'), W);
+  await vi.waitFor(() => expect(anzeige()).toBe('Klassisch · Fraunces · Klassisch ›'), W);
   await tippe(zeile);
   expect(await screen.findByRole('dialog', { name: 'Design' }, W)).toBeInTheDocument();
 });

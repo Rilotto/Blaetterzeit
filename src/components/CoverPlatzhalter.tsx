@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import iconHerz from '@/assets/icons/icon-herz.png';
-import { buecherFarbe } from '@/theme';
+import { buecherFarbe, stilRolle } from '@/theme';
 import { coverFlaecheStil } from './coverFlaeche';
 import Icon from './Icon';
 
@@ -21,7 +21,7 @@ export default function CoverPlatzhalter({ breite, hoehe }: { breite?: number; h
   const groesse = breite !== undefined && hoehe !== undefined ? { width: `${breite}px`, height: `${hoehe}px` } : {};
   const icon = breite !== undefined ? Math.max(20, Math.round(breite * 0.36)) : 40;
   return (
-    <div data-cover-platzhalter="" style={{ ...stil, ...groesse }}>
+    <div data-cover-platzhalter="" {...stilRolle('cover')} style={{ ...stil, ...groesse }}>
       <Icon datei="icon-herz.png" url={iconHerz} farbe={buecherFarbe('coverplatzhalterIcon')} groesse={icon} />
     </div>
   );

@@ -131,10 +131,24 @@ describe('Migrationen Eintragungsdatum (REQ-041)', () => {
     const db = await nodeSqlite();
     await migrieren(db, MIGRATIONEN.filter((m) => m.version <= 6));
     await db.ausfuehren("INSERT INTO buch (id, titel, status, preis_cent, geaendert) VALUES ('x', 'Alt', 'ungelesen', 500, '2026-01-01T00:00:00.000Z')");
-    expect(await migrieren(db)).toBe(7);
+    expect(await migrieren(db, MIGRATIONEN.filter((m) => m.version <= 7))).toBe(7);
+    expect(await migrieren(db)).toBe(MIGRATIONEN.length);
     const repo = new SqliteBookRepository(db);
     expect(await repo.get('x')).toEqual({ id: 'x', titel: 'Alt', status: 'ungelesen', preisCent: 500 });
     const neu = { id: 'x', titel: 'Alt', status: 'ungelesen' as const, preisCent: 500, verlag: 'Carlsen', isbn: '9783551551672' };
+    await repo.save(neu);
+    expect(await repo.get('x')).toEqual(neu);
+  });
+
+  it('SQLite v7 → v8: vorhandene Bücher bleiben lesbar, Maße werden gespeichert (REQ-072)', async () => {
+    const { MIGRATIONEN } = await import('@/storage/sqlite/migrationen');
+    const db = await nodeSqlite();
+    await migrieren(db, MIGRATIONEN.filter((m) => m.version <= 7));
+    await db.ausfuehren("INSERT INTO buch (id, titel, status, isbn, geaendert) VALUES ('x', 'Alt', 'ungelesen', '9783551551672', '2026-01-01T00:00:00.000Z')");
+    expect(await migrieren(db)).toBe(8);
+    const repo = new SqliteBookRepository(db);
+    expect(await repo.get('x')).toEqual({ id: 'x', titel: 'Alt', status: 'ungelesen', isbn: '9783551551672' });
+    const neu = { id: 'x', titel: 'Alt', status: 'ungelesen' as const, isbn: '9783551551672', hoeheMm: 210, dickeMm: 25 };
     await repo.save(neu);
     expect(await repo.get('x')).toEqual(neu);
   });

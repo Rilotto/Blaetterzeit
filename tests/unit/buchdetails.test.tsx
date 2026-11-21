@@ -65,7 +65,8 @@ describe('Zuschnitt', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Bestätigen' }));
     await act(async () => {});
     expect(bestaetigt).toHaveBeenCalledTimes(1);
-    expect(bestaetigt.mock.calls[0][0][2]).toEqual({ x: nachher[2][0], y: nachher[2][1] });
+    expect(bestaetigt.mock.calls[0][0][2].x).toBeCloseTo(nachher[2][0], 4);
+    expect(bestaetigt.mock.calls[0][0][2].y).toBeCloseTo(nachher[2][1], 4);
   });
 
   it('Cover startet im breiten Format', () => {

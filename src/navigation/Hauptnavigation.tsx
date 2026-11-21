@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { navFarbe, abstand, navIconGroesse, textstufe } from '@/theme';
+import { navFarbe, abstand, navIconGroesse, textstufe, stilRolle } from '@/theme';
 import { menuePunkte, type MenuePunktId } from './menu';
 
 interface Props {
@@ -67,7 +67,7 @@ const beschriftungStil = (farbe: string): CSSProperties => ({
 
 export default function Hauptnavigation({ aktiv, onAuswahl }: Props) {
   return (
-    <nav aria-label="Hauptnavigation" style={navStil}>
+    <nav aria-label="Hauptnavigation" {...stilRolle('navigation')} style={navStil}>
       {menuePunkte.map((punkt) => {
         const istAktiv = punkt.id === aktiv;
         const farbe = navFarbe(istAktiv ? 'aktivfarbe' : 'inaktivfarbe');
@@ -79,7 +79,7 @@ export default function Hauptnavigation({ aktiv, onAuswahl }: Props) {
             onClick={() => onAuswahl(punkt.id)}
             style={punktStil}
           >
-            <span data-highlight={istAktiv ? 'active' : 'inactive'} style={hervorhebungStil(istAktiv)}>
+            <span data-highlight={istAktiv ? 'active' : 'inactive'} {...stilRolle('navmarke')} style={hervorhebungStil(istAktiv)}>
               <span aria-hidden="true" data-icon={punkt.iconDatei} style={iconStil(punkt.iconUrl, farbe)} />
             </span>
             <span style={beschriftungStil(farbe)}>{punkt.beschriftung}</span>

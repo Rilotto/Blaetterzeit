@@ -3,7 +3,7 @@ import Symbolbild from '@/components/Symbolbild';
 import type { BewertungsWert } from '@/domain/bewertung';
 import { rezensionLeer } from '@/domain/bewertung';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
-import { abdunklung, kriteriumBlass, kriteriumVoll, rezensionFarbe, sichernKante, textstufe, zeilenabstand, bildschirmrandPx, pillenhoehe, abstand } from '@/theme';
+import { abdunklung, kriteriumBlass, kriteriumVoll, rezensionFarbe, sichernKante, textstufe, zeilenabstand, bildschirmrandPx, pillenhoehe, abstand, stilRolle } from '@/theme';
 import { REZENSION_PLATZHALTER, SCHREIBFENSTER_ZUG_SCHWELLE, STUFEN } from './rezension';
 
 
@@ -213,7 +213,7 @@ export default function Schreibfenster({ titel, autor, sterne, rezension, onSich
   return (
     <>
       <div data-schreibfenster-hintergrund="" onClick={schliessen} style={hintergrundStil} />
-      <div role="dialog" aria-modal="true" aria-label="Rezension schreiben" data-schreibfenster="" style={fensterStil(versatz)}>
+      <div role="dialog" aria-modal="true" aria-label="Rezension schreiben" data-schreibfenster="" {...stilRolle('blatt')} style={fensterStil(versatz)}>
         <div
           data-ziehgriff=""
           onPointerDown={zugStart}

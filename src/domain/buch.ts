@@ -5,6 +5,7 @@
 import {
   istExemplarId,
   istFormatId,
+  istMassMm,
   istSonderausgabeId,
   istUnterformatId,
   namenListeAusDaten,
@@ -89,6 +90,13 @@ export interface Buch {
   verlag?: string;
   /** ISBN-10 oder ISBN-13 ohne Trennzeichen, Prüfziffer gültig (REQ-063); fehlend = keine ISBN. */
   isbn?: string;
+  /**
+   * Maße in Millimetern, ganzzahlig > 0 (= Zentimeter mit einer Nachkommastelle, REQ-072); jeder Wert einzeln
+   * optional, fehlend = kein Wert.
+   */
+  breiteMm?: number;
+  hoeheMm?: number;
+  dickeMm?: number;
 }
 
 export type Fortschrittsmodus = 'seite' | 'prozent';
@@ -123,6 +131,9 @@ export const OPTIONALE_BUCHFELDER = [
   'preisCent',
   'verlag',
   'isbn',
+  'breiteMm',
+  'hoeheMm',
+  'dickeMm',
 ] as const;
 
 export interface NeuesBuch {
@@ -207,5 +218,8 @@ export function buchAusDaten(daten: unknown): Buch {
   if (typeof e.preisCent === 'number' && Number.isInteger(e.preisCent) && e.preisCent >= 0) buch.preisCent = e.preisCent;
   if (typeof e.verlag === 'string' && e.verlag.trim() !== '') buch.verlag = e.verlag;
   if (typeof e.isbn === 'string' && e.isbn !== '') buch.isbn = e.isbn;
+  if (istMassMm(e.breiteMm)) buch.breiteMm = e.breiteMm;
+  if (istMassMm(e.hoeheMm)) buch.hoeheMm = e.hoeheMm;
+  if (istMassMm(e.dickeMm)) buch.dickeMm = e.dickeMm;
   return buch;
 }

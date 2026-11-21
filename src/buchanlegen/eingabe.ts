@@ -4,6 +4,7 @@ import {
   erschienenPruefen,
   formatangabenBereinigen,
   isbnFiltern,
+  istMassMm,
   isbnGueltig,
   type ExemplarId,
   type FormatId,
@@ -25,6 +26,10 @@ export interface Eingaben {
   preisCent?: number;
   verlag?: string;
   isbn?: string;
+  /** Maße in Millimetern (REQ-072); fehlend = kein Wert. */
+  breiteMm?: number;
+  hoeheMm?: number;
+  dickeMm?: number;
   /** „Erschienen“ als TT.MM.JJJJ (REQ-060, AK-3). */
   erschienen?: string;
   /** Überschriebenes „Hinzugefügt“ als TT.MM.JJJJ (REQ-060, AK-9); fehlend = Zeitpunkt des Anlegens. */
@@ -52,6 +57,10 @@ export interface Vorbelegung {
   sonderausgabe?: SonderausgabeId;
   exemplar?: ExemplarId;
   preisCent?: number;
+  /** Maße in Millimetern, nur eindeutig zuordenbare Werte der Quelle (REQ-072, AK-8). */
+  breiteMm?: number;
+  hoeheMm?: number;
+  dickeMm?: number;
   /** Frontcover als Data-URL (wird beim Anlegen im Bildspeicher abgelegt, REQ-019). */
   cover?: string;
 }
@@ -87,6 +96,9 @@ export function eingabenAusVorbelegung(v: Vorbelegung | undefined): Eingaben {
   }
   Object.assign(e, formatangabenBereinigen(v));
   if (v.preisCent !== undefined && Number.isInteger(v.preisCent) && v.preisCent >= 0) e.preisCent = v.preisCent;
+  if (istMassMm(v.breiteMm)) e.breiteMm = v.breiteMm;
+  if (istMassMm(v.hoeheMm)) e.hoeheMm = v.hoeheMm;
+  if (istMassMm(v.dickeMm)) e.dickeMm = v.dickeMm;
   return e;
 }
 
@@ -113,5 +125,8 @@ export function buchAusEingaben(e: Eingaben, jetzt: Date = new Date()): Buch {
   if (e.preisCent !== undefined) buch.preisCent = e.preisCent;
   if (e.verlag) buch.verlag = e.verlag;
   if (e.isbn) buch.isbn = e.isbn;
+  if (istMassMm(e.breiteMm)) buch.breiteMm = e.breiteMm;
+  if (istMassMm(e.hoeheMm)) buch.hoeheMm = e.hoeheMm;
+  if (istMassMm(e.dickeMm)) buch.dickeMm = e.dickeMm;
   return buch;
 }

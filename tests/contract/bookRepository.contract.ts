@@ -160,6 +160,19 @@ export function runBookRepositoryContract(name: string, factory: Fabrik) {
       expect(await nachher.get(buch.id)).toEqual({ id: buch.id, titel: 'Ausgabe', status: 'gelesen' });
     });
 
+    it('speichert die Maße einzeln optional (REQ-072), auch nach einem Neustart; Überschreiben entfernt sie', async () => {
+      const voll = { ...neuesBuch({ titel: 'Maße', status: 'gelesen' }), breiteMm: 135, hoeheMm: 210, dickeMm: 32 };
+      const teil = { ...neuesBuch({ titel: 'Teil', status: 'gelesen' }), hoeheMm: 210 };
+      await repo.save(voll);
+      await repo.save(teil);
+      expect(await repo.get(voll.id)).toEqual(voll);
+      const nachher = neustart ? await neustart() : repo;
+      expect(await nachher.get(voll.id)).toEqual(voll);
+      expect(await nachher.get(teil.id)).toEqual(teil);
+      await nachher.save({ id: voll.id, titel: 'Maße', status: 'gelesen' });
+      expect(await nachher.get(voll.id)).toEqual({ id: voll.id, titel: 'Maße', status: 'gelesen' });
+    });
+
     it('liefert die Bücher in der Reihenfolge des Anlegens, auch nach dem Überschreiben', async () => {
       const a = neuesBuch({ titel: 'A', status: 'ungelesen' });
       const b = neuesBuch({ titel: 'B', status: 'ungelesen' });

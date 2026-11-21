@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import iconZurueck from '@/assets/icons/icon-zurueck.png';
 import Icon from '@/components/Icon';
-import { barcodeFarbe, textstufe, zeilenabstand, abstand, bildschirmrand } from '@/theme';
+import { barcodeFarbe, textstufe, zeilenabstand, abstand, bildschirmrand, stilRolle } from '@/theme';
 import { QUELLEN_NAME, type Treffer } from './treffer';
 
 interface Props {
@@ -127,6 +127,7 @@ export default function Auswahlfenster({ isbn, treffer, onWahl, onZurueck }: Pro
       data-auswahlfenster=""
       data-isbn={isbn}
       data-sicherer-bereich=""
+      {...stilRolle('blatt')}
       style={fensterStil}
     >
       <div style={innenStil}>

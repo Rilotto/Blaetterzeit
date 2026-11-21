@@ -89,6 +89,8 @@ describe('Parser', () => {
       preisCent: 2200,
       format: 'print',
       unterformat: 'hardcover',
+      // REQ-072 AK-8: Höhe aus 300 $c „22 cm“
+      hoeheMm: 220,
     });
     expect(t!.coverUrl).toContain('isbn=9783551551672');
     expect(dnbTrefferLesen(DNB_LEER, '9783551551672')).toEqual([]);
