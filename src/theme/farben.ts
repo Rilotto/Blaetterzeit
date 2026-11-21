@@ -520,6 +520,9 @@ export const plusMenueSchatten = `0 10px 30px color-mix(in srgb, ${schattenFarbe
 /** Weicher Schatten der Coverfläche in den Buchdetails (Referenzbild), aus „Dunkelbraun“ abgeleitet. */
 export const buchdetailsCoverSchatten = `0 10px 24px color-mix(in srgb, ${schattenFarbe} 22%, transparent)`;
 
+/** Schatten der Lupe im Zuschnitt (REQ-070), aus „Dunkelbraun“ abgeleitet. */
+export const zuschnittLupeSchatten = `0 4px 14px color-mix(in srgb, ${schattenFarbe} 35%, transparent)`;
+
 /** Schatten des Auswahlmenüs (REQ-015, Referenzbild), aus „Dunkelbraun“ abgeleitet. */
 export const auswahlmenueSchatten = `0 8px 28px color-mix(in srgb, ${schattenFarbe} 20%, transparent)`;
 

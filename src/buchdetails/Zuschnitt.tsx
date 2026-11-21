@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 import { startEcken, type Ecken, type Punkt } from '@/bild/entzerren';
 import type { Bildbereich } from '@/storage/ImageStore';
-import { buchdetailsFarbe, textstufe, abstand } from '@/theme';
+import { buchdetailsFarbe, textstufe, abstand, zuschnittLupeSchatten } from '@/theme';
 import type { Masse } from '@/domain/ausgabe';
 import Kopfzeile from './Kopfzeile';
 import { FEINJUSTIERUNG, LUPE, feinjustiert, lupenSeite } from './feinjustierung';
@@ -109,7 +109,7 @@ const lupeStil = (seite: 'links' | 'rechts'): CSSProperties => ({
   overflow: 'hidden',
   border: `2px solid ${buchdetailsFarbe('zuschnittRahmen')}`,
   backgroundColor: buchdetailsFarbe('zuschnittFlaeche'),
-  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.35)',
+  boxShadow: zuschnittLupeSchatten,
   pointerEvents: 'none',
 });
 

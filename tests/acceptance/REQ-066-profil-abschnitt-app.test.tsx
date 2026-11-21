@@ -79,7 +79,13 @@ describe('REQ-066 Profil › App › Design', () => {
     const bilder = { get: async () => undefined, put: async () => {}, remove: async () => {} } as unknown as ImageStore;
     render(<BuchDetails buchId={b.id} repository={repo} bildspeicher={bilder} bildquelle={{ scannen: async () => null, galerie: async () => null }} onZurueck={() => {}} />);
     const d = await screen.findByRole('region', { name: 'Buchdetails' }, W);
-    await tippe(d.querySelector('[data-reiter="details"]')!);
+    // robust: Reiterleiste erscheint erst nach dem asynchronen Laden des Buches
+    const reiterDetails = await vi.waitFor(() => {
+      const e = d.querySelector<HTMLElement>('[data-reiter="details"]');
+      expect(e).not.toBeNull();
+      return e!;
+    }, W);
+    await tippe(reiterDetails);
     const ausgabe = await vi.waitFor(() => {
       const e = d.querySelector<HTMLElement>('[data-ausgabe-karte]');
       expect(e).not.toBeNull();
