@@ -106,7 +106,7 @@ describe('Reiter „Details“', () => {
       'Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt',
     ]);
     expect(zeilen.filter((z) => z.querySelector('[data-zeile-pfeil]')).map((z) => z.getAttribute('data-ausgabe-zeile'))).toEqual([
-      'seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis',
+      'seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis',
     ]);
     expect(wert('seiten')).toBe('608');
     expect(wert('erschienen')).toBe('2025');
