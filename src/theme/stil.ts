@@ -9,7 +9,6 @@
 // (`data-stil-skizze`, `data-skizze-rolle`), damit die Skizze „Klassisch“ unabhängig vom App-Stil bleibt.
 
 import { rubrikFarbe } from './farben';
-import { schriftgroesse } from './typografie';
 
 export type StilId = 'klassisch' | 'feuilleton';
 
@@ -109,9 +108,9 @@ function feuilletonRegeln(): Regel[] {
     // F1: keine Karten, Rahmen oder Ghost-Flächen; Einträge durch dünne Linien in GhostFrame getrennt.
     { rolle: 'karte', deklarationen: flaecheWeg },
     { rolle: 'eintrag', deklarationen: { ...flaecheWeg, 'border-bottom': `${m.linie}px solid ${ghostframe}` } },
-    // F2: Seiten- und Buchtitel groß in normaler Strichstärke.
-    { rolle: 'seitentitel', deklarationen: { 'font-size': schriftgroesse('seite'), 'font-weight': '400' } },
-    { rolle: 'buchtitel', deklarationen: { 'font-size': schriftgroesse('abschnitt'), 'font-weight': '400' } },
+    // F2: Seiten- und Buchtitel in normaler Strichstärke; Schriftgrößen wie Klassisch (CEO-Fix 2026-11-21).
+    { rolle: 'seitentitel', deklarationen: { 'font-weight': '400' } },
+    { rolle: 'buchtitel', deklarationen: { 'font-weight': '400' } },
     // F3/F4: Filter, Umschaltpillen und Status-Chips als Text, aktiv in Primär mit Unterstrich.
     { rolle: 'leiste', deklarationen: { 'background-color': 'transparent', 'box-shadow': 'none', 'border-radius': '0' } },
     { rolle: 'leistenpille', deklarationen: { display: 'none' } },

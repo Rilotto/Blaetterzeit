@@ -37,7 +37,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 
 **Regeln des Stils „Feuilleton“ (gelten in der ganzen App, u. a. Seite „Bücher“, Übersichten, Buchdetails, Ausgabe, Bewertung, Profil, Menüs und Blätter)**
 - F1: Keine Karten, Rahmen oder Ghost-Flächen (Ausnahme: F7). Einträge und Zeilen sind nur durch eine dünne Trennlinie in GhostFrame getrennt.
-- F2: Seitentitel und Buchtitel groß, in normaler Strichstärke (nicht fett).
+- F2: Alle Texte, auch Seitentitel und Buchtitel, haben dieselben Schriftgrößen wie im Stil „Klassisch“. Seitentitel und Buchtitel stehen in normaler Strichstärke (nicht fett).
 - F3: Filterleiste ohne Pillen: Filter als reiner Text in Tertiär, der aktive Filter in Primär mit Unterstrich (Standard 2 px).
 - F4: Umschaltpillen (Reiterleiste REQ-043, Umschaltpille im Fenster „Design“) und Status-Chips folgen demselben Muster: Text, der aktive Eintrag in Primär mit Unterstrich, statt gefüllter Pille.
 - F5: Cover-Platzhalter ohne Fläche, nur als dünner Rahmen in GhostFrame mit eckigen Ecken (CEO 2026-11-18: „B passt für mich“; abweichend von der Ghost-Fläche aus REQ-010, die für „Klassisch“ gilt); Fortschrittsbalken dünn (Standard ca. 2 px).
@@ -88,7 +88,8 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 - **Gegeben** „Feuilleton“ ist aktiv
 - **Wenn** der Nutzer eine Seite mit Karten oder Einträgen betrachtet (z. B. Karte „Ausgabe“, Listenansicht, Profil)
 - **Dann** gibt es keine Kartenflächen, Rahmen oder Ghost-Flächen (außer bei Blättern, Fenstern und Menüs von unten, siehe AK-11); Einträge sind durch dünne Trennlinien in GhostFrame getrennt
-- **Und** Seiten- und Buchtitel sind groß in normaler Strichstärke
+- **Und** alle Texte, auch Seiten- und Buchtitel, haben dieselbe Schriftgröße wie bei „Klassisch“
+- **Und** Seiten- und Buchtitel stehen in normaler Strichstärke
 
 ### AK-8 Feuilleton: Filter, Umschaltpillen, Status-Chips
 - **Gegeben** „Feuilleton“ ist aktiv
@@ -135,6 +136,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 
 | Datum | Änderung | durch |
 |---|---|---|
+| 2026-11-21 | CEO (wörtlich): „Im Stil feuilleton sind jetzt die Titel der Bücher ziiieeeeemlich groß. Bitte übernehme die schriftgrößen aus dem Klassischen Stil für alle Texte und plane dies als fix für den nächsten Prototypen.“ F2 geändert: Schriftgrößen aller Texte wie „Klassisch“, Regel „Seitentitel und Buchtitel groß“ entfällt, normale Strichstärke bleibt. AK-7 angepasst. Status unverändert | Anforderungsmanager |
 | 2026-11-21 | CEO (wörtlich): „ja das passt für mich so“. Neue Regel F7 als Ausnahme von F1: Blätter, Fenster und Menüs von unten behalten ihre Fläche, eckig, ohne Schatten, mit Linie oben. Neu AK-11, AK-4 auf F1–F7, AK-7 mit Verweis. Status unverändert | Anforderungsmanager |
 | 2026-11-18 | F5 und AK-9: Cover-Platzhalter im Feuilleton nur als dünner Rahmen in GhostFrame, eckig (CEO: „B passt für mich“), löst den Widerspruch zu REQ-010 | Anforderungsmanager |
 | 2026-11-18 | Erstellt aus CEO-Wunsch, CEO-Antwort („ja überall“) und dem vom CEO angenommenen Vorschlag des Scrum Masters. Status „Abgestimmt“ | Anforderungsmanager |

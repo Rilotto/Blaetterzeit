@@ -310,14 +310,43 @@ describe('REQ-071 Stil', () => {
     }
   });
 
-  it('[REQ-071/AK-7] Feuilleton: Seitentitel bleibt groß (mindestens so groß wie bei Klassisch)', async () => {
+  /** Schriftgrößen von Seitentitel, Buchtiteln und allen Texten mit Stil-Rolle (Bücher-Seite und Buchdetails › Details). */
+  async function schriftgroessen() {
+    const auf = () =>
+      [screen.getByRole('heading', { name: 'Deine Bücher' }), ...Array.from(document.querySelectorAll('[data-buchtitel], [data-stil-rolle], [data-stil-rolle] *'))].map(
+        (e) => `${(e.getAttribute('data-stil-rolle') ?? e.tagName).slice(0, 20)}:${norm(e.textContent).slice(0, 15)}=${cs(e).fontSize}`,
+      );
+    const buecher = auf();
+    const d = await zuBuchdetails();
+    const titel = Array.from(d.querySelectorAll('h1, h2, [data-buchtitel]')).map((e) => `${norm(e.textContent).slice(0, 15)}=${cs(e).fontSize}`);
+    await tippe(d.querySelector('[data-reiter="details"]')!);
+    await vi.waitFor(() => expect(d.querySelector('[data-ausgabe-karte]')).not.toBeNull(), W);
+    const details = Array.from(d.querySelectorAll('[data-stil-rolle], [data-stil-rolle] *')).map((e) => `${norm(e.textContent).slice(0, 15)}=${cs(e).fontSize}`);
+    return { buecher, titel, details };
+  }
+
+  it('[REQ-071/AK-7] Feuilleton: Seiten-, Buchtitel und alle übrigen Texte haben dieselbe Schriftgröße wie bei „Klassisch“', async () => {
     await starte();
-    const klassisch = px(cs(screen.getByRole('heading', { name: 'Deine Bücher' })).fontSize);
+    const k = await schriftgroessen();
+    const kTitel = cs(screen.getAllByText('Momo')[0]).fontSize;
     cleanup();
     await starte({ stil: 'feuilleton' });
-    const f = cs(screen.getByRole('heading', { name: 'Deine Bücher' })).fontSize;
-    if (px(f) > 0 && klassisch > 0) expect(px(f)).toBeGreaterThanOrEqual(klassisch);
-    else expect(f).toMatch(/var\(--bz-schriftgroesse-(seite|abschnitt)\)|\d/);
+    const f = await schriftgroessen();
+    expect(cs(screen.getAllByText('Momo')[0]).fontSize).toBe(kTitel);
+    expect(f.buecher.length).toBeGreaterThan(5);
+    expect(f.buecher).toEqual(k.buecher);
+    expect(f.titel).toEqual(k.titel);
+    expect(f.details).toEqual(k.details);
+  });
+
+  it('[REQ-071/AK-7] Feuilleton: Seitentitel „Deine Bücher“ exakt gleich groß wie bei „Klassisch“', async () => {
+    await starte();
+    const klassisch = cs(screen.getByRole('heading', { name: 'Deine Bücher' })).fontSize;
+    expect(klassisch).not.toBe('');
+    cleanup();
+    await starte({ stil: 'feuilleton' });
+    expect(cs(screen.getByRole('heading', { name: 'Deine Bücher' })).fontSize).toBe(klassisch);
+    for (const t of Array.from(document.querySelectorAll('[data-buchtitel]'))) expect(cs(t).fontWeight).toMatch(/^(400|normal)$/);
   });
 
   it('[REQ-071/AK-8] Feuilleton: Filterleiste als Text, inaktiv Tertiär, aktiv Primär mit Unterstrich; Tippfläche unverändert', async () => {
