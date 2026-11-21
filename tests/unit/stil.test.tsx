@@ -70,7 +70,7 @@ describe('Pille „Stil“ im Fenster Design (REQ-071)', () => {
     expect(getComputedStyle(karte).borderRadius).toBe('0px');
     designOeffnen();
     const aktiv = container.querySelector('[data-design-reiter="farben"]') as HTMLElement;
-    expect(getComputedStyle(aktiv).borderBottomWidth).toBe(`${feuilletonMasse.unterstrich}px`);
+    expect(getComputedStyle(aktiv).boxShadow).toMatch(new RegExp(`0px -${feuilletonMasse.unterstrich}px.*inset`));
     expect(getComputedStyle(container.querySelector('[data-design-umschalter-pille]') as HTMLElement).display).toBe('none');
     stilReiter();
     // Skizze „Klassisch“ bleibt Klassisch, Skizze „Feuilleton“ wird umgeformt.

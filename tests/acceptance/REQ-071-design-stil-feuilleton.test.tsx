@@ -101,18 +101,68 @@ const GHOSTFRAME = () => farbe('var(--bz-farbe-ghostframe)');
 const HINTERGRUND = () => farbe('var(--bz-farbe-hintergrund)');
 const keineFlaeche = (e: Element) => ['transparent', 'rgba(0, 0, 0, 0)'].includes(cs(e).backgroundColor);
 const px = (v: string) => parseFloat(v) || 0;
-/** Dünne durchgezogene Linie an einer Seite in der Farbe `f`. */
+/** Schatten-Liste in einzelne Schatten zerlegen (Kommas in Klammern bleiben erhalten). */
+function schatten(wert: string): string[] {
+  if (!wert || wert === 'none') return [];
+  const teile: string[] = [];
+  let tiefe = 0;
+  let akt = '';
+  for (const z of wert) {
+    if (z === '(') tiefe++;
+    if (z === ')') tiefe--;
+    if (z === ',' && tiefe === 0) {
+      teile.push(akt.trim());
+      akt = '';
+    } else akt += z;
+  }
+  if (akt.trim()) teile.push(akt.trim());
+  return teile;
+}
+/** Innenliegender Schatten, der als Linie an `seite` wirkt: „inset 0 ±Npx 0 [0] farbe“. */
+function innenLinie(e: Element, seite: 'Top' | 'Bottom') {
+  for (const sh of schatten(cs(e).boxShadow)) {
+    if (!/\binset\b/.test(sh)) continue;
+    const rest = sh.replace(/\binset\b/, '').trim();
+    const zahlen = rest.match(/-?\d*\.?\d+(px)?(?=\s|$)/g) ?? [];
+    const farbteil = rest.replace(/(^|\s)-?\d*\.?\d+(px)?(?=\s|$)/g, ' ').trim();
+    const [x, y, blur] = zahlen.map((z) => parseFloat(z));
+    if (x !== 0 || !y || (blur ?? 0) !== 0) continue;
+    if ((seite === 'Top' && y > 0) || (seite === 'Bottom' && y < 0)) return { dicke: Math.abs(y), farbe: farbe(farbteil) };
+  }
+  return null;
+}
+/**
+ * Dünne sichtbare Linie an einer Seite in der Farbe `f` – technikneutral (F8): entweder ein durchgezogener Rahmen
+ * oder ein innenliegender Schatten ohne Unschärfe.
+ */
 function linie(e: Element, seite: 'Top' | 'Bottom', f: string) {
   const s = cs(e) as unknown as Record<string, string>;
-  expect(s[`border${seite}Style`], `border-${seite} Stil`).toBe('solid');
-  expect(px(s[`border${seite}Width`])).toBeGreaterThan(0);
-  expect(px(s[`border${seite}Width`])).toBeLessThanOrEqual(3);
-  expect(s[`border${seite}Color`]).toBe(f);
+  const rahmen = s[`border${seite}Style`] === 'solid' && px(s[`border${seite}Width`]) > 0 && s[`border${seite}Color`] === f;
+  if (rahmen) {
+    expect(px(s[`border${seite}Width`])).toBeLessThanOrEqual(3);
+    return;
+  }
+  const innen = innenLinie(e, seite);
+  expect(innen, `sichtbare Linie ${seite} in ${f} (border: ${s[`border${seite}Style`]} ${s[`border${seite}Width`]} ${s[`border${seite}Color`]}; box-shadow: ${s.boxShadow})`).not.toBeNull();
+  expect(innen!.farbe).toBe(f);
+  expect(innen!.dicke).toBeGreaterThan(0);
+  expect(innen!.dicke).toBeLessThanOrEqual(3);
 }
+/** Keine sichtbare Linie an `seite` (weder Rahmen in Farbe noch innenliegender Linien-Schatten). */
+function keineLinie(e: Element, seite: 'Top' | 'Bottom') {
+  const s = cs(e) as unknown as Record<string, string>;
+  const sichtbarerRahmen = s[`border${seite}Style`] === 'solid' && px(s[`border${seite}Width`]) > 0 && !['transparent', 'rgba(0, 0, 0, 0)'].includes(s[`border${seite}Color`]);
+  expect(sichtbarerRahmen || innenLinie(e, seite) !== null).toBe(false);
+}
+/** Kein äußerer (Wurf-)Schatten; innenliegende Linien sind erlaubt. */
+const ohneAussenSchatten = (e: Element) => expect(schatten(cs(e).boxShadow).filter((sh) => !/\binset\b/.test(sh))).toEqual([]);
 const ohneRahmen = (e: Element) => {
   const s = cs(e);
-  for (const k of ['borderTopStyle', 'borderLeftStyle', 'borderRightStyle'] as const) expect(['none', '', 'hidden'].includes(s[k]) || px(s[k.replace('Style', 'Width') as 'borderTopWidth']) === 0).toBe(true);
-  expect(['none', ''].includes(s.boxShadow)).toBe(true);
+  for (const k of ['Top', 'Left', 'Right'] as const) {
+    const sichtbar = s[`border${k}Style`] === 'solid' && px(s[`border${k}Width`]) > 0 && !['transparent', 'rgba(0, 0, 0, 0)'].includes(s[`border${k}Color`]);
+    expect(sichtbar, `Rahmen ${k}`).toBe(false);
+  }
+  ohneAussenSchatten(e);
 };
 
 describe('REQ-071 Stil', () => {
@@ -220,7 +270,7 @@ describe('REQ-071 Stil', () => {
     expect(wurzel()).toHaveAttribute('data-stil', 'klassisch');
     await schliesseDesign();
     await zuBuecher();
-    expect(cs(nav()).borderTopStyle).not.toBe('solid');
+    keineLinie(nav(), 'Top');
   });
 
   it('[REQ-071/AK-5] „Feuilleton“ gewählt: nach Neustart (neue App-Instanz, selber Speicher) weiterhin aktiv', async () => {
@@ -369,7 +419,7 @@ describe('REQ-071 Stil', () => {
         linie(e, 'Bottom', PRIMAER());
       } else {
         expect(cs(e).color).toBe(TERTIAER());
-        expect(['transparent', 'rgba(0, 0, 0, 0)']).toContain(cs(e).borderBottomColor);
+        keineLinie(e, 'Bottom');
       }
     }
     expect(filter.map((e) => [cs(e).height, cs(e).minHeight].join('|'))).toEqual(hoeheK);
@@ -448,7 +498,7 @@ describe('REQ-071 Stil', () => {
     for (const m of marken) {
       expect(keineFlaeche(m)).toBe(true);
       if (m.getAttribute('data-highlight') === 'active') linie(m, 'Top', PRIMAER());
-      else expect(['transparent', 'rgba(0, 0, 0, 0)']).toContain(cs(m).borderTopColor);
+      else keineLinie(m, 'Top');
     }
   });
 
@@ -456,7 +506,7 @@ describe('REQ-071 Stil', () => {
   function blattF7(e: Element) {
     expect(keineFlaeche(e), 'Fläche bleibt').toBe(false);
     expect(['0', '0px']).toContain(cs(e).borderRadius);
-    expect(['none', ''].includes(cs(e).boxShadow)).toBe(true);
+    ohneAussenSchatten(e);
     linie(e, 'Top', GHOSTFRAME());
   }
 
@@ -502,6 +552,138 @@ describe('REQ-071 Stil', () => {
     const blatt = await screen.findByRole('dialog', { name: 'Maße' }, W);
     expect(keineFlaeche(blatt)).toBe(false);
     expect(['0', '0px']).not.toContain(cs(blatt).borderRadius);
+  });
+
+  // ------------------------------------------------------------------ AK-12 gleiche Abmessungen (F8)
+  const MASS = [
+    'marginTop', 'marginBottom', 'marginLeft', 'marginRight',
+    'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight',
+    'gap', 'rowGap', 'columnGap', 'width', 'height', 'minHeight', 'minWidth', 'maxWidth', 'lineHeight', 'fontSize',
+    'borderTopWidth', 'borderBottomWidth', 'borderLeftWidth', 'borderRightWidth', 'boxSizing', 'display', 'flexDirection',
+  ] as const;
+  /** Erlaubte Maßänderungen laut REQ: Balkendicke (F5); Rahmen von Cover und Navmarke liegen innen (border-box). */
+  function massAufnahme(wurzelEl: ParentNode = document) {
+    const els = Array.from(wurzelEl.querySelectorAll<HTMLElement>('[data-stil-rolle], [data-stil-rolle] *, [data-buchtitel], [data-filter], [data-ausgabe-zeile]'));
+    return els.map((e) => {
+      const rollen = (e.getAttribute('data-stil-rolle') ?? '').split(' ');
+      const c = cs(e) as unknown as Record<string, string>;
+      const props = MASS.filter((k) => {
+        if (rollen.includes('balken') && k === 'height') return false;
+        // F4: die wandernde Pille entfällt (Optik), ihr Platz ist absolut positioniert
+        if (rollen.includes('leistenpille') && k === 'display') return false;
+        if ((rollen.includes('cover') || rollen.includes('navmarke')) && (k.startsWith('border') || k === 'boxSizing')) return false;
+        return true;
+      });
+      return `${e.tagName}[${rollen.join('+')}] ${norm(e.textContent).slice(0, 12)} ` + props.map((k) => `${k}=${c[k]}`).join(';');
+    });
+  }
+  /** Cover/Navmarke: Rahmen nur innen – border-box mit fester Größe. */
+  function rahmenInnen() {
+    for (const e of Array.from(document.querySelectorAll<HTMLElement>('[data-stil-rolle~="cover"], [data-stil-rolle~="navmarke"]'))) {
+      const c = cs(e);
+      const rahmen = ['Top', 'Bottom', 'Left', 'Right'].some((k) => px((c as unknown as Record<string, string>)[`border${k}Width`]) > 0);
+      if (rahmen) expect(c.boxSizing, e.outerHTML.slice(0, 80)).toBe('border-box');
+    }
+  }
+  /** Gleiche Abläufe in beiden Stilen, Aufnahme je Oberfläche. */
+  async function oberflaechen(stil?: string) {
+    await starte(stil ? { stil } : {});
+    const ergebnis: Record<string, string[]> = { buecher: massAufnahme() };
+    if (stil) rahmenInnen();
+    const d = await zuBuchdetails();
+    ergebnis.buchdetails = massAufnahme(d);
+    await tippe(d.querySelector('[data-reiter="details"]')!);
+    await vi.waitFor(() => expect(d.querySelector('[data-ausgabe-karte]')).not.toBeNull(), W);
+    ergebnis.details = massAufnahme(d);
+    await tippe(d.querySelector('[data-ausgabe-zeile="masse"]')!);
+    const blatt = await screen.findByRole('dialog', { name: 'Maße' }, W);
+    ergebnis.blattMasse = massAufnahme(blatt.parentElement!).concat(MASS.map((k) => `${k}=${(cs(blatt) as unknown as Record<string, string>)[k]}`));
+    cleanup();
+    await starte(stil ? { stil } : {});
+    await profil();
+    ergebnis.profil = massAufnahme(screen.getByRole('main'));
+    ergebnis.navigation = massAufnahme(nav().parentElement!).filter((z) => z.includes('navigation') || z.includes('navmarke'));
+    const f = await oeffneDesign();
+    ergebnis.fensterDesign = massAufnahme(f);
+    cleanup();
+    return ergebnis;
+  }
+
+  it('[REQ-071/AK-12] gleiche Abmessungen auf Bücher-Seite, Buchdetails, Karte „Ausgabe“, Blatt „Maße“, Profil, Navigation und Fenster „Design“', async () => {
+    const k = await oberflaechen();
+    const f = await oberflaechen('feuilleton');
+    for (const o of Object.keys(k)) {
+      expect(f[o].length, o).toBeGreaterThan(0);
+      expect(f[o], `Oberfläche ${o}`).toEqual(k[o]);
+    }
+  });
+
+  it('[REQ-071/AK-12] Listenansicht der Übersicht: Abstände der Einträge und Statuschips gleich wie „Klassisch“', async () => {
+    async function liste(stil?: string) {
+      await starte(stil ? { stil } : {});
+      const links = screen.getAllByText(/Alle ansehen/);
+      await tippe(links[links.length - 1]);
+      const umschalter = await vi.waitFor(() => {
+        const u = document.querySelector<HTMLElement>('[data-umschalter]');
+        expect(u).not.toBeNull();
+        return u!;
+      }, W);
+      const knoepfe = Array.from(umschalter.querySelectorAll<HTMLElement>('button'));
+      await tippe(knoepfe[knoepfe.length - 1]);
+      await vi.waitFor(() => expect(document.querySelectorAll('[data-listenkarte]').length).toBeGreaterThan(0), W);
+      const a = massAufnahme(screen.getByRole('main'));
+      cleanup();
+      return a;
+    }
+    const k = await liste();
+    const f = await liste('feuilleton');
+    expect(f.some((z) => z.includes('eintrag'))).toBe(true);
+    expect(f).toEqual(k);
+  });
+
+  it('[REQ-071/AK-12] Trennlinien liegen innen: Einträge und Karten haben dieselbe Rahmenbreite wie bei „Klassisch“ (Linie ohne zusätzlichen Platz)', async () => {
+    const breiten = async (stil?: string) => {
+      await starte(stil ? { stil } : {});
+      const d = await zuBuchdetails();
+      await tippe(d.querySelector('[data-reiter="details"]')!);
+      await vi.waitFor(() => expect(d.querySelector('[data-ausgabe-karte]')).not.toBeNull(), W);
+      const r = Array.from(d.querySelectorAll('[data-stil-rolle~="eintrag"], [data-stil-rolle~="karte"]')).map((e) =>
+        ['Top', 'Bottom', 'Left', 'Right'].map((s2) => (cs(e) as unknown as Record<string, string>)[`border${s2}Width`]).join(','),
+      );
+      if (stil) for (const e of Array.from(d.querySelectorAll('[data-ausgabe-zeile]'))) linie(e, 'Bottom', GHOSTFRAME());
+      cleanup();
+      return r;
+    };
+    const k = await breiten();
+    expect(await breiten('feuilleton')).toEqual(k);
+  });
+
+  it('[REQ-071/AK-12] Tippflächen im Feuilleton mindestens 44 px: Filter, Reiter, Umschaltpille, Stil-Zeilen sind Schaltflächen mit erweiterter Tippfläche (REQ-065) und gleich hoch wie bei „Klassisch“', async () => {
+    // Die 44-px-Tippfläche entsteht laut REQ-065 über button::before (var(--bz-tippflaeche)) bzw. data-tippflaeche.
+    const tippbar = (e: Element) => e.tagName === 'BUTTON' || e.hasAttribute('data-tippflaeche');
+    const hoehen = async (stil?: string) => {
+      await starte(stil ? { stil } : {});
+      const r: string[] = [];
+      const auf = (e: Element, was: string) => {
+        expect(tippbar(e), `${was} ${e.textContent} tippbar`).toBe(true);
+        r.push(`${was}:${norm(e.textContent)}=${cs(e).height}/${cs(e).minHeight}/${cs(e).minWidth}`);
+      };
+      for (const e of Array.from(document.querySelectorAll('[data-filter]'))) auf(e, 'Filter');
+      const d = await zuBuchdetails();
+      for (const e of Array.from(d.querySelectorAll('[data-reiterleiste] [role="tab"]'))) auf(e, 'Reiter');
+      cleanup();
+      await starte(stil ? { stil } : {});
+      const f = await oeffneStil();
+      for (const e of Array.from(f.querySelectorAll('[data-design-reiter], button[data-stil-zeile]'))) auf(e, 'Design');
+      cleanup();
+      return r;
+    };
+    const k = await hoehen();
+    const f = await hoehen('feuilleton');
+    expect(f.length).toBeGreaterThan(5);
+    expect(f).toEqual(k);
+    // Die Stilregeln überschreiben die erweiterte Tippfläche (::before) nicht.
+    expect(document.querySelector('style[data-stil-regeln]')?.textContent ?? '').not.toMatch(/::?before|::?after/);
   });
 
   it.each([

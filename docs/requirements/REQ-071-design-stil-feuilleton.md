@@ -43,6 +43,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 - F5: Cover-Platzhalter ohne Fläche, nur als dünner Rahmen in GhostFrame mit eckigen Ecken (CEO 2026-11-18: „B passt für mich“; abweichend von der Ghost-Fläche aus REQ-010, die für „Klassisch“ gilt); Fortschrittsbalken dünn (Standard ca. 2 px).
 - F6: Untere Hauptnavigation auf der Farbrubrik „Hintergrund“ mit Trennlinie oben; das aktive Icon in Primär mit kurzem Strich darüber (statt Hervorhebung hinter dem Icon).
 - F7 (Ausnahme von F1, CEO 2026-11-21): Blätter, Fenster und Menüs, die von unten aufgehen, behalten ihre Fläche. Sie haben eckige Ecken, keinen Schatten und oben eine Trennlinie.
+- F8 (CEO 2026-11-21): Jede Oberfläche hat im Feuilleton dieselben Abmessungen wie im Stil „Klassisch“, also gleiche Abstände zwischen Einträgen und Büchern, Ränder, Innenabstände, Höhen und Breiten. Feuilleton ändert nur die Optik nach F1–F7 (Linien statt Flächen, Unterstrich statt Pille, Balkendicke, Ecken). Trennlinien liegen innerhalb des Raums, den bei „Klassisch“ Kartenrand und Kartenabstand einnehmen. Tippflächen bleiben mindestens 44 px groß.
 - Konkrete Maße (Strichstärken, Größen) sind Standardwerte auf Zuruf und kein Akzeptanzkriterium.
 
 **Zeile „Design“ im Profil**
@@ -70,7 +71,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 ### AK-4 Sofort anwenden ohne Neustart
 - **Gegeben** „Klassisch“ ist aktiv
 - **Wenn** der Nutzer „Feuilleton“ antippt
-- **Dann** gelten ohne Neustart in der ganzen App die Feuilleton-Regeln F1–F7
+- **Dann** gelten ohne Neustart in der ganzen App die Feuilleton-Regeln F1–F8
 - **Und** das Häkchen wechselt zu „Feuilleton“
 
 ### AK-5 Dauerhaft gespeichert
@@ -113,6 +114,13 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 - **Dann** hat es weiterhin eine Fläche
 - **Und** diese hat eckige Ecken, keinen Schatten und oben eine Trennlinie
 
+### AK-12 Feuilleton: gleiche Abmessungen wie „Klassisch“
+- **Gegeben** dieselben Bücher und Daten, einmal mit Stil „Klassisch“, einmal mit „Feuilleton“
+- **Wenn** der Nutzer eine beliebige Oberfläche in beiden Stilen vergleicht (z. B. Seite „Bücher“, Listenansicht, Buchdetails, Karte „Ausgabe“, Profil, Blätter)
+- **Dann** sind Abstände zwischen Einträgen und Büchern, Ränder, Innenabstände, Höhen und Breiten in beiden Stilen gleich
+- **Und** die Trennlinien liegen innerhalb des Raums, den bei „Klassisch“ Kartenrand und Kartenabstand einnehmen
+- **Und** jede Tippfläche ist mindestens 44 px groß
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Ein Editor für eigene Stile; neue Stile nur auf Zuruf des CEO an der zentralen Stelle.
@@ -136,6 +144,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 
 | Datum | Änderung | durch |
 |---|---|---|
+| 2026-11-21 | CEO (wörtlich): „ebenso sind in diesem Stil auch die Bücher zu weit auseinander. Bitte vergleiche die Abmessungen jeder Oberfläche und bei Abweichungen, passe diese gemäß dem Stil Klassisch an.“ Neue Regel F8: gleiche Abmessungen wie „Klassisch“, nur die Optik ändert sich, Trennlinien im Raum von Kartenrand/-abstand, Tippflächen mindestens 44 px. Neu AK-12, AK-4 auf F1–F8. Status unverändert | Anforderungsmanager |
 | 2026-11-21 | CEO (wörtlich): „Im Stil feuilleton sind jetzt die Titel der Bücher ziiieeeeemlich groß. Bitte übernehme die schriftgrößen aus dem Klassischen Stil für alle Texte und plane dies als fix für den nächsten Prototypen.“ F2 geändert: Schriftgrößen aller Texte wie „Klassisch“, Regel „Seitentitel und Buchtitel groß“ entfällt, normale Strichstärke bleibt. AK-7 angepasst. Status unverändert | Anforderungsmanager |
 | 2026-11-21 | CEO (wörtlich): „ja das passt für mich so“. Neue Regel F7 als Ausnahme von F1: Blätter, Fenster und Menüs von unten behalten ihre Fläche, eckig, ohne Schatten, mit Linie oben. Neu AK-11, AK-4 auf F1–F7, AK-7 mit Verweis. Status unverändert | Anforderungsmanager |
 | 2026-11-18 | F5 und AK-9: Cover-Platzhalter im Feuilleton nur als dünner Rahmen in GhostFrame, eckig (CEO: „B passt für mich“), löst den Widerspruch zu REQ-010 | Anforderungsmanager |
