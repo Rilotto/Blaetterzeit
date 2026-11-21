@@ -20,7 +20,7 @@ Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.pn
 
 ## Anforderung (Satzschablone)
 
-- Das System muss das 3D-Modell (REQ-076) beim Öffnen der 3D-Ansicht (REQ-074) in der Startansicht schräg von vorne zeigen, sodass Cover und Buchrücken sichtbar sind, wie im Referenzbild.
+- Das System muss das 3D-Modell (REQ-076) beim Öffnen der 3D-Ansicht (REQ-074) in der Startansicht schräg von vorne zeigen, wie im Referenzbild: Cover vorne, rechts davon der Schnitt, oben die Oberkante; der Buchrücken ist nicht zu sehen.
 - Das System muss dem Nutzer die Möglichkeit bieten, das Modell durch Ziehen mit dem Finger frei um alle Achsen zu drehen, ohne Begrenzung des Drehwinkels.
 - Wenn der Nutzer den Finger nach einer Ziehbewegung loslässt, muss das System das Modell mit dem Schwung der Bewegung weiterdrehen.
 - Das System darf die Größe des Modells durch Gesten (z. B. Zwei-Finger-Spreizen) nicht verändern.
@@ -30,7 +30,8 @@ Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.pn
 ### AK-1 Startansicht
 - **Gegeben** ein Buch
 - **Wenn** die 3D-Ansicht geöffnet wird
-- **Dann** zeigt das Modell Cover und Buchrücken schräg von vorne
+- **Dann** zeigt das Modell das Cover schräg von vorne, rechts davon den Schnitt und oben die Oberkante
+- **Und** der Buchrücken ist nicht sichtbar
 
 ### AK-2 Frei drehen, alle Richtungen
 - **Gegeben** die 3D-Ansicht ist geöffnet
@@ -70,3 +71,4 @@ Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.pn
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-21 | Erstellt aus CEO-Beschreibung und CEO-Antworten (über den Scrum Master); Inhalt vom CEO bestätigt. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-21 | Startansicht an Referenzbild angeglichen (Hinweis des Scrum Masters, CEO: „Startansicht wie im Screenshot“): Cover, Schnitt rechts, Oberkante oben, Rücken nicht sichtbar. Anforderung und AK-1 geändert. Status unverändert | Anforderungsmanager |

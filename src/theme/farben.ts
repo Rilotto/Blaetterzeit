@@ -808,3 +808,45 @@ export const barcodeFarbe = (rolle: BarcodeFarbrolle): string => rubrikFarbe(bar
 
 /** Weicher, warmer Schatten von Karten statt eines harten Rahmens (REQ-065 AK-11). */
 export const kartenSchatten = `0 1px 2px color-mix(in srgb, ${schattenFarbe} 10%, transparent), 0 6px 18px color-mix(in srgb, ${schattenFarbe} 12%, transparent)`;
+
+/** Farbrollen der 3D-Ansicht (REQ-074, REQ-076, REQ-078). */
+export type Ansicht3dFarbrolle =
+  | 'modellFlaeche'
+  | 'modellTitel'
+  | 'seitenPapier'
+  | 'seitenLinie'
+  | 'schleier'
+  | 'titel'
+  | 'autor'
+  | 'schliessenFlaeche'
+  | 'schliessenIcon'
+  | 'pilleFlaeche'
+  | 'pilleSchrift'
+  | 'hinweisFlaeche'
+  | 'hinweisSchrift';
+
+/**
+ * Aus welcher Farbrubrik jede Farbrolle der 3D-Ansicht ihre Farbe bezieht. Cover, Rücken und Rückseite ohne
+ * Bild sind „Primär“ (REQ-076); alle übrigen Zuordnungen prüft der CEO im Prototyp.
+ */
+export const ansicht3dFarbrollen: Record<Ansicht3dFarbrolle, FarbrubrikId> = {
+  modellFlaeche: 'primaer',
+  modellTitel: 'hintergrund',
+  seitenPapier: 'kartenflaeche',
+  seitenLinie: 'sekundaer',
+  schleier: 'hintergrund',
+  titel: 'dunkelbraun',
+  autor: 'tertiaer',
+  schliessenFlaeche: 'hintergrund',
+  schliessenIcon: 'dunkelbraun',
+  pilleFlaeche: 'tertiaer',
+  pilleSchrift: 'hintergrund',
+  hinweisFlaeche: 'dunkelbraun',
+  hinweisSchrift: 'hintergrund',
+};
+
+/** CSS-Ausdruck einer Farbrolle der 3D-Ansicht, z. B. `var(--bz-farbe-primaer)`. */
+export const ansicht3dFarbe = (rolle: Ansicht3dFarbrolle): string => rubrikFarbe(ansicht3dFarbrollen[rolle]);
+
+/** Schatten unter dem 3D-Modell bzw. der X-Schaltfläche, aus „Dunkelbraun“ abgeleitet. */
+export const ansicht3dSchatten = `0 6px 18px color-mix(in srgb, ${schattenFarbe} 22%, transparent)`;

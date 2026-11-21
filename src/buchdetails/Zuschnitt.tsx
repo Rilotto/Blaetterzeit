@@ -2,10 +2,9 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import { startEcken, type Ecken, type Punkt } from '@/bild/entzerren';
 import type { Bildbereich } from '@/storage/ImageStore';
 import { buchdetailsFarbe, textstufe, abstand, zuschnittLupeSchatten } from '@/theme';
-import type { Masse } from '@/domain/ausgabe';
 import Kopfzeile from './Kopfzeile';
 import { FEINJUSTIERUNG, LUPE, feinjustiert, lupenSeite } from './feinjustierung';
-import { RAND, seitenverhaeltnis } from './masse';
+import { RAND, seitenverhaeltnis, type MassQuelle } from './masse';
 
 interface Props {
   bild: string;
@@ -14,7 +13,7 @@ interface Props {
   onBestaetigen: (ecken: Ecken) => void | Promise<void>;
   onZurueck: () => void;
   /** Maße des Buches für das Seitenverhältnis des Startrahmens (REQ-073, AK-6); fehlend = Standardmaße. */
-  masse?: Masse;
+  masse?: MassQuelle;
   /** Uhr in Millisekunden für die Feinjustierung (REQ-070); in Tests ersetzbar. */
   uhr?: () => number;
 }

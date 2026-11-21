@@ -398,6 +398,8 @@ export default function ManuellerEintrag({
     setUnterblatt(null);
   };
 
+  /** Maße samt Format und Seitenzahl für Schätzwerte (REQ-077); ungültige Seitenzahl = keine. */
+  const massQuelle = { ...eingaben, seitenanzahl: seitenFehlen(eingaben) ? undefined : Number(eingaben.seiten) };
   const masseSetzen = (m: Masse) => ausgabeSetzen(m, ['breiteMm', 'hoeheMm', 'dickeMm']);
 
   const formatSetzen = (a: Formatangaben) => ausgabeSetzen(a, ['format', 'unterformat', 'sonderausgabe', 'exemplar']);
@@ -474,7 +476,7 @@ export default function ManuellerEintrag({
   };
 
   const zuschnittBestaetigen = async (bild: string, ecken: Ecken) => {
-    const ergebnis = await zuschneiden(bild, ecken, seitenverhaeltnis('cover', eingaben)).catch(() => bild);
+    const ergebnis = await zuschneiden(bild, ecken, seitenverhaeltnis('cover', massQuelle)).catch(() => bild);
     if (!aktiv.current) return;
     setCover(ergebnis);
     setSchritt({ art: 'blatt' });
@@ -515,7 +517,7 @@ export default function ManuellerEintrag({
       <Zuschnitt
         bild={bild}
         bereich="cover"
-        masse={eingaben}
+        masse={massQuelle}
         onBestaetigen={(ecken) => zuschnittBestaetigen(bild, ecken)}
         onZurueck={() => setSchritt({ art: 'blatt' })}
       />
@@ -610,7 +612,7 @@ export default function ManuellerEintrag({
           </div>
           <AusgabeKarte
             ohneFotos
-            angaben={eingaben}
+            angaben={massQuelle}
             werte={{ erschienen: eingaben.erschienen ?? '', hinzugefuegt: eingaben.hinzugefuegt ?? heute }}
             seitenFehler={seitenFehler}
             seitenEingabe={
@@ -656,7 +658,7 @@ export default function ManuellerEintrag({
       ) : null}
       {unterblatt === 'masse' ? (
         <BlattMasse
-          masse={{ breiteMm: eingaben.breiteMm, hoeheMm: eingaben.hoeheMm, dickeMm: eingaben.dickeMm }}
+          masse={massQuelle}
           onSichern={masseSetzen}
           onSchliessen={() => setUnterblatt(null)}
         />

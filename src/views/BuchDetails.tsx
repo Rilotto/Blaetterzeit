@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import Ansicht3d, { UNSCHAERFE, backdropUnterstuetzt } from '@/buchdetails/ansicht3d/Ansicht3d';
+import { doppeltippErkennen, type Doppeltipp } from '@/buchdetails/doppeltipp';
 import iconMehr from '@/assets/icons/icon-mehr.png';
 import { zuschneiden } from '@/bild/bildverarbeitung';
 import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
@@ -30,7 +32,7 @@ import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/
 import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
 import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
 import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore } from '@/storage';
-import { buchdetailsFarbe, fortschrittFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
+import { ansicht3dFarbe, ansicht3dSchatten, buchdetailsFarbe, fortschrittFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
 
 export interface BuchDetailsProps {
   buchId: string;
@@ -94,6 +96,27 @@ const autorStil: CSSProperties = {
   color: fortschrittFarbe('autor'),
 };
 
+/** So lange steht der Hinweis bei Hörbüchern (REQ-078), ms. Dauer prüft der CEO im Prototyp. */
+export const HINWEIS_3D_MS = 2500;
+export const HINWEIS_3D_TEXT = 'Diese Funktion ist noch nicht umgesetzt';
+
+const hinweisStil: CSSProperties = {
+  position: 'fixed',
+  left: '50%',
+  bottom: `calc(${abstand('xl')} * 3)`,
+  zIndex: 70,
+  transform: 'translateX(-50%)',
+  maxWidth: `calc(100% - 2 * ${bildschirmrand})`,
+  boxSizing: 'border-box',
+  padding: `${abstand('s')} ${abstand('l')}`,
+  borderRadius: '999px',
+  backgroundColor: ansicht3dFarbe('hinweisFlaeche'),
+  color: ansicht3dFarbe('hinweisSchrift'),
+  boxShadow: ansicht3dSchatten,
+  ...textstufe('text'),
+  textAlign: 'center',
+};
+
 const pillenBereichStil: CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
@@ -136,14 +159,27 @@ export default function BuchDetails({
   const [schritt, setSchritt] = useState<Schritt>({ art: 'details' });
   const aktiv = useRef(true);
   const kameraErgebnis = useRef<((bild: string | null) => void) | null>(null);
+  // 3D-Ansicht (REQ-074) und Hinweis bei Hörbüchern (REQ-078).
+  const [ansicht3d, setAnsicht3d] = useState(false);
+  const [hinweis3d, setHinweis3d] = useState(false);
+  const [backdrop] = useState(backdropUnterstuetzt);
+  const doppeltipp = useRef<Doppeltipp | null>(null);
+  const buchRef = useRef<Buch | undefined>(undefined);
 
   useEffect(() => {
     aktiv.current = true;
     return () => {
       aktiv.current = false;
       kameraErgebnis.current?.(null);
+      doppeltipp.current?.abbrechen();
     };
   }, []);
+
+  useEffect(() => {
+    if (!hinweis3d) return;
+    const t = setTimeout(() => setHinweis3d(false), HINWEIS_3D_MS);
+    return () => clearTimeout(t);
+  }, [hinweis3d]);
 
   useEffect(() => {
     if (vorgegeben && vorgegeben.id === buchId) return;
@@ -201,6 +237,27 @@ export default function BuchDetails({
   const fortschrittOeffnen = () => {
     if (!buch) return;
     setBlatt(hatSeitenanzahl(buch) ? 'aktuelleSeite' : 'buchlaenge');
+  };
+
+  // Cover: Einfachtipp öffnet nach der Wartezeit das Auswahlmenü, Doppeltipp die 3D-Ansicht (REQ-074) bzw. bei
+  // Hörbüchern den Hinweis (REQ-078). Rücken und Schnitt öffnen das Auswahlmenü sofort (REQ-015).
+  buchRef.current = buch;
+  if (doppeltipp.current === null) {
+    doppeltipp.current = doppeltippErkennen(
+      () => {
+        if (aktiv.current) setMenue('cover');
+      },
+      () => {
+        const b = buchRef.current;
+        if (!aktiv.current || !b) return;
+        if (b.format === 'hoerbuch') setHinweis3d(true);
+        else setAnsicht3d(true);
+      },
+    );
+  }
+  const bereichAntippen = (bereich: Bildbereich) => {
+    if (bereich === 'cover') doppeltipp.current?.tipp();
+    else setMenue(bereich);
   };
 
   const buchlaengeSichern = (seitenanzahl: number) => {
@@ -368,8 +425,10 @@ export default function BuchDetails({
     );
   }
 
+  const verwischt = ansicht3d && !backdrop;
   return (
-    <section aria-label="Buchdetails" style={ansichtStil}>
+    <>
+    <section aria-label="Buchdetails" style={verwischt ? { ...ansichtStil, filter: UNSCHAERFE } : ansichtStil}>
       <Kopfzeile
         onZurueck={zurueck}
         rechts={
@@ -381,7 +440,7 @@ export default function BuchDetails({
       />
       {buch ? (
         <>
-          <Buchdarstellung titel={buch.titel} bilder={bilder} masse={buch} onAntippen={setMenue} />
+          <Buchdarstellung titel={buch.titel} bilder={bilder} masse={buch} onAntippen={bereichAntippen} />
           <h1 data-buchdetails-titel="" {...stilRolle('seitentitel', 'buchtitel')} style={titelStil}>
             {buch.titel}
           </h1>
@@ -464,5 +523,22 @@ export default function BuchDetails({
         />
       ) : null}
     </section>
+    {buch && ansicht3d ? (
+      <Ansicht3d
+        buch={buch}
+        bilder={bilder}
+        onSchliessen={() => setAnsicht3d(false)}
+        onBearbeiten={() => {
+          setAnsicht3d(false);
+          setReiter('details');
+        }}
+      />
+    ) : null}
+    {hinweis3d ? (
+      <p role="status" data-hinweis-3d="" style={hinweisStil}>
+        {HINWEIS_3D_TEXT}
+      </p>
+    ) : null}
+    </>
   );
 }

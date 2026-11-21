@@ -39,7 +39,7 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 
 **Manueller Eintrag und Barcode**
 - Das System muss die Zeile „Maße“ auch in der Karte „Ausgabe“ des Blatts „Manueller Eintrag“ (REQ-060) an derselben Stelle anbieten, mit gleichem Blatt und gleichen Regeln. Die Werte werden mit dem Buch angelegt.
-- Wenn beim Barcode-Scan (REQ-062) eine Quelle Maße liefert (z. B. Höhe aus der DNB, `physical_dimensions` aus Open Library), muss das System die eindeutig zuordenbaren Werte auf eine Nachkommastelle in Zentimetern umgerechnet in den vorbefüllten Manuellen Eintrag übernehmen. Nicht gelieferte oder nicht eindeutig zuordenbare Werte bleiben leer.
+- Wenn beim Barcode-Scan (REQ-062) eine Quelle Maße liefert (z. B. Höhe aus der DNB, `physical_dimensions` aus Open Library), muss das System die eindeutig zuordenbaren Werte auf eine Nachkommastelle in Zentimetern umgerechnet in den vorbefüllten Manuellen Eintrag übernehmen. Nicht gelieferte oder nicht eindeutig zuordenbare Werte bleiben leer. Liefert keine Quelle Maße, wird nichts übernommen oder gespeichert; Zeile und Blatt zeigen dann den Schätz-Vorschlag.
 
 ## Akzeptanzkriterien
 
@@ -93,7 +93,9 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 - **Wenn** der Nutzer den Treffer antippt
 - **Dann** enthält der vorbefüllte Manuelle Eintrag diese Werte (Höhe 21,0), nicht gelieferte Werte sind leer
 - **Gegeben** keine Quelle liefert Maße
-- **Dann** sind die Felder leer
+- **Wenn** der Nutzer den Treffer antippt
+- **Dann** werden keine Maße übernommen oder gespeichert
+- **Und** Zeile und Blatt „Maße“ im Manuellen Eintrag zeigen den Schätz-Vorschlag „ca. …“ nach REQ-077 (wie AK-2, AK-3)
 
 ### AK-9 Schätzwerte folgen dem Format, werden nicht gespeichert
 - **Gegeben** ein Buch ohne Maße mit „Print · Taschenbuch“
@@ -129,3 +131,4 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 | 2026-11-18 | Erstellt aus CEO-Wunsch und vom CEO bestätigtem Vorschlag (eine Nachkommastelle). Status „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-21 | CEO (wörtlich): „ja ergänze bitte den Pfeil bei "Maße".“ Pfeil „›“ rechts an der Zeile „Maße“ ergänzt (Anforderung, AK-1). Status unverändert | Anforderungsmanager |
 | 2026-11-21 | CEO („a klingt gut“): ohne Maße zeigt die Zeile die geschätzten Standardmaße (REQ-077) als Vorschlag „ca. …“ statt „Trag die Maße ein“; Blatt damit vorbefüllt; gespeichert erst mit „Sichern“; Anpassung bei Formatwechsel. AK-2, AK-3 geändert, AK-9 neu. Status unverändert | Anforderungsmanager |
+| 2026-11-21 | Widerspruch zu AK-3 behoben (Hinweis des Scrum Masters, im Sinne der CEO-Entscheidung „a“): AK-8 ohne Maße aus der Quelle → nichts gespeichert, Zeile und Blatt zeigen den Schätz-Vorschlag. Status unverändert | Anforderungsmanager |

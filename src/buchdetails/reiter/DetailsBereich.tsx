@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
+import { masseVorschlagText } from '@/buchdetails/masse';
 import {
-  MASSE_LEER,
   PREIS_LEER,
   exemplarText,
   formatText,
@@ -204,6 +204,7 @@ function Zeile({
   wert,
   letzte = false,
   hervorgehoben = false,
+  vorschlag = false,
   onAntippen,
   eingabe,
   fehler = false,
@@ -213,6 +214,8 @@ function Zeile({
   wert: string;
   letzte?: boolean;
   hervorgehoben?: boolean;
+  /** Schätzwert „ca. …“: abgeschwächt und kursiv (REQ-072, AK-2). */
+  vorschlag?: boolean;
   onAntippen?: () => void;
   /** Eingabefeld statt Wert (Seiten im Manuellen Eintrag, REQ-060). */
   eingabe?: ReactNode;
@@ -245,6 +248,7 @@ function Zeile({
       beschriftung={beschriftung}
       wert={wert}
       hervorgehoben={hervorgehoben}
+      vorschlag={vorschlag}
       pfeil={pfeil}
       letzte={letzte}
       onAntippen={onAntippen}
@@ -262,6 +266,7 @@ export function KartenZeile({
   beschriftung,
   wert,
   hervorgehoben = false,
+  vorschlag = false,
   pfeil = false,
   letzte = false,
   onAntippen,
@@ -273,13 +278,19 @@ export function KartenZeile({
   beschriftung: string;
   wert: string;
   hervorgehoben?: boolean;
+  /** Schätzwert: Wert kursiv, data-zeile-vorschlag="true" (REQ-072, AK-2). */
+  vorschlag?: boolean;
   pfeil?: boolean;
   letzte?: boolean;
   onAntippen?: () => void;
 }) {
   const wertUndPfeil = (
     <>
-      <span data-zeile-wert="" style={wertStil(hervorgehoben)}>
+      <span
+        data-zeile-wert=""
+        data-zeile-vorschlag={vorschlag ? 'true' : undefined}
+        style={vorschlag ? { ...wertStil(hervorgehoben), fontStyle: 'italic' } : wertStil(hervorgehoben)}
+      >
         {wert}
       </span>
       {pfeil ? (
@@ -308,7 +319,7 @@ export function KartenZeile({
 /** Angaben der Karte „Ausgabe“, die direkt aus dem Buch bzw. den Eingaben kommen. */
 export type AusgabeAngaben = Pick<
   Buch,
-  'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn' | 'breiteMm' | 'hoeheMm' | 'dickeMm'
+  'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn' | 'breiteMm' | 'hoeheMm' | 'dickeMm' | 'seitenanzahl'
 >;
 
 export interface AusgabeKarteProps {
@@ -333,8 +344,9 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
       <Zeile
         id="masse"
         beschriftung="Maße"
-        wert={hatMasse(angaben) ? masseText(angaben) : MASSE_LEER}
+        wert={hatMasse(angaben) ? masseText(angaben) : masseVorschlagText(angaben)}
         hervorgehoben={!hatMasse(angaben)}
+        vorschlag={!hatMasse(angaben)}
         onAntippen={onZeile.masse}
       />
       <Zeile id="exemplar" beschriftung="Exemplar" wert={exemplarText(angaben)} onAntippen={onZeile.exemplar} />
