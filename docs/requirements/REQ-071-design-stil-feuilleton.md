@@ -36,12 +36,13 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 - „Klassisch“ ist der heutige Stil. Mit „Klassisch“ muss die App genau so aussehen wie ohne diesen REQ.
 
 **Regeln des Stils „Feuilleton“ (gelten in der ganzen App, u. a. Seite „Bücher“, Übersichten, Buchdetails, Ausgabe, Bewertung, Profil, Menüs und Blätter)**
-- F1: Keine Karten, Rahmen oder Ghost-Flächen. Einträge und Zeilen sind nur durch eine dünne Trennlinie in GhostFrame getrennt.
+- F1: Keine Karten, Rahmen oder Ghost-Flächen (Ausnahme: F7). Einträge und Zeilen sind nur durch eine dünne Trennlinie in GhostFrame getrennt.
 - F2: Seitentitel und Buchtitel groß, in normaler Strichstärke (nicht fett).
 - F3: Filterleiste ohne Pillen: Filter als reiner Text in Tertiär, der aktive Filter in Primär mit Unterstrich (Standard 2 px).
 - F4: Umschaltpillen (Reiterleiste REQ-043, Umschaltpille im Fenster „Design“) und Status-Chips folgen demselben Muster: Text, der aktive Eintrag in Primär mit Unterstrich, statt gefüllter Pille.
 - F5: Cover-Platzhalter ohne Fläche, nur als dünner Rahmen in GhostFrame mit eckigen Ecken (CEO 2026-11-18: „B passt für mich“; abweichend von der Ghost-Fläche aus REQ-010, die für „Klassisch“ gilt); Fortschrittsbalken dünn (Standard ca. 2 px).
 - F6: Untere Hauptnavigation auf der Farbrubrik „Hintergrund“ mit Trennlinie oben; das aktive Icon in Primär mit kurzem Strich darüber (statt Hervorhebung hinter dem Icon).
+- F7 (Ausnahme von F1, CEO 2026-11-21): Blätter, Fenster und Menüs, die von unten aufgehen, behalten ihre Fläche. Sie haben eckige Ecken, keinen Schatten und oben eine Trennlinie.
 - Konkrete Maße (Strichstärken, Größen) sind Standardwerte auf Zuruf und kein Akzeptanzkriterium.
 
 **Zeile „Design“ im Profil**
@@ -69,7 +70,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 ### AK-4 Sofort anwenden ohne Neustart
 - **Gegeben** „Klassisch“ ist aktiv
 - **Wenn** der Nutzer „Feuilleton“ antippt
-- **Dann** gelten ohne Neustart in der ganzen App die Feuilleton-Regeln F1–F6
+- **Dann** gelten ohne Neustart in der ganzen App die Feuilleton-Regeln F1–F7
 - **Und** das Häkchen wechselt zu „Feuilleton“
 
 ### AK-5 Dauerhaft gespeichert
@@ -86,7 +87,7 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 ### AK-7 Feuilleton: Linien statt Karten
 - **Gegeben** „Feuilleton“ ist aktiv
 - **Wenn** der Nutzer eine Seite mit Karten oder Einträgen betrachtet (z. B. Karte „Ausgabe“, Listenansicht, Profil)
-- **Dann** gibt es keine Kartenflächen, Rahmen oder Ghost-Flächen; Einträge sind durch dünne Trennlinien in GhostFrame getrennt
+- **Dann** gibt es keine Kartenflächen, Rahmen oder Ghost-Flächen (außer bei Blättern, Fenstern und Menüs von unten, siehe AK-11); Einträge sind durch dünne Trennlinien in GhostFrame getrennt
 - **Und** Seiten- und Buchtitel sind groß in normaler Strichstärke
 
 ### AK-8 Feuilleton: Filter, Umschaltpillen, Status-Chips
@@ -104,6 +105,12 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 - **Gegeben** Farbdesign „Salbei“, Schrift „Fraunces“, Stil „Feuilleton“
 - **Wenn** der Nutzer die Seite „Profil“ betrachtet
 - **Dann** zeigt die Zeile „Design“ rechts „Salbei · Fraunces · Feuilleton“
+
+### AK-11 Feuilleton: Blätter, Fenster und Menüs von unten
+- **Gegeben** „Feuilleton“ ist aktiv
+- **Wenn** der Nutzer ein Blatt, Fenster oder Menü öffnet, das von unten aufgeht (z. B. Blatt „Preis“, Fenster „Design“, Statusmenü)
+- **Dann** hat es weiterhin eine Fläche
+- **Und** diese hat eckige Ecken, keinen Schatten und oben eine Trennlinie
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -128,5 +135,6 @@ Erweitert REQ-067 (Fenster „Design“) und REQ-066 (Zeile „Design“). Name 
 
 | Datum | Änderung | durch |
 |---|---|---|
+| 2026-11-21 | CEO (wörtlich): „ja das passt für mich so“. Neue Regel F7 als Ausnahme von F1: Blätter, Fenster und Menüs von unten behalten ihre Fläche, eckig, ohne Schatten, mit Linie oben. Neu AK-11, AK-4 auf F1–F7, AK-7 mit Verweis. Status unverändert | Anforderungsmanager |
 | 2026-11-18 | F5 und AK-9: Cover-Platzhalter im Feuilleton nur als dünner Rahmen in GhostFrame, eckig (CEO: „B passt für mich“), löst den Widerspruch zu REQ-010 | Anforderungsmanager |
 | 2026-11-18 | Erstellt aus CEO-Wunsch, CEO-Antwort („ja überall“) und dem vom CEO angenommenen Vorschlag des Scrum Masters. Status „Abgestimmt“ | Anforderungsmanager |

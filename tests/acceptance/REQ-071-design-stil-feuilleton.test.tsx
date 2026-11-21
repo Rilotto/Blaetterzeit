@@ -423,6 +423,58 @@ describe('REQ-071 Stil', () => {
     }
   });
 
+  /** F7: Fläche bleibt, eckig, ohne Schatten, Linie oben in GhostFrame. */
+  function blattF7(e: Element) {
+    expect(keineFlaeche(e), 'Fläche bleibt').toBe(false);
+    expect(['0', '0px']).toContain(cs(e).borderRadius);
+    expect(['none', ''].includes(cs(e).boxShadow)).toBe(true);
+    linie(e, 'Top', GHOSTFRAME());
+  }
+
+  it('[REQ-071/AK-11] Feuilleton: Blatt „Maße“ und Statusmenü behalten ihre Fläche, eckig, ohne Schatten, Linie oben', async () => {
+    await starte({ stil: 'feuilleton' });
+    const d = await zuBuchdetails();
+    // Statusmenü (Menü von unten bzw. über dem Inhalt)
+    const chip = d.querySelector('[data-stil-rolle~="chip"]')!;
+    await tippe(chip);
+    const menue = await screen.findByRole('menu', { name: 'Status wählen' }, W);
+    blattF7(menue);
+    cleanup();
+    // Blatt „Maße“ (frisch geöffnete Buchdetails)
+    await starte({ stil: 'feuilleton' });
+    const d2 = await zuBuchdetails();
+    await tippe(d2.querySelector('[data-reiter="details"]')!);
+    const zeileMasse = await vi.waitFor(() => {
+      const z = d2.querySelector<HTMLElement>('[data-ausgabe-zeile="masse"]');
+      expect(z).not.toBeNull();
+      return z!;
+    }, W);
+    await tippe(zeileMasse);
+    const blatt = await screen.findByRole('dialog', { name: 'Maße' }, W);
+    blattF7(blatt);
+  });
+
+  it('[REQ-071/AK-11] Feuilleton: Fenster „Design“ behält seine Fläche, eckig, ohne Schatten, Linie oben', async () => {
+    await starte({ stil: 'feuilleton' });
+    const f = await oeffneDesign();
+    blattF7(f.closest('[data-stil-rolle~="blatt"]') ?? f);
+  });
+
+  it('[REQ-071/AK-11] Gegenstück „Klassisch“: Blatt „Maße“ hat keine Linie oben aus dem Feuilleton-Stil', async () => {
+    await starte();
+    const d = await zuBuchdetails();
+    await tippe(d.querySelector('[data-reiter="details"]')!);
+    const z = await vi.waitFor(() => {
+      const e = d.querySelector<HTMLElement>('[data-ausgabe-zeile="masse"]');
+      expect(e).not.toBeNull();
+      return e!;
+    }, W);
+    await tippe(z);
+    const blatt = await screen.findByRole('dialog', { name: 'Maße' }, W);
+    expect(keineFlaeche(blatt)).toBe(false);
+    expect(['0', '0px']).not.toContain(cs(blatt).borderRadius);
+  });
+
   it.each([
     [{}, 'Klassisch · Fraunces · Klassisch'],
     [{ farbdesign: 'salbei', schrift: 'fraunces', stil: 'feuilleton' }, 'Salbei · Fraunces · Feuilleton'],
