@@ -1,7 +1,7 @@
 ---
 id: REQ-076
 titel: 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

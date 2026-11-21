@@ -1,7 +1,7 @@
 ---
 id: REQ-075
 titel: 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

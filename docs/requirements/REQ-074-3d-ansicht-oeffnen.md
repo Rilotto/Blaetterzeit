@@ -1,7 +1,7 @@
 ---
 id: REQ-074
 titel: 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
