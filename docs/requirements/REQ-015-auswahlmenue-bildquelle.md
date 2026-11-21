@@ -26,6 +26,7 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 
 **Öffnen und Schließen**
 - Wenn der Nutzer in den Buchdetails einen der Bereiche „Buchrücken“, „Cover“ oder „Schnitt“ (REQ-014) antippt, muss das System ein Auswahlmenü für diesen Bereich anzeigen.
+- Beim Bereich „Cover“ muss das System das Auswahlmenü erst nach der Doppeltipp-Wartezeit aus REQ-074 (Standardwert etwa 0,3 s, auf Zuruf änderbar) öffnen, sofern kein zweiter Tipp folgt. Ein Doppeltipp öffnet stattdessen die 3D-Ansicht (REQ-074) bzw. den Hinweis bei Hörbüchern (REQ-078). Buchrücken und Schnitt öffnen das Menü weiterhin sofort.
 - Das System muss das Auswahlmenü auch dann anzeigen, wenn für den Bereich bereits ein Bild hinterlegt ist („jederzeit … neu gestaltbar“).
 - Wenn der Nutzer außerhalb des Auswahlmenüs tippt, muss das System das Auswahlmenü schließen, ohne den Bereich zu verändern.
 
@@ -133,3 +134,4 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 3 und 7 eingearbeitet: Wortlaut „Aus Galerie auswählen“, „Cover online suchen“ sichtbar ohne Funktion (AK-5 geändert, Funktion in To-do), Schließen durch Tippen außerhalb (neu AK-7), „Foto entfernen“ mit X-Icon (neu AK-2/AK-6), Icons nachgebildet (neu AK-9), Farbe/Schrift wie Referenzbild. Offen: Priorität | Anforderungsmanager |
 | 2026-11-09 | Priorität Must (CEO). Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |
+| 2026-11-21 | CEO (wörtlich): „ja passt.“ Hinweis ergänzt: Einfacher Tipp aufs Cover öffnet das Menü erst nach etwa 0,3 s Wartezeit auf einen Doppeltipp (REQ-074). AKs unverändert; Tests müssen die Wartezeit abwarten. Status unverändert | Anforderungsmanager |

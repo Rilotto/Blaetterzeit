@@ -1,7 +1,7 @@
 ---
 id: REQ-077
 titel: Standardmaße je Format und geschätzte Dicke aus der Seitenzahl
-status: Entwurf
+status: Abgestimmt
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -20,8 +20,10 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 
 - Das System muss die Standardmaße je Format an einer zentralen Stelle führen. Die Werte sind auf Zuruf des CEO änderbar; konkrete Zahlen sind kein eingefrorenes Akzeptanzkriterium, eingefroren wird nur die Zuordnung Format → Standardwert.
 - Startwerte (Breite × Höhe):
-  - „Print · Taschenbuch“, „E-Book“, „Print · Weiß ich nicht“: 12,0 × 19,0 cm
+  - „Print · Taschenbuch“, „E-Book“, „Hörbuch“, „Print · Weiß ich nicht“, „Print“ ohne Unterformat und kein Format: 12,0 × 19,0 cm
   - „Print · Hardcover“: 14,8 × 21,0 cm, Deckelüberstand oben, unten und vorne je 3 mm
+- Bei Hardcover sind Breite und Höhe (Standard wie hinterlegt) die Außenmaße der Deckel; der Buchblock ist oben, unten und vorne um den Deckelüberstand kleiner.
+- Für Hörbücher gelten die Standardmaße nur für die Buchdarstellung (REQ-073) und den Maße-Vorschlag (REQ-072); eine 3D-Ansicht gibt es für Hörbücher nicht (REQ-078).
   - „Print · Kleinformat“: 10,5 × 14,8 cm
 - Das System muss die Dicke, wenn keine hinterlegt ist, aus der Seitenzahl (REQ-025) schätzen:
   - „Print · Hardcover“: Seitenzahl × 0,0574 mm + 4,75 mm
@@ -36,6 +38,15 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 - **Gegeben** Bücher ohne Maße mit „Print · Taschenbuch“, „E-Book“, „Print · Weiß ich nicht“, „Print · Hardcover“ bzw. „Print · Kleinformat“
 - **Wenn** ihre Standardmaße bestimmt werden
 - **Dann** sind Breite × Höhe 12,0 × 19,0 / 12,0 × 19,0 / 12,0 × 19,0 / 14,8 × 21,0 / 10,5 × 14,8 cm (mit den jeweils aktuellen Standardwerten)
+
+### AK-6 Ohne Format, Print ohne Unterformat, Hörbuch
+- **Gegeben** Bücher ohne Maße und mit 400 Seiten: ohne Format, mit „Print“ ohne Unterformat bzw. mit „Hörbuch“
+- **Dann** gelten jeweils die Taschenbuch-Standardmaße 12,0 × 19,0 × 2,4 cm
+
+### AK-7 Hardcover-Maße sind Außenmaße
+- **Gegeben** ein Hardcover ohne Maße
+- **Dann** sind die Deckel 14,8 × 21,0 cm groß
+- **Und** der Buchblock ist in der Höhe 6 mm und in der Breite 3 mm kleiner
 
 ### AK-2 Dicke aus der Seitenzahl
 - **Gegeben** ein Taschenbuch mit 400 Seiten ohne Dicke
@@ -70,12 +81,11 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 
 ## Offene Fragen
 
-1. Welche Standardmaße gelten, wenn **kein Format** gewählt ist oder **„Print“ ohne Unterformat**? (Häufigster Fall: neue Bücher haben laut REQ-058 kein Format.)
-2. Was gilt für **Hörbücher** in der 2D-Buchdarstellung (REQ-073) und beim Maße-Vorschlag (REQ-072)? Die Aussage „Gilt nicht für Hörbücher!“ bezog sich auf das 3D-Modell.
-3. Sind die Hardcover-Maße 14,8 × 21,0 cm (und vom Nutzer gemessene Hardcover-Maße) die **Außenmaße der Deckel**, sodass der Buchblock um den Überstand kleiner ist? Oder ist es der Buchblock, und die Deckel kommen hinzu?
+- Keine.
 
 ## Änderungshistorie
 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-21 | Erstellt aus vom CEO angenommenem Vorschlag des Scrum Masters. Status „Entwurf“, weil drei Lücken offen sind (siehe Offene Fragen) | Anforderungsmanager |
+| 2026-11-21 | CEO-Antworten (wörtlich): 1. „Wie ein Taschenbuch, guter Vorschlag!“ (kein Format / Print ohne Unterformat → Taschenbuch); 2. „ja, lass uns auch ein Taschenbuchformat nehmen“ (Hörbuch → Taschenbuch für 2D und Vorschlag); 3. „dein Vorschlag klingt gut, machen wir so“ (Hardcover-Maße = Außenmaße der Deckel). Neu AK-6, AK-7. Offene Fragen leer. Status „Abgestimmt“ | Anforderungsmanager |

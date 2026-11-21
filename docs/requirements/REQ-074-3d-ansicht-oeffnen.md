@@ -24,7 +24,7 @@ Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.pn
 
 - Wenn der Nutzer in den Buchdetails (REQ-013) doppelt auf den Bereich „Cover“ der Buchdarstellung (REQ-014) tippt und das Buch nicht das Format „Hörbuch“ hat, muss das System die 3D-Ansicht dieses Buches öffnen.
 - Wenn der Nutzer den Bereich „Cover“ einfach antippt, muss das System nach einer kurzen Wartezeit ohne zweiten Tipp das Auswahlmenü (REQ-015) öffnen. Bei einem Doppeltipp darf das Auswahlmenü nicht erscheinen.
-- Das System muss die Wartezeit für den Doppeltipp zentral führen; der Wert ist kein Akzeptanzkriterium.
+- Das System muss die Wartezeit für den Doppeltipp zentral führen. Standardwert etwa 0,3 s, auf Zuruf des CEO änderbar; der Wert ist kein Akzeptanzkriterium.
 - Das System muss als Hintergrund der 3D-Ansicht die zuvor geöffneten Buchdetails verschwommen darstellen.
 - Das System muss in der 3D-Ansicht das 3D-Modell des Buches (REQ-076) darstellen.
 - Das System muss unterhalb des Modells den Buchtitel und darunter den Autor darstellen. Ohne Autor entfällt diese Zeile (wie REQ-028).
@@ -97,3 +97,4 @@ Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.pn
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-21 | Erstellt aus CEO-Beschreibung und CEO-Antworten (über den Scrum Master); Inhalt vom CEO bestätigt. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-21 | CEO (wörtlich): „ja passt.“ Standardwert der Doppeltipp-Wartezeit etwa 0,3 s (auf Zuruf) eingetragen | Anforderungsmanager |
