@@ -1,7 +1,7 @@
 ---
 id: REQ-082
 titel: Seite „Statistik“ – Vergleichszeile gegenüber dem vorherigen Zeitraum
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

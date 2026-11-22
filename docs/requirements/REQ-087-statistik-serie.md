@@ -1,7 +1,7 @@
 ---
 id: REQ-087
 titel: Seite „Statistik“ – Zeile „Serie X Tage“
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

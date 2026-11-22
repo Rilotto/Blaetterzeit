@@ -1,7 +1,7 @@
 ---
 id: REQ-083
 titel: Seite „Statistik“ – Balkendiagramm je Woche, Monat und Jahr
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

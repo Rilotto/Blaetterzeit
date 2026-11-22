@@ -1,7 +1,7 @@
 ---
 id: REQ-088
 titel: Seite „Statistik“ – Kalenderkarte für Woche und Monat mit Covern
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

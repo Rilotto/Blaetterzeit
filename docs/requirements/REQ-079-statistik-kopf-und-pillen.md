@@ -1,7 +1,7 @@
 ---
 id: REQ-079
 titel: Seite „Statistik“ – Kopf „Dein Lesen“ und Zeitraum-Pillen
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO

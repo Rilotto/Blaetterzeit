@@ -1,7 +1,7 @@
 ---
 id: REQ-090
 titel: Seite „Statistik“ – Gestaltung aus Farbrubriken, in allen Farbdesigns und Stilen
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: qualitaet
 quelle: CEO

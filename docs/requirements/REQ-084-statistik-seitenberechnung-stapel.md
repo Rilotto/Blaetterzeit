@@ -1,7 +1,7 @@
 ---
 id: REQ-084
 titel: Seite „Statistik“ – Seiten „in Sessions“ und „aus beendeten Büchern“, gestapelt mit Legende
-status: Abgestimmt
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
