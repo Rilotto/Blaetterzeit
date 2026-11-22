@@ -44,8 +44,8 @@ describe('Typografie-Tokens (REQ-065)', () => {
 });
 
 describe('Farbdesigns (REQ-068)', () => {
-  it('drei Designs in fester Reihenfolge, jedes vollständig', () => {
-    expect(farbdesignReihenfolge.map((id) => farbdesigns[id].name)).toEqual(['Klassisch', 'Salbei', 'Nachtlektüre']);
+  it('fünf Designs in fester Reihenfolge, jedes vollständig', () => {
+    expect(farbdesignReihenfolge.map((id) => farbdesigns[id].name)).toEqual(['Klassisch', 'Salbei', 'Nachtlektüre', 'Raureif', 'Polarnacht']);
     for (const id of farbdesignReihenfolge) {
       expect(Object.keys(farbdesigns[id].werte).sort()).toEqual(Object.keys(farbrubriken).sort());
       for (const w of Object.values(farbdesigns[id].werte)) expect(w).toMatch(/^#[0-9A-F]{6}$/i);
@@ -66,7 +66,7 @@ describe('Profil › App › Design (REQ-066 bis REQ-069)', () => {
     fireEvent.click(container.querySelector('[data-profil-zeile="design"]') as HTMLElement);
     expect(screen.getByRole('dialog', { name: 'Design' })).toBeTruthy();
     expect(container.querySelector('[data-design-reiter="farben"]')?.getAttribute('aria-selected')).toBe('true');
-    expect(container.querySelectorAll('[data-farbdesign] [data-farbkreis]')).toHaveLength(15);
+    expect(container.querySelectorAll('[data-farbdesign] [data-farbkreis]')).toHaveLength(25);
 
     fireEvent.click(container.querySelector('button[data-farbdesign="nachtlektuere"]') as HTMLElement);
     expect(wurzel(container).style.getPropertyValue('--bz-farbe-hintergrund')).toBe('#2B2420');

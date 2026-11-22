@@ -74,7 +74,7 @@ export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
 };
 
 /** Farbdesigns (REQ-068): Jedes Design legt einen Wert für jede Farbrubrik fest. */
-export type FarbdesignId = 'klassisch' | 'salbei' | 'nachtlektuere';
+export type FarbdesignId = 'klassisch' | 'salbei' | 'nachtlektuere' | 'raureif' | 'polarnacht';
 
 export interface Farbdesign {
   /** Anzeigename im Fenster „Design“. */
@@ -98,9 +98,10 @@ const klassischWerte = Object.defineProperties(
 
 /**
  * Zentrale Definition der Farbdesigns in fester Reihenfolge (REQ-068). Neue Designs nur auf Zuruf des CEO.
- * „Klassisch“ = die Standardwerte aus `farbrubriken`. Bei „Salbei“ und „Nachtlektüre“ sind Hintergrund,
- * Primär, Sekundär, Tertiär und Dunkelbraun vom CEO vorgegeben, die übrigen Rubriken abgeleitet
- * (Nachtlektüre: Kriterienfarben aufgehellt, damit sie auf dunklem Hintergrund lesbar bleiben).
+ * „Klassisch“ = die Standardwerte aus `farbrubriken`. Bei „Salbei“, „Nachtlektüre“, „Raureif“ und „Polarnacht“
+ * sind Hintergrund, Primär, Sekundär, Tertiär und Dunkelbraun (bei Raureif/Polarnacht auch Ghost/GhostFrame)
+ * vom CEO vorgegeben, die übrigen Rubriken abgeleitet (dunkle Designs: Kriterienfarben aufgehellt, damit sie
+ * auf dunklem Hintergrund lesbar bleiben).
  */
 export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
   klassisch: { name: 'Klassisch', dunkel: false, werte: klassischWerte },
@@ -151,10 +152,58 @@ export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
       dialoge: '#5CBFB8',
     },
   },
+  raureif: {
+    name: 'Raureif',
+    dunkel: false,
+    werte: {
+      ...klassischWerte,
+      hintergrund: '#F6F8FA',
+      kartenflaeche: '#FCFDFE',
+      primaer: '#2E5A7A',
+      sekundaer: '#C9D8E3',
+      tertiaer: '#5C6B78',
+      dunkelbraun: '#1E2A35',
+      ghost: '#EBF0F4',
+      ghostframe: '#D8E0E7',
+      traenen: '#2F6FA8',
+      nebenfiguren: '#5C6B78',
+      grusel: '#3E4A56',
+    },
+  },
+  polarnacht: {
+    name: 'Polarnacht',
+    dunkel: true,
+    werte: {
+      hintergrund: '#0F1620',
+      kartenflaeche: '#18222F',
+      primaer: '#8EC5E8',
+      sekundaer: '#24364A',
+      tertiaer: '#9BABBB',
+      dunkelbraun: '#E8F0F6',
+      ghost: '#172030',
+      ghostframe: '#253244',
+      flammerot: '#E0644B',
+      flammeorange: '#F0AD66',
+      sterne: '#EBC04A',
+      tempo: '#9AABE6',
+      weltenbau: '#82C29C',
+      spice: '#E8766A',
+      spannung: '#B79AD6',
+      action: '#EDAA60',
+      hauptfiguren: '#D69C66',
+      nebenfiguren: '#9BABBB',
+      plottwist: '#D584B3',
+      traenen: '#7FB6E8',
+      romantik: '#EB98B2',
+      humor: '#BCD06E',
+      grusel: '#A4B0BC',
+      dialoge: '#66C8C1',
+    },
+  },
 };
 
 /** Reihenfolge der Farbdesigns in der Liste (REQ-068 AK-1). */
-export const farbdesignReihenfolge: readonly FarbdesignId[] = ['klassisch', 'salbei', 'nachtlektuere'];
+export const farbdesignReihenfolge: readonly FarbdesignId[] = ['klassisch', 'salbei', 'nachtlektuere', 'raureif', 'polarnacht'];
 
 /** Farbdesign ohne Nutzerwahl (REQ-068 AK-2). */
 export const standardFarbdesign: FarbdesignId = 'klassisch';
