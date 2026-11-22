@@ -123,7 +123,7 @@ const miniRasterStil: CSSProperties = {
   gap: '2px',
 };
 
-const miniFeldStil = (spalte: number, erster: boolean, heute: boolean): CSSProperties => ({
+const miniFeldStil = (spalte: number, erster: boolean, heute: boolean, gelesen: boolean): CSSProperties => ({
   position: 'relative',
   boxSizing: 'border-box',
   ...(erster ? { gridColumnStart: spalte + 1 } : {}),
@@ -132,20 +132,14 @@ const miniFeldStil = (spalte: number, erster: boolean, heute: boolean): CSSPrope
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: statistikFarbe('miniFeld'),
+  // Lesetag: ganzes Feld in „Primär“ gefüllt, gleiche Form wie die übrigen Felder (REQ-089 AK-2).
+  backgroundColor: statistikFarbe(gelesen ? 'lesetagFeld' : 'miniFeld'),
   ...(heute ? { outline: `1.5px solid ${statistikFarbe('heuteRahmen')}`, outlineOffset: '-1.5px' } : {}),
 });
 
-const lesepunktStil: CSSProperties = {
-  width: '55%',
-  height: '55%',
-  borderRadius: '50%',
-  backgroundColor: statistikFarbe('lesepunkt'),
-};
-
 /**
  * Zwölf Mini-Kalender eines Jahres (REQ-089): Monatskürzel, 7 Spalten Mo–So ohne Wochentagszeile, der 1. in der
- * Spalte seines Wochentags; Lesetage mit Punkt in „Primär“, heute umrandet.
+ * Spalte seines Wochentags; Lesetage als vollständig in „Primär“ gefülltes Feld, heute umrandet.
  */
 export function Jahreskalender({ monate }: { monate: MiniMonat[] }) {
   return (
@@ -165,10 +159,9 @@ export function Jahreskalender({ monate }: { monate: MiniMonat[] }) {
                   data-spalte={spalte}
                   data-heute={t.heute ? 'true' : 'false'}
                   data-gelesen={t.gelesen ? 'true' : 'false'}
-                  style={miniFeldStil(spalte, i === 0, t.heute)}
-                >
-                  {t.gelesen ? <span data-lesepunkt="" style={lesepunktStil} /> : null}
-                </div>
+                  data-gefuellt={t.gelesen ? 'true' : 'false'}
+                  style={miniFeldStil(spalte, i === 0, t.heute, t.gelesen)}
+                />
               );
             })}
           </div>

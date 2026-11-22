@@ -957,7 +957,7 @@ export type StatistikFarbrolle =
   | 'heuteRahmen'
   | 'monatKuerzel'
   | 'miniFeld'
-  | 'lesepunkt';
+  | 'lesetagFeld';
 
 /** Aus welcher Farbrubrik jede Farbrolle der Seite „Statistik“ ihre Farbe bezieht (neu nur „Gold“, REQ-084/REQ-090). */
 export const statistikFarbrollen: Record<StatistikFarbrolle, FarbrubrikId> = {
@@ -997,7 +997,7 @@ export const statistikFarbrollen: Record<StatistikFarbrolle, FarbrubrikId> = {
   heuteRahmen: 'primaer',
   monatKuerzel: 'tertiaer',
   miniFeld: 'ghost',
-  lesepunkt: 'primaer',
+  lesetagFeld: 'primaer',
 };
 
 /** CSS-Ausdruck einer Farbrolle der Seite „Statistik“, z. B. `var(--bz-farbe-gold)`. */

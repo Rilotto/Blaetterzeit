@@ -1,7 +1,8 @@
 /**
  * Akzeptanztests REQ-089 – Seite „Statistik“: Jahreskalender mit zwölf Mini-Kalendern.
  * Abgeleitet aus dem REQ-Text. Schnittstellen laut Entwickler (Sprint 09): [data-jahreskalender], [data-mini-monat],
- * [data-mini-tag=JJJJ-MM-TT][data-spalte][data-heute][data-gelesen], [data-lesepunkt].
+ * [data-mini-tag=JJJJ-MM-TT][data-spalte][data-heute][data-gelesen].
+ * Änderung 2026-11-22: Lesetag = vollständig in „Primär“ gefülltes Tagesfeld (gleiche Form, kein Punkt/Kreis).
  */
 import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
@@ -50,7 +51,16 @@ function farbe(ausdruck: string) {
   return w;
 }
 const monate = () => $$('[data-mini-monat]');
-const mitPunkt = () => $$('[data-mini-tag]').filter((e) => e.querySelector('[data-lesepunkt]')).map((e) => e.getAttribute('data-mini-tag'));
+const tage = () => $$('[data-mini-tag]');
+const bg = (e: HTMLElement) => getComputedStyle(e).backgroundColor;
+const primaer = () => farbe('var(--bz-farbe-primaer)');
+/** Felder, deren eigener Hintergrund in „Primär“ gefüllt ist. */
+const gefuellt = () => {
+  const p = primaer();
+  return tage().filter((e) => bg(e) === p).map((e) => e.getAttribute('data-mini-tag'));
+};
+const FORM = ['borderRadius', 'borderTopLeftRadius', 'aspectRatio', 'width', 'height', 'clipPath', 'maskImage'] as const;
+const form = (e: HTMLElement) => FORM.map((k) => `${k}=${e.style[k as keyof CSSStyleDeclaration] ?? ''}`).join(';');
 const KUERZEL = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
 
 describe('REQ-089 Jahreskalender', () => {
@@ -88,21 +98,72 @@ describe('REQ-089 Jahreskalender', () => {
     expect(monate()[0].querySelector('[data-mini-tag]')!.getAttribute('data-spalte')).toBe('5');
   });
 
-  it('[REQ-089/AK-2] zwei Sitzungen am 03.02.2026, eine am 10.10.2026: genau diese Felder mit Punkt in „Primär“', async () => {
+  it('[REQ-089/AK-2] zwei Sitzungen am 03.02.2026, eine am 10.10.2026: genau diese Felder vollständig in „Primär“ gefüllt', async () => {
     await zeige([buch({ sitzungen: [s(2026, 2, 3, 9), s(2026, 2, 3, 20, 30)] }), buch({ sitzungen: [s(2026, 10, 10)] })]);
-    expect(mitPunkt()).toEqual(['2026-02-03', '2026-10-10']);
-    for (const p of $$('[data-lesepunkt]')) expect(getComputedStyle(p).backgroundColor).toBe(farbe('var(--bz-farbe-primaer)'));
+    expect(primaer()).not.toBe('');
+    expect(gefuellt()).toEqual(['2026-02-03', '2026-10-10']);
+    expect(tage().filter((e) => e.getAttribute('data-gelesen') === 'true').map((e) => e.getAttribute('data-mini-tag'))).toEqual(['2026-02-03', '2026-10-10']);
+  });
+
+  it('[REQ-089/AK-2] Lesetag ohne Punkt oder Kreis: das Feld selbst ist gefüllt, kein Kindelement trägt die Farbe', async () => {
+    await zeige([buch({ sitzungen: [s(2026, 2, 3, 9), s(2026, 10, 10)] })]);
+    expect($('[data-lesepunkt]')).toBeNull();
+    const p = primaer();
+    for (const k of ['2026-02-03', '2026-10-10']) {
+      const f = $(`[data-mini-tag="${k}"]`)!;
+      expect(bg(f), k).toBe(p);
+      for (const kind of Array.from(f.querySelectorAll<HTMLElement>('*'))) {
+        expect(kind.style.borderRadius, `${k}: Kreis im Feld`).not.toBe('50%');
+        expect(bg(kind), `${k}: farbiges Kindelement`).not.toBe(p);
+      }
+    }
+  });
+
+  it('[REQ-089/AK-2] Lesetag hat dieselbe Form wie die übrigen Tagesfelder', async () => {
+    await zeige([buch({ sitzungen: [s(2026, 2, 3), s(2026, 10, 10)] })]);
+    const lese = $('[data-mini-tag="2026-02-03"]')!;
+    const nachbar = $('[data-mini-tag="2026-02-04"]')!;
+    const fern = $('[data-mini-tag="2026-07-15"]')!;
+    expect(form(lese)).toBe(form(nachbar));
+    expect(form(lese)).toBe(form(fern));
+    expect(form($('[data-mini-tag="2026-10-10"]')!)).toBe(form(nachbar));
+    expect(lese.style.borderRadius).not.toBe('50%');
+  });
+
+  it('[REQ-089/AK-2] alle anderen Felder ungefüllt (nicht „Primär“, untereinander gleich)', async () => {
+    await zeige([buch({ sitzungen: [s(2026, 2, 3), s(2026, 10, 10)] })]);
+    const p = primaer();
+    const andere = tage().filter((e) => !['2026-02-03', '2026-10-10'].includes(e.getAttribute('data-mini-tag')!));
+    expect(andere).toHaveLength(363);
+    const werte = new Set(andere.map(bg));
+    expect(werte.has(p)).toBe(false);
+    expect(werte.size).toBe(1);
+    for (const e of andere) expect(e.querySelector('*'), e.getAttribute('data-mini-tag')!).toBeNull();
   });
 
   it('[REQ-089/AK-2] Sitzungen anderer Jahre erscheinen nicht; Tagesgrenze nach lokaler Zeit', async () => {
     await zeige([buch({ sitzungen: [s(2025, 2, 3), s(2027, 10, 10), { zeitpunkt: new Date(2026, 0, 1, 0, 5).toISOString(), seite: 3 }, { zeitpunkt: new Date(2026, 11, 31, 23, 55).toISOString(), seite: 4 }] })]);
-    expect(mitPunkt()).toEqual(['2026-01-01', '2026-12-31']);
+    expect(gefuellt()).toEqual(['2026-01-01', '2026-12-31']);
   });
 
-  it('[REQ-089/AK-3] Buch *gelesen* mit „Beendet am“ 05.03.2026 ohne Sitzung: 5. März ohne Punkt', async () => {
+  it('[REQ-089/AK-2] Lesetag, der heute ist: gefüllt und zugleich umrandet', async () => {
+    await zeige([buch({ sitzungen: [s(2026, 11, 22, 9)] })]);
+    expect(gefuellt()).toEqual(['2026-11-22']);
+    expect($('[data-mini-tag="2026-11-22"]')!.getAttribute('data-heute')).toBe('true');
+  });
+
+  it('[REQ-089/AK-3] Buch *gelesen* mit „Beendet am“ 05.03.2026 ohne Sitzung: 5. März nicht gefüllt', async () => {
     await zeige([buch({ status: 'gelesen', seitenanzahl: 300, beendetAm: '2026-03-05' })]);
-    expect(mitPunkt()).toEqual([]);
-    expect($('[data-mini-tag="2026-03-05"]')!.querySelector('[data-lesepunkt]')).toBeNull();
+    expect(gefuellt()).toEqual([]);
+    const f = $('[data-mini-tag="2026-03-05"]')!;
+    expect(bg(f)).toBe(bg($('[data-mini-tag="2026-03-06"]')!));
+    expect(f.getAttribute('data-gelesen')).toBe('false');
+    expect(f.querySelector('*')).toBeNull();
+  });
+
+  it('[REQ-089/AK-3] „Beendet am“ 05.03.2026 plus Sitzung an einem anderen Tag: nur der Sitzungstag gefüllt', async () => {
+    await zeige([buch({ status: 'gelesen', seitenanzahl: 300, beendetAm: '2026-03-05', sitzungen: [s(2026, 3, 1)] })]);
+    expect(gefuellt()).toEqual(['2026-03-01']);
   });
 
   it('[REQ-089/AK-4] heute 22.11.2026: genau das Feld 22. November umrandet; in 2025 keins', async () => {

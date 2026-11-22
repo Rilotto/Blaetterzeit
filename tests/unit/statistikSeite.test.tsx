@@ -79,8 +79,8 @@ describe('Seite „Statistik“ (Teil B)', () => {
     expect($('[data-legende]')).toBeNull();
     const oben = Math.max(...$$('[data-hilfslinie]').map((l) => Number(l.dataset.hilfslinie)));
     expect(oben).toBeGreaterThanOrEqual(1);
-    // Lesepunkt am Sitzungstag, nicht am Tag „Beendet am“.
-    expect($$('[data-lesepunkt]').map((p) => p.parentElement!.dataset.miniTag)).toEqual(['2026-10-01']);
+    // Gefülltes Feld am Sitzungstag, nicht am Tag „Beendet am“.
+    expect($$('[data-mini-tag][data-gefuellt="true"]').map((p) => p.dataset.miniTag)).toEqual(['2026-10-01']);
   });
 
   it('Kalender: Cover des Buches mit der letzten Sitzung des Tages', () => {

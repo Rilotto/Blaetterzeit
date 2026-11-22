@@ -2,7 +2,7 @@
  * Akzeptanztests REQ-080 – Seite „Statistik“: Zeitraum blättern und Zeitraum-Titel.
  * Abgeleitet aus dem REQ-Text. Schnittstellen laut Entwickler (Sprint 09): siehe REQ-079-Test; zusätzlich
  * [data-kachel=seiten|buecher] [data-kachel-wert], [data-kennzahl-wert], [data-balken][data-wert],
- * [data-lesetage-text], [data-kalender-tag][data-gelesen], [data-mini-tag][data-gelesen], [data-lesepunkt].
+ * [data-lesetage-text], [data-kalender-tag][data-gelesen], [data-mini-tag][data-gelesen], [data-mini-tag][data-gefuellt].
  */
 import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
@@ -113,7 +113,7 @@ describe('REQ-080 Zeitraum blättern und Titel', () => {
     await zeige(um(2026, 11, 22), 'jahr', b);
     // Vorbedingung: 2026 hat Werte
     expect(Number(norm($('[data-kachel="seiten"] [data-kachel-wert]')!.textContent))).toBeGreaterThan(0);
-    expect($$('[data-lesepunkt]').length).toBeGreaterThan(0);
+    expect($$('[data-mini-tag][data-gefuellt="true"]').length).toBeGreaterThan(0);
     await vor();
     expect(titel()).toEqual(['2027', null]);
     expect(norm($('[data-kachel="seiten"] [data-kachel-wert]')!.textContent)).toBe('0');
@@ -122,7 +122,7 @@ describe('REQ-080 Zeitraum blättern und Titel', () => {
     expect($$('[data-balken]').map((e) => Number(e.getAttribute('data-wert')))).toEqual(Array(12).fill(0));
     expect($$('[data-balken-teil]')).toHaveLength(0);
     expect(norm($('[data-lesetage-text]')!.textContent)).toBe('0 von 365 Tagen gelesen');
-    expect($$('[data-lesepunkt]')).toHaveLength(0);
+    expect($$('[data-mini-tag][data-gefuellt="true"]')).toHaveLength(0);
     expect($$('[data-mini-tag][data-gelesen="true"]')).toHaveLength(0);
     await tippe($('[data-kachel="buecher"]'));
     expect($$('[data-balken]').map((e) => Number(e.getAttribute('data-wert')))).toEqual(Array(12).fill(0));
