@@ -1,0 +1,62 @@
+---
+id: REQ-087
+titel: Seite „Statistik“ – Zeile „Serie X Tage“
+status: Entwurf
+prioritaet: Should
+art: funktional
+quelle: CEO
+ersetzt: []
+ersetzt_durch:
+freigegeben_in:
+---
+
+## Ziel / Nutzen
+
+Als **Nutzer** möchte ich **meine aktuelle Lesesträhne auf der Statistikseite sehen**, damit **ich motiviert bin, dranzubleiben**.
+
+CEO (2026-11-22): Zeile „Serie X Tage“ = dieselbe Lesesträhne wie in den Buchdetails. Serie zählt nur Tage mit Sessions, nicht nachgetragene Bücher.
+
+## Anforderung (Satzschablone)
+
+- Das System muss unter der Karte mit Kacheln und Diagramm links ein Flammen-Symbol und die Zeile „Serie X Tage“ anzeigen (wie REF-statistik-01).
+- X wird nach der Regel von REQ-027 berechnet (lückenlose Lesetage, die heute oder gestern enden; verpasster Tag = 0; Tagesgrenze lokale Gerätezeit; nur Sitzungen zählen).
+- X ist unabhängig vom gezeigten Zeitraum und bezieht sich immer auf heute.
+
+## Akzeptanzkriterien
+
+### AK-1 Serie aus Sitzungen
+- **Gegeben** Sitzungen vorgestern, gestern und heute
+- **Wenn** die Seite betrachtet wird
+- **Dann** steht „Serie 3 Tage“, auch wenn ein vergangener Zeitraum gezeigt wird
+
+### AK-2 Verpasster Tag
+- **Gegeben** die letzte Sitzung war vorgestern
+- **Wenn** die Seite betrachtet wird
+- **Dann** steht „Serie 0 Tage“
+
+### AK-3 Nachgetragenes Buch zählt nicht
+- **Gegeben** keine Sitzungen, ein Buch mit „Beendet am“ heute
+- **Wenn** die Seite betrachtet wird
+- **Dann** steht „Serie 0 Tage“
+
+## Abgrenzung (nicht Teil dieses REQ)
+
+- Flamme und Streak in den Buchdetails (REQ-027) bleiben unverändert.
+
+## Qualitätsanforderungen
+
+- Siehe REQ-090.
+
+## Abhängigkeiten
+
+- **REQ-027, REQ-024.**
+
+## Offene Fragen
+
+- F3: REQ-027 führt den Streak je Buch, buchübergreifende Streaks sind dort ausgeschlossen. Auf der Statistikseite gibt es kein einzelnes Buch. Welche Sitzungen zählen für „Serie X Tage“?
+
+## Änderungshistorie
+
+| Datum | Änderung | durch |
+|---|---|---|
+| 2026-11-22 | Erstellt aus CEO-Festlegungen; bleibt „Entwurf“ wegen F3 (Konflikt mit REQ-027: Streak je Buch) | Anforderungsmanager |
