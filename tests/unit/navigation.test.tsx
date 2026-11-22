@@ -5,6 +5,7 @@ import { menuePunkte, startMenuePunkt, type MenuePunktId } from '@/navigation/me
 import { ansichten } from '@/views';
 import BuecherAnsicht from '@/views/BuecherAnsicht';
 import ProfilAnsicht from '@/views/ProfilAnsicht';
+import StatistikAnsicht from '@/views/StatistikAnsicht';
 import UnderConstruction from '@/views/UnderConstruction';
 
 // Inhalte als Data-URL (base64), um Kopie und Original byteweise zu vergleichen.
@@ -52,9 +53,9 @@ describe('Menü-Konfiguration', () => {
     expect(startMenuePunkt).toBe('start');
   });
 
-  it('hat für jeden Menüpunkt eine Ansicht: „Bücher“ die Bücheransicht, „Profil“ die Profilansicht, sonst den Platzhalter', () => {
+  it('hat für jeden Menüpunkt eine Ansicht: „Bücher“ die Bücheransicht, „Profil“ die Profilansicht, „Statistik“ die Statistikseite, sonst den Platzhalter', () => {
     for (const p of menuePunkte) {
-      expect(ansichten[p.id]).toBe(p.id === 'buecher' ? BuecherAnsicht : p.id === 'profil' ? ProfilAnsicht : UnderConstruction);
+      expect(ansichten[p.id]).toBe(p.id === 'buecher' ? BuecherAnsicht : p.id === 'profil' ? ProfilAnsicht : p.id === 'statistik' ? StatistikAnsicht : UnderConstruction);
     }
   });
 });

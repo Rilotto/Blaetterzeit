@@ -49,6 +49,26 @@ describe('Statuspille und Statusmenü', () => {
     expect((await repo.get(ID))?.status).toBe('gelesen');
   });
 
+  it('Wechsel auf gelesen setzt „Beendet am“, Blatt „Beendet am“ überschreibt (REQ-085)', async () => {
+    const repo = await zeige(buch({ status: 'am_lesen' }));
+    await tippe(document.querySelector('[data-statuspille]')!);
+    await tippe(within(screen.getByRole('menu', { name: 'Status wählen' })).getByRole('menuitem', { name: 'gelesen' }));
+    expect((await repo.get(ID))?.beendetAm).toBe('2026-11-12');
+    await tippe(document.querySelector('[data-reiter="details"]')!);
+    const zeile = document.querySelector('[data-ausgabe-zeile="beendet"]')!;
+    expect(zeile).toHaveTextContent('Nov. 2026');
+    await tippe(zeile);
+    const feld = document.querySelector<HTMLInputElement>('[data-blatt-feld="beendet"]')!;
+    expect(feld.value).toBe('12.11.2026');
+    fireEvent.change(feld, { target: { value: '13112026' } });
+    await tippe(document.querySelector('[data-blatt-sichern="beendet"]')!);
+    expect((await repo.get(ID))?.beendetAm).toBe('2026-11-12');
+    fireEvent.change(feld, { target: { value: '14032019' } });
+    await tippe(document.querySelector('[data-blatt-sichern="beendet"]')!);
+    expect((await repo.get(ID))?.beendetAm).toBe('2019-03-14');
+    expect(document.querySelector('[data-ausgabe-zeile="beendet"]')).toHaveTextContent('März 2019');
+  });
+
   it('Tippen außerhalb schließt ohne Änderung', async () => {
     const repo = await zeige(buch());
     await tippe(document.querySelector('[data-statuspille]')!);
@@ -110,7 +130,7 @@ describe('Fortschritt, Buchlänge und Aktuelle Seite', () => {
     expect(document.querySelector('[data-prozent]')).toHaveTextContent('11 %');
     expect(document.querySelector('[data-sitzungen]')).toHaveTextContent('1');
     expect(document.querySelector('[data-flamme]')).toHaveAttribute('data-flamme', 'aktiv');
-    expect((await repo.get(ID))?.sitzungen).toEqual([{ zeitpunkt: jetzt().toISOString() }]);
+    expect((await repo.get(ID))?.sitzungen).toEqual([{ seite: 42, zeitpunkt: jetzt().toISOString() }]);
   });
 
   it('Buchlänge per X schließen speichert nichts', async () => {

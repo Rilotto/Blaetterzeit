@@ -31,7 +31,9 @@ export type FarbrubrikId =
   | 'romantik'
   | 'humor'
   | 'grusel'
-  | 'dialoge';
+  | 'dialoge'
+  // REQ-084: Seiten „aus beendeten Büchern“ im Statistik-Diagramm.
+  | 'gold';
 
 export interface Farbrubrik {
   /** Anzeigename der Rubrik (vom CEO vergeben bzw. Arbeitsname). */
@@ -71,6 +73,8 @@ export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
   humor: { name: 'Humor', wert: '#8EA33B' },
   grusel: { name: 'Grusel', wert: '#45505A' },
   dialoge: { name: 'Dialoge', wert: '#2F8F8A' },
+  // REQ-084: Stapelteil „aus beendeten Büchern“ (Standardwert auf Zuruf, kein Akzeptanzkriterium).
+  gold: { name: 'Gold', wert: '#C9A23F' },
 };
 
 /** Farbdesigns (REQ-068): Jedes Design legt einen Wert für jede Farbrubrik fest. */
@@ -150,6 +154,8 @@ export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
       humor: '#B6C863',
       grusel: '#9AA5B0',
       dialoge: '#5CBFB8',
+      // „Primär“ ist hier bereits goldgelb; „Gold“ deshalb heller und kühler, damit beide Stapelteile unterscheidbar sind.
+      gold: '#EAD9A6',
     },
   },
   raureif: {
@@ -198,6 +204,7 @@ export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
       humor: '#BCD06E',
       grusel: '#A4B0BC',
       dialoge: '#66C8C1',
+      gold: '#E3C46B',
     },
   },
 };
@@ -911,3 +918,90 @@ export const seitenmusterFarbe = (rolle: SeitenmusterFarbrolle): string => seite
 
 /** Schatten unter dem 3D-Modell bzw. der X-Schaltfläche, aus „Dunkelbraun“ abgeleitet. */
 export const ansicht3dSchatten = `0 6px 18px color-mix(in srgb, ${schattenFarbe} 22%, transparent)`;
+
+/** Farbrollen der Seite „Statistik“ (REQ-079 bis REQ-090), Zuordnung nach REF-statistik-01 bis -07. */
+export type StatistikFarbrolle =
+  | 'ueberschrift'
+  | 'pillenleisteFlaeche'
+  | 'pillenleisteRahmen'
+  | 'pilleAktivFlaeche'
+  | 'pilleAktivSchrift'
+  | 'pilleInaktivSchrift'
+  | 'pfeilRahmen'
+  | 'pfeilIcon'
+  | 'zeitraumTitel'
+  | 'zeitraumJahr'
+  | 'karteFlaeche'
+  | 'karteRahmen'
+  | 'kachelFlaeche'
+  | 'kachelRahmen'
+  | 'kachelGewaehltRahmen'
+  | 'kachelZahl'
+  | 'kachelBezeichnung'
+  | 'kennzahl'
+  | 'kennzahlEinheit'
+  | 'vergleich'
+  | 'hilfslinie'
+  | 'skala'
+  | 'balkenLeer'
+  | 'balkenSessions'
+  | 'balkenBeendet'
+  | 'balkenBuecher'
+  | 'achse'
+  | 'legende'
+  | 'serieText'
+  | 'serieZahl'
+  | 'wochentag'
+  | 'tagFlaeche'
+  | 'tagZahl'
+  | 'heuteRahmen'
+  | 'monatKuerzel'
+  | 'miniFeld'
+  | 'lesepunkt';
+
+/** Aus welcher Farbrubrik jede Farbrolle der Seite „Statistik“ ihre Farbe bezieht (neu nur „Gold“, REQ-084/REQ-090). */
+export const statistikFarbrollen: Record<StatistikFarbrolle, FarbrubrikId> = {
+  ueberschrift: 'dunkelbraun',
+  pillenleisteFlaeche: 'kartenflaeche',
+  pillenleisteRahmen: 'sekundaer',
+  pilleAktivFlaeche: 'primaer',
+  pilleAktivSchrift: 'hintergrund',
+  pilleInaktivSchrift: 'tertiaer',
+  pfeilRahmen: 'sekundaer',
+  pfeilIcon: 'tertiaer',
+  zeitraumTitel: 'dunkelbraun',
+  zeitraumJahr: 'tertiaer',
+  karteFlaeche: 'kartenflaeche',
+  karteRahmen: 'sekundaer',
+  kachelFlaeche: 'kartenflaeche',
+  kachelRahmen: 'sekundaer',
+  kachelGewaehltRahmen: 'primaer',
+  kachelZahl: 'dunkelbraun',
+  kachelBezeichnung: 'tertiaer',
+  kennzahl: 'dunkelbraun',
+  kennzahlEinheit: 'tertiaer',
+  vergleich: 'tertiaer',
+  hilfslinie: 'ghostframe',
+  skala: 'tertiaer',
+  balkenLeer: 'ghostframe',
+  balkenSessions: 'primaer',
+  balkenBeendet: 'gold',
+  balkenBuecher: 'primaer',
+  achse: 'tertiaer',
+  legende: 'tertiaer',
+  serieText: 'tertiaer',
+  serieZahl: 'dunkelbraun',
+  wochentag: 'tertiaer',
+  tagFlaeche: 'ghost',
+  tagZahl: 'tertiaer',
+  heuteRahmen: 'primaer',
+  monatKuerzel: 'tertiaer',
+  miniFeld: 'ghost',
+  lesepunkt: 'primaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle der Seite „Statistik“, z. B. `var(--bz-farbe-gold)`. */
+export const statistikFarbe = (rolle: StatistikFarbrolle): string => rubrikFarbe(statistikFarbrollen[rolle]);
+
+/** Blasse Fläche der gewählten Kachel (REF-statistik-01), aus „Primär“ und „Kartenfläche“ gemischt. */
+export const statistikKachelGewaehltFlaeche = `color-mix(in srgb, ${rubrikFarbe('primaer')} 14%, ${rubrikFarbe('kartenflaeche')})`;

@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { masseVorschlagText } from '@/buchdetails/masse';
 import {
   PREIS_LEER,
+  beendetText,
   exemplarText,
   formatText,
   hatMasse,
@@ -27,7 +28,8 @@ export type AusgabeZeile =
   | 'verlag'
   | 'erschienen'
   | 'isbn'
-  | 'hinzugefuegt';
+  | 'hinzugefuegt'
+  | 'beendet';
 
 /** Zeilen mit Pfeil „›“ (REQ-056, AK-2). */
 const MIT_PFEIL: readonly AusgabeZeile[] = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'masse'];
@@ -47,6 +49,8 @@ interface Props {
   onIsbn?: () => void;
   /** Zeile „Hinzugefügt“ angetippt (REQ-064). */
   onHinzugefuegt?: () => void;
+  /** Zeile „Beendet am“ angetippt (REQ-085). */
+  onBeendet?: () => void;
 }
 
 // Überschriften wie REF-details-01/-02: normale Schreibweise, größer, Dunkelbraun (nicht Großbuchstaben wie „BEWERTUNG“).
@@ -325,7 +329,7 @@ export type AusgabeAngaben = Pick<
 export interface AusgabeKarteProps {
   angaben: AusgabeAngaben;
   /** Anzeigetexte der Zeilen Seiten, Erschienen und Hinzugefügt. */
-  werte: { seiten?: string; erschienen?: string; hinzugefuegt?: string };
+  werte: { seiten?: string; erschienen?: string; hinzugefuegt?: string; /** Zeile „Beendet am“ nur mit Wert (REQ-085). */ beendet?: string };
   /** Antippen je Zeile; ohne Eintrag ist die Zeile ohne Funktion. */
   onZeile?: Partial<Record<AusgabeZeile, (() => void) | undefined>>;
   /** Ohne Zeile „Fotos“ (Manueller Eintrag, REQ-060, AK-1). */
@@ -362,13 +366,16 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
       <Zeile id="verlag" beschriftung="Verlag" wert={angaben.verlag ?? ''} onAntippen={onZeile.verlag} />
       <Zeile id="erschienen" beschriftung="Erschienen" wert={werte.erschienen ?? ''} onAntippen={onZeile.erschienen} />
       <Zeile id="isbn" beschriftung="ISBN" wert={angaben.isbn ?? ''} onAntippen={onZeile.isbn} />
-      <Zeile id="hinzugefuegt" beschriftung="Hinzugefügt" wert={werte.hinzugefuegt ?? ''} onAntippen={onZeile.hinzugefuegt} letzte />
+      <Zeile id="hinzugefuegt" beschriftung="Hinzugefügt" wert={werte.hinzugefuegt ?? ''} onAntippen={onZeile.hinzugefuegt} letzte={werte.beendet === undefined} />
+      {werte.beendet === undefined ? null : (
+        <Zeile id="beendet" beschriftung="Beendet am" wert={werte.beendet} onAntippen={onZeile.beendet} letzte />
+      )}
     </div>
   );
 }
 
 /** Reiter „Details“ (REQ-051 bis REQ-056, REQ-063, REQ-064). */
-export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt }: Props) {
+export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet }: Props) {
   const erschienen = buch.erscheinungsjahr ?? (buch.erscheinungsdatum ? Number(buch.erscheinungsdatum.slice(6)) : undefined);
   return (
     <div style={{ paddingBottom: abstand('s') }}>
@@ -402,6 +409,7 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMa
             seiten: buch.seitenanzahl !== undefined ? String(buch.seitenanzahl) : '',
             erschienen: erschienen !== undefined && !Number.isNaN(erschienen) ? String(erschienen) : '',
             hinzugefuegt: hinzugefuegtText(buch.eingetragenAm),
+            beendet: beendetText(buch.beendetAm),
           }}
           angaben={buch}
           onZeile={{
@@ -414,6 +422,7 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMa
             verlag: onVerlag,
             isbn: onIsbn,
             hinzugefuegt: onHinzugefuegt,
+            beendet: onBeendet,
           }}
         />
       </Abschnitt>

@@ -697,11 +697,13 @@ describe('REQ-002 Untere Hauptnavigation', () => {
     // Begründung: sprints/sprint-02/testbericht.md, Abschnitt „Angepasste REQ-002-Tests“.
     // Sprint 06 Teil C: „Profil“ hat mit REQ-066 eine definierte Zielansicht (Abschnitt „App“); dort prüft
     // REQ-066/AK-1, dass „under construction :)“ NICHT erscheint.
-    const DEFINIERTE_ZIELANSICHTEN = ['Bücher', 'Profil']; // REQ-005, REQ-066
+    // Sprint 09: „Statistik“ hat mit REQ-079 eine definierte Zielansicht (Seite „Dein Lesen“); dort prüft
+    // REQ-079/AK-1, dass „under construction :)“ NICHT erscheint.
+    const DEFINIERTE_ZIELANSICHTEN = ['Bücher', 'Profil', 'Statistik']; // REQ-005, REQ-066, REQ-079
     const OHNE_ZIELANSICHT = LABELS.filter((l) => !DEFINIERTE_ZIELANSICHTEN.includes(l));
 
     it('[REQ-002/AK-12] Voraussetzung: es gibt weiterhin Menüpunkte ohne definierte Zielansicht', () => {
-      expect(OHNE_ZIELANSICHT).toEqual(['Start', 'Bibliothek', 'Statistik']);
+      expect(OHNE_ZIELANSICHT).toEqual(['Start', 'Bibliothek']);
     });
 
     it.each(OHNE_ZIELANSICHT)('[REQ-002/AK-12] bei aktivem "%s" (ohne definierte Zielansicht) zeigt der Inhaltsbereich genau "under construction :)"', (label) => {

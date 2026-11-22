@@ -277,3 +277,29 @@ export function eintragungsdatumAusText(datum: string, bisher?: string): string 
   const [j, mo, t] = teile;
   return new Date(j, mo - 1, t, 12).toISOString();
 }
+
+/** Kalendertag „JJJJ-MM-TT“ → [Jahr, Monat 1–12, Tag]; sonst undefined. */
+function kalendertagTeile(tag: string | undefined): [number, number, number] | undefined {
+  const m = tag ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(tag) : null;
+  return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : undefined;
+}
+
+/** „Beendet am“ (REQ-085) im Format der Zeile „Hinzugefügt“, z. B. „März 2019“; ohne Datum leer. */
+export function beendetText(beendetAm: string | undefined): string {
+  const teile = kalendertagTeile(beendetAm);
+  return teile ? `${MONATE_KURZ[teile[1] - 1]} ${teile[0]}` : '';
+}
+
+/** „Beendet am“ → TT.MM.JJJJ für das Datumsblatt (REQ-085); ohne Datum leer. */
+export function beendetDatumText(beendetAm: string | undefined): string {
+  const teile = kalendertagTeile(beendetAm);
+  const zwei = (n: number) => String(n).padStart(2, '0');
+  return teile ? `${zwei(teile[2])}.${zwei(teile[1])}.${teile[0]}` : '';
+}
+
+/** Geprüftes Datum TT.MM.JJJJ → „Beendet am“ als „JJJJ-MM-TT“ (REQ-085). */
+export function beendetAusText(datum: string): string {
+  const teile = datumTeile(datum);
+  if (!teile) throw new Error('Datum ungültig');
+  return `${teile[0]}-${datum.slice(3, 5)}-${datum.slice(0, 2)}`;
+}

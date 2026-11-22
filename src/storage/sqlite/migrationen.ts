@@ -109,6 +109,15 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN dicke_mm INTEGER',
     ],
   },
+  {
+    version: 9,
+    beschreibung: 'Beendet am; Sitzungen mit Seitenzahl (REQ-085, REQ-084)',
+    anweisungen: [
+      // Lokaler Kalendertag „JJJJ-MM-TT“; NULL = kein Datum. Sitzungen erhalten „seite“ im vorhandenen
+      // JSON der Spalte `sitzungen` (ältere Einträge ohne Seite bleiben gültig), kein Spaltenumbau nötig.
+      'ALTER TABLE buch ADD COLUMN beendet_am TEXT',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

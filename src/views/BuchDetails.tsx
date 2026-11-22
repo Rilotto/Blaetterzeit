@@ -9,7 +9,7 @@ import { standardBildspeicher, standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattAktuelleSeite from '@/buchdetails/BlattAktuelleSeite';
 import BlattBuchlaenge from '@/buchdetails/BlattBuchlaenge';
-import { BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
+import { BlattBeendet, BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
 import BlattPreis from '@/buchdetails/BlattPreis';
 import Buchdarstellung, { type Bilder } from '@/buchdetails/Buchdarstellung';
 import Fortschritt from '@/buchdetails/Fortschritt';
@@ -27,9 +27,9 @@ import FensterFormat from '@/buchdetails/reiter/FensterFormat';
 import Schreibfenster from '@/buchdetails/reiter/Schreibfenster';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
-import { eintragungsdatumAusText, type Formatangaben, type Masse } from '@/domain/ausgabe';
+import { beendetAusText, eintragungsdatumAusText, type Formatangaben, type Masse } from '@/domain/ausgabe';
 import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
-import type { Buch, Fortschrittsmodus, LesestatusId } from '@/domain/buch';
+import { statusSetzen, type Buch, type Fortschrittsmodus, type LesestatusId } from '@/domain/buch';
 import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
 import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore } from '@/storage';
 import { ansicht3dFarbe, ansicht3dSchatten, buchdetailsFarbe, fortschrittFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
@@ -50,7 +50,7 @@ export interface BuchDetailsProps {
   onZurueck: () => void;
 }
 
-type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | 'masse' | 'verlag' | 'isbn' | 'hinzugefuegt' | null;
+type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | 'masse' | 'verlag' | 'isbn' | 'hinzugefuegt' | 'beendet' | null;
 
 const systemzeit = () => new Date();
 
@@ -230,7 +230,8 @@ export default function BuchDetails({
 
   const statusWaehlen = (status: LesestatusId) => {
     if (!buch || buch.status === status) return;
-    speichern({ ...buch, status });
+    // Wechsel auf *gelesen* setzt „Beendet am“ auf heute (REQ-085).
+    speichern(statusSetzen(buch, status, jetzt()));
   };
 
   // Herz bzw. Fortschritt antippen: ohne Seitenanzahl zuerst „Buchlänge“ (REQ-025), sonst „Aktuelle Seite“ (REQ-024).
@@ -343,6 +344,13 @@ export default function BuchDetails({
   const hinzugefuegtSpeichern = (datum: string) => {
     if (!buch) return;
     speichern({ ...buch, eingetragenAm: eintragungsdatumAusText(datum, buch.eingetragenAm) });
+    setBlatt(null);
+  };
+
+  // „Beendet am“ überschreiben (REQ-085); das Blatt lässt nur gültige Daten bis heute durch.
+  const beendetSpeichern = (datum: string) => {
+    if (!buch) return;
+    speichern({ ...buch, beendetAm: beendetAusText(datum) });
     setBlatt(null);
   };
 
@@ -467,6 +475,7 @@ export default function BuchDetails({
             onVerlag={() => setBlatt('verlag')}
             onIsbn={() => setBlatt('isbn')}
             onHinzugefuegt={() => setBlatt('hinzugefuegt')}
+            onBeendet={() => setBlatt('beendet')}
           />
         </>
       ) : null}
@@ -513,6 +522,9 @@ export default function BuchDetails({
       {buch && blatt === 'isbn' ? <BlattIsbn isbn={buch.isbn} onSichern={isbnSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'hinzugefuegt' ? (
         <BlattHinzugefuegt eingetragenAm={buch.eingetragenAm} jetzt={jetzt} onSichern={hinzugefuegtSpeichern} onSchliessen={() => setBlatt(null)} />
+      ) : null}
+      {buch && blatt === 'beendet' ? (
+        <BlattBeendet beendetAm={buch.beendetAm} jetzt={jetzt} onSichern={beendetSpeichern} onSchliessen={() => setBlatt(null)} />
       ) : null}
       {menue !== null ? (
         <Auswahlmenue
