@@ -862,8 +862,6 @@ export const kartenSchatten = `0 1px 2px color-mix(in srgb, ${schattenFarbe} 10%
 export type Ansicht3dFarbrolle =
   | 'modellFlaeche'
   | 'modellTitel'
-  | 'seitenPapier'
-  | 'seitenLinie'
   | 'schleier'
   | 'titel'
   | 'autor'
@@ -881,8 +879,6 @@ export type Ansicht3dFarbrolle =
 export const ansicht3dFarbrollen: Record<Ansicht3dFarbrolle, FarbrubrikId> = {
   modellFlaeche: 'primaer',
   modellTitel: 'hintergrund',
-  seitenPapier: 'kartenflaeche',
-  seitenLinie: 'sekundaer',
   schleier: 'hintergrund',
   titel: 'dunkelbraun',
   autor: 'tertiaer',
@@ -896,6 +892,22 @@ export const ansicht3dFarbrollen: Record<Ansicht3dFarbrolle, FarbrubrikId> = {
 
 /** CSS-Ausdruck einer Farbrolle der 3D-Ansicht, z. B. `var(--bz-farbe-primaer)`. */
 export const ansicht3dFarbe = (rolle: Ansicht3dFarbrolle): string => rubrikFarbe(ansicht3dFarbrollen[rolle]);
+
+/** Farbrollen des Seitenmusters (Buchseiten: Schnitt, Ober- und Unterkante ohne Bild). */
+export type SeitenmusterFarbrolle = 'flaeche' | 'linie';
+
+/**
+ * Feste, designunabhängige Farben des Seitenmusters (CEO-Vorgabe 2026-11-22: Buchseiten immer warmweiß,
+ * egal welches Design). Standardwerte auf Zuruf – werden von den Farbdesigns NICHT überschrieben,
+ * deshalb direkte Farbwerte statt CSS-Variable einer Farbrubrik.
+ */
+export const seitenmusterFarben: Record<SeitenmusterFarbrolle, Farbrubrik> = {
+  flaeche: { name: 'Seiten Fläche', wert: '#F4EDE0' },
+  linie: { name: 'Seiten Linie', wert: '#E2D6C2' },
+};
+
+/** Farbwert einer Farbrolle des Seitenmusters (unabhängig vom aktiven Farbdesign). */
+export const seitenmusterFarbe = (rolle: SeitenmusterFarbrolle): string => seitenmusterFarben[rolle].wert;
 
 /** Schatten unter dem 3D-Modell bzw. der X-Schaltfläche, aus „Dunkelbraun“ abgeleitet. */
 export const ansicht3dSchatten = `0 6px 18px color-mix(in srgb, ${schattenFarbe} 22%, transparent)`;

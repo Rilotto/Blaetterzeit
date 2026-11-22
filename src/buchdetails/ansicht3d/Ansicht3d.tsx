@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerE
 import { bildBegrenzen } from '@/bild/bildverarbeitung';
 import Symbolbild from '@/components/Symbolbild';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
-import { ansicht3dFarbe, ansicht3dSchatten, abstand, bildschirmrand, pillenhoehe, textstufe } from '@/theme';
+import { ansicht3dFarbe, ansicht3dSchatten, seitenmusterFarbe, abstand, bildschirmrand, pillenhoehe, textstufe } from '@/theme';
 import type { MassQuelle } from '../masse';
 import { Trackball, cssDrehung } from './drehung';
 import { TEXTUR_MAX_KANTE, buchModell, type Bilder, type Flaeche, type Inhalt } from './modell';
@@ -136,7 +136,7 @@ const pilleStil: CSSProperties = {
 const LINIE_PX = 0.6;
 const PAPIER_PX = 1.4;
 const seitenmuster = (linien: 'senkrecht' | 'waagerecht') =>
-  `repeating-linear-gradient(${linien === 'senkrecht' ? '90deg' : '0deg'}, ${ansicht3dFarbe('seitenPapier')} 0 ${PAPIER_PX}px, ${ansicht3dFarbe('seitenLinie')} ${PAPIER_PX}px ${PAPIER_PX + LINIE_PX}px)`;
+  `repeating-linear-gradient(${linien === 'senkrecht' ? '90deg' : '0deg'}, ${seitenmusterFarbe('flaeche')} 0 ${PAPIER_PX}px, ${seitenmusterFarbe('linie')} ${PAPIER_PX}px ${PAPIER_PX + LINIE_PX}px)`;
 
 /** Leichte Schattierung je Fläche für Tiefe (keine Farbe, nur Helligkeit). */
 const HELLIGKEIT: Record<Flaeche['seite'], number> = {

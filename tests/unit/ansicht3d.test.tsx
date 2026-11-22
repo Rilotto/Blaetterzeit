@@ -31,8 +31,9 @@ const nahe = (a: Quat, b: Quat) => {
 };
 
 describe('Drehung (REQ-075)', () => {
-  it('Startansicht wie Referenzbild: Cover, Schnitt und Oberkante, kein Rücken', () => {
-    expect(sichtbareSeiten(START_LAGE).sort()).toEqual(['oben', 'schnitt', 'vorne']);
+  it('Startansicht gerade: nur das Cover frontal', () => {
+    expect(sichtbareSeiten(START_LAGE)).toEqual(['vorne']);
+    expect(cssDrehung(START_LAGE)).toBe('rotate3d(0, 1, 0, 0rad)');
   });
 
   it('CSS-Transform hin und zurück ergibt dieselbe Lage', () => {

@@ -50,10 +50,8 @@ export function quatDrehen(q: Quat, v: Vek3): Vek3 {
   return [p[0], p[1], p[2]];
 }
 
-/** Startansicht wie im Referenzbild (REQ-075, AK-1): Cover schräg von vorne, rechts der Schnitt, oben die Oberkante. */
-export const START_LAGE: Quat = quatNormieren(
-  quatMal(quatAchseWinkel([1, 0, 0], (-14 * Math.PI) / 180), quatAchseWinkel([0, 1, 0], (-32 * Math.PI) / 180)),
-);
+/** Startansicht (CEO-Vorgabe 2026-11-22): gerade, Cover frontal zum Betrachter, ohne Neigung oder Drehung. */
+export const START_LAGE: Quat = EINHEIT;
 
 /** Drehung zu einer Ziehbewegung (dx, dy in px): rechts ziehen dreht die Vorderseite nach rechts, unten ziehen nach unten. */
 export function ziehDrehung(dx: number, dy: number, jePx = DREHUNG_JE_PX): Quat {

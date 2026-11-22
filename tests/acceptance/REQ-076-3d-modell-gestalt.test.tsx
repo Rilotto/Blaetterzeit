@@ -15,10 +15,14 @@ import { STANDARD_MASSE_MM } from '@/buchdetails/masse';
 import type { Buch } from '@/domain/buch';
 import type { ImageStore } from '@/storage/ImageStore';
 import { InMemoryBookRepository } from '@/storage/InMemoryBookRepository';
-import { farbdesigns, farbVariablenAnwenden, type FarbdesignId } from '@/theme';
+import { farbdesigns, farbVariablenAnwenden, seitenmusterFarbe, stilRegeln, type FarbdesignId, type StilId } from '@/theme';
 
 vi.mock('@/buecher/demodaten', () => ({ demoBuecher: [] }));
-afterEach(() => cleanup());
+afterEach(() => {
+  cleanup();
+  document.documentElement.removeAttribute('data-stil');
+  document.querySelectorAll('style[data-test-stil]').forEach((e) => e.remove());
+});
 
 const W = { timeout: 3000 };
 const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC';
@@ -33,13 +37,21 @@ function speicher(id: string, bereiche: Bereich[]) {
   } as unknown as ImageStore;
 }
 
-async function oeffne3d(m: Partial<Buch> = {}, bilder: Bereich[] = [], design?: FarbdesignId) {
+async function oeffne3d(m: Partial<Buch> = {}, bilder: Bereich[] = [], design?: FarbdesignId, stil?: StilId) {
   const repo = new InMemoryBookRepository();
   const id = crypto.randomUUID();
   await repo.save({ id, titel: 'Der Hobbit', status: 'ungelesen', ...m } as Buch);
   const huelle = document.createElement('div');
   document.body.appendChild(huelle);
   if (design) farbVariablenAnwenden(huelle, design);
+  if (stil) {
+    huelle.setAttribute('data-stil', stil);
+    document.documentElement.setAttribute('data-stil', stil);
+    const st = document.createElement('style');
+    st.setAttribute('data-test-stil', '');
+    st.textContent = stilRegeln();
+    document.head.appendChild(st);
+  }
   render(<BuchDetails buchId={id} repository={repo} bildspeicher={speicher(id, bilder)} bildquelle={{ scannen: async () => null, galerie: async () => null }} onZurueck={() => {}} />, {
     container: huelle,
   });
@@ -254,6 +266,86 @@ describe('REQ-076 Gestalt des Modells', () => {
       const { huelle } = await oeffne3d({ format: 'print', unterformat: 'hardcover' }, [], 'nachtlektuere');
       const soll = farbeVon(huelle, farbdesigns.nachtlektuere.werte.primaer);
       for (const s of ['vorne', 'ruecken', 'hinten']) expect(getComputedStyle(flaeche(s)).backgroundColor, s).toBe(soll);
+    });
+  });
+  describe('AK-8 Buchseiten immer warmweiß', () => {
+    /** Hex- oder rgb-Farbe → „r, g, b“, unabhängig davon, wie jsdom den Gradienten normalisiert. */
+    const rgb = (hex: string) => {
+      const h = hex.replace('#', '');
+      return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)).join(', ');
+    };
+    /** Alle Farben im Gradienten als „r, g, b“. */
+    const farbenIn = (bild: string) =>
+      new Set([
+        ...[...bild.matchAll(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g)].map((m) => `${m[1]}, ${m[2]}, ${m[3]}`),
+        ...[...bild.matchAll(/#([0-9a-f]{6})\b/g)].map((m) => rgb(m[1])),
+      ]);
+    const muster = () =>
+      Object.fromEntries(
+        ['schnitt', 'oben', 'unten'].map((seite) => {
+          const f = flaeche(seite);
+          expect(f.getAttribute('data-inhalt'), seite).toBe('muster');
+          const cs = getComputedStyle(f);
+          return [seite, { bild: (cs.backgroundImage || f.style.backgroundImage).toLowerCase(), farbe: cs.backgroundColor }];
+        }),
+      );
+    const kombis: [FarbdesignId, StilId][] = [
+      ['klassisch', 'klassisch'],
+      ['nachtlektuere', 'klassisch'],
+      ['polarnacht', 'klassisch'],
+      ['klassisch', 'feuilleton'],
+      ['polarnacht', 'feuilleton'],
+    ];
+
+    it('[REQ-076/AK-8] Schnitt ohne Bild, Ober- und Unterkante: in Klassisch, Nachtlektüre, Polarnacht und den Stilen Klassisch/Feuilleton identisch aus der Rolle „Buchseiten“', async () => {
+      const ergebnisse: ReturnType<typeof muster>[] = [];
+      for (const [design, stil] of kombis) {
+        await oeffne3d({ format: 'print', unterformat: 'taschenbuch' }, [], design, stil);
+        ergebnisse.push(muster());
+        cleanup();
+        document.documentElement.removeAttribute('data-stil');
+        document.querySelectorAll('style[data-test-stil]').forEach((e) => e.remove());
+      }
+      for (const e of ergebnisse.slice(1)) expect(e).toEqual(ergebnisse[0]);
+      const flaecheFarbe = rgb(seitenmusterFarbe('flaeche'));
+      const linieFarbe = rgb(seitenmusterFarbe('linie'));
+      expect(flaecheFarbe).not.toBe(linieFarbe);
+      for (const seite of ['schnitt', 'oben', 'unten']) {
+        const bild = ergebnisse[0][seite].bild;
+        expect(bild, seite).toMatch(/gradient/);
+        expect([...farbenIn(bild)].sort(), seite).toEqual([flaecheFarbe, linieFarbe].sort());
+        expect(bild, seite).not.toMatch(/var\(/);
+      }
+    });
+
+    it('[REQ-076/AK-8] Seitenmuster nutzt weder Primär noch eine andere Farbe der Designs (Polarnacht, Nachtlektüre, Klassisch)', async () => {
+      for (const design of ['polarnacht', 'nachtlektuere', 'klassisch'] as FarbdesignId[]) {
+        await oeffne3d({ format: 'print', unterformat: 'hardcover' }, [], design);
+        const werte = new Set(
+          Object.values(farbdesigns[design].werte)
+            .map((w) => String(w))
+            .filter((w) => /^#[0-9a-f]{6}$/i.test(w))
+            .map(rgb),
+        );
+        expect(werte.has(rgb(farbdesigns[design].werte.primaer))).toBe(true);
+        for (const [seite, { bild }] of Object.entries(muster())) {
+          const genutzt = farbenIn(bild);
+          expect(genutzt.size, seite).toBeGreaterThan(0);
+          for (const w of genutzt) expect(werte.has(w), `${design}/${seite} nutzt Designfarbe ${w}`).toBe(false);
+          expect(bild).not.toMatch(/var\(/);
+        }
+        cleanup();
+      }
+    });
+
+    it('[REQ-076/AK-8] Buchseiten-Fläche ist hell (warmweiß: hohe Helligkeit, Rot ≥ Blau)', () => {
+      const hex = seitenmusterFarbe('flaeche').replace('#', '');
+      const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
+      expect((r + g + b) / 3).toBeGreaterThan(220);
+      expect(r).toBeGreaterThanOrEqual(b);
+      const l = seitenmusterFarbe('linie').replace('#', '');
+      const lin = [0, 2, 4].map((i) => parseInt(l.slice(i, i + 2), 16));
+      expect(lin.reduce((x, y) => x + y)).toBeLessThan(r + g + b);
     });
   });
 });

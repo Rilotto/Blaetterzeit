@@ -70,6 +70,9 @@ function sichtbar(schwelle = 0.05): Set<string> {
   return s;
 }
 const vorneRichtung = (): Vek3 => quatDrehen(lage(), [0, 0, 1]);
+/** Drehwinkel einer Lage in rad (0 … π). */
+const winkel = (q: Quat) => 2 * Math.acos(Math.min(1, Math.abs(q[3])));
+const punkt = (a: Vek3, b: Vek3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const konj = (q: Quat): Quat => [-q[0], -q[1], -q[2], q[3]];
 /** Drehachse der Änderung zwischen zwei Lagen (Weltsystem), normiert. */
 function deltaAchse(vorher: Quat, nachher: Quat): Vek3 {
@@ -105,27 +108,48 @@ async function ziehe(dx: number, dy: number, schritte: number, jeSchritt?: () =>
 
 describe('REQ-075 Drehen', () => {
   describe('AK-1 Startansicht', () => {
-    it('[REQ-075/AK-1] Cover schräg von vorne, rechts der Schnitt, oben die Oberkante; Rücken, Rückseite, Unterkante nicht sichtbar', async () => {
+    const frontal = () => {
+      const q = lage();
+      // Lage = Identität: Drehwinkel 0 (q und −q beschreiben dieselbe Lage)
+      expect(Math.abs(q[3])).toBeCloseTo(1, 6);
+      expect(winkel(q)).toBeCloseTo(0, 4);
+      // Cover zeigt frontal nach vorne, Oberkante nach oben, Schnitt nach rechts (weder geneigt noch gedreht)
+      const n = (seite: string) => quatDrehen(q, normale(document.querySelector<HTMLElement>(`[data-modell3d] [data-flaeche="${seite}"]`)!.style.transform));
+      const v = n('vorne');
+      expect(v[0]).toBeCloseTo(0, 6);
+      expect(v[1]).toBeCloseTo(0, 6);
+      expect(v[2]).toBeCloseTo(1, 6);
+      expect(n('oben')[1]).toBeCloseTo(-1, 6);
+      expect(n('schnitt')[0]).toBeCloseTo(1, 6);
+      // sichtbar ist nur das Cover; alle anderen Flächen höchstens als Kante (Normale senkrecht zur Blickrichtung oder abgewandt)
+      expect([...sichtbar(1e-6)]).toEqual(['vorne']);
+      for (const seite of ['oben', 'unten', 'ruecken', 'schnitt']) expect(Math.abs(n(seite)[2]), seite).toBeLessThan(1e-6);
+    };
+
+    it('[REQ-075/AK-1] Taschenbuch: Startansicht komplett gerade, Cover frontal nach vorne, weder geneigt noch gedreht', async () => {
       await oeffne3d();
-      const s = sichtbar();
-      expect([...s].sort()).toEqual(['oben', 'schnitt', 'vorne']);
-      // schräg: Cover nicht frontal
-      const v = vorneRichtung();
-      expect(v[2]).toBeLessThan(0.99);
-      expect(v[2]).toBeGreaterThan(0.5);
-      // Schnitt liegt rechts (Normale +x im Bild), Oberkante oben (Normale −y in CSS)
-      const f = (seite: string) => quatDrehen(lage(), normale(document.querySelector<HTMLElement>(`[data-modell3d] [data-flaeche="${seite}"]`)!.style.transform));
-      expect(f('schnitt')[0]).toBeGreaterThan(0.2);
-      expect(f('oben')[1]).toBeLessThan(-0.1);
+      frontal();
     });
 
-    it('[REQ-075/AK-1] auch beim Hardcover: Startansicht zeigt Cover, Schnitt, Oberkante, nicht den Rücken', async () => {
+    it('[REQ-075/AK-1] auch beim Hardcover: Startansicht gerade und frontal', async () => {
       await oeffne3d({ unterformat: 'hardcover' });
-      const s = sichtbar();
-      expect(s.has('vorne')).toBe(true);
-      expect(s.has('schnitt')).toBe(true);
-      expect(s.has('oben')).toBe(true);
-      expect(s.has('ruecken')).toBe(false);
+      frontal();
+    });
+
+    it('[REQ-075/AK-1] nach Schließen und erneutem Öffnen wieder gerade (keine gemerkte Drehung)', async () => {
+      await oeffne3d();
+      await ziehe(20, 10, 5);
+      await act(async () => void pu(300, 250));
+      expect(winkel(lage())).toBeGreaterThan(0.1);
+      await act(async () => void fireEvent.click(document.querySelector('[data-ansicht3d-schliessen]')!));
+      await vi.waitFor(() => expect(document.querySelector('[data-ansicht3d]')).toBeNull(), W);
+      const cover = document.querySelector<HTMLElement>('[data-bereich="cover"]')!;
+      await act(async () => {
+        fireEvent.click(cover);
+        fireEvent.click(cover);
+      });
+      await screen.findByRole('dialog', { name: '3D-Ansicht' }, W);
+      frontal();
     });
   });
 
@@ -187,47 +211,55 @@ describe('REQ-075 Drehen', () => {
   });
 
   describe('AK-3 Schwung', () => {
-    it('[REQ-075/AK-3] zügig nach rechts ziehen und loslassen → Modell dreht nach dem Loslassen in dieselbe Richtung weiter', async () => {
-      await oeffne3d();
+    /** Zügig ziehen (4 Schritte à 16 ms) und loslassen; liefert Lage vor dem Ziehen und beim Loslassen. */
+    async function schwungZiehen(dx: number, dy: number) {
       fake();
+      const q0 = lage();
       await act(async () => {
-        pd(100, 200);
+        pd(200, 200);
         for (let i = 1; i <= 4; i++) {
           vi.advanceTimersByTime(16);
-          pm(100 + 25 * i, 200);
+          pm(200 + dx * i, 200 + dy * i);
         }
+        vi.advanceTimersByTime(16);
+        pu(200 + dx * 4, 200 + dy * 4);
+      });
+      return { q0, qLos: lage() };
+    }
+
+    it.each([
+      ['nach rechts', 25, 0, 1],
+      ['nach links', -25, 0, 1],
+      ['nach oben', 0, -20, 0],
+      ['nach unten', 0, 20, 0],
+    ] as [string, number, number, 0 | 1][])('[REQ-075/AK-3] zügig %s ziehen und loslassen → Modell dreht danach um dieselbe Achse im selben Drehsinn weiter', async (_n, dx, dy, achse) => {
+      await oeffne3d();
+      const { q0, qLos } = await schwungZiehen(dx, dy);
+      const zieh = deltaAchse(q0, qLos);
+      expect(Math.abs(zieh[achse])).toBeGreaterThan(0.99);
+      await vor(50);
+      const q1 = lage();
+      expect(winkel(quatMal(q1, konj(qLos)))).toBeGreaterThan(0.01);
+      // gleiche Achse und gleicher Drehsinn wie beim Ziehen
+      expect(punkt(deltaAchse(qLos, q1), zieh)).toBeGreaterThan(0.95);
+      await vor(100);
+      const q2 = lage();
+      expect(punkt(deltaAchse(q1, q2), zieh)).toBeGreaterThan(0.95);
+      // Gesamtwinkel seit dem Loslassen nimmt weiter zu
+      expect(winkel(quatMal(q2, konj(qLos)))).toBeGreaterThan(winkel(quatMal(q1, konj(qLos))));
+    });
+
+    it('[REQ-075/AK-3] Gegenfall: ohne Ziehbewegung (nur antippen) dreht sich nichts', async () => {
+      await oeffne3d();
+      fake();
+      const q0 = lage();
+      await act(async () => {
+        pd(200, 200);
         vi.advanceTimersByTime(16);
         pu(200, 200);
       });
-      const q0 = lage();
-      const x0 = vorneRichtung()[0];
-      await vor(150);
-      const q1 = lage();
-      expect(q1).not.toEqual(q0);
-      const a = deltaAchse(q0, q1);
-      expect(Math.abs(a[1])).toBeGreaterThan(0.95);
-      // dieselbe Richtung wie beim Ziehen nach rechts: Vorderseite wandert weiter nach rechts
-      expect(vorneRichtung()[0]).toBeGreaterThan(x0);
-    });
-
-    it('[REQ-075/AK-3] zügig nach oben ziehen → Schwung um die waagerechte Achse, Vorderseite wandert weiter nach oben', async () => {
-      await oeffne3d();
-      fake();
-      await act(async () => {
-        pd(200, 300);
-        for (let i = 1; i <= 4; i++) {
-          vi.advanceTimersByTime(16);
-          pm(200, 300 - 20 * i);
-        }
-        vi.advanceTimersByTime(16);
-        pu(200, 220);
-      });
-      const q0 = lage();
-      const y0 = vorneRichtung()[1];
-      await vor(150);
-      const a = deltaAchse(q0, lage());
-      expect(Math.abs(a[0])).toBeGreaterThan(0.95);
-      expect(vorneRichtung()[1]).toBeLessThan(y0);
+      await vor(300);
+      expect(winkel(quatMal(lage(), konj(q0)))).toBeLessThan(1e-6);
     });
   });
 
