@@ -3,7 +3,7 @@
  * Alle Tage sind Kalendertage nach lokaler Gerätezeit, Schlüssel „JJJJ-MM-TT“ (siehe `kalendertag`).
  * Tage werden intern als Date um 12:00 Uhr lokaler Zeit geführt (sommerzeitfest).
  */
-import type { EinstellungRepository } from '../storage/EinstellungRepository';
+import type { EinstellungRepository } from '../storage';
 import { kalendertag, type Buch } from './buch';
 import { hatSeitenanzahl, streak } from './fortschritt';
 
@@ -14,10 +14,10 @@ import { hatSeitenanzahl, streak } from './fortschritt';
 export type Zeitraumart = 'woche' | 'monat' | 'jahr';
 
 /** Pillen in fester Reihenfolge (REQ-079, AK-2). */
-export const ZEITRAUM_PILLEN: readonly { art: Zeitraumart; bezeichnung: string }[] = [
-  { art: 'woche', bezeichnung: 'Wöchentlich' },
-  { art: 'monat', bezeichnung: 'Monatlich' },
-  { art: 'jahr', bezeichnung: 'Jährlich' },
+export const ZEITRAUM_PILLEN: readonly { art: Zeitraumart; text: string }[] = [
+  { art: 'woche', text: 'Wöchentlich' },
+  { art: 'monat', text: 'Monatlich' },
+  { art: 'jahr', text: 'Jährlich' },
 ];
 
 /** Ohne gespeicherte Wahl ist „Wöchentlich“ aktiv (REQ-079, AK-4). */

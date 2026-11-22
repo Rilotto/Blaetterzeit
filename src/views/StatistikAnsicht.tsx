@@ -293,7 +293,7 @@ export default function StatistikAnsicht({ buecher, repository, bildspeicher, ei
               {...stilRolle('reiter')}
               style={pilleStil(aktiv)}
             >
-              {p.bezeichnung}
+              {p.text}
             </button>
           );
         })}

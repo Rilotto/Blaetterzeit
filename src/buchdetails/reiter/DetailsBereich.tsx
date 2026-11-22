@@ -127,7 +127,7 @@ export const karteDetails: CSSProperties = {
   backgroundColor: detailsFarbe('karteFlaeche'),
 };
 
-export const zeileStil = (letzte: boolean, antippbar: boolean): CSSProperties => ({
+export const zeileStil = (letzte: boolean, antippbar: boolean, trennlinieOben = false): CSSProperties => ({
   display: 'flex',
   alignItems: 'center',
   gap: abstand('m'),
@@ -137,6 +137,7 @@ export const zeileStil = (letzte: boolean, antippbar: boolean): CSSProperties =>
   margin: 0,
   padding: `${abstand('s')} 0`,
   border: 'none',
+  ...(trennlinieOben ? { borderTop: `1.5px solid ${detailsFarbe('trennlinie')}` } : {}),
   borderBottom: letzte ? 'none' : `1.5px solid ${detailsFarbe('trennlinie')}`,
   background: 'none',
   fontFamily: 'inherit',
@@ -207,6 +208,7 @@ function Zeile({
   beschriftung,
   wert,
   letzte = false,
+  trennlinieOben = false,
   hervorgehoben = false,
   vorschlag = false,
   onAntippen,
@@ -217,6 +219,7 @@ function Zeile({
   beschriftung: string;
   wert: string;
   letzte?: boolean;
+  trennlinieOben?: boolean;
   hervorgehoben?: boolean;
   /** Schätzwert „ca. …“: abgeschwächt und kursiv (REQ-072, AK-2). */
   vorschlag?: boolean;
@@ -234,7 +237,7 @@ function Zeile({
         data-fehler={fehler ? 'true' : undefined}
         {...stilRolle('eintrag')}
         style={{
-          ...zeileStil(letzte, true),
+          ...zeileStil(letzte, true, trennlinieOben),
           cursor: 'text',
           ...(fehler ? { outline: `2px solid ${detailsFarbe('zeileFehler')}`, outlineOffset: '-2px', borderRadius: '10px' } : {}),
         }}
@@ -255,6 +258,7 @@ function Zeile({
       vorschlag={vorschlag}
       pfeil={pfeil}
       letzte={letzte}
+      trennlinieOben={trennlinieOben}
       onAntippen={onAntippen}
     />
   );
@@ -273,6 +277,7 @@ export function KartenZeile({
   vorschlag = false,
   pfeil = false,
   letzte = false,
+  trennlinieOben = false,
   onAntippen,
 }: {
   /** data-Attribute der Zeile (z. B. data-ausgabe-zeile). */
@@ -286,6 +291,8 @@ export function KartenZeile({
   vorschlag?: boolean;
   pfeil?: boolean;
   letzte?: boolean;
+  /** Trennlinie über statt unter der Zeile (Zeile „Beendet am“, REQ-085). */
+  trennlinieOben?: boolean;
   onAntippen?: () => void;
 }) {
   const wertUndPfeil = (
@@ -305,7 +312,7 @@ export function KartenZeile({
     </>
   );
   return (
-    <button type="button" {...zeilenAttribute} onClick={onAntippen} {...stilRolle('eintrag')} style={zeileStil(letzte, Boolean(onAntippen))}>
+    <button type="button" {...zeilenAttribute} onClick={onAntippen} {...stilRolle('eintrag')} style={zeileStil(letzte, Boolean(onAntippen), trennlinieOben)}>
       <span data-zeile-bezeichnung="" style={bezeichnungStil}>
         {beschriftung}
       </span>
@@ -366,9 +373,11 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
       <Zeile id="verlag" beschriftung="Verlag" wert={angaben.verlag ?? ''} onAntippen={onZeile.verlag} />
       <Zeile id="erschienen" beschriftung="Erschienen" wert={werte.erschienen ?? ''} onAntippen={onZeile.erschienen} />
       <Zeile id="isbn" beschriftung="ISBN" wert={angaben.isbn ?? ''} onAntippen={onZeile.isbn} />
-      <Zeile id="hinzugefuegt" beschriftung="Hinzugefügt" wert={werte.hinzugefuegt ?? ''} onAntippen={onZeile.hinzugefuegt} letzte={werte.beendet === undefined} />
+      {/* „Hinzugefügt“ bleibt ohne untere Trennlinie (gleicher Zeilenstil wie Profil › App, REQ-066); die Linie zu
+          „Beendet am“ (REQ-085) trägt dessen Oberkante – optisch unverändert. */}
+      <Zeile id="hinzugefuegt" beschriftung="Hinzugefügt" wert={werte.hinzugefuegt ?? ''} onAntippen={onZeile.hinzugefuegt} letzte />
       {werte.beendet === undefined ? null : (
-        <Zeile id="beendet" beschriftung="Beendet am" wert={werte.beendet} onAntippen={onZeile.beendet} letzte />
+        <Zeile id="beendet" beschriftung="Beendet am" wert={werte.beendet} onAntippen={onZeile.beendet} letzte trennlinieOben />
       )}
     </div>
   );
