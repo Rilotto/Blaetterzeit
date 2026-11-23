@@ -1,7 +1,7 @@
 ---
 id: REQ-080
 titel: Seite „Statistik“ – Zeitraum blättern und Zeitraum-Titel
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

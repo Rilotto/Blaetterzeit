@@ -1,7 +1,7 @@
 ---
 id: REQ-078
 titel: 3D-Ansicht – Hinweis bei Hörbüchern
-status: In Umsetzung
+status: Implementiert
 prioritaet: Could
 art: funktional
 quelle: CEO

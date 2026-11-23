@@ -18,7 +18,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-9 | 1 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
-| REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-12 | 5 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
+| REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-12 | 4 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-13 | 8 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-003 | Zentral definierte App-Schrift | Implementiert | AK-1 | 8 | 0 | tests/acceptance/REQ-003-schriftart.test.tsx |
 | REQ-003 | Zentral definierte App-Schrift | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-003-schriftart.test.tsx |
@@ -386,13 +386,13 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-053-details-inhaltswarnungen.test.tsx |
 | REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
 | REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
@@ -468,11 +468,11 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
 | REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
 | REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-1 | 5 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre) | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-1 | 7 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
@@ -498,44 +498,98 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-10 | 4 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
 | REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
 | REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-12 | 4 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-1 | 2 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-2 | 4 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-3 | 3 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-4 | 5 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-5 | 8 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-6 | 4 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-7 | 2 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-8 | 8 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | In Umsetzung | AK-9 | 0 | 0 |  |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-2 | 1 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-3 | 1 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-4 | 4 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-5 | 1 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
-| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | In Umsetzung | AK-6 | 4 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
-| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-1 | 0 | 0 |  |
-| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-2 | 0 | 0 |  |
-| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-3 | 0 | 0 |  |
-| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-4 | 0 | 0 |  |
-| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-5 | 0 | 0 |  |
-| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-6 | 0 | 0 |  |
-| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Abgestimmt | AK-7 | 0 | 0 |  |
-| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Abgestimmt | AK-1 | 0 | 0 |  |
-| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Abgestimmt | AK-2 | 0 | 0 |  |
-| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Abgestimmt | AK-3 | 0 | 0 |  |
-| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Abgestimmt | AK-4 | 0 | 0 |  |
-| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-1 | 0 | 0 |  |
-| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-2 | 0 | 0 |  |
-| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-3 | 0 | 0 |  |
-| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-4 | 0 | 0 |  |
-| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-5 | 0 | 0 |  |
-| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-6 | 0 | 0 |  |
-| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Abgestimmt | AK-7 | 0 | 0 |  |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-1 | 0 | 0 |  |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-6 | 0 | 0 |  |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-7 | 0 | 0 |  |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-2 | 0 | 0 |  |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-3 | 0 | 0 |  |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-4 | 0 | 0 |  |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Abgestimmt | AK-5 | 0 | 0 |  |
-| REQ-078 | 3D-Ansicht – Hinweis bei Hörbüchern | Abgestimmt | AK-1 | 0 | 0 |  |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-2 | 7 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-5 | 8 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-6 | 4 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-8 | 8 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-9 | 7 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Implementiert | AK-4 | 6 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-073 | Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen | Implementiert | AK-6 | 4 | 0 | tests/acceptance/REQ-073-proportionen-aus-massen.test.tsx |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-074-3d-ansicht-oeffnen.test.tsx |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-074-3d-ansicht-oeffnen.test.tsx |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-074-3d-ansicht-oeffnen.test.tsx |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-074-3d-ansicht-oeffnen.test.tsx |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-074-3d-ansicht-oeffnen.test.tsx |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-074-3d-ansicht-oeffnen.test.tsx |
+| REQ-074 | 3D-Ansicht – Öffnen per Doppeltipp aufs Cover, Aufbau und Schließen | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-074-3d-ansicht-oeffnen.test.tsx |
+| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-075-3d-ansicht-drehen.test.tsx |
+| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-075-3d-ansicht-drehen.test.tsx |
+| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-075-3d-ansicht-drehen.test.tsx |
+| REQ-075 | 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-075-3d-ansicht-drehen.test.tsx |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-5 | 7 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
+| REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-1 | 7 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-6 | 4 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-2 | 10 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-078 | 3D-Ansicht – Hinweis bei Hörbüchern | Implementiert | AK-1 | 5 | 0 | tests/acceptance/REQ-078-3d-hoerbuch-hinweis.test.tsx |
+| REQ-079 | Seite „Statistik“ – Kopf „Dein Lesen“ und Zeitraum-Pillen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-079-statistik-kopf-und-pillen.test.tsx |
+| REQ-079 | Seite „Statistik“ – Kopf „Dein Lesen“ und Zeitraum-Pillen | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-079-statistik-kopf-und-pillen.test.tsx |
+| REQ-079 | Seite „Statistik“ – Kopf „Dein Lesen“ und Zeitraum-Pillen | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-079-statistik-kopf-und-pillen.test.tsx |
+| REQ-079 | Seite „Statistik“ – Kopf „Dein Lesen“ und Zeitraum-Pillen | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-079-statistik-kopf-und-pillen.test.tsx |
+| REQ-080 | Seite „Statistik“ – Zeitraum blättern und Zeitraum-Titel | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-080-statistik-zeitraum-navigation.test.tsx |
+| REQ-080 | Seite „Statistik“ – Zeitraum blättern und Zeitraum-Titel | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-080-statistik-zeitraum-navigation.test.tsx |
+| REQ-080 | Seite „Statistik“ – Zeitraum blättern und Zeitraum-Titel | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-080-statistik-zeitraum-navigation.test.tsx |
+| REQ-080 | Seite „Statistik“ – Zeitraum blättern und Zeitraum-Titel | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-080-statistik-zeitraum-navigation.test.tsx |
+| REQ-080 | Seite „Statistik“ – Zeitraum blättern und Zeitraum-Titel | Implementiert | AK-5 | 12 | 0 | tests/acceptance/REQ-080-statistik-zeitraum-navigation.test.tsx |
+| REQ-081 | Seite „Statistik“ – Kacheln „Seiten“ und „Bücher“ mit großer Kennzahl | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-081-statistik-kacheln-kennzahl.test.tsx |
+| REQ-081 | Seite „Statistik“ – Kacheln „Seiten“ und „Bücher“ mit großer Kennzahl | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-081-statistik-kacheln-kennzahl.test.tsx |
+| REQ-081 | Seite „Statistik“ – Kacheln „Seiten“ und „Bücher“ mit großer Kennzahl | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-081-statistik-kacheln-kennzahl.test.tsx |
+| REQ-081 | Seite „Statistik“ – Kacheln „Seiten“ und „Bücher“ mit großer Kennzahl | Implementiert | AK-4 | 6 | 0 | tests/acceptance/REQ-081-statistik-kacheln-kennzahl.test.tsx |
+| REQ-082 | Seite „Statistik“ – Vergleichszeile gegenüber dem vorherigen Zeitraum | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-082-statistik-vergleichszeile.test.tsx |
+| REQ-082 | Seite „Statistik“ – Vergleichszeile gegenüber dem vorherigen Zeitraum | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-082-statistik-vergleichszeile.test.tsx |
+| REQ-082 | Seite „Statistik“ – Vergleichszeile gegenüber dem vorherigen Zeitraum | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-082-statistik-vergleichszeile.test.tsx |
+| REQ-082 | Seite „Statistik“ – Vergleichszeile gegenüber dem vorherigen Zeitraum | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-082-statistik-vergleichszeile.test.tsx |
+| REQ-082 | Seite „Statistik“ – Vergleichszeile gegenüber dem vorherigen Zeitraum | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-082-statistik-vergleichszeile.test.tsx |
+| REQ-083 | Seite „Statistik“ – Balkendiagramm je Woche, Monat und Jahr | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-083-statistik-balkendiagramm.test.tsx |
+| REQ-083 | Seite „Statistik“ – Balkendiagramm je Woche, Monat und Jahr | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-083-statistik-balkendiagramm.test.tsx |
+| REQ-083 | Seite „Statistik“ – Balkendiagramm je Woche, Monat und Jahr | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-083-statistik-balkendiagramm.test.tsx |
+| REQ-083 | Seite „Statistik“ – Balkendiagramm je Woche, Monat und Jahr | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-083-statistik-balkendiagramm.test.tsx |
+| REQ-083 | Seite „Statistik“ – Balkendiagramm je Woche, Monat und Jahr | Implementiert | AK-5 | 8 | 0 | tests/acceptance/REQ-083-statistik-balkendiagramm.test.tsx |
+| REQ-084 | Seite „Statistik“ – Seiten „in Sessions“ und „aus beendeten Büchern“, gestapelt mit Legende | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-084-statistik-seitenberechnung-stapel.test.tsx |
+| REQ-084 | Seite „Statistik“ – Seiten „in Sessions“ und „aus beendeten Büchern“, gestapelt mit Legende | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-084-statistik-seitenberechnung-stapel.test.tsx |
+| REQ-084 | Seite „Statistik“ – Seiten „in Sessions“ und „aus beendeten Büchern“, gestapelt mit Legende | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-084-statistik-seitenberechnung-stapel.test.tsx |
+| REQ-084 | Seite „Statistik“ – Seiten „in Sessions“ und „aus beendeten Büchern“, gestapelt mit Legende | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-084-statistik-seitenberechnung-stapel.test.tsx |
+| REQ-084 | Seite „Statistik“ – Seiten „in Sessions“ und „aus beendeten Büchern“, gestapelt mit Legende | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-084-statistik-seitenberechnung-stapel.test.tsx |
+| REQ-084 | Seite „Statistik“ – Seiten „in Sessions“ und „aus beendeten Büchern“, gestapelt mit Legende | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-084-statistik-seitenberechnung-stapel.test.tsx |
+| REQ-085 | Buchfeld „Beendet am“ – automatisch beim Status *gelesen*, überschreibbar im Reiter „Details“ | Implementiert | AK-1 | 9 | 0 | tests/acceptance/REQ-085-buchfeld-beendet-am.test.tsx |
+| REQ-085 | Buchfeld „Beendet am“ – automatisch beim Status *gelesen*, überschreibbar im Reiter „Details“ | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-085-buchfeld-beendet-am.test.tsx |
+| REQ-085 | Buchfeld „Beendet am“ – automatisch beim Status *gelesen*, überschreibbar im Reiter „Details“ | Implementiert | AK-3 | 6 | 0 | tests/acceptance/REQ-085-buchfeld-beendet-am.test.tsx |
+| REQ-085 | Buchfeld „Beendet am“ – automatisch beim Status *gelesen*, überschreibbar im Reiter „Details“ | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-085-buchfeld-beendet-am.test.tsx |
+| REQ-085 | Buchfeld „Beendet am“ – automatisch beim Status *gelesen*, überschreibbar im Reiter „Details“ | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-085-buchfeld-beendet-am.test.tsx |
+| REQ-086 | Seite „Statistik“ – Zeile „X von N Tagen gelesen“ | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-086-statistik-lesetage-im-zeitraum.test.tsx |
+| REQ-086 | Seite „Statistik“ – Zeile „X von N Tagen gelesen“ | Implementiert | AK-2 | 7 | 0 | tests/acceptance/REQ-086-statistik-lesetage-im-zeitraum.test.tsx |
+| REQ-086 | Seite „Statistik“ – Zeile „X von N Tagen gelesen“ | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-086-statistik-lesetage-im-zeitraum.test.tsx |
+| REQ-087 | Seite „Statistik“ – Zeile „Serie X Tage“ | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-087-statistik-serie.test.tsx |
+| REQ-087 | Seite „Statistik“ – Zeile „Serie X Tage“ | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-087-statistik-serie.test.tsx |
+| REQ-087 | Seite „Statistik“ – Zeile „Serie X Tage“ | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-087-statistik-serie.test.tsx |
+| REQ-087 | Seite „Statistik“ – Zeile „Serie X Tage“ | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-087-statistik-serie.test.tsx |
+| REQ-088 | Seite „Statistik“ – Kalenderkarte für Woche und Monat mit Covern | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-088-statistik-kalender-woche-monat.test.tsx |
+| REQ-088 | Seite „Statistik“ – Kalenderkarte für Woche und Monat mit Covern | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-088-statistik-kalender-woche-monat.test.tsx |
+| REQ-088 | Seite „Statistik“ – Kalenderkarte für Woche und Monat mit Covern | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-088-statistik-kalender-woche-monat.test.tsx |
+| REQ-088 | Seite „Statistik“ – Kalenderkarte für Woche und Monat mit Covern | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-088-statistik-kalender-woche-monat.test.tsx |
+| REQ-088 | Seite „Statistik“ – Kalenderkarte für Woche und Monat mit Covern | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-088-statistik-kalender-woche-monat.test.tsx |
+| REQ-088 | Seite „Statistik“ – Kalenderkarte für Woche und Monat mit Covern | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-088-statistik-kalender-woche-monat.test.tsx |
+| REQ-089 | Seite „Statistik“ – Jahreskalender mit zwölf Mini-Kalendern | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-089-statistik-jahreskalender.test.tsx |
+| REQ-089 | Seite „Statistik“ – Jahreskalender mit zwölf Mini-Kalendern | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-089-statistik-jahreskalender.test.tsx |
+| REQ-089 | Seite „Statistik“ – Jahreskalender mit zwölf Mini-Kalendern | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-089-statistik-jahreskalender.test.tsx |
+| REQ-089 | Seite „Statistik“ – Jahreskalender mit zwölf Mini-Kalendern | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-089-statistik-jahreskalender.test.tsx |
+| REQ-090 | Seite „Statistik“ – Gestaltung aus Farbrubriken, in allen Farbdesigns und Stilen | Implementiert | AK-1 | 6 | 0 | tests/acceptance/REQ-090-statistik-farbdesigns-stile.test.tsx |
+| REQ-090 | Seite „Statistik“ – Gestaltung aus Farbrubriken, in allen Farbdesigns und Stilen | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-090-statistik-farbdesigns-stile.test.tsx |

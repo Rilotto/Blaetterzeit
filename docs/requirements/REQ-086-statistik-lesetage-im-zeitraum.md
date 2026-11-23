@@ -1,7 +1,7 @@
 ---
 id: REQ-086
 titel: Seite „Statistik“ – Zeile „X von N Tagen gelesen“
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

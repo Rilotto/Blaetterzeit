@@ -8,3 +8,4 @@
 - **Entwickler-Annahmen (nicht festgeschrieben, CEO prüft im Prototyp):** Deckeldicke 2,5 mm (max. ¼ der Dicke); Mindestdicke 3 mm verzerrt bei Büchern unter 3 mm die Proportion aus REQ-076 AK-1 (Risiko gering); Hinweisdauer 2,5 s.
 - **Risiken:** Unschärfe in jsdom nur über `filter`-Zweig prüfbar (backdrop-filter nicht); Schwung/Trägheit nur mit Fake-Uhr getestet, Gefühl am Gerät prüft der CEO; Android-Zurück-Taste nativ nur über das bestehende Muster (Web: popstate getestet).
 - **Empfehlung:** freigabefähig für die Review, sobald die CI (`npm run verify`, volle Suite) grün ist.
+- **Grobe Tests (2026-11-23, nach CEO-Abnahme):** `tests/grob/REQ-072…078-grob.test.tsx` neu (7 Dateien, 8 Tests, je Kern des REQ), lokal grün (dot); `tsc -b` und oxlint ohne Befund. Feine Tests unverändert. Keine Gegenprobe.

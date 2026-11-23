@@ -1,7 +1,7 @@
 ---
 id: REQ-085
 titel: Buchfeld „Beendet am“ – automatisch beim Status *gelesen*, überschreibbar im Reiter „Details“
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

@@ -1,7 +1,7 @@
 ---
 id: REQ-089
 titel: Seite „Statistik“ – Jahreskalender mit zwölf Mini-Kalendern
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

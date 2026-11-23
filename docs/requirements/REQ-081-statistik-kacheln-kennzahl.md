@@ -1,7 +1,7 @@
 ---
 id: REQ-081
 titel: Seite „Statistik“ – Kacheln „Seiten“ und „Bücher“ mit großer Kennzahl
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO
