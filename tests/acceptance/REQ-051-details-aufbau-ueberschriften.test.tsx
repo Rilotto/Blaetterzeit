@@ -68,7 +68,7 @@ async function zustand(w: Welt, d: HTMLElement, id: string) {
   return { html: bereich(d).innerHTML, dialoge: dialoge(), buch: JSON.stringify(await w.repo.get(id)) };
 }
 
-const UEBERSCHRIFTEN = ['Genres', 'Tropes', 'Inhaltswarnungen', 'Sammlungen und Bibliotheken', 'Ausgabe'];
+const UEBERSCHRIFTEN = ['Genres', 'Tropes', 'Inhaltswarnungen', 'Sagas, Sammlungen und Bibliotheken', 'Ausgabe'];
 
 describe('REQ-051 Details: Aufbau', () => {
   it('[REQ-051/AK-1] fünf Überschriften in fester Reihenfolge', async () => {

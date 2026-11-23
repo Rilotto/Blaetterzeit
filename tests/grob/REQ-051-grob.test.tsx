@@ -39,6 +39,6 @@ const bereich = (d: HTMLElement) => d.querySelector<HTMLElement>('[data-reiter-b
 it('[REQ-051/GROB] Reiter „Details“ zeigt die fünf Überschriften in fester Reihenfolge, kein Platzhaltertext', async () => {
   const { d } = await details();
   const h = Array.from(bereich(d).querySelectorAll('[data-abschnitt-ueberschrift]')).map((e) => norm(e.textContent));
-  expect(h).toEqual(['Genres', 'Tropes', 'Inhaltswarnungen', 'Sammlungen und Bibliotheken', 'Ausgabe']);
+  expect(h).toEqual(['Genres', 'Tropes', 'Inhaltswarnungen', 'Sagas, Sammlungen und Bibliotheken', 'Ausgabe']);
   expect(bereich(d).textContent).not.toContain('under construction');
 });

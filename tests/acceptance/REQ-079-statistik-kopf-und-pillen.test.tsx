@@ -70,7 +70,8 @@ describe('REQ-079 Kopf und Zeitraum-Pillen', () => {
 
   it('[REQ-079/AK-1] Gegenstück: andere Menüpunkte ohne Zielansicht zeigen weiterhin den Platzhalter, nicht „Dein Lesen“', async () => {
     render(<App einstellungRepository={new InMemoryEinstellungRepository()} />);
-    await tippe(within(nav()).getByRole('button', { name: 'Bibliothek' }));
+    // Seit REQ-097 hat „Bibliothek“ eine Zielansicht; „Start“ ist weiterhin ohne Ziel (REQ-002).
+    await tippe(within(nav()).getByRole('button', { name: 'Start' }));
     expect(norm(screen.getByRole('main').textContent)).toBe('under construction :)');
     expect(screen.queryByText('Dein Lesen')).toBeNull();
   });

@@ -227,7 +227,8 @@ describe('REQ-062 Treffer zur ISBN', () => {
     await scanne(scanner);
     await tippe((await screen.findByRole('dialog', { name: 'Gefundene Bücher' }, W)).querySelector('[data-treffer]')!);
     await vi.waitFor(() => expect(blatt()).not.toBeNull(), W);
-    expect(norm(zeile('verlag').textContent)).toBe('Verlag');
+    // Seit REQ-091 trägt die Zeile rechts den Pfeil „›“; geprüft wird: Bezeichnung „Verlag“, kein Wert.
+    expect(norm(zeile('verlag').textContent).replace(/›/g, '').trim()).toBe('Verlag');
     expect(feld('Seiten').value).toBe('');
     // Seit REQ-092: kein Feld „JAHR“; ohne Angabe der Quelle bleibt „Erschienen“ leer.
     expect(norm(zeile('erschienen').textContent)).toMatch(/^Erschienen\s*›?$/);
