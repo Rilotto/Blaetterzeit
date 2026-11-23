@@ -145,10 +145,25 @@ describe('Migrationen Eintragungsdatum (REQ-041)', () => {
     const db = await nodeSqlite();
     await migrieren(db, MIGRATIONEN.filter((m) => m.version <= 7));
     await db.ausfuehren("INSERT INTO buch (id, titel, status, isbn, geaendert) VALUES ('x', 'Alt', 'ungelesen', '9783551551672', '2026-01-01T00:00:00.000Z')");
-    expect(await migrieren(db)).toBe(8);
+    expect(await migrieren(db)).toBe(Math.max(...MIGRATIONEN.map((m) => m.version)));
     const repo = new SqliteBookRepository(db);
     expect(await repo.get('x')).toEqual({ id: 'x', titel: 'Alt', status: 'ungelesen', isbn: '9783551551672' });
     const neu = { id: 'x', titel: 'Alt', status: 'ungelesen' as const, isbn: '9783551551672', hoeheMm: 210, dickeMm: 25 };
+    await repo.save(neu);
+    expect(await repo.get('x')).toEqual(neu);
+  });
+
+  it('SQLite v8 → v9: alte Sitzungen ohne Seite bleiben lesbar, „Beendet am“ und Seite je Sitzung werden gespeichert (REQ-084, REQ-085)', async () => {
+    const { MIGRATIONEN } = await import('@/storage/sqlite/migrationen');
+    const db = await nodeSqlite();
+    await migrieren(db, MIGRATIONEN.filter((m) => m.version <= 8));
+    await db.ausfuehren(
+      `INSERT INTO buch (id, titel, status, sitzungen, geaendert) VALUES ('x', 'Alt', 'gelesen', '[{"zeitpunkt":"2026-01-01T10:00:00.000Z"}]', '2026-01-01T00:00:00.000Z')`,
+    );
+    expect(await migrieren(db)).toBe(9);
+    const repo = new SqliteBookRepository(db);
+    expect(await repo.get('x')).toEqual({ id: 'x', titel: 'Alt', status: 'gelesen', sitzungen: [{ zeitpunkt: '2026-01-01T10:00:00.000Z' }] });
+    const neu = { id: 'x', titel: 'Alt', status: 'gelesen' as const, beendetAm: '2019-03-14', sitzungen: [{ zeitpunkt: '2026-01-01T10:00:00.000Z' }, { zeitpunkt: '2026-01-02T10:00:00.000Z', seite: 40 }] };
     await repo.save(neu);
     expect(await repo.get('x')).toEqual(neu);
   });

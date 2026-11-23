@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import { massEingabeText, massPruefen, type Masse } from '@/domain/ausgabe';
+import { masseVorbefuellung, type MassQuelle } from './masse';
 import { fortschrittFarbe, textstufe, abstand } from '@/theme';
 import BlattUnten, { blattEingabeStil, blattHinweisStil, sichernStil } from './BlattUnten';
 
@@ -13,8 +14,11 @@ const FELDER: readonly { id: MassFeld; label: string; schluessel: keyof Masse }[
 ];
 
 interface Props {
-  /** Gespeicherte Maße; vorhandene Werte sind vorbefüllt (REQ-072, AK-3). */
-  masse: Masse;
+  /**
+   * Gespeicherte Maße samt Format und Seitenzahl: vorhandene Werte sind vorbefüllt, ohne jeden Wert die
+   * Schätzwerte nach REQ-077 (REQ-072, AK-3). Gespeichert wird erst mit „Sichern“.
+   */
+  masse: MassQuelle;
   /** Alle Felder gültig: Maße in Millimetern, leeres Feld fehlt (REQ-072, AK-4). */
   onSichern: (masse: Masse) => void;
   /** X, Herunterziehen, Tippen außerhalb, Zurück-Taste: nichts speichern (REQ-072, AK-6). */
@@ -48,11 +52,10 @@ const malStil: CSSProperties = {
 
 /** Blatt „Maße“ mit Breite, Höhe und Dicke in Zentimetern (REQ-072), Muster wie „Preis“ (REQ-059). */
 export default function BlattMasse({ masse, onSichern, onSchliessen }: Props) {
-  const [eingaben, setEingaben] = useState<Record<MassFeld, string>>(() => ({
-    breite: massEingabeText(masse.breiteMm),
-    hoehe: massEingabeText(masse.hoeheMm),
-    dicke: massEingabeText(masse.dickeMm),
-  }));
+  const [eingaben, setEingaben] = useState<Record<MassFeld, string>>(() => {
+    const v = masseVorbefuellung(masse);
+    return { breite: massEingabeText(v.breiteMm), hoehe: massEingabeText(v.hoeheMm), dicke: massEingabeText(v.dickeMm) };
+  });
   const [fehler, setFehler] = useState<Record<MassFeld, boolean>>({ breite: false, hoehe: false, dicke: false });
 
   const sichern = () => {

@@ -115,6 +115,23 @@ export function runBookRepositoryContract(name: string, factory: Fabrik) {
       expect(await nachher.get(prozent.id)).toEqual(prozent);
     });
 
+    it('speichert „Beendet am“ (REQ-085) und die Seite je Sitzung (REQ-084), auch nach einem Neustart', async () => {
+      const buch = {
+        ...neuesBuch({ titel: 'Beendet', status: 'gelesen', seitenanzahl: 300 }),
+        beendetAm: '2019-03-14',
+        sitzungen: [{ zeitpunkt: '2026-11-11T21:59:00.000Z' }, { zeitpunkt: '2026-11-12T06:01:00.000Z', seite: 42 }],
+      };
+      await repo.save(buch);
+      expect(await repo.get(buch.id)).toEqual(buch);
+      await repo.save({ ...buch, beendetAm: '2026-11-22' });
+      const nachher = neustart ? await neustart() : repo;
+      expect((await nachher.get(buch.id))?.beendetAm).toBe('2026-11-22');
+      expect((await nachher.get(buch.id))?.sitzungen?.[1].seite).toBe(42);
+      const { beendetAm: _weg, ...ohne } = buch;
+      await nachher.save(ohne);
+      expect((await nachher.get(buch.id))?.beendetAm).toBeUndefined();
+    });
+
     it('speichert Bewertungen und Rezension (REQ-045, REQ-049), auch nach einem Neustart; Zurücksetzen entfernt sie', async () => {
       const lang = `${'Absatz eins. '.repeat(400)}\n\nAbsatz zwei.`;
       const buch = { ...neuesBuch({ titel: 'Bewertet', status: 'gelesen' }), bewertungen: { sterne: 4 as const, spice: 2 as const }, rezension: lang };

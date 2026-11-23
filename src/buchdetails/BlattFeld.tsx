@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  beendetDatumText,
   datumFiltern,
   datumText,
   eintragungsdatumText,
@@ -139,6 +140,28 @@ export function BlattHinzugefuegt({
       titel="Hinzugefügt"
       kennung="hinzugefuegt"
       startWert={startDatum || eintragungsdatumText(eingetragenAm) || datumText(jetzt())}
+      platzhalter="TT.MM.JJJJ"
+      inputMode="numeric"
+      filtern={datumFiltern}
+      pruefen={(w) => {
+        const p = hinzugefuegtPruefen(w, jetzt());
+        return p.ok ? p.datum : null;
+      }}
+      {...rest}
+    />
+  );
+}
+
+/**
+ * Blatt „Beendet am“ (REQ-085): Verhalten wie „Hinzugefügt“ (TT.MM.JJJJ, nicht in der Zukunft); vorbefüllt mit dem
+ * gespeicherten Datum, ohne Datum leer. Liefert TT.MM.JJJJ.
+ */
+export function BlattBeendet({ beendetAm, jetzt, ...rest }: EinfachProps & { beendetAm?: string; jetzt: () => Date }) {
+  return (
+    <BlattFeld
+      titel="Beendet am"
+      kennung="beendet"
+      startWert={beendetDatumText(beendetAm)}
       platzhalter="TT.MM.JJJJ"
       inputMode="numeric"
       filtern={datumFiltern}

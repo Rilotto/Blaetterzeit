@@ -1,8 +1,7 @@
 import type { CSSProperties } from 'react';
 import { BILDBEREICHE, type Bildbereich } from '@/storage/ImageStore';
 import { buchdetailsCoverSchatten, buchdetailsFarbe, textformatAlleAnsehen, textstufe, abstand } from '@/theme';
-import type { Masse } from '@/domain/ausgabe';
-import { BEREICH_ABSTAND, bereichName, darstellungsMasse } from './masse';
+import { BEREICH_ABSTAND, bereichName, darstellungsMasse, type MassQuelle } from './masse';
 
 export type Bilder = Partial<Record<Bildbereich, string>>;
 
@@ -10,7 +9,7 @@ interface Props {
   titel: string;
   bilder: Bilder;
   /** Maße des Buches (REQ-073); fehlende Werte = Standardmaße. */
-  masse?: Masse;
+  masse?: MassQuelle;
   onAntippen: (bereich: Bildbereich) => void;
 }
 
@@ -37,6 +36,8 @@ const grundStil = (bereich: Bildbereich, masse: { hoehe: number; cover: number; 
   textAlign: 'left',
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
+  // Doppeltipp aufs Cover öffnet die 3D-Ansicht (REQ-074); kein Doppeltipp-Zoom des Browsers.
+  touchAction: 'manipulation',
 });
 
 const ohneBildStil = (bereich: Bildbereich): CSSProperties =>

@@ -5,6 +5,7 @@
  *  - Zeile [data-ausgabe-zeile="masse"]; Blatt role=dialog „Maße“ mit [data-ziehgriff], X [aria-label="Schließen"],
  *    [data-mass-feld=breite|hoehe|dicke] (Fehler data-fehler), [data-mass-label], [data-masse-hinweis], [data-masse-sichern]
  *  - Herunterziehen am [data-ziehgriff] ab 80 px; Zurück-Taste im Web als popstate
+ *  - Sprint 08: ohne Maße Vorschlag „ca. …“ nach REQ-077 an [data-zeile-wert][data-zeile-vorschlag="true"], Blatt vorbefüllt
  * „Neustart“: neu geladene Module, neue Repository-Instanz auf derselben IndexedDB (fake-indexeddb).
  */
 import '@testing-library/jest-dom/vitest';
@@ -136,8 +137,29 @@ describe('REQ-072 Maße', () => {
   });
 
   describe('AK-2 Anzeige', () => {
+    const wertEl = (d: ParentNode) => zeile(d, 'masse').querySelector<HTMLElement>('[data-zeile-wert]')!;
     it.each([
-      [{}, 'Trag die Maße ein'],
+      [{ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 }, 'ca. 12,0 × 19,0 × 2,4 cm'],
+      [{ format: 'print', unterformat: 'hardcover', seitenanzahl: 400 }, 'ca. 14,8 × 21,0 × 2,8 cm'],
+      [{}, 'ca. 12,0 × 19,0 × 2,5 cm'],
+    ] as [Partial<Buch>, string][])('[REQ-072/AK-2] ohne Maße %j → Vorschlag „%s“, kursiv/abgeschwächt, nichts gespeichert', async (m, soll) => {
+      const { d, id } = await mitBuch(buch(m));
+      expect(wert(d)).toBe(soll);
+      expect(wertEl(d).getAttribute('data-zeile-vorschlag')).toBe('true');
+      expect(getComputedStyle(wertEl(d)).fontStyle).toBe('italic');
+      await warte(100);
+      const g = await gespeichert(id);
+      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([undefined, undefined, undefined]);
+    });
+
+    it('[REQ-072/AK-2] mit Werten: kein Vorschlag, nicht kursiv', async () => {
+      const { d } = await mitBuch(buch({ breiteMm: 135, hoeheMm: 210, dickeMm: 32, format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 }));
+      expect(wert(d)).toBe('13,5 × 21,0 × 3,2 cm');
+      expect(wertEl(d).getAttribute('data-zeile-vorschlag')).not.toBe('true');
+      expect(getComputedStyle(wertEl(d)).fontStyle).not.toBe('italic');
+    });
+
+    it.each([
       [{ breiteMm: 135, hoeheMm: 210, dickeMm: 32 }, '13,5 × 21,0 × 3,2 cm'],
       [{ hoeheMm: 210 }, '– × 21,0 × – cm'],
       [{ breiteMm: 100, dickeMm: 5 }, '10,0 × – × 0,5 cm'],
@@ -149,7 +171,7 @@ describe('REQ-072 Maße', () => {
 
   describe('AK-3 Aufbau des Blatts', () => {
     it('[REQ-072/AK-3] Ziehgriff, Titel, X, Felder Breite × Höhe × Dicke mit Großbuchstaben-Labels, Hinweis, „Sichern“', async () => {
-      const { d } = await mitBuch();
+      const { d } = await mitBuch(buch({ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 }));
       await oeffne(d);
       const b = blatt()!;
       expect(b.querySelector('[data-ziehgriff]')).not.toBeNull();
@@ -161,10 +183,8 @@ describe('REQ-072 Maße', () => {
         getComputedStyle(l).textTransform === 'uppercase' ? norm(l.textContent).toUpperCase() : norm(l.textContent),
       );
       expect(labels).toEqual(['BREITE', 'HÖHE', 'DICKE']);
-      for (const f of ['breite', 'hoehe', 'dicke'] as const) {
-        expect(feld(f).value).toBe('');
-        expect(feld(f).getAttribute('inputmode')).toBe('decimal');
-      }
+      for (const f of ['breite', 'hoehe', 'dicke'] as const) expect(feld(f).getAttribute('inputmode')).toBe('decimal');
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['12,0', '19,0', '2,4']);
       expect(norm(b.querySelector('[data-masse-hinweis]')?.textContent)).toBe('in Zentimetern');
       expect(norm(b.querySelector('[data-masse-sichern]')?.textContent)).toBe('Sichern');
     });
@@ -173,6 +193,17 @@ describe('REQ-072 Maße', () => {
       const { d } = await mitBuch(buch({ breiteMm: 135, hoeheMm: 210, dickeMm: 32 }));
       await oeffne(d);
       expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['13,5', '21,0', '3,2']);
+    });
+
+    it.each([
+      [{ format: 'print', unterformat: 'hardcover', seitenanzahl: 400 }, ['14,8', '21,0', '2,8']],
+      [{ format: 'print', unterformat: 'kleinformat' }, ['10,5', '14,8', '2,5']],
+    ] as [Partial<Buch>, string[]][])('[REQ-072/AK-3] ohne Maße %j: Felder mit Schätzwerten %j vorbefüllt, nichts gespeichert', async (m, soll) => {
+      const { d, id } = await mitBuch(buch(m));
+      await oeffne(d);
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(soll);
+      const g = await gespeichert(id);
+      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([undefined, undefined, undefined]);
     });
 
     it('[REQ-072/AK-3] teilweise Werte: fehlende Felder bleiben leer', async () => {
@@ -187,6 +218,8 @@ describe('REQ-072 Maße', () => {
       const { d, id } = await mitBuch();
       await oeffne(d);
       await gib('breite', '13.5');
+      await gib('hoehe', '');
+      await gib('dicke', '');
       await sichern();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
       await vi.waitFor(() => expect(wert(d)).toBe('13,5 × – × – cm'), W);
@@ -227,13 +260,15 @@ describe('REQ-072 Maße', () => {
       expect(g?.breiteMm).toBe(135);
     });
 
-    it('[REQ-072/AK-4] alle Felder leeren → „Trag die Maße ein“', async () => {
-      const { d } = await mitBuch(buch({ hoeheMm: 210 }));
+    it('[REQ-072/AK-4] alle Felder leeren → keine Maße gespeichert, Zeile zeigt wieder den Vorschlag „ca. …“', async () => {
+      const { d, id } = await mitBuch(buch({ hoeheMm: 210, format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 }));
       await oeffne(d);
       await gib('hoehe', '');
       await sichern();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      expect(wert(d)).toBe('Trag die Maße ein');
+      expect(wert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      const g = await gespeichert(id);
+      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([undefined, undefined, undefined]);
     });
   });
 
@@ -272,6 +307,8 @@ describe('REQ-072 Maße', () => {
       await sichern();
       expect(fehler('breite')).toBe(true);
       await gib('breite', '13,5');
+      await gib('hoehe', '');
+      await gib('dicke', '');
       await sichern();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
       expect(wert(d)).toBe('13,5 × – × – cm');
@@ -319,10 +356,12 @@ describe('REQ-072 Maße', () => {
       const m = await oeffneManuell();
       const ids = Array.from(m.querySelectorAll('[data-ausgabe-zeile]')).map((z) => z.getAttribute('data-ausgabe-zeile'));
       expect(ids[ids.indexOf('format') + 1]).toBe('masse');
-      expect(wert(m)).toBe('Trag die Maße ein');
+      expect(wert(m)).toBe('ca. 12,0 × 19,0 × 2,5 cm');
       fireEvent.change(meFeld('Titel'), { target: { value: 'Maßbuch' } });
       fireEvent.change(meFeld('Seiten'), { target: { value: '300' } });
+      await vi.waitFor(() => expect(wert(m)).toBe('ca. 12,0 × 19,0 × 1,9 cm'), W);
       await oeffne(m);
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['12,0', '19,0', '1,9']);
       await gib('breite', '12');
       await gib('hoehe', '18,5');
       await gib('dicke', '4.2');
@@ -339,6 +378,19 @@ describe('REQ-072 Maße', () => {
       expect(wert(await zeige(w2, neu.id))).toBe('12,0 × 18,5 × 4,2 cm');
     });
 
+    it('[REQ-072/AK-7] Manueller Eintrag ohne Maße: Vorschlag wird nicht mit dem Buch gespeichert', async () => {
+      const w = await starte();
+      await zeigeBA(w);
+      const m = await oeffneManuell();
+      fireEvent.change(meFeld('Titel'), { target: { value: 'Ohne Maß' } });
+      fireEvent.change(meFeld('Seiten'), { target: { value: '400' } });
+      await vi.waitFor(() => expect(wert(m)).toBe('ca. 12,0 × 19,0 × 2,4 cm'), W);
+      await tippe(within(me()!).getByRole('button', { name: 'Hinzufügen' }));
+      await vi.waitFor(() => expect(me()).toBeNull(), W);
+      const neu = (await w.repo.list()).find((b) => b.titel === 'Ohne Maß')!;
+      expect([neu.breiteMm, neu.hoeheMm, neu.dickeMm]).toEqual([undefined, undefined, undefined]);
+    });
+
     it('[REQ-072/AK-7] gleiche Regeln: ungültiger Wert im Manuellen Eintrag wird rot markiert, Blatt bleibt offen', async () => {
       const w = await starte();
       await zeigeBA(w);
@@ -350,7 +402,7 @@ describe('REQ-072 Maße', () => {
       expect(fehler('dicke')).toBe(true);
       await tippe(blatt()!.querySelector('[aria-label="Schließen"]')!);
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      expect(wert(me()!)).toBe('Trag die Maße ein');
+      expect(wert(me()!)).toBe('ca. 12,0 × 19,0 × 2,5 cm');
       // Blatt sauber schließen (hält den Verlauf der Zurück-Taste für die Folgetests sauber)
       await tippe(within(me()!).getByRole('button', { name: 'Schließen' }));
       await vi.waitFor(() => expect(me()).toBeNull(), W);
@@ -398,11 +450,17 @@ describe('REQ-072 Maße', () => {
       expect([neu.breiteMm, neu.hoeheMm, neu.dickeMm]).toEqual([undefined, 210, undefined]);
     });
 
-    it('[REQ-072/AK-8] keine Quelle liefert Maße → Felder leer', async () => {
-      await scanneUndTippe([{ quelle: 'openlibrary', angaben: { titel: 'Ohne', isbn: ISBN } }]);
-      expect(wert(me()!)).toBe('Trag die Maße ein');
+    it('[REQ-072/AK-8] keine Quelle liefert Maße → nichts übernommen/gespeichert; Zeile und Blatt zeigen den Schätz-Vorschlag', async () => {
+      const w = await scanneUndTippe([{ quelle: 'openlibrary', angaben: { titel: 'Ohne', isbn: ISBN, seitenanzahl: 400 } }]);
+      expect(wert(me()!)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
       await oeffne(me()!);
-      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['', '', '']);
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['12,0', '19,0', '2,4']);
+      await tippe(blatt()!.querySelector('[aria-label="Schließen"]')!);
+      await vi.waitFor(() => expect(blatt()).toBeNull(), W);
+      await tippe(within(me()!).getByRole('button', { name: 'Hinzufügen' }));
+      await vi.waitFor(() => expect(me()).toBeNull(), W);
+      const neu = (await w.repo.list()).find((b) => b.titel === 'Ohne')!;
+      expect([neu.breiteMm, neu.hoeheMm, neu.dickeMm]).toEqual([undefined, undefined, undefined]);
     });
 
     const dnbXml = (c: string) => `<?xml version="1.0" encoding="UTF-8"?>
@@ -443,6 +501,67 @@ describe('REQ-072 Maße', () => {
     it('[REQ-072/AK-8] Open Library ohne physical_dimensions → keine Maße', () => {
       const [t] = openLibraryTrefferLesen(ol(), ISBN);
       expect([t.angaben.breiteMm, t.angaben.hoeheMm, t.angaben.dickeMm]).toEqual([undefined, undefined, undefined]);
+    });
+  });
+  describe('AK-9 Schätzwerte folgen dem Format, werden nicht gespeichert', () => {
+    async function formatAufHardcover(d: HTMLElement) {
+      await tippe(zeile(d, 'format'));
+      const f = await vi.waitFor(() => {
+        const e = document.querySelector<HTMLElement>('[data-fenster-format]');
+        expect(e).not.toBeNull();
+        return e!;
+      }, W);
+      await tippe(f.querySelector('[data-unterformat="hardcover"]')!);
+      await tippe(f.querySelector('[data-format-sichern]')!);
+      await vi.waitFor(() => expect(document.querySelector('[data-fenster-format]')).toBeNull(), W);
+      await warte(60);
+    }
+    const tb400 = () => buch({ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 });
+
+    it('[REQ-072/AK-9] Taschenbuch ohne Maße → Format auf Hardcover ändern und sichern → Zeile zeigt Hardcover-Schätzwerte, nichts gespeichert', async () => {
+      const { d, id } = await mitBuch(tb400());
+      expect(wert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      await formatAufHardcover(d);
+      await vi.waitFor(() => expect(wert(d)).toBe('ca. 14,8 × 21,0 × 2,8 cm'), W);
+      await oeffne(d);
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['14,8', '21,0', '2,8']);
+      const g = await gespeichert(id);
+      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([undefined, undefined, undefined]);
+    });
+
+    it.each(['X', 'Außen', 'Zurück-Taste', 'Herunterziehen'])('[REQ-072/AK-9] vorbefülltes Blatt ohne „Sichern“ schließen (%s) → weiterhin keine Maße gespeichert', async (weg) => {
+      const { d, id } = await mitBuch(tb400());
+      await oeffne(d);
+      if (weg === 'X') await tippe(blatt()!.querySelector('[aria-label="Schließen"]')!);
+      else if (weg === 'Außen') await tippe(document.querySelector('[data-blatt-hintergrund]')!);
+      else if (weg === 'Zurück-Taste') await zurueckTaste();
+      else await herunterziehen();
+      await vi.waitFor(() => expect(blatt()).toBeNull(), W);
+      expect(wert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      const g = await gespeichert(id);
+      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([undefined, undefined, undefined]);
+    });
+
+    it('[REQ-072/AK-9] vorbefülltes Blatt mit „Sichern“ → Werte gespeichert, Zeile ohne „ca.“ und nicht abgeschwächt', async () => {
+      const { d, id } = await mitBuch(tb400());
+      await oeffne(d);
+      await sichern();
+      await vi.waitFor(() => expect(blatt()).toBeNull(), W);
+      await vi.waitFor(() => expect(wert(d)).toBe('12,0 × 19,0 × 2,4 cm'), W);
+      const w = zeile(d, 'masse').querySelector<HTMLElement>('[data-zeile-wert]')!;
+      expect(w.getAttribute('data-zeile-vorschlag')).not.toBe('true');
+      expect(getComputedStyle(w).fontStyle).not.toBe('italic');
+      const g = await gespeichert(id);
+      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([120, 190, 24]);
+    });
+
+    it('[REQ-072/AK-9] nach dem Sichern folgen die Werte nicht mehr dem Format', async () => {
+      const { d } = await mitBuch(tb400());
+      await oeffne(d);
+      await sichern();
+      await vi.waitFor(() => expect(wert(d)).toBe('12,0 × 19,0 × 2,4 cm'), W);
+      await formatAufHardcover(d);
+      expect(wert(d)).toBe('12,0 × 19,0 × 2,4 cm');
     });
   });
 });

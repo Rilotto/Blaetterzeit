@@ -1,5 +1,5 @@
 /**
- * Akzeptanztests REQ-068 – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre).
+ * Akzeptanztests REQ-068 – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht).
  * Abgeleitet aus dem REQ-Text. Konkrete Farbwerte sind Standardwerte auf Zuruf (kein AK); erwartete Werte
  * kommen deshalb aus der zentralen Definition `farbdesigns` (src/theme/farben.ts).
  * Schnittstellen laut Entwickler (Sprint 06 Teil C): App-Prop `einstellungRepository`; button[data-farbdesign]
@@ -62,18 +62,20 @@ async function oeffneFenster() {
 }
 
 describe('REQ-068 Farbdesigns', () => {
-  it('[REQ-068/AK-1] Liste: „Klassisch“, „Salbei“, „Nachtlektüre“ in dieser Reihenfolge', async () => {
+  it('[REQ-068/AK-1] Liste: „Klassisch“, „Salbei“, „Nachtlektüre“, „Raureif“, „Polarnacht“ in dieser Reihenfolge', async () => {
     await starte();
     await oeffneFenster();
-    expect(zeilen().map((z) => z.getAttribute('data-farbdesign'))).toEqual(['klassisch', 'salbei', 'nachtlektuere']);
+    expect(zeilen().map((z) => z.getAttribute('data-farbdesign'))).toEqual(['klassisch', 'salbei', 'nachtlektuere', 'raureif', 'polarnacht']);
     expect(zeilen().map((z) => (z.textContent ?? '').trim())).toEqual([
       expect.stringContaining('Klassisch'),
       expect.stringContaining('Salbei'),
       expect.stringContaining('Nachtlektüre'),
+      expect.stringContaining('Raureif'),
+      expect.stringContaining('Polarnacht'),
     ]);
   });
 
-  it.each(['klassisch', 'salbei', 'nachtlektuere'] as const)('[REQ-068/AK-1] „%s“: fünf Farbkreise Hintergrund, Primär, Sekundär, Tertiär, Dunkelbraun mit den Werten des Designs', async (id) => {
+  it.each(['klassisch', 'salbei', 'nachtlektuere', 'raureif', 'polarnacht'] as const)('[REQ-068/AK-1] „%s“: fünf Farbkreise Hintergrund, Primär, Sekundär, Tertiär, Dunkelbraun mit den Werten des Designs', async (id) => {
     await starte();
     await oeffneFenster();
     const kreise = Array.from(zeile(id).querySelectorAll<HTMLElement>('[data-farbkreis]'));
@@ -83,10 +85,16 @@ describe('REQ-068 Farbdesigns', () => {
     for (const k of kreise) expect(getComputedStyle(k).backgroundColor).toBe(farbeVon(wurzel(), k.getAttribute('data-farbwert')!));
   });
 
-  it('[REQ-068/AK-1] Klassisch zeigt die heutigen Standardfarben, Salbei/Nachtlektüre die vom CEO vorgegebenen Werte', () => {
+  it('[REQ-068/AK-1] Klassisch zeigt die heutigen Standardfarben, Salbei/Nachtlektüre/Raureif/Polarnacht die vom CEO vorgegebenen Werte', () => {
     for (const r of RUBRIKEN) expect(farbdesigns.klassisch.werte[r]).toBe(farbrubriken[r].wert);
     expect(RUBRIKEN.map((r) => farbdesigns.salbei.werte[r].toUpperCase())).toEqual(['#F3F5EE', '#4E7D63', '#C9D6C3', '#5E6B5A', '#2C3A2F']);
     expect(RUBRIKEN.map((r) => farbdesigns.nachtlektuere.werte[r].toUpperCase())).toEqual(['#2B2420', '#D9A21B', '#5A4A3E', '#B8A58C', '#F1E9DA']);
+    expect(RUBRIKEN.map((r) => farbdesigns.raureif.werte[r].toUpperCase())).toEqual(['#F6F8FA', '#2E5A7A', '#C9D8E3', '#5C6B78', '#1E2A35']);
+    expect(RUBRIKEN.map((r) => farbdesigns.polarnacht.werte[r].toUpperCase())).toEqual(['#0F1620', '#8EC5E8', '#24364A', '#9BABBB', '#E8F0F6']);
+    // Ghost / GhostFrame vom CEO vorgegeben
+    expect([farbdesigns.raureif.werte.ghost, farbdesigns.raureif.werte.ghostframe].map((w) => w.toUpperCase())).toEqual(['#EBF0F4', '#D8E0E7']);
+    expect([farbdesigns.polarnacht.werte.ghost, farbdesigns.polarnacht.werte.ghostframe].map((w) => w.toUpperCase())).toEqual(['#172030', '#253244']);
+    expect([farbdesigns.raureif.dunkel, farbdesigns.polarnacht.dunkel]).toEqual([false, true]);
   });
 
   it('[REQ-068/AK-2] nie gewählt: App in den Farben von „Klassisch“, „Klassisch“ mit Häkchen, die anderen mit leerem Kreis', async () => {
@@ -97,6 +105,8 @@ describe('REQ-068 Farbdesigns', () => {
     expect(hatHaken('klassisch')).toBe(true);
     expect(hatKreis('salbei')).toBe(true);
     expect(hatKreis('nachtlektuere')).toBe(true);
+    expect(hatKreis('raureif')).toBe(true);
+    expect(hatKreis('polarnacht')).toBe(true);
     expect(zeile('klassisch')).toHaveAttribute('aria-checked', 'true');
   });
 

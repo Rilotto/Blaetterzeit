@@ -34,6 +34,8 @@ export interface Designwahl {
 }
 
 interface DesignKontext extends Designwahl {
+  /** Speicher der App-Einstellungen, auch für andere gemerkte Wahlen (z. B. Zeitraum der Statistik, REQ-079). */
+  einstellungRepository?: EinstellungRepository;
   farbdesignWaehlen: (id: FarbdesignId) => void;
   schriftWaehlen: (id: SchriftId) => void;
   stilWaehlen: (id: StilId) => void;
@@ -114,8 +116,8 @@ export function DesignAnbieter({ repository, children }: { repository: Einstellu
   );
 
   const wert = useMemo(
-    () => ({ ...wahl, farbdesignWaehlen, schriftWaehlen, stilWaehlen }),
-    [wahl, farbdesignWaehlen, schriftWaehlen, stilWaehlen],
+    () => ({ ...wahl, einstellungRepository: repository, farbdesignWaehlen, schriftWaehlen, stilWaehlen }),
+    [wahl, repository, farbdesignWaehlen, schriftWaehlen, stilWaehlen],
   );
   return <Kontext.Provider value={wert}>{children}</Kontext.Provider>;
 }

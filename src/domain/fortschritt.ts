@@ -22,6 +22,15 @@ export function fortschrittExakt(buch: Buch): number {
 /** Kaufmännisch auf eine ganze Zahl gerundet (nur nichtnegative Werte). */
 export const kaufmaennisch = (wert: number): number => Math.floor(wert + 0.5);
 
+/**
+ * Gesicherter Fortschritt als Seitenzahl für die Sitzung (REQ-084): Modus „Seite“ die aktuelle Seite,
+ * Modus „%“ Prozent × Seitenanzahl / 100, kaufmännisch gerundet.
+ */
+export function seiteVon(buch: Buch): number {
+  if (modusVon(buch) === 'prozent') return kaufmaennisch(((buch.fortschrittProzent ?? 0) * (buch.seitenanzahl ?? 0)) / 100);
+  return buch.aktuelleSeite ?? 0;
+}
+
 /** Fortschritt als ganze Prozentzahl für die Statistik-Pille (REQ-026). */
 export const fortschrittGerundet = (buch: Buch): number => kaufmaennisch(fortschrittExakt(buch));
 
@@ -77,7 +86,7 @@ export function fortschrittSichern(buch: Buch, modus: Fortschrittsmodus, wert: n
   }
   const nachher = fortschrittExakt(neu);
   const sitzungen: Sitzung[] = [...(buch.sitzungen ?? [])];
-  if (nachher > vorher) sitzungen.push({ zeitpunkt: jetzt.toISOString() });
+  if (nachher > vorher) sitzungen.push({ zeitpunkt: jetzt.toISOString(), seite: seiteVon(neu) });
   if (sitzungen.length > 0) neu.sitzungen = sitzungen;
   return neu;
 }

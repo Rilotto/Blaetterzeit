@@ -1,7 +1,7 @@
 ---
 id: REQ-075
 titel: 3D-Ansicht – Modell frei drehen mit Schwung, ohne Zoom
-status: Abgestimmt
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -14,13 +14,13 @@ freigegeben_in:
 
 Als **Nutzer** möchte ich **das 3D-Modell meines Buches frei in alle Richtungen drehen**, damit **ich es von jeder Seite betrachten kann**.
 
-CEO (2026-11-21, wörtlich): „Wichtig: Ich möchte das Buch frei drehen können […]“. Antwort des CEO (über den Scrum Master): völlig frei in alle Richtungen; nach dem Loslassen dreht es mit Schwung weiter; kein Zoom; Startansicht wie im Referenzbild, schräg von vorne; ein Zurück zur Startansicht ist nicht nötig.
+CEO (2026-11-21, wörtlich): „Wichtig: Ich möchte das Buch frei drehen können […]“. Antwort des CEO (über den Scrum Master): völlig frei in alle Richtungen; nach dem Loslassen dreht es mit Schwung weiter; kein Zoom; ein Zurück zur Startansicht ist nicht nötig. Startansicht laut CEO (2026-11-22, wörtlich): „Das 3D Buch soll bitte als Startposition komplett gerade ausgerichtet sein, mit dem Cover nach vorn.“ Das ersetzt die frühere Vorgabe „schräg wie im Screenshot“.
 
-Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.png) (Startansicht).
+Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.png) (Gesamteindruck; für die Startansicht nicht mehr maßgeblich).
 
 ## Anforderung (Satzschablone)
 
-- Das System muss das 3D-Modell (REQ-076) beim Öffnen der 3D-Ansicht (REQ-074) in der Startansicht schräg von vorne zeigen, sodass Cover und Buchrücken sichtbar sind, wie im Referenzbild.
+- Das System muss das 3D-Modell (REQ-076) beim Öffnen der 3D-Ansicht (REQ-074) in der Startansicht komplett gerade ausgerichtet zeigen, mit dem Cover frontal nach vorne, ohne Neigung oder Drehung.
 - Das System muss dem Nutzer die Möglichkeit bieten, das Modell durch Ziehen mit dem Finger frei um alle Achsen zu drehen, ohne Begrenzung des Drehwinkels.
 - Wenn der Nutzer den Finger nach einer Ziehbewegung loslässt, muss das System das Modell mit dem Schwung der Bewegung weiterdrehen.
 - Das System darf die Größe des Modells durch Gesten (z. B. Zwei-Finger-Spreizen) nicht verändern.
@@ -30,7 +30,8 @@ Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.pn
 ### AK-1 Startansicht
 - **Gegeben** ein Buch
 - **Wenn** die 3D-Ansicht geöffnet wird
-- **Dann** zeigt das Modell Cover und Buchrücken schräg von vorne
+- **Dann** steht das Modell komplett gerade, das Cover zeigt frontal nach vorne
+- **Und** das Modell ist weder geneigt noch gedreht
 
 ### AK-2 Frei drehen, alle Richtungen
 - **Gegeben** die 3D-Ansicht ist geöffnet
@@ -70,3 +71,5 @@ Referenzbild: [referenzen/REF-3d-01-ansicht.png](referenzen/REF-3d-01-ansicht.pn
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-21 | Erstellt aus CEO-Beschreibung und CEO-Antworten (über den Scrum Master); Inhalt vom CEO bestätigt. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-21 | Startansicht an Referenzbild angeglichen (Hinweis des Scrum Masters, CEO: „Startansicht wie im Screenshot“): Cover, Schnitt rechts, Oberkante oben, Rücken nicht sichtbar. Anforderung und AK-1 geändert. Status unverändert | Anforderungsmanager |
+| 2026-11-22 | CEO (wörtlich): „Das 3D Buch soll bitte als Startposition komplett gerade ausgerichtet sein, mit dem Cover nach vorn.“ Startansicht jetzt gerade und frontal statt schräg wie im Screenshot. Anforderung und AK-1 geändert. Status unverändert | Anforderungsmanager |

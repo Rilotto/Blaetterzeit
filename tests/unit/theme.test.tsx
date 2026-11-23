@@ -40,6 +40,8 @@ describe('Farbrubriken', () => {
         'humor',
         'grusel',
         'dialoge',
+        // REQ-084: Statistik „aus beendeten Büchern“
+        'gold',
       ].sort(),
     );
     for (const r of Object.values(farbrubriken)) {

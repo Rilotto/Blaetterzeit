@@ -1,6 +1,6 @@
 ---
 id: REQ-068
-titel: Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre)
+titel: Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht)
 status: Implementiert
 prioritaet: Should
 art: funktional
@@ -21,7 +21,7 @@ CEO (2026-11-18, wörtlich): „Farben gibt mir eine Übersicht, welche der bish
 ## Anforderung (Satzschablone)
 
 - Das System muss Farbdesigns an genau einer zentralen Stelle definieren. Jedes Farbdesign hat einen Namen und legt einen Wert für jede Farbrubrik fest (siehe Glossar „Farbrubrik“).
-- Das System muss zum Start genau die Farbdesigns „Klassisch“, „Salbei“ und „Nachtlektüre“ in dieser Reihenfolge bereitstellen.
+- Das System muss genau die Farbdesigns „Klassisch“, „Salbei“, „Nachtlektüre“, „Raureif“ und „Polarnacht“ in dieser Reihenfolge bereitstellen.
 - Das System muss im Fenster „Design“ unter „Farben“ je Farbdesign eine Zeile mit dem Namen und fünf Farbkreisen darstellen, und zwar in der Reihenfolge Hintergrund, Primär, Sekundär, Tertiär, Dunkelbraun mit den Werten dieses Designs.
 - Das System muss beim aktiven Farbdesign ein Häkchen darstellen und bei allen anderen einen leeren Kreis.
 - Wenn der Nutzer eine Zeile antippt, muss das System dieses Farbdesign sofort app-weit anwenden, ohne Neustart und ohne „Sichern“.
@@ -36,17 +36,21 @@ CEO (2026-11-18, wörtlich): „Farben gibt mir eine Übersicht, welche der bish
 | Klassisch | heutige Standardfarben | | | | | #FFFDF8 |
 | Salbei | #F3F5EE | #4E7D63 | #C9D6C3 | #5E6B5A | #2C3A2F | #FBFCF8 |
 | Nachtlektüre (dunkel) | #2B2420 | #D9A21B | #5A4A3E | #B8A58C | #F1E9DA | #362D28 |
+| Raureif (hell) | #F6F8FA | #2E5A7A | #C9D8E3 | #5C6B78 | #1E2A35 | leitet der Entwickler ab |
+| Polarnacht (dunkel) | #0F1620 | #8EC5E8 | #24364A | #9BABBB | #E8F0F6 | leitet der Entwickler ab |
+
+Zusätzlich vom CEO vorgegeben: Ghost / GhostFrame für Raureif #EBF0F4 / #D8E0E7, für Polarnacht #172030 / #253244.
 
 „Kartenfläche“ erscheint nicht in den fünf Farbkreisen der Liste.
 
-Die übrigen Farbrubriken (Ghost, GhostFrame, Flamme Rot und Orange, Kriterienfarben) leitet der Entwickler je Design passend ab. Eine Farbänderung auf Zuruf betrifft das vom CEO genannte Design.
+Die übrigen Farbrubriken (Ghost und GhostFrame, soweit nicht oben vorgegeben, Kartenfläche bei Raureif und Polarnacht, Flamme Rot und Orange, Kriterienfarben) leitet der Entwickler je Design passend ab. Eine Farbänderung auf Zuruf betrifft das vom CEO genannte Design.
 
 ## Akzeptanzkriterien
 
 ### AK-1 Liste der Farbdesigns
 - **Gegeben** das Fenster „Design“ mit aktivem „Farben“
 - **Wenn** der Nutzer die Liste betrachtet
-- **Dann** stehen dort „Klassisch“, „Salbei“ und „Nachtlektüre“ in dieser Reihenfolge, je mit fünf Farbkreisen in den Farben Hintergrund, Primär, Sekundär, Tertiär und Dunkelbraun des jeweiligen Designs
+- **Dann** stehen dort „Klassisch“, „Salbei“, „Nachtlektüre“, „Raureif“ und „Polarnacht“ in dieser Reihenfolge, je mit fünf Farbkreisen in den Farben Hintergrund, Primär, Sekundär, Tertiär und Dunkelbraun des jeweiligen Designs
 
 ### AK-2 Standard und Markierung
 - **Gegeben** der Nutzer hat noch nie ein Farbdesign gewählt
@@ -93,5 +97,6 @@ Die übrigen Farbrubriken (Ghost, GhostFrame, Flamme Rot und Orange, Kriterienfa
 
 | Datum | Änderung | durch |
 |---|---|---|
+| 2026-11-22 | CEO (wörtlich): „Bitte baue nun den Prototypen und berücksichtige auch die neuen Farben“ (Winter-Templates vom 2026-11-21). Zwei Farbdesigns ergänzt: „Raureif“ (hell) und „Polarnacht“ (dunkel), Reihenfolge Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht. Standardwerte auf Zuruf; Kartenfläche, Flammen und Kriterienfarben leitet der Entwickler ab. Titel, Anforderung, AK-1 und Tabelle geändert. Status unverändert | Anforderungsmanager |
 | 2026-11-18 | Farbrubrik „Kartenfläche“ (REQ-065) mit Standardwerten je Design in die Tabelle aufgenommen (Klassisch #FFFDF8, Salbei #FBFCF8, Nachtlektüre #362D28). Begründung: CEO-Wunsch nach hellerer Kartenfläche „wie bei Buchdetails -> Ausgabe“, nachdem die Körnung entfällt. Status unverändert | Anforderungsmanager |
 | 2026-11-18 | Erstellt aus der CEO-Anforderung, dem angenommenen Mockup und den CEO-Antworten (Start-Designs, Ablösung von REQ-001). Status „Abgestimmt“ | Anforderungsmanager |

@@ -1,7 +1,8 @@
 import type { CSSProperties, ReactNode } from 'react';
+import { masseVorschlagText } from '@/buchdetails/masse';
 import {
-  MASSE_LEER,
   PREIS_LEER,
+  beendetText,
   exemplarText,
   formatText,
   hatMasse,
@@ -27,7 +28,8 @@ export type AusgabeZeile =
   | 'verlag'
   | 'erschienen'
   | 'isbn'
-  | 'hinzugefuegt';
+  | 'hinzugefuegt'
+  | 'beendet';
 
 /** Zeilen mit Pfeil „›“ (REQ-056, AK-2). */
 const MIT_PFEIL: readonly AusgabeZeile[] = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'masse'];
@@ -47,6 +49,8 @@ interface Props {
   onIsbn?: () => void;
   /** Zeile „Hinzugefügt“ angetippt (REQ-064). */
   onHinzugefuegt?: () => void;
+  /** Zeile „Beendet am“ angetippt (REQ-085). */
+  onBeendet?: () => void;
 }
 
 // Überschriften wie REF-details-01/-02: normale Schreibweise, größer, Dunkelbraun (nicht Großbuchstaben wie „BEWERTUNG“).
@@ -123,7 +127,7 @@ export const karteDetails: CSSProperties = {
   backgroundColor: detailsFarbe('karteFlaeche'),
 };
 
-export const zeileStil = (letzte: boolean, antippbar: boolean): CSSProperties => ({
+export const zeileStil = (letzte: boolean, antippbar: boolean, trennlinieOben = false): CSSProperties => ({
   display: 'flex',
   alignItems: 'center',
   gap: abstand('m'),
@@ -133,6 +137,7 @@ export const zeileStil = (letzte: boolean, antippbar: boolean): CSSProperties =>
   margin: 0,
   padding: `${abstand('s')} 0`,
   border: 'none',
+  ...(trennlinieOben ? { borderTop: `1.5px solid ${detailsFarbe('trennlinie')}` } : {}),
   borderBottom: letzte ? 'none' : `1.5px solid ${detailsFarbe('trennlinie')}`,
   background: 'none',
   fontFamily: 'inherit',
@@ -203,7 +208,9 @@ function Zeile({
   beschriftung,
   wert,
   letzte = false,
+  trennlinieOben = false,
   hervorgehoben = false,
+  vorschlag = false,
   onAntippen,
   eingabe,
   fehler = false,
@@ -212,7 +219,10 @@ function Zeile({
   beschriftung: string;
   wert: string;
   letzte?: boolean;
+  trennlinieOben?: boolean;
   hervorgehoben?: boolean;
+  /** Schätzwert „ca. …“: abgeschwächt und kursiv (REQ-072, AK-2). */
+  vorschlag?: boolean;
   onAntippen?: () => void;
   /** Eingabefeld statt Wert (Seiten im Manuellen Eintrag, REQ-060). */
   eingabe?: ReactNode;
@@ -227,7 +237,7 @@ function Zeile({
         data-fehler={fehler ? 'true' : undefined}
         {...stilRolle('eintrag')}
         style={{
-          ...zeileStil(letzte, true),
+          ...zeileStil(letzte, true, trennlinieOben),
           cursor: 'text',
           ...(fehler ? { outline: `2px solid ${detailsFarbe('zeileFehler')}`, outlineOffset: '-2px', borderRadius: '10px' } : {}),
         }}
@@ -245,8 +255,10 @@ function Zeile({
       beschriftung={beschriftung}
       wert={wert}
       hervorgehoben={hervorgehoben}
+      vorschlag={vorschlag}
       pfeil={pfeil}
       letzte={letzte}
+      trennlinieOben={trennlinieOben}
       onAntippen={onAntippen}
     />
   );
@@ -262,8 +274,10 @@ export function KartenZeile({
   beschriftung,
   wert,
   hervorgehoben = false,
+  vorschlag = false,
   pfeil = false,
   letzte = false,
+  trennlinieOben = false,
   onAntippen,
 }: {
   /** data-Attribute der Zeile (z. B. data-ausgabe-zeile). */
@@ -273,13 +287,21 @@ export function KartenZeile({
   beschriftung: string;
   wert: string;
   hervorgehoben?: boolean;
+  /** Schätzwert: Wert kursiv, data-zeile-vorschlag="true" (REQ-072, AK-2). */
+  vorschlag?: boolean;
   pfeil?: boolean;
   letzte?: boolean;
+  /** Trennlinie über statt unter der Zeile (Zeile „Beendet am“, REQ-085). */
+  trennlinieOben?: boolean;
   onAntippen?: () => void;
 }) {
   const wertUndPfeil = (
     <>
-      <span data-zeile-wert="" style={wertStil(hervorgehoben)}>
+      <span
+        data-zeile-wert=""
+        data-zeile-vorschlag={vorschlag ? 'true' : undefined}
+        style={vorschlag ? { ...wertStil(hervorgehoben), fontStyle: 'italic' } : wertStil(hervorgehoben)}
+      >
         {wert}
       </span>
       {pfeil ? (
@@ -290,7 +312,7 @@ export function KartenZeile({
     </>
   );
   return (
-    <button type="button" {...zeilenAttribute} onClick={onAntippen} {...stilRolle('eintrag')} style={zeileStil(letzte, Boolean(onAntippen))}>
+    <button type="button" {...zeilenAttribute} onClick={onAntippen} {...stilRolle('eintrag')} style={zeileStil(letzte, Boolean(onAntippen), trennlinieOben)}>
       <span data-zeile-bezeichnung="" style={bezeichnungStil}>
         {beschriftung}
       </span>
@@ -308,13 +330,13 @@ export function KartenZeile({
 /** Angaben der Karte „Ausgabe“, die direkt aus dem Buch bzw. den Eingaben kommen. */
 export type AusgabeAngaben = Pick<
   Buch,
-  'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn' | 'breiteMm' | 'hoeheMm' | 'dickeMm'
+  'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn' | 'breiteMm' | 'hoeheMm' | 'dickeMm' | 'seitenanzahl'
 >;
 
 export interface AusgabeKarteProps {
   angaben: AusgabeAngaben;
   /** Anzeigetexte der Zeilen Seiten, Erschienen und Hinzugefügt. */
-  werte: { seiten?: string; erschienen?: string; hinzugefuegt?: string };
+  werte: { seiten?: string; erschienen?: string; hinzugefuegt?: string; /** Zeile „Beendet am“ nur mit Wert (REQ-085). */ beendet?: string };
   /** Antippen je Zeile; ohne Eintrag ist die Zeile ohne Funktion. */
   onZeile?: Partial<Record<AusgabeZeile, (() => void) | undefined>>;
   /** Ohne Zeile „Fotos“ (Manueller Eintrag, REQ-060, AK-1). */
@@ -333,8 +355,9 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
       <Zeile
         id="masse"
         beschriftung="Maße"
-        wert={hatMasse(angaben) ? masseText(angaben) : MASSE_LEER}
+        wert={hatMasse(angaben) ? masseText(angaben) : masseVorschlagText(angaben)}
         hervorgehoben={!hatMasse(angaben)}
+        vorschlag={!hatMasse(angaben)}
         onAntippen={onZeile.masse}
       />
       <Zeile id="exemplar" beschriftung="Exemplar" wert={exemplarText(angaben)} onAntippen={onZeile.exemplar} />
@@ -350,13 +373,18 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
       <Zeile id="verlag" beschriftung="Verlag" wert={angaben.verlag ?? ''} onAntippen={onZeile.verlag} />
       <Zeile id="erschienen" beschriftung="Erschienen" wert={werte.erschienen ?? ''} onAntippen={onZeile.erschienen} />
       <Zeile id="isbn" beschriftung="ISBN" wert={angaben.isbn ?? ''} onAntippen={onZeile.isbn} />
+      {/* „Hinzugefügt“ bleibt ohne untere Trennlinie (gleicher Zeilenstil wie Profil › App, REQ-066); die Linie zu
+          „Beendet am“ (REQ-085) trägt dessen Oberkante – optisch unverändert. */}
       <Zeile id="hinzugefuegt" beschriftung="Hinzugefügt" wert={werte.hinzugefuegt ?? ''} onAntippen={onZeile.hinzugefuegt} letzte />
+      {werte.beendet === undefined ? null : (
+        <Zeile id="beendet" beschriftung="Beendet am" wert={werte.beendet} onAntippen={onZeile.beendet} letzte trennlinieOben />
+      )}
     </div>
   );
 }
 
 /** Reiter „Details“ (REQ-051 bis REQ-056, REQ-063, REQ-064). */
-export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt }: Props) {
+export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet }: Props) {
   const erschienen = buch.erscheinungsjahr ?? (buch.erscheinungsdatum ? Number(buch.erscheinungsdatum.slice(6)) : undefined);
   return (
     <div style={{ paddingBottom: abstand('s') }}>
@@ -390,6 +418,7 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMa
             seiten: buch.seitenanzahl !== undefined ? String(buch.seitenanzahl) : '',
             erschienen: erschienen !== undefined && !Number.isNaN(erschienen) ? String(erschienen) : '',
             hinzugefuegt: hinzugefuegtText(buch.eingetragenAm),
+            beendet: beendetText(buch.beendetAm),
           }}
           angaben={buch}
           onZeile={{
@@ -402,6 +431,7 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMa
             verlag: onVerlag,
             isbn: onIsbn,
             hinzugefuegt: onHinzugefuegt,
+            beendet: onBeendet,
           }}
         />
       </Abschnitt>

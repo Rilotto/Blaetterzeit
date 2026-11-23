@@ -1,4 +1,6 @@
-# Sprint 08 – 3D-Ansicht des Buches (geplant, nicht freigegeben)
+# Sprint 08 – 3D-Ansicht des Buches
+
+Freigabe CEO 2026-11-21: „yes, starte bitte mit sprint 08“. Branch: sprint-08/3d-ansicht (von sprint-07, PR noch offen). Teil A: REQ-077 + Anpassungen REQ-072/073; Teil B: REQ-074–076, 078.
 
 Planung beauftragt vom CEO 2026-11-21: „Bitte plane nun die nächste Umsetzung und gebe mir Bescheid. Freigegeben zur Umsetzung ist noch nichts.“
 Start erst nach ausdrücklicher Freigabe. Basis: Branch von Sprint 07 bzw. main nach dessen Merge.

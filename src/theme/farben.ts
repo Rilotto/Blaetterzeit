@@ -31,7 +31,9 @@ export type FarbrubrikId =
   | 'romantik'
   | 'humor'
   | 'grusel'
-  | 'dialoge';
+  | 'dialoge'
+  // REQ-084: Seiten „aus beendeten Büchern“ im Statistik-Diagramm.
+  | 'gold';
 
 export interface Farbrubrik {
   /** Anzeigename der Rubrik (vom CEO vergeben bzw. Arbeitsname). */
@@ -71,10 +73,12 @@ export const farbrubriken: Record<FarbrubrikId, Farbrubrik> = {
   humor: { name: 'Humor', wert: '#8EA33B' },
   grusel: { name: 'Grusel', wert: '#45505A' },
   dialoge: { name: 'Dialoge', wert: '#2F8F8A' },
+  // REQ-084: Stapelteil „aus beendeten Büchern“ (Standardwert auf Zuruf, kein Akzeptanzkriterium).
+  gold: { name: 'Gold', wert: '#C9A23F' },
 };
 
 /** Farbdesigns (REQ-068): Jedes Design legt einen Wert für jede Farbrubrik fest. */
-export type FarbdesignId = 'klassisch' | 'salbei' | 'nachtlektuere';
+export type FarbdesignId = 'klassisch' | 'salbei' | 'nachtlektuere' | 'raureif' | 'polarnacht';
 
 export interface Farbdesign {
   /** Anzeigename im Fenster „Design“. */
@@ -98,9 +102,10 @@ const klassischWerte = Object.defineProperties(
 
 /**
  * Zentrale Definition der Farbdesigns in fester Reihenfolge (REQ-068). Neue Designs nur auf Zuruf des CEO.
- * „Klassisch“ = die Standardwerte aus `farbrubriken`. Bei „Salbei“ und „Nachtlektüre“ sind Hintergrund,
- * Primär, Sekundär, Tertiär und Dunkelbraun vom CEO vorgegeben, die übrigen Rubriken abgeleitet
- * (Nachtlektüre: Kriterienfarben aufgehellt, damit sie auf dunklem Hintergrund lesbar bleiben).
+ * „Klassisch“ = die Standardwerte aus `farbrubriken`. Bei „Salbei“, „Nachtlektüre“, „Raureif“ und „Polarnacht“
+ * sind Hintergrund, Primär, Sekundär, Tertiär und Dunkelbraun (bei Raureif/Polarnacht auch Ghost/GhostFrame)
+ * vom CEO vorgegeben, die übrigen Rubriken abgeleitet (dunkle Designs: Kriterienfarben aufgehellt, damit sie
+ * auf dunklem Hintergrund lesbar bleiben).
  */
 export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
   klassisch: { name: 'Klassisch', dunkel: false, werte: klassischWerte },
@@ -149,12 +154,63 @@ export const farbdesigns: Record<FarbdesignId, Farbdesign> = {
       humor: '#B6C863',
       grusel: '#9AA5B0',
       dialoge: '#5CBFB8',
+      // „Primär“ ist hier bereits goldgelb; „Gold“ deshalb heller und kühler, damit beide Stapelteile unterscheidbar sind.
+      gold: '#EAD9A6',
+    },
+  },
+  raureif: {
+    name: 'Raureif',
+    dunkel: false,
+    werte: {
+      ...klassischWerte,
+      hintergrund: '#F6F8FA',
+      kartenflaeche: '#FCFDFE',
+      primaer: '#2E5A7A',
+      sekundaer: '#C9D8E3',
+      tertiaer: '#5C6B78',
+      dunkelbraun: '#1E2A35',
+      ghost: '#EBF0F4',
+      ghostframe: '#D8E0E7',
+      traenen: '#2F6FA8',
+      nebenfiguren: '#5C6B78',
+      grusel: '#3E4A56',
+    },
+  },
+  polarnacht: {
+    name: 'Polarnacht',
+    dunkel: true,
+    werte: {
+      hintergrund: '#0F1620',
+      kartenflaeche: '#18222F',
+      primaer: '#8EC5E8',
+      sekundaer: '#24364A',
+      tertiaer: '#9BABBB',
+      dunkelbraun: '#E8F0F6',
+      ghost: '#172030',
+      ghostframe: '#253244',
+      flammerot: '#E0644B',
+      flammeorange: '#F0AD66',
+      sterne: '#EBC04A',
+      tempo: '#9AABE6',
+      weltenbau: '#82C29C',
+      spice: '#E8766A',
+      spannung: '#B79AD6',
+      action: '#EDAA60',
+      hauptfiguren: '#D69C66',
+      nebenfiguren: '#9BABBB',
+      plottwist: '#D584B3',
+      traenen: '#7FB6E8',
+      romantik: '#EB98B2',
+      humor: '#BCD06E',
+      grusel: '#A4B0BC',
+      dialoge: '#66C8C1',
+      gold: '#E3C46B',
     },
   },
 };
 
 /** Reihenfolge der Farbdesigns in der Liste (REQ-068 AK-1). */
-export const farbdesignReihenfolge: readonly FarbdesignId[] = ['klassisch', 'salbei', 'nachtlektuere'];
+export const farbdesignReihenfolge: readonly FarbdesignId[] = ['klassisch', 'salbei', 'nachtlektuere', 'raureif', 'polarnacht'];
 
 /** Farbdesign ohne Nutzerwahl (REQ-068 AK-2). */
 export const standardFarbdesign: FarbdesignId = 'klassisch';
@@ -808,3 +864,144 @@ export const barcodeFarbe = (rolle: BarcodeFarbrolle): string => rubrikFarbe(bar
 
 /** Weicher, warmer Schatten von Karten statt eines harten Rahmens (REQ-065 AK-11). */
 export const kartenSchatten = `0 1px 2px color-mix(in srgb, ${schattenFarbe} 10%, transparent), 0 6px 18px color-mix(in srgb, ${schattenFarbe} 12%, transparent)`;
+
+/** Farbrollen der 3D-Ansicht (REQ-074, REQ-076, REQ-078). */
+export type Ansicht3dFarbrolle =
+  | 'modellFlaeche'
+  | 'modellTitel'
+  | 'schleier'
+  | 'titel'
+  | 'autor'
+  | 'schliessenFlaeche'
+  | 'schliessenIcon'
+  | 'pilleFlaeche'
+  | 'pilleSchrift'
+  | 'hinweisFlaeche'
+  | 'hinweisSchrift';
+
+/**
+ * Aus welcher Farbrubrik jede Farbrolle der 3D-Ansicht ihre Farbe bezieht. Cover, Rücken und Rückseite ohne
+ * Bild sind „Primär“ (REQ-076); alle übrigen Zuordnungen prüft der CEO im Prototyp.
+ */
+export const ansicht3dFarbrollen: Record<Ansicht3dFarbrolle, FarbrubrikId> = {
+  modellFlaeche: 'primaer',
+  modellTitel: 'hintergrund',
+  schleier: 'hintergrund',
+  titel: 'dunkelbraun',
+  autor: 'tertiaer',
+  schliessenFlaeche: 'hintergrund',
+  schliessenIcon: 'dunkelbraun',
+  pilleFlaeche: 'tertiaer',
+  pilleSchrift: 'hintergrund',
+  hinweisFlaeche: 'dunkelbraun',
+  hinweisSchrift: 'hintergrund',
+};
+
+/** CSS-Ausdruck einer Farbrolle der 3D-Ansicht, z. B. `var(--bz-farbe-primaer)`. */
+export const ansicht3dFarbe = (rolle: Ansicht3dFarbrolle): string => rubrikFarbe(ansicht3dFarbrollen[rolle]);
+
+/** Farbrollen des Seitenmusters (Buchseiten: Schnitt, Ober- und Unterkante ohne Bild). */
+export type SeitenmusterFarbrolle = 'flaeche' | 'linie';
+
+/**
+ * Feste, designunabhängige Farben des Seitenmusters (CEO-Vorgabe 2026-11-22: Buchseiten immer warmweiß,
+ * egal welches Design). Standardwerte auf Zuruf – werden von den Farbdesigns NICHT überschrieben,
+ * deshalb direkte Farbwerte statt CSS-Variable einer Farbrubrik.
+ */
+export const seitenmusterFarben: Record<SeitenmusterFarbrolle, Farbrubrik> = {
+  flaeche: { name: 'Seiten Fläche', wert: '#F4EDE0' },
+  linie: { name: 'Seiten Linie', wert: '#E2D6C2' },
+};
+
+/** Farbwert einer Farbrolle des Seitenmusters (unabhängig vom aktiven Farbdesign). */
+export const seitenmusterFarbe = (rolle: SeitenmusterFarbrolle): string => seitenmusterFarben[rolle].wert;
+
+/** Schatten unter dem 3D-Modell bzw. der X-Schaltfläche, aus „Dunkelbraun“ abgeleitet. */
+export const ansicht3dSchatten = `0 6px 18px color-mix(in srgb, ${schattenFarbe} 22%, transparent)`;
+
+/** Farbrollen der Seite „Statistik“ (REQ-079 bis REQ-090), Zuordnung nach REF-statistik-01 bis -07. */
+export type StatistikFarbrolle =
+  | 'ueberschrift'
+  | 'pillenleisteFlaeche'
+  | 'pillenleisteRahmen'
+  | 'pilleAktivFlaeche'
+  | 'pilleAktivSchrift'
+  | 'pilleInaktivSchrift'
+  | 'pfeilRahmen'
+  | 'pfeilIcon'
+  | 'zeitraumTitel'
+  | 'zeitraumJahr'
+  | 'karteFlaeche'
+  | 'karteRahmen'
+  | 'kachelFlaeche'
+  | 'kachelRahmen'
+  | 'kachelGewaehltRahmen'
+  | 'kachelZahl'
+  | 'kachelBezeichnung'
+  | 'kennzahl'
+  | 'kennzahlEinheit'
+  | 'vergleich'
+  | 'hilfslinie'
+  | 'skala'
+  | 'balkenLeer'
+  | 'balkenSessions'
+  | 'balkenBeendet'
+  | 'balkenBuecher'
+  | 'achse'
+  | 'legende'
+  | 'serieText'
+  | 'serieZahl'
+  | 'wochentag'
+  | 'tagFlaeche'
+  | 'tagZahl'
+  | 'heuteRahmen'
+  | 'monatKuerzel'
+  | 'miniFeld'
+  | 'lesetagFeld';
+
+/** Aus welcher Farbrubrik jede Farbrolle der Seite „Statistik“ ihre Farbe bezieht (neu nur „Gold“, REQ-084/REQ-090). */
+export const statistikFarbrollen: Record<StatistikFarbrolle, FarbrubrikId> = {
+  ueberschrift: 'dunkelbraun',
+  pillenleisteFlaeche: 'kartenflaeche',
+  pillenleisteRahmen: 'sekundaer',
+  pilleAktivFlaeche: 'primaer',
+  pilleAktivSchrift: 'hintergrund',
+  pilleInaktivSchrift: 'tertiaer',
+  pfeilRahmen: 'sekundaer',
+  pfeilIcon: 'tertiaer',
+  zeitraumTitel: 'dunkelbraun',
+  zeitraumJahr: 'tertiaer',
+  karteFlaeche: 'kartenflaeche',
+  karteRahmen: 'sekundaer',
+  kachelFlaeche: 'kartenflaeche',
+  kachelRahmen: 'sekundaer',
+  kachelGewaehltRahmen: 'primaer',
+  kachelZahl: 'dunkelbraun',
+  kachelBezeichnung: 'tertiaer',
+  kennzahl: 'dunkelbraun',
+  kennzahlEinheit: 'tertiaer',
+  vergleich: 'tertiaer',
+  hilfslinie: 'ghostframe',
+  skala: 'tertiaer',
+  balkenLeer: 'ghostframe',
+  balkenSessions: 'primaer',
+  balkenBeendet: 'gold',
+  balkenBuecher: 'primaer',
+  achse: 'tertiaer',
+  legende: 'tertiaer',
+  serieText: 'tertiaer',
+  serieZahl: 'dunkelbraun',
+  wochentag: 'tertiaer',
+  tagFlaeche: 'ghost',
+  tagZahl: 'tertiaer',
+  heuteRahmen: 'primaer',
+  monatKuerzel: 'tertiaer',
+  miniFeld: 'ghost',
+  lesetagFeld: 'primaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle der Seite „Statistik“, z. B. `var(--bz-farbe-gold)`. */
+export const statistikFarbe = (rolle: StatistikFarbrolle): string => rubrikFarbe(statistikFarbrollen[rolle]);
+
+/** Blasse Fläche der gewählten Kachel (REF-statistik-01), aus „Primär“ und „Kartenfläche“ gemischt. */
+export const statistikKachelGewaehltFlaeche = `color-mix(in srgb, ${rubrikFarbe('primaer')} 14%, ${rubrikFarbe('kartenflaeche')})`;

@@ -1,6 +1,6 @@
 ---
 id: REQ-056
-titel: Reiter „Details“ – Abschnitt „Ausgabe“ mit elf Zeilen
+titel: Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen
 status: Implementiert
 prioritaet: Must
 art: funktional
@@ -25,9 +25,9 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ## Anforderung (Satzschablone)
 
-- Das System muss unter „Ausgabe“ eine Karte mit genau diesen Zeilen in dieser Reihenfolge darstellen, je links Bezeichnung, rechts Wert: Seiten, Format, Maße (REQ-072), Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt.
+- Das System muss unter „Ausgabe“ eine Karte mit genau diesen Zeilen in dieser Reihenfolge darstellen, je links Bezeichnung, rechts Wert: Seiten, Format, Maße (REQ-072), Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt, Beendet am (REQ-085).
 - Das System darf keine Zeile „Signiert“ darstellen (CEO: „Signiert soll bitte nicht umgesetzt werden.“).
-- Das System muss die Zeilen Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis sowie die Zeile „Maße“ (REQ-072) rechts mit einem Pfeil „›“ darstellen, die übrigen ohne Pfeil.
+- Das System muss die Zeilen Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis sowie die Zeile „Maße“ (REQ-072) rechts mit einem Pfeil „›“ darstellen, die übrigen ohne Pfeil; auch „Beendet am“ hat keinen Pfeil (**Auslegung**: REQ-085 legt keinen fest, die Zeile verhält sich wie „Hinzugefügt“, die keinen Pfeil hat).
 - Werte:
   - Seiten: Seitenanzahl des Buches (REQ-025); Antippen: REQ-057.
   - Format: gewähltes Format, bei Print mit gewähltem Unterformat getrennt durch „ · “ (z. B. „Print · Taschenbuch“); Antippen: REQ-058.
@@ -38,22 +38,24 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
   - Verlag, ISBN: derzeit leer, ohne Eingabemöglichkeit.
   - Erschienen: Erscheinungsjahr (REQ-033).
   - Hinzugefügt: Eintragungsdatum (REQ-041) als abgekürzter Monat mit Punkt und Jahr (z. B. „Okt. 2026“).
+  - Beendet am: Datum „Beendet am“ im selben Format wie „Hinzugefügt“, ohne Datum rechts leer; Antippen: REQ-085.
 - Wenn eine Zeile keinen Wert hat (Seiten, Format, Exemplar, Erschienen, Verlag, ISBN), muss das System die rechte Seite leer lassen (**Auslegung**).
 - Wenn der Nutzer „Fotos“, „Verlag“, „Erschienen“, „ISBN“ oder „Hinzugefügt“ antippt, darf das System nichts verändern.
 - Das System muss Karte, Trennlinien, Bezeichnungen, Werte und Pfeile farblich wie im Referenzbild darstellen, mit Farben aus zentralen Farbrubriken.
 
 ## Akzeptanzkriterien
 
-### AK-1 Elf Zeilen in fester Reihenfolge, kein „Signiert“
+### AK-1 Zwölf Zeilen in fester Reihenfolge, kein „Signiert“
 - **Gegeben** der Reiter „Details“ ist aktiv
 - **Wenn** die Karte unter „Ausgabe“ betrachtet wird
-- **Dann** lauten die Zeilen von oben nach unten genau: Seiten, Format, Maße, Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt
+- **Dann** lauten die Zeilen von oben nach unten genau: Seiten, Format, Maße, Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt, Beendet am
 - **Und** es gibt keine Zeile „Signiert“
 
 ### AK-2 Pfeile
 - **Gegeben** die Karte „Ausgabe“ wird angezeigt
 - **Wenn** die rechten Enden der Zeilen betrachtet werden
 - **Dann** haben genau Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis sowie „Maße“ (REQ-072) einen Pfeil „›“
+- **Und** „Hinzugefügt“ und „Beendet am“ haben keinen Pfeil
 
 ### AK-3 Seiten und Erschienen
 - **Gegeben** ein Buch mit Seitenanzahl 608 und Erscheinungsjahr 2025
@@ -93,7 +95,7 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ## Abhängigkeiten
 
-- **REQ-025, REQ-033, REQ-041, REQ-051, REQ-057, REQ-058, REQ-059.**
+- **REQ-025, REQ-033, REQ-041, REQ-051, REQ-057, REQ-058, REQ-059, REQ-085.**
 
 ## Offene Fragen
 
@@ -108,3 +110,4 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 | 2026-11-15 | CEO: „Signiert soll bitte nicht umgesetzt werden. Der Rest ist in Ordnung.“ Zeile „Signiert“ entfernt (zehn Zeilen; AK-1, AK-5, AK-7 angepasst). Status „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-21 | CEO (wörtlich): „ja ergänze bitte den Pfeil bei "Maße".“ Zeile „Maße“ (REQ-072) in die Pfeil-Aufzählung (Anforderung, AK-2) aufgenommen. Status unverändert | Anforderungsmanager |
 | 2026-11-21 | Konflikt mit REQ-072 (vom CEO bestätigt: „Maße“ direkt unter „Format“) aufgelöst: Zeilenliste und AK-1 auf elf Zeilen mit „Maße“ nach „Format“, Titel angepasst. Status unverändert | Anforderungsmanager |
+| 2026-11-22 | An REQ-085 angepasst: zwölfte Zeile „Beendet am“ direkt unter „Hinzugefügt“ (Position laut REQ-085), Wert wie „Hinzugefügt“, ohne Pfeil (Auslegung, wie „Hinzugefügt“). Titel, Zeilenliste, AK-1, AK-2 angepasst. Status unverändert | Anforderungsmanager |

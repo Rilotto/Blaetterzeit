@@ -82,17 +82,37 @@ describe('REQ-073 Proportionen aus den Maßen', () => {
     expect(dick.cover).toBeCloseTo(duenn.cover, 3);
   });
 
-  it('[REQ-073/AK-3] ohne Maße: Proportionen 13,5 × 21 × 2,5', async () => {
-    await zeige({});
-    erwarte(13.5, 21, 2.5);
+  // Sprint 08: Standardmaße je Format nach REQ-077 (derzeit Taschenbuch 12,0 × 19,0, Hardcover 14,8 × 21,0; Dicke aus Seitenzahl)
+  const TB = { format: 'print', unterformat: 'taschenbuch' } as Partial<Buch>;
+  const HC = { format: 'print', unterformat: 'hardcover' } as Partial<Buch>;
+
+  it('[REQ-073/AK-3] Taschenbuch, 400 Seiten, ohne Maße: Proportionen 12,0 × 19,0 × 2,4', async () => {
+    await zeige({ ...TB, seitenanzahl: 400 });
+    erwarte(12, 19, 2.4);
+  });
+
+  it('[REQ-073/AK-3] dasselbe Buch als Hardcover: Proportionen 14,8 × 21,0 × 2,8', async () => {
+    await zeige({ ...HC, seitenanzahl: 400 });
+    erwarte(14.8, 21, 2.8);
   });
 
   it.each([
-    [{ dickeMm: 50 }, [13.5, 21, 5]],
-    [{ breiteMm: 100 }, [10, 21, 2.5]],
-    [{ hoeheMm: 300 }, [13.5, 30, 2.5]],
-    [{ breiteMm: 150, hoeheMm: 230 }, [15, 23, 2.5]],
-  ] as [Partial<Buch>, [number, number, number]][])('[REQ-073/AK-4] nur %j: fehlende Einzelwerte durch Standard ersetzt → %j', async (m, [b, h, d]) => {
+    ['ohne Format, ohne Seitenzahl', {}, [12, 19, 2.5]],
+    ['Kleinformat, 300 Seiten', { format: 'print', unterformat: 'kleinformat', seitenanzahl: 300 }, [10.5, 14.8, 1.9]],
+    ['E-Book, 400 Seiten', { format: 'ebook', seitenanzahl: 400 }, [12, 19, 2.4]],
+  ] as [string, Partial<Buch>, [number, number, number]][])('[REQ-073/AK-3] %s: Standardproportionen %j', async (_n, m, [b, h, d]) => {
+    await zeige(m);
+    erwarte(b, h, d);
+  });
+
+  it.each([
+    [{ ...TB, dickeMm: 50 }, [12, 19, 5]],
+    [{ ...TB, seitenanzahl: 400, dickeMm: 50 }, [12, 19, 5]],
+    [{ ...TB, breiteMm: 100 }, [10, 19, 2.5]],
+    [{ ...TB, hoeheMm: 300, seitenanzahl: 400 }, [12, 30, 2.4]],
+    [{ ...TB, breiteMm: 150, hoeheMm: 230 }, [15, 23, 2.5]],
+    [{ ...HC, dickeMm: 50 }, [14.8, 21, 5]],
+  ] as [Partial<Buch>, [number, number, number]][])('[REQ-073/AK-4] nur %j: fehlende Einzelwerte durch Standard nach REQ-077 ersetzt → %j', async (m, [b, h, d]) => {
     await zeige(m);
     erwarte(b, h, d);
   });

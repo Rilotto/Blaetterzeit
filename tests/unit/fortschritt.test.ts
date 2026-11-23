@@ -71,7 +71,7 @@ describe('Sichern und Sitzungen', () => {
   it('Erhöhung legt eine Sitzung an, gleich oder weniger nicht; Fortschritt wird trotzdem gespeichert', () => {
     let b = buch({ seitenanzahl: 400, aktuelleSeite: 42 });
     b = fortschrittSichern(b, 'seite', 50, jetzt);
-    expect(b.sitzungen).toEqual([sitzung(jetzt)]);
+    expect(b.sitzungen).toEqual([{ ...sitzung(jetzt), seite: 50 }]);
     b = fortschrittSichern(b, 'seite', 50, jetzt);
     b = fortschrittSichern(b, 'seite', 30, jetzt);
     expect(b.sitzungen).toHaveLength(1);

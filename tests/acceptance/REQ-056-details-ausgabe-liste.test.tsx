@@ -72,14 +72,14 @@ async function zustand(w: Welt, d: HTMLElement, id: string) {
 }
 import { neuesBuch } from '@/domain/buch';
 
-// REQ-072/AK-1: Zeile „Maße“ direkt unter „Format“ (Anpassung Sprint 07)
-const ZEILEN = ['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt'];
-const NAMEN = ['Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'];
+// REQ-072/AK-1: Zeile „Maße“ direkt unter „Format“ (Anpassung Sprint 07); REQ-085: „Beendet am“ unter „Hinzugefügt“ (Sprint 09)
+const ZEILEN = ['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet'];
+const NAMEN = ['Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt', 'Beendet am'];
 const karte = (d: HTMLElement) => abschnitt(d, 'ausgabe').querySelector<HTMLElement>('[data-ausgabe-karte]')!;
 const zeilen = (d: HTMLElement) => Array.from(karte(d).querySelectorAll<HTMLElement>('[data-ausgabe-zeile]'));
 
 describe('REQ-056 Karte „Ausgabe“', () => {
-  it('[REQ-056/AK-1] elf Zeilen (mit „Maße“ laut REQ-072) in fester Reihenfolge, links Bezeichnung, kein „Signiert“', async () => {
+  it('[REQ-056/AK-1] zwölf Zeilen (mit „Maße“ laut REQ-072 und „Beendet am“ laut REQ-085) in fester Reihenfolge, links Bezeichnung, kein „Signiert“', async () => {
     const { d } = await mitBuch();
     expect(zeilen(d).map((z) => z.getAttribute('data-ausgabe-zeile'))).toEqual(ZEILEN);
     expect(zeilen(d).map((z) => norm(z.querySelector('[data-zeile-bezeichnung]')?.textContent))).toEqual(NAMEN);
@@ -91,12 +91,15 @@ describe('REQ-056 Karte „Ausgabe“', () => {
     expect(bereich(d).textContent).not.toMatch(/Signiert/i);
   });
 
-  it('[REQ-056/AK-2] genau Seiten, Format, Maße, Exemplar, Sonderausgabe, Fotos, Preis haben den Pfeil „›“', async () => {
-    const { d } = await mitBuch(buch({ seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00' }));
+  it('[REQ-056/AK-2] genau Seiten, Format, Maße, Exemplar, Sonderausgabe, Fotos, Preis haben den Pfeil „›“; Hinzugefügt und Beendet am ohne', async () => {
+    const { d } = await mitBuch(buch({ seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00', status: 'gelesen', beendetAm: '2026-11-03' }));
     const mit = zeilen(d).filter((z) => z.querySelector('[data-zeile-pfeil]')).map((z) => z.getAttribute('data-ausgabe-zeile'));
     expect(mit).toEqual(['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis']);
     for (const z of zeilen(d).filter((z) => z.querySelector('[data-zeile-pfeil]'))) expect(norm(z.querySelector('[data-zeile-pfeil]')!.textContent)).toBe('›');
-    for (const id of ['verlag', 'erschienen', 'isbn', 'hinzugefuegt']) expect(zeile(d, id).textContent).not.toContain('›');
+    for (const id of ['verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet']) {
+      expect(zeile(d, id).querySelector('[data-zeile-pfeil]')).toBeNull();
+      expect(zeile(d, id).textContent).not.toContain('›');
+    }
   });
 
   it('[REQ-056/AK-3] Seiten 608 und Erschienen 2025', async () => {

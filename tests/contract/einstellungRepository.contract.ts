@@ -31,6 +31,15 @@ export function runEinstellungRepositoryContract(name: string, factory: () => Ei
       expect(await repo.lesen('schrift')).toBe('system');
     });
 
+    it('merkt die Zeitraum-Pille der Statistik getrennt (REQ-079)', async () => {
+      const { repo } = umgebung;
+      expect(await repo.lesen('statistikZeitraum')).toBeUndefined();
+      await repo.speichern('statistikZeitraum', 'jahr');
+      await repo.speichern('farbdesign', 'salbei');
+      expect(await repo.lesen('statistikZeitraum')).toBe('jahr');
+      if (umgebung.neustart) expect(await umgebung.neustart().lesen('statistikZeitraum')).toBe('jahr');
+    });
+
     it('nach einem Neustart bleiben die Werte erhalten (falls dauerhaft)', async () => {
       if (!umgebung.neustart) return;
       await umgebung.repo.speichern('farbdesign', 'salbei');

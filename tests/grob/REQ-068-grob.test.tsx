@@ -46,10 +46,10 @@ async function oeffneDesign() {
 }
 const zeilen = () => Array.from(fenster()!.querySelectorAll<HTMLElement>('button[data-farbdesign]')).map((z) => z.getAttribute('data-farbdesign'));
 
-it('[REQ-068/GROB] drei Designs; „Nachtlektüre“ wirkt sofort und bleibt nach Neustart aktiv', async () => {
+it('[REQ-068/GROB] fünf Designs; „Nachtlektüre“ wirkt sofort und bleibt nach Neustart aktiv', async () => {
   const repo = starte();
   await oeffneDesign();
-  expect(zeilen()).toEqual(['klassisch', 'salbei', 'nachtlektuere']);
+  expect(zeilen()).toEqual(['klassisch', 'salbei', 'nachtlektuere', 'raureif', 'polarnacht']);
   expect(wurzel()).toHaveAttribute('data-farbdesign', 'klassisch');
   await tippe(fenster()!.querySelector('button[data-farbdesign="nachtlektuere"]')!);
   expect(wurzel()).toHaveAttribute('data-farbdesign', 'nachtlektuere');

@@ -42,6 +42,9 @@ const MIGRATIONEN: ((db: IDBDatabase, tx: IDBTransaction) => void)[] = [
   // Version 6: Verlag, ISBN (REQ-063) und Maße breiteMm, hoeheMm, dickeMm (REQ-072). Optionale Felder im
   // Buchobjekt, vorhandene Datensätze bleiben gültig; kein Umbau nötig.
   () => {},
+  // Version 7: „Beendet am“ (REQ-085) und Seitenzahl je Sitzung (REQ-084). Optionale Felder im Buchobjekt bzw.
+  // in den Sitzungen; ältere Sitzungen ohne Seite bleiben gültig (zählen als Lesetag mit 0 Seiten). Kein Umbau.
+  () => {},
 ];
 
 export const SCHEMA_VERSION = MIGRATIONEN.length;

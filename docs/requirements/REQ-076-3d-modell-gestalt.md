@@ -1,7 +1,7 @@
 ---
 id: REQ-076
 titel: 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern
-status: Abgestimmt
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -30,6 +30,8 @@ Antworten des CEO (2026-11-21, über den Scrum Master): Rückseite, Rücken und 
 - Das System muss auf dem Schnitt (der dem Rücken gegenüberliegenden Seitenfläche) das hinterlegte Schnittbild zeigen; ohne Bild das Seitenmuster.
 - Das System muss Ober- und Unterkante des Buchblocks mit dem Seitenmuster darstellen.
 - Das System muss die Farbe „Primär“ aus der zentralen Farbrubrik beziehen, sodass ein anderes Farbdesign (REQ-068) sie mitändert.
+- Das System muss das Seitenmuster (Schnitt ohne Bild, Ober- und Unterkante) immer in einem warmen Weißton mit etwas dunkleren Linien darstellen, unabhängig von Farbdesign (REQ-068) und Stil (REQ-071).
+- Das System muss beide Werte aus einer eigenen zentralen Farbrolle „Buchseiten“ beziehen, die kein Farbdesign überschreibt. Die Standardwerte sind auf Zuruf änderbar und kein Akzeptanzkriterium.
 
 **Format**
 - Bei Format „Print · Hardcover“ muss das System Vorder- und Rückdeckel sowie Rücken als Deckel darstellen, die den Buchblock oben, unten und vorne um den Deckelüberstand (REQ-077) überragen.
@@ -76,6 +78,12 @@ Antworten des CEO (2026-11-21, über den Scrum Master): Rückseite, Rücken und 
 - **Wenn** der Nutzer ein anderes Farbdesign wählt und die 3D-Ansicht öffnet
 - **Dann** haben Vorderseite, Rücken und Rückseite die Farbe „Primär“ des neuen Designs
 
+### AK-8 Buchseiten immer warmweiß
+- **Gegeben** ein Buch ohne Schnittbild
+- **Wenn** die 3D-Ansicht nacheinander mit „Klassisch“, „Nachtlektüre“ und „Polarnacht“ sowie mit den Stilen „Klassisch“ und „Feuilleton“ geöffnet wird
+- **Dann** haben Schnitt, Ober- und Unterkante jedes Mal dieselben Farben aus der Farbrolle „Buchseiten“ (warmweiße Fläche, etwas dunklere Linien)
+- **Und** weder Primär noch eine andere Farbe des Designs wird für das Seitenmuster verwendet
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Hörbücher (REQ-078, To-do-Liste).
@@ -99,3 +107,4 @@ Antworten des CEO (2026-11-21, über den Scrum Master): Rückseite, Rücken und 
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-21 | Erstellt aus CEO-Beschreibung und CEO-Antworten (über den Scrum Master); Inhalt vom CEO bestätigt. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-22 | CEO (wörtlich): „Egal welcher Stil oder welche Farbe eingestellt ist, die Buchseiten im 3D-Modell sollen bitte immer in einem warmen weiß-ton sein!“ Seitenmuster immer warmweiß mit dunkleren Linien aus eigener Farbrolle „Buchseiten“ (Standardwerte auf Zuruf). Neu AK-8. Status unverändert | Anforderungsmanager |

@@ -97,6 +97,11 @@ export interface Buch {
   breiteMm?: number;
   hoeheMm?: number;
   dickeMm?: number;
+  /**
+   * „Beendet am“ (REQ-085): lokaler Kalendertag als „JJJJ-MM-TT“ (ohne Uhrzeit, damit der Tag in jeder
+   * Zeitzone gleich bleibt); fehlend = kein Datum.
+   */
+  beendetAm?: string;
 }
 
 export type Fortschrittsmodus = 'seite' | 'prozent';
@@ -104,6 +109,38 @@ export type Fortschrittsmodus = 'seite' | 'prozent';
 export interface Sitzung {
   /** Zeitpunkt des Sicherns (ISO 8601). */
   zeitpunkt: string;
+  /**
+   * Gesicherter Fortschritt als Seitenzahl (REQ-084); im Modus „%“ Prozent × Seitenanzahl / 100, kaufmännisch
+   * gerundet. Fehlt bei Sitzungen, die vor REQ-084 entstanden sind.
+   */
+  seite?: number;
+}
+
+/** Kalendertag „JJJJ-MM-TT“ (REQ-085, „Beendet am“). */
+export function istKalendertag(wert: unknown): wert is string {
+  if (typeof wert !== 'string') return false;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(wert);
+  if (!m) return false;
+  const [j, mo, t] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const d = new Date(Date.UTC(j, mo - 1, t));
+  return d.getUTCFullYear() === j && d.getUTCMonth() === mo - 1 && d.getUTCDate() === t;
+}
+
+/** Lokaler Kalendertag eines Zeitpunkts als „JJJJ-MM-TT“. */
+export function kalendertag(zeitpunkt: Date): string {
+  const zwei = (n: number) => String(n).padStart(2, '0');
+  return `${zeitpunkt.getFullYear()}-${zwei(zeitpunkt.getMonth() + 1)}-${zwei(zeitpunkt.getDate())}`;
+}
+
+/**
+ * Lesestatus setzen (REQ-022). Wechselt der Status auf *gelesen*, wird „Beendet am“ auf heute gesetzt (REQ-085);
+ * gleicher Status ändert nichts, andere Wechsel lassen „Beendet am“ unverändert.
+ */
+export function statusSetzen(buch: Buch, status: LesestatusId, jetzt: Date): Buch {
+  if (buch.status === status) return buch;
+  const neu: Buch = { ...buch, status };
+  if (status === 'gelesen') neu.beendetAm = kalendertag(jetzt);
+  return neu;
 }
 
 export const istFortschrittsmodus = (wert: unknown): wert is Fortschrittsmodus => wert === 'seite' || wert === 'prozent';
@@ -134,6 +171,7 @@ export const OPTIONALE_BUCHFELDER = [
   'breiteMm',
   'hoeheMm',
   'dickeMm',
+  'beendetAm',
 ] as const;
 
 export interface NeuesBuch {
@@ -196,8 +234,13 @@ export function buchAusDaten(daten: unknown): Buch {
   if (istFortschrittsmodus(e.fortschrittsmodus)) buch.fortschrittsmodus = e.fortschrittsmodus;
   if (Array.isArray(e.sitzungen)) {
     buch.sitzungen = e.sitzungen
-      .filter((s): s is { zeitpunkt: string } => typeof (s as { zeitpunkt?: unknown })?.zeitpunkt === 'string')
-      .map((s) => ({ zeitpunkt: s.zeitpunkt }));
+      .filter((s): s is { zeitpunkt: string; seite?: unknown } => typeof (s as { zeitpunkt?: unknown })?.zeitpunkt === 'string')
+      .map((s) => {
+        const sitzung: Sitzung = { zeitpunkt: s.zeitpunkt };
+        // Seitenzahl nur als ganze Zahl ab 0 (REQ-084); ältere Sitzungen haben keine.
+        if (typeof s.seite === 'number' && Number.isInteger(s.seite) && s.seite >= 0) sitzung.seite = s.seite;
+        return sitzung;
+      });
   }
   // Fehlt das Eintragungsdatum oder ist es ungültig, fehlt es im Ergebnis (robust für ältere Datensätze, REQ-041).
   if (istZeitpunkt(e.eingetragenAm)) buch.eingetragenAm = e.eingetragenAm;
@@ -221,5 +264,6 @@ export function buchAusDaten(daten: unknown): Buch {
   if (istMassMm(e.breiteMm)) buch.breiteMm = e.breiteMm;
   if (istMassMm(e.hoeheMm)) buch.hoeheMm = e.hoeheMm;
   if (istMassMm(e.dickeMm)) buch.dickeMm = e.dickeMm;
+  if (istKalendertag(e.beendetAm)) buch.beendetAm = e.beendetAm;
   return buch;
 }
