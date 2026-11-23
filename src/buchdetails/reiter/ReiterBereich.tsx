@@ -4,7 +4,7 @@ import type { Buch } from '@/domain/buch';
 import UnderConstruction from '@/views/UnderConstruction';
 import Bewertung from './Bewertung';
 import DeineRezension from './DeineRezension';
-import DetailsBereich from './DetailsBereich';
+import DetailsBereich, { type ListenAbschnittProps } from './DetailsBereich';
 import type { ReiterId } from './rezension';
 import { abstand } from '@/theme';
 
@@ -27,10 +27,14 @@ interface Props {
   onHinzugefuegt?: () => void;
   /** Zeile „Beendet am“ (REQ-085). */
   onBeendet?: () => void;
+  /** Zeile „Erschienen“ (REQ-092). */
+  onErschienen?: () => void;
+  /** Abschnitt „Sagas, Sammlungen und Bibliotheken“ (REQ-095). */
+  listen?: ListenAbschnittProps;
 }
 
 /** Inhalt des aktiven Reiters (REQ-043). Notizbuch und Figuren & Orte: „under construction :)“. */
-export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSchreiben, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet }: Props) {
+export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSchreiben, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet, onErschienen, listen }: Props) {
   if (reiter === 'details') {
     return (
       <div role="tabpanel" aria-label="Details" data-reiter-bereich="details">
@@ -44,6 +48,8 @@ export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSch
           onIsbn={onIsbn}
           onHinzugefuegt={onHinzugefuegt}
           onBeendet={onBeendet}
+          onErschienen={onErschienen}
+          listen={listen}
         />
       </div>
     );

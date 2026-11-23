@@ -26,6 +26,20 @@ const inhaltStil: CSSProperties = {
   padding: `${abstand('xs')} ${seitenRand}px ${abstand('s')}`,
 };
 
+/** Ein Cover-Platzhalter ohne Buchtitel mit Platzhaltertext darunter (REQ-012). Ohne Funktion. */
+export function PlatzhalterInhalt({ platzhaltertext }: { platzhaltertext: string }) {
+  return (
+    <div style={inhaltStil}>
+      <div style={{ width: `${coverBreite}px` }}>
+        <CoverPlatzhalter />
+        <PlatzhalterText data-platzhaltertext="" farbe={buecherFarbe('abschnittsplatzhalterText')} style={platzhaltertextStil}>
+          {platzhaltertext}
+        </PlatzhalterText>
+      </div>
+    </div>
+  );
+}
+
 /**
  * Abschnitt mit Überschrift, einem Cover-Platzhalter ohne Buchtitel und einem
  * Platzhaltertext darunter (REQ-012). Ohne Funktion.

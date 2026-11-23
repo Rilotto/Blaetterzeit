@@ -91,6 +91,17 @@ export function fortschrittSichern(buch: Buch, modus: Fortschrittsmodus, wert: n
   return neu;
 }
 
+/**
+ * Fortschritt leeren (REQ-024 AK-8, REQ-093 AK-7): aktuelle Seite und Prozentwert entfallen, der Modus bleibt.
+ * Es entsteht keine Sitzung; bisherige Sitzungen bleiben unverändert.
+ */
+export function fortschrittEntfernen(buch: Buch): Buch {
+  const neu: Buch = { ...buch };
+  delete neu.aktuelleSeite;
+  delete neu.fortschrittProzent;
+  return neu;
+}
+
 /** Prüft die Seitenanzahl im Menü „Buchlänge“: ganze Zahl ab 1 (REQ-025). */
 export function seitenanzahlPruefen(eingabe: string): { ok: true; wert: number } | { ok: false; grund: 'leer' | 'ungueltig' } {
   const text = eingabe.trim();

@@ -157,7 +157,8 @@ describe('REQ-064 „Hinzugefügt“ ändern', () => {
     expect((await gespeichert(id))?.eingetragenAm).toBe(EINGETRAGEN);
   });
 
-  it.each(['31.02.2025', '29.02.2025', '00.01.2025', '15.13.2025', '1.2.2025', ''])('[REQ-064/AK-4] ungültiges Datum „%s“: markiert, nichts gespeichert', async (ein) => {
+  // '' entfernt (2026-11-23): ein leeres Feld entfernt laut Anforderungstext das Eintragungsdatum (REQ-093).
+  it.each(['31.02.2025', '29.02.2025', '00.01.2025', '15.13.2025', '1.2.2025'])('[REQ-064/AK-4] ungültiges Datum „%s“: markiert, nichts gespeichert', async (ein) => {
     const { d, id } = await mitBuch();
     await oeffne(d);
     gib(ein);

@@ -1,7 +1,8 @@
 // Eingaberegeln des Blatts „Manueller Eintrag“ (REQ-030, REQ-031, REQ-060). Ohne UI, damit sie einzeln testbar sind.
 import {
   eintragungsdatumAusText,
-  erschienenPruefen,
+  erscheinungAusText,
+  erschienenErgebnis,
   formatangabenBereinigen,
   isbnFiltern,
   istMassMm,
@@ -11,12 +12,11 @@ import {
   type SonderausgabeId,
   type UnterformatId,
 } from '@/domain/ausgabe';
-import { neuesBuch, STANDARD_LESESTATUS, type Buch } from '@/domain/buch';
+import { istBandnummer, neuesBuch, STANDARD_LESESTATUS, type Buch } from '@/domain/buch';
 
 export interface Eingaben {
   titel: string;
   autor: string;
-  jahr: string;
   seiten: string;
   /** Angaben der Karte „Ausgabe“ (REQ-060); fehlend = nicht eingegeben. */
   format?: FormatId;
@@ -30,13 +30,15 @@ export interface Eingaben {
   breiteMm?: number;
   hoeheMm?: number;
   dickeMm?: number;
-  /** „Erschienen“ als TT.MM.JJJJ (REQ-060, AK-3). */
+  /** „Erschienen“ als TT.MM.JJJJ oder JJJJ (REQ-060, REQ-092); das Feld „JAHR“ entfällt. */
   erschienen?: string;
+  /** Bandnummer aus dem Barcode-Scan (REQ-099); wird mit dem Buch gespeichert. */
+  bandnummer?: number;
   /** Überschriebenes „Hinzugefügt“ als TT.MM.JJJJ (REQ-060, AK-9); fehlend = Zeitpunkt des Anlegens. */
   hinzugefuegt?: string;
 }
 
-export const LEERE_EINGABEN: Eingaben = { titel: '', autor: '', jahr: '', seiten: '' };
+export const LEERE_EINGABEN: Eingaben = { titel: '', autor: '', seiten: '' };
 
 /**
  * Vorbelegung des Blatts „Manueller Eintrag“, z. B. aus einem Barcode-Treffer (REQ-062, Teil B).
@@ -61,12 +63,13 @@ export interface Vorbelegung {
   breiteMm?: number;
   hoeheMm?: number;
   dickeMm?: number;
+  /** Bandnummer der Reihe (REQ-099); keine ganze Zahl ≥ 1 → nicht übernommen. */
+  bandnummer?: number;
+  /** Name der Reihe laut Quelle; wird nicht automatisch einer Saga zugeordnet (REQ-099, AK-7). */
+  reihe?: string;
   /** Frontcover als Data-URL (wird beim Anlegen im Bildspeicher abgelegt, REQ-019). */
   cover?: string;
 }
-
-/** Feld „JAHR“: nur Ziffern, höchstens vier (REQ-030, AK-12). */
-export const jahrFiltern = (wert: string): string => wert.replace(/\D/g, '').slice(0, 4);
 
 /** Feld „SEITEN“: nur Ziffern, höchstens fünf (Annahme des Entwicklers). */
 export const seitenFiltern = (wert: string): string => wert.replace(/\D/g, '').slice(0, 5);
@@ -77,8 +80,9 @@ export const titelFehlt = (e: Eingaben): boolean => e.titel.trim() === '';
 /** Seitenzahl ist Pflicht (REQ-060, AK-5); 0 gilt als keine Angabe. */
 export const seitenFehlen = (e: Eingaben): boolean => e.seiten === '' || Number(e.seiten) <= 0;
 
-/** Jahr ist ungültig bei einer bis drei Ziffern; leer ist gültig (REQ-031, AK-12/AK-13). */
-export const jahrUngueltig = (e: Eingaben): boolean => e.jahr !== '' && !/^\d{4}$/.test(e.jahr);
+/** „Erschienen“ ungültig (REQ-031 AK-12/AK-13, REQ-092): weder leer noch TT.MM.JJJJ bis heute noch JJJJ bis zum laufenden Jahr. */
+export const erschienenUngueltig = (e: Eingaben, jetzt: Date = new Date()): boolean =>
+  e.erschienen !== undefined && erschienenErgebnis(e.erschienen, jetzt) === null;
 
 /** Eingaben aus einer Vorbelegung; ungültige Angaben fehlen. */
 export function eingabenAusVorbelegung(v: Vorbelegung | undefined): Eingaben {
@@ -86,9 +90,11 @@ export function eingabenAusVorbelegung(v: Vorbelegung | undefined): Eingaben {
   if (!v) return e;
   if (v.titel) e.titel = v.titel;
   if (v.autor) e.autor = v.autor;
-  if (v.erscheinungsjahr !== undefined) e.jahr = jahrFiltern(String(v.erscheinungsjahr));
   if (v.seitenanzahl !== undefined && Number.isInteger(v.seitenanzahl) && v.seitenanzahl > 0) e.seiten = seitenFiltern(String(v.seitenanzahl));
-  if (v.erscheinungsdatum && erschienenPruefen(v.erscheinungsdatum).ok) e.erschienen = v.erscheinungsdatum;
+  // „Erschienen“ (REQ-092): vollständiges Datum als TT.MM.JJJJ, sonst nur das Jahr als JJJJ.
+  if (v.erscheinungsdatum && erschienenErgebnis(v.erscheinungsdatum)) e.erschienen = v.erscheinungsdatum;
+  else if (v.erscheinungsjahr !== undefined && erschienenErgebnis(String(v.erscheinungsjahr))) e.erschienen = String(v.erscheinungsjahr);
+  if (istBandnummer(v.bandnummer)) e.bandnummer = v.bandnummer;
   if (v.verlag?.trim()) e.verlag = v.verlag.trim();
   if (v.isbn) {
     const isbn = isbnFiltern(v.isbn.replace(/[^0-9Xx]/g, ''));
@@ -110,14 +116,14 @@ export function eingabenAusVorbelegung(v: Vorbelegung | undefined): Eingaben {
 export function buchAusEingaben(e: Eingaben, jetzt: Date = new Date()): Buch {
   if (titelFehlt(e)) throw new Error('Titel fehlt');
   if (seitenFehlen(e)) throw new Error('Seitenzahl fehlt');
-  if (jahrUngueltig(e)) throw new Error('Jahr ungültig');
+  if (erschienenUngueltig(e, jetzt)) throw new Error('Erschienen ungültig');
   const autor = e.autor.trim();
   const buch = neuesBuch({
     titel: e.titel.trim(),
     status: STANDARD_LESESTATUS,
     ...(autor ? { autor } : {}),
-    ...(e.jahr ? { erscheinungsjahr: Number(e.jahr) } : {}),
-    ...(e.erschienen ? { erscheinungsdatum: e.erschienen } : {}),
+    ...erscheinungAusText(e.erschienen ? erschienenErgebnis(e.erschienen, jetzt) ?? '' : ''),
+    ...(istBandnummer(e.bandnummer) ? { bandnummer: e.bandnummer } : {}),
     seitenanzahl: Number(e.seiten),
     eingetragenAm: e.hinzugefuegt ? eintragungsdatumAusText(e.hinzugefuegt) : jetzt.toISOString(),
   });

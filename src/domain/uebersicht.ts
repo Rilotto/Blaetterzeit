@@ -9,19 +9,19 @@ import { fortschrittExakt, fortschrittGerundet, hatSeitenanzahl, modusVon } from
 export const MAX_NEUESTE = 10;
 
 /**
- * Nach Eintragungsdatum absteigend: das zuletzt eingetragene Buch zuerst (REQ-035, REQ-041).
- * Bücher ohne gültiges Datum gelten als älter als alle datierten; untereinander und bei gleichem Datum
- * entscheidet die Reihenfolge des Anlegens (Reihenfolge der Eingabe, später angelegt = neuer).
+ * Reihenfolge des Abschnitts „Alle Bücher“ (REQ-035, REQ-041, REQ-093 AK-11/AK-12): zuerst Bücher ohne gültiges
+ * Eintragungsdatum, untereinander A–Z nach Titel; danach nach Eintragungsdatum absteigend (zuletzt eingetragen zuerst),
+ * bei gleichem Datum entscheidet die Reihenfolge des Anlegens (später angelegt = neuer).
  */
 export function nachEintragung(buecher: readonly Buch[]): Buch[] {
-  const zeit = (b: Buch) => {
-    const t = b.eingetragenAm === undefined ? Number.NaN : Date.parse(b.eingetragenAm);
-    return Number.isNaN(t) ? Number.NEGATIVE_INFINITY : t;
-  };
-  return buecher
+  const zeit = (b: Buch) => (b.eingetragenAm === undefined ? Number.NaN : Date.parse(b.eingetragenAm));
+  const ohne = buecher.filter((b) => Number.isNaN(zeit(b)));
+  const mit = buecher
     .map((buch, nr) => ({ buch, nr, t: zeit(buch) }))
+    .filter((x) => !Number.isNaN(x.t))
     .sort((a, b) => (a.t === b.t ? b.nr - a.nr : b.t > a.t ? 1 : -1))
     .map((x) => x.buch);
+  return [...alphabetisch(ohne), ...mit];
 }
 
 /** Die höchstens zehn zuletzt eingetragenen Bücher, neuestes zuerst (REQ-035). */

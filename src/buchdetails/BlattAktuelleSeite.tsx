@@ -15,6 +15,8 @@ interface Props {
   onSichern: (modus: Fortschrittsmodus, wert: number) => void;
   /** X oder Tippen außerhalb: nichts speichern (REQ-024, AK-11). */
   onSchliessen: () => void;
+  /** Leeres Feld gesichert: gespeicherten Fortschritt entfernen, ohne Sitzung (REQ-024 AK-8, REQ-093 AK-7). */
+  onLeeren: () => void;
 }
 
 const MODI: { modus: Fortschrittsmodus; text: string }[] = [
@@ -48,7 +50,7 @@ const optionStil = (aktiv: boolean): CSSProperties => ({
 });
 
 /** Blatt „Aktuelle Seite“: Fortschritt als Seite oder Prozent eingeben und sichern (REQ-024). */
-export default function BlattAktuelleSeite({ seitenanzahl, startModus, startWert, onSichern, onSchliessen }: Props) {
+export default function BlattAktuelleSeite({ seitenanzahl, startModus, startWert, onSichern, onSchliessen, onLeeren }: Props) {
   const [modus, setModus] = useState<Fortschrittsmodus>(startModus);
   const [eingabe, setEingabe] = useState(startWert);
   const [hinweis, setHinweis] = useState<string | null>(null);
@@ -66,8 +68,11 @@ export default function BlattAktuelleSeite({ seitenanzahl, startModus, startWert
       onSichern(modus, p.wert);
       return;
     }
-    if (p.grund === 'leer') setHinweis(modus === 'prozent' ? 'Bitte gib einen Prozentwert ein.' : 'Bitte gib eine Seite ein.');
-    else if (p.grund === 'zuGross') setHinweis(modus === 'prozent' ? 'Höchstens 100 %.' : `Höchstens Seite ${seitenanzahl}.`);
+    if (p.grund === 'leer') {
+      onLeeren();
+      return;
+    }
+    if (p.grund === 'zuGross') setHinweis(modus === 'prozent' ? 'Höchstens 100 %.' : `Höchstens Seite ${seitenanzahl}.`);
     else setHinweis('Bitte gib eine ganze Zahl ab 0 ein.');
   };
 

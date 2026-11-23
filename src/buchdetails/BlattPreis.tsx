@@ -6,8 +6,8 @@ import { abstand } from '@/theme';
 interface Props {
   /** Gespeicherter Preis in Cent; ohne Wert ist das Feld mit „0,00 €“ vorbefüllt (REQ-059, AK-1/AK-3). */
   preisCent?: number;
-  /** Gültiger Betrag gesichert (REQ-059, AK-2). */
-  onSichern: (cent: number) => void;
+  /** Gültiger Betrag gesichert (REQ-059, AK-2); `undefined` = Feld geleert, Preis entfernen (REQ-093, AK-3). */
+  onSichern: (cent: number | undefined) => void;
   /** X oder Tippen außerhalb: nichts speichern (REQ-059, AK-4). */
   onSchliessen: () => void;
 }
@@ -19,8 +19,12 @@ export default function BlattPreis({ preisCent, onSichern, onSchliessen }: Props
 
   const sichern = () => {
     const p = preisPruefen(eingabe);
+    if (!p.ok && p.grund === 'leer') {
+      onSichern(undefined);
+      return;
+    }
     if (!p.ok) {
-      setHinweis(p.grund === 'leer' ? 'Bitte gib den Preis ein.' : 'Bitte gib einen Betrag wie 12,99 ein.');
+      setHinweis('Bitte gib einen Betrag wie 12,99 ein.');
       return;
     }
     onSichern(p.cent);

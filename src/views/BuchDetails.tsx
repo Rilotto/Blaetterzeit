@@ -5,11 +5,11 @@ import iconMehr from '@/assets/icons/icon-mehr.png';
 import { zuschneiden } from '@/bild/bildverarbeitung';
 import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
 import type { Ecken } from '@/bild/entzerren';
-import { standardBildspeicher, standardRepository } from '@/buecher/buchQuelle';
+import { standardBildspeicher, standardListenRepository, standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattAktuelleSeite from '@/buchdetails/BlattAktuelleSeite';
 import BlattBuchlaenge from '@/buchdetails/BlattBuchlaenge';
-import { BlattBeendet, BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
+import { BlattAutor, BlattBeendet, BlattErschienen, BlattHinzugefuegt, BlattIsbn, BlattTitel, BlattVerlag } from '@/buchdetails/BlattFeld';
 import BlattPreis from '@/buchdetails/BlattPreis';
 import Buchdarstellung, { type Bilder } from '@/buchdetails/Buchdarstellung';
 import Fortschritt from '@/buchdetails/Fortschritt';
@@ -27,12 +27,16 @@ import FensterFormat from '@/buchdetails/reiter/FensterFormat';
 import Schreibfenster from '@/buchdetails/reiter/Schreibfenster';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
-import { beendetAusText, eintragungsdatumAusText, type Formatangaben, type Masse } from '@/domain/ausgabe';
+import { beendetAusText, eintragungsdatumAusText, erscheinungAusText, erschienenEingabeText, type Formatangaben, type Masse } from '@/domain/ausgabe';
+import { sagaZeileText, sagenDesBuches, type ListenArt } from '@/domain/listen';
+import BlattZuListe from '@/listen/BlattZuListe';
+import { useListen } from '@/listen/gemeinsam';
+import ListenNavigation, { type ListenZiel } from '@/listen/ListenNavigation';
 import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
 import { statusSetzen, type Buch, type Fortschrittsmodus, type LesestatusId } from '@/domain/buch';
-import { fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
-import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore } from '@/storage';
-import { ansicht3dFarbe, ansicht3dSchatten, buchdetailsFarbe, fortschrittFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
+import { fortschrittEntfernen, fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
+import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore, type ListenRepository } from '@/storage';
+import { ansicht3dFarbe, ansicht3dSchatten, buchdetailsFarbe, fortschrittFarbe, listenFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
 
 export interface BuchDetailsProps {
   buchId: string;
@@ -46,11 +50,31 @@ export interface BuchDetailsProps {
   repository?: BookRepository;
   /** Aktuelle Zeit für Sitzungen und Streak (REQ-024, REQ-027); ohne Angabe die Systemzeit. In Tests ersetzbar. */
   jetzt?: () => Date;
+  /** Listenspeicher (Sagas, Sammlungen, Bibliotheken, REQ-095); ohne Angabe der der App. In Tests ersetzbar. */
+  listenRepository?: ListenRepository;
   /** Zurück zur Seite „Bücher“. */
   onZurueck: () => void;
 }
 
-type Blatt = 'buchlaenge' | 'aktuelleSeite' | 'rezension' | 'seiten' | 'format' | 'preis' | 'masse' | 'verlag' | 'isbn' | 'hinzugefuegt' | 'beendet' | null;
+/** Platzhalter an der Stelle der Autorzeile, wenn kein Autor gespeichert ist (REQ-094). */
+export const AUTOR_PLATZHALTER = 'unbekannter Autor';
+
+type Blatt =
+  | 'buchlaenge'
+  | 'aktuelleSeite'
+  | 'rezension'
+  | 'seiten'
+  | 'format'
+  | 'preis'
+  | 'masse'
+  | 'verlag'
+  | 'isbn'
+  | 'hinzugefuegt'
+  | 'beendet'
+  | 'erschienen'
+  | 'titel'
+  | 'autor'
+  | null;
 
 const systemzeit = () => new Date();
 
@@ -94,6 +118,29 @@ const autorStil: CSSProperties = {
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   color: fortschrittFarbe('autor'),
+};
+
+// Titel und Autor sind antippbar (REQ-094); die Darstellung bleibt unverändert (REQ-018, REQ-028).
+const antippbar: CSSProperties = { cursor: 'pointer', WebkitTapHighlightColor: 'transparent' };
+
+// „Band 1 · The Empyrean“ direkt unter der Autorzeile (REQ-099): wie die Autorzeile, aufrecht.
+const sagaZeileStil: CSSProperties = {
+  display: 'block',
+  boxSizing: 'border-box',
+  width: `calc(100% - ${2 * RAND}px)`,
+  margin: `${abstand('xs')} ${RAND}px 0`,
+  padding: 0,
+  border: 'none',
+  background: 'none',
+  fontFamily: 'inherit',
+  ...textstufe('meta'),
+  lineHeight: 1.3,
+  textAlign: 'center',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  color: listenFarbe('sagaZeile'),
+  ...antippbar,
 };
 
 /** So lange steht der Hinweis bei Hörbüchern (REQ-078), ms. Dauer prüft der CEO im Prototyp. */
@@ -142,9 +189,15 @@ export default function BuchDetails({
   bildspeicher,
   repository,
   jetzt = systemzeit,
+  listenRepository,
   onZurueck,
 }: BuchDetailsProps) {
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
+  const listenRepo = useMemo(() => listenRepository ?? standardListenRepository(), [listenRepository]);
+  const { listen, zug, neuLaden: listenNeuLaden } = useListen(listenRepo);
+  // Blatt „Zu einer … hinzufügen“ (REQ-096) bzw. flächendeckende Listen-Ansicht (REQ-097, REQ-098, REQ-099).
+  const [listenBlatt, setListenBlatt] = useState<ListenArt | null>(null);
+  const [listenZiel, setListenZiel] = useState<ListenZiel | null>(null);
   const [geladen, setGeladen] = useState<Buch | undefined>(undefined);
   // In den Buchdetails geänderter Stand (Status, Seitenanzahl, Fortschritt); hat Vorrang vor dem übergebenen Buch.
   const [geaendert, setGeaendert] = useState<Buch | undefined>(undefined);
@@ -279,7 +332,14 @@ export default function BuchDetails({
     speichern(bewertungAntippen(buch, kriterium, n));
   };
 
-  // Rezension sichern (REQ-049); leerer Text wird bereits im Schreibfenster abgewiesen.
+  // Feld im Menü „Aktuelle Seite“ geleert: Fortschritt entfernen, keine Sitzung (REQ-024 AK-8, REQ-093 AK-7).
+  const fortschrittLeeren = () => {
+    if (!buch) return;
+    speichern(fortschrittEntfernen(buch));
+    setBlatt(null);
+  };
+
+  // Rezension sichern (REQ-049); leerer Text entfernt eine gespeicherte Rezension (REQ-093, AK-8).
   const rezensionSpeichern = (text: string) => {
     if (!buch) return;
     const neu = rezensionSichern(buch, text);
@@ -306,10 +366,17 @@ export default function BuchDetails({
     setBlatt(null);
   };
 
-  // Preis sichern (REQ-059).
-  const preisSpeichern = (preisCent: number) => {
+  /** Buch ohne die genannten Angaben (Leeren, REQ-093). */
+  const ohne = (b: Buch, ...felder: (keyof Buch)[]): Buch => {
+    const neu: Buch = { ...b };
+    for (const f of felder) delete neu[f];
+    return neu;
+  };
+
+  // Preis sichern (REQ-059); leer entfernt den Preis (REQ-093, AK-3).
+  const preisSpeichern = (preisCent: number | undefined) => {
     if (!buch) return;
-    speichern({ ...buch, preisCent });
+    speichern(preisCent === undefined ? ohne(buch, 'preisCent') : { ...buch, preisCent });
     setBlatt(null);
   };
 
@@ -333,25 +400,56 @@ export default function BuchDetails({
     setBlatt(null);
   };
 
-  // ISBN sichern (REQ-063); das Blatt lässt nur gültige ISBN durch.
+  // ISBN sichern (REQ-063); das Blatt lässt nur gültige ISBN durch, leer entfernt sie (REQ-093, AK-2).
   const isbnSpeichern = (isbn: string) => {
     if (!buch) return;
-    speichern({ ...buch, isbn });
+    speichern(isbn ? { ...buch, isbn } : ohne(buch, 'isbn'));
     setBlatt(null);
   };
 
-  // Eintragungsdatum ändern (REQ-064); gleicher Tag behält den bisherigen Zeitpunkt.
+  // Eintragungsdatum ändern (REQ-064); gleicher Tag behält den bisherigen Zeitpunkt; leer entfernt es (REQ-093, AK-5).
   const hinzugefuegtSpeichern = (datum: string) => {
     if (!buch) return;
-    speichern({ ...buch, eingetragenAm: eintragungsdatumAusText(datum, buch.eingetragenAm) });
+    speichern(datum ? { ...buch, eingetragenAm: eintragungsdatumAusText(datum, buch.eingetragenAm) } : ohne(buch, 'eingetragenAm'));
     setBlatt(null);
   };
 
-  // „Beendet am“ überschreiben (REQ-085); das Blatt lässt nur gültige Daten bis heute durch.
+  // „Beendet am“ überschreiben (REQ-085); leer entfernt es, der Status bleibt (REQ-093, AK-6).
   const beendetSpeichern = (datum: string) => {
     if (!buch) return;
-    speichern({ ...buch, beendetAm: beendetAusText(datum) });
+    speichern(datum ? { ...buch, beendetAm: beendetAusText(datum) } : ohne(buch, 'beendetAm'));
     setBlatt(null);
+  };
+
+  // „Erschienen“ (REQ-092): Datum oder Jahr ersetzt die bisherige Angabe vollständig, leer entfernt sie.
+  const erschienenSpeichern = (text: string) => {
+    if (!buch) return;
+    speichern({ ...ohne(buch, 'erscheinungsdatum', 'erscheinungsjahr'), ...erscheinungAusText(text) });
+    setBlatt(null);
+  };
+
+  // Titel (Pflicht) und Autor (leerbar) unter der Buchdarstellung ändern (REQ-094).
+  const titelSpeichern = (titel: string) => {
+    if (!buch) return;
+    speichern({ ...buch, titel });
+    setBlatt(null);
+  };
+  const autorSpeichern = (autor: string) => {
+    if (!buch) return;
+    speichern(autor ? { ...buch, autor } : ohne(buch, 'autor'));
+    setBlatt(null);
+  };
+
+  // Zurück aus der Listen-Ansicht: Listen und Buch neu lesen (dort kann sich beides geändert haben).
+  const listenAnsichtSchliessen = () => {
+    setListenZiel(null);
+    void listenNeuLaden();
+    void (async () => {
+      const lauf = ausstehend.current;
+      if (lauf) await lauf;
+      const b = await (repository ?? (await standardRepository())).get(buchId).catch(() => undefined);
+      if (b && aktiv.current) setGeaendert(b);
+    })();
   };
 
   // Standard-Bildquelle: „Scannen“ zeigt die Kameraansicht der App und liefert deren Foto bzw. null (Zurück).
@@ -433,7 +531,22 @@ export default function BuchDetails({
     );
   }
 
+  if (listenZiel !== null) {
+    return (
+      <ListenNavigation
+        start={listenZiel}
+        onZurueck={listenAnsichtSchliessen}
+        repository={repository}
+        listenRepository={listenRepo}
+        bildspeicher={speicher}
+        bildquelle={bildquelle}
+        jetzt={jetzt}
+      />
+    );
+  }
+
   const verwischt = ansicht3d && !backdrop;
+  const sagen = buch ? sagenDesBuches(listen ?? [], zug, buch.id) : [];
   return (
     <>
     <section aria-label="Buchdetails" style={verwischt ? { ...ansichtStil, filter: UNSCHAERFE } : ansichtStil}>
@@ -449,14 +562,29 @@ export default function BuchDetails({
       {buch ? (
         <>
           <Buchdarstellung titel={buch.titel} bilder={bilder} masse={buch} onAntippen={bereichAntippen} />
-          <h1 data-buchdetails-titel="" {...stilRolle('seitentitel', 'buchtitel')} style={titelStil}>
+          <h1 data-buchdetails-titel="" {...stilRolle('seitentitel', 'buchtitel')} onClick={() => setBlatt('titel')} style={{ ...titelStil, ...antippbar }}>
             {buch.titel}
           </h1>
-          {buch.autor ? (
-            <p data-buchdetails-autor="" style={autorStil}>
-              {buch.autor}
-            </p>
-          ) : null}
+          {/* Ohne Autor der Platzhalter „unbekannter Autor“ (kein gespeicherter Autor), antippbar zum Nachtragen (REQ-094). */}
+          <p
+            data-buchdetails-autor=""
+            data-autor-platzhalter={buch.autor ? undefined : 'true'}
+            onClick={() => setBlatt('autor')}
+            style={{ ...autorStil, ...antippbar }}
+          >
+            {buch.autor || AUTOR_PLATZHALTER}
+          </p>
+          {sagen.map(({ liste, band }) => (
+            <button
+              key={liste.id}
+              type="button"
+              data-saga-zeile={liste.id}
+              onClick={() => setListenZiel({ art: 'liste', listeId: liste.id })}
+              style={sagaZeileStil}
+            >
+              {sagaZeileText(liste.name, band)}
+            </button>
+          ))}
           <div style={pillenBereichStil}>
             <Statuspille status={buch.status} onWaehlen={statusWaehlen} />
           </div>
@@ -476,6 +604,13 @@ export default function BuchDetails({
             onIsbn={() => setBlatt('isbn')}
             onHinzugefuegt={() => setBlatt('hinzugefuegt')}
             onBeendet={() => setBlatt('beendet')}
+            onErschienen={() => setBlatt('erschienen')}
+            listen={{
+              listen: listen ?? [],
+              zug,
+              onPille: (art) => setListenBlatt(art),
+              onZeile: (art) => setListenZiel({ art: 'uebersicht', listenArt: art, buchId: buch.id }),
+            }}
           />
         </>
       ) : null}
@@ -488,6 +623,7 @@ export default function BuchDetails({
           startModus={modusVon(buch)}
           startWert={gespeicherteEingabe(buch)}
           onSichern={fortschrittSpeichern}
+          onLeeren={fortschrittLeeren}
           onSchliessen={() => setBlatt(null)}
         />
       ) : null}
@@ -521,7 +657,33 @@ export default function BuchDetails({
       {buch && blatt === 'verlag' ? <BlattVerlag verlag={buch.verlag} onSichern={verlagSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'isbn' ? <BlattIsbn isbn={buch.isbn} onSichern={isbnSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'hinzugefuegt' ? (
-        <BlattHinzugefuegt eingetragenAm={buch.eingetragenAm} jetzt={jetzt} onSichern={hinzugefuegtSpeichern} onSchliessen={() => setBlatt(null)} />
+        <BlattHinzugefuegt
+          eingetragenAm={buch.eingetragenAm}
+          jetzt={jetzt}
+          leerbar
+          leerOhneDatum
+          onSichern={hinzugefuegtSpeichern}
+          onSchliessen={() => setBlatt(null)}
+        />
+      ) : null}
+      {buch && blatt === 'erschienen' ? (
+        <BlattErschienen erschienen={erschienenEingabeText(buch)} jetzt={jetzt} onSichern={erschienenSpeichern} onSchliessen={() => setBlatt(null)} />
+      ) : null}
+      {buch && blatt === 'titel' ? <BlattTitel titel={buch.titel} onSichern={titelSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'autor' ? <BlattAutor autor={buch.autor} onSichern={autorSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && listenBlatt !== null ? (
+        <BlattZuListe
+          art={listenBlatt}
+          buch={buch}
+          listen={listen ?? []}
+          zug={zug}
+          repository={listenRepo}
+          onGesichert={() => {
+            setListenBlatt(null);
+            void listenNeuLaden();
+          }}
+          onSchliessen={() => setListenBlatt(null)}
+        />
       ) : null}
       {buch && blatt === 'beendet' ? (
         <BlattBeendet beendetAm={buch.beendetAm} jetzt={jetzt} onSichern={beendetSpeichern} onSchliessen={() => setBlatt(null)} />

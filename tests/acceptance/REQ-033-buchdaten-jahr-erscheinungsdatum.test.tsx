@@ -121,8 +121,9 @@ describe('REQ-033 Erscheinungsjahr und Erscheinungsdatum', () => {
     });
   });
 
-  describe('AK-3 Neues Buch ohne Erscheinungsdatum', () => {
-    it('[REQ-033/AK-3] ein im Blatt „Manueller Eintrag“ angelegtes Buch (auch mit Jahr) hat kein Erscheinungsdatum', async () => {
+  // Fassung 2026-11-23 (REQ-092): „Erschienen“ leer gelassen → weder Erscheinungsdatum noch Erscheinungsjahr; kein Feld „JAHR“.
+  describe('AK-3 Neues Buch ohne Angabe bei „Erschienen“', () => {
+    async function anlegen(mitErschienen?: string) {
       const daten = new Map<string, Buch>();
       const repo = {
         list: async () => [...daten.values()],
@@ -144,16 +145,42 @@ describe('REQ-033 Erscheinungsjahr und Erscheinungsdatum', () => {
       fireEvent.click(await screen.findByRole('button', { name: 'Buch hinzufügen' }));
       fireEvent.click(within(await screen.findByRole('menu', { name: 'Buch hinzufügen' })).getByRole('menuitem', { name: /Von Hand eintragen/ }));
       const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
+      expect(within(d).queryAllByLabelText(/^\s*jahr\s*$/i), 'kein Feld „JAHR“').toHaveLength(0);
       fireEvent.change(within(d).getByLabelText(/^\s*titel\s*$/i), { target: { value: 'Neu' } });
-      fireEvent.change(within(d).getByLabelText(/^\s*jahr\s*$/i), { target: { value: '2019' } });
-      // Seit REQ-060: Seitenzahl Pflicht; „+ Erscheinungsdatum hinzufügen“ gibt es nicht mehr, „Erschienen“ bleibt leer.
       fireEvent.change(within(d).getByLabelText(/^\s*seiten\s*$/i), { target: { value: '100' } });
+      if (mitErschienen !== undefined) {
+        await act(async () => {
+          fireEvent.click(d.querySelector('[data-ausgabe-zeile="erschienen"]')!);
+          await new Promise((r) => setTimeout(r, 20));
+        });
+        const f = await vi.waitFor(() => {
+          const e = document.querySelector<HTMLInputElement>('[data-blatt-feld="erschienen"]');
+          expect(e).not.toBeNull();
+          return e!;
+        });
+        fireEvent.change(f, { target: { value: mitErschienen } });
+        await act(async () => {
+          fireEvent.click(document.querySelector('[data-blatt-sichern="erschienen"]')!);
+          await new Promise((r) => setTimeout(r, 20));
+        });
+      }
       await act(async () => {
         fireEvent.click(within(d).getByRole('button', { name: 'Hinzufügen' }));
         await new Promise((r) => setTimeout(r, 20));
       });
       const [b] = [...daten.values()];
       expect(b).toBeDefined();
+      return b;
+    }
+
+    it('[REQ-033/AK-3] „Erschienen“ leer gelassen: weder Erscheinungsdatum noch Erscheinungsjahr', async () => {
+      const b = await anlegen();
+      expect(b).not.toHaveProperty('erscheinungsdatum');
+      expect(b).not.toHaveProperty('erscheinungsjahr');
+    });
+
+    it('[REQ-033/AK-3] Gegenprobe: „Erschienen“ 2019 ergibt nur das Erscheinungsjahr, kein Datum', async () => {
+      const b = await anlegen('2019');
       expect(b.erscheinungsjahr).toBe(2019);
       expect(b).not.toHaveProperty('erscheinungsdatum');
     });

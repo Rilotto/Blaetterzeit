@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import {
   beendetDatumText,
   datumFiltern,
   datumText,
   eintragungsdatumText,
-  erschienenPruefen,
+  erschienenErgebnis,
+  erschienenFiltern,
   hinzugefuegtPruefen,
   isbnFiltern,
   isbnGueltig,
@@ -35,11 +36,14 @@ export interface BlattFeldProps {
   onSichern: (wert: string) => void;
   /** X oder Tippen außerhalb: nichts speichern. */
   onSchliessen: () => void;
+  /** Weitere Elemente unter „Sichern“ (z. B. „Liste löschen“, REQ-098). */
+  unten?: ReactNode;
 }
 
 /**
  * Blatt mit einem Eingabefeld und der Pille „Sichern“ nach Muster des Menüs „Preis“ (REQ-059).
- * Ungültig: Feld in Primär hervorgehoben ohne Hinweistext, bis es geändert wird – wie „JAHR“ (REQ-031).
+ * Ungültig: Feld in Primär hervorgehoben ohne Hinweistext, bis es geändert wird (REQ-063).
+ * Leerbare Angaben liefern beim Sichern eines leeren Feldes '' – der Aufrufer entfernt dann die Angabe (REQ-093).
  */
 export default function BlattFeld({
   titel,
@@ -53,6 +57,7 @@ export default function BlattFeld({
   maxLength,
   onSichern,
   onSchliessen,
+  unten,
 }: BlattFeldProps) {
   const [eingabe, setEingabe] = useState(startWert);
   const [fehler, setFehler] = useState(false);
@@ -96,6 +101,7 @@ export default function BlattFeld({
       <button type="button" data-blatt-sichern={kennung} onClick={sichern} style={sichernStil}>
         Sichern
       </button>
+      {unten}
     </BlattUnten>
   );
 }
@@ -105,12 +111,12 @@ interface EinfachProps {
   onSchliessen: () => void;
 }
 
-/** Blatt „Verlag“ (REQ-063). Leer bzw. nur Leerzeichen sichern entfernt den Verlag (Annahme des Entwicklers). */
+/** Blatt „Verlag“ (REQ-063). Leer bzw. nur Leerzeichen sichern entfernt den Verlag (REQ-093). */
 export function BlattVerlag({ verlag, ...rest }: EinfachProps & { verlag?: string }) {
   return <BlattFeld titel="Verlag" kennung="verlag" startWert={verlag ?? ''} platzhalter="Verlag" maxLength={200} pruefen={(w) => w.trim()} {...rest} />;
 }
 
-/** Blatt „ISBN“ (REQ-063): nur Ziffern (und „X“ als zehnte Stelle), Prüfziffer wird beim Sichern geprüft. */
+/** Blatt „ISBN“ (REQ-063): nur Ziffern (und „X“ als zehnte Stelle), Prüfziffer wird beim Sichern geprüft; leer entfernt (REQ-093). */
 export function BlattIsbn({ isbn, ...rest }: EinfachProps & { isbn?: string }) {
   return (
     <BlattFeld
@@ -122,7 +128,7 @@ export function BlattIsbn({ isbn, ...rest }: EinfachProps & { isbn?: string }) {
       inputMode="text"
       autoCapitalize="characters"
       filtern={isbnFiltern}
-      pruefen={(w) => (isbnGueltig(w) ? w : null)}
+      pruefen={(w) => (w === '' ? '' : isbnGueltig(w) ? w : null)}
       {...rest}
     />
   );
@@ -133,17 +139,29 @@ export function BlattHinzugefuegt({
   eingetragenAm,
   startDatum,
   jetzt,
+  leerOhneDatum = false,
+  leerbar = false,
   ...rest
-}: EinfachProps & { eingetragenAm?: string; /** Vorbefüllung TT.MM.JJJJ (hat Vorrang). */ startDatum?: string; jetzt: () => Date }) {
+}: EinfachProps & {
+  eingetragenAm?: string;
+  /** Vorbefüllung TT.MM.JJJJ (hat Vorrang). */
+  startDatum?: string;
+  jetzt: () => Date;
+  /** Ohne Eintragungsdatum leer statt heute vorbefüllen (Buchdetails nach dem Leeren, REQ-093). */
+  leerOhneDatum?: boolean;
+  /** Leeres Feld ist gültig und liefert '' (Buchdetails, REQ-093 AK-5). */
+  leerbar?: boolean;
+}) {
   return (
     <BlattFeld
       titel="Hinzugefügt"
       kennung="hinzugefuegt"
-      startWert={startDatum || eintragungsdatumText(eingetragenAm) || datumText(jetzt())}
+      startWert={startDatum || eintragungsdatumText(eingetragenAm) || (leerOhneDatum ? '' : datumText(jetzt()))}
       platzhalter="TT.MM.JJJJ"
       inputMode="numeric"
       filtern={datumFiltern}
       pruefen={(w) => {
+        if (leerbar && w.trim() === '') return '';
         const p = hinzugefuegtPruefen(w, jetzt());
         return p.ok ? p.datum : null;
       }}
@@ -154,7 +172,7 @@ export function BlattHinzugefuegt({
 
 /**
  * Blatt „Beendet am“ (REQ-085): Verhalten wie „Hinzugefügt“ (TT.MM.JJJJ, nicht in der Zukunft); vorbefüllt mit dem
- * gespeicherten Datum, ohne Datum leer. Liefert TT.MM.JJJJ.
+ * gespeicherten Datum, ohne Datum leer. Liefert TT.MM.JJJJ bzw. '' (leer entfernt, REQ-093).
  */
 export function BlattBeendet({ beendetAm, jetzt, ...rest }: EinfachProps & { beendetAm?: string; jetzt: () => Date }) {
   return (
@@ -166,6 +184,8 @@ export function BlattBeendet({ beendetAm, jetzt, ...rest }: EinfachProps & { bee
       inputMode="numeric"
       filtern={datumFiltern}
       pruefen={(w) => {
+        // Leer entfernt „Beendet am“ (REQ-093, AK-6).
+        if (w.trim() === '') return '';
         const p = hinzugefuegtPruefen(w, jetzt());
         return p.ok ? p.datum : null;
       }}
@@ -174,21 +194,41 @@ export function BlattBeendet({ beendetAm, jetzt, ...rest }: EinfachProps & { bee
   );
 }
 
-/** Blatt „Erschienen“ im Manuellen Eintrag (REQ-060, AK-3): Datum TT.MM.JJJJ. */
-export function BlattErschienen({ erschienen, ...rest }: EinfachProps & { erschienen?: string }) {
+/**
+ * Blatt „Erschienen“ (REQ-060, REQ-092): Datum TT.MM.JJJJ bis heute oder Jahr JJJJ bis zum laufenden Jahr, je nachdem
+ * was vorliegt. Leer ist gültig und liefert '' (Angabe entfernen). Liefert TT.MM.JJJJ, JJJJ oder ''.
+ */
+export function BlattErschienen({ erschienen, jetzt = () => new Date(), ...rest }: EinfachProps & { erschienen?: string; jetzt?: () => Date }) {
   return (
     <BlattFeld
       titel="Erschienen"
       kennung="erschienen"
       startWert={erschienen ?? ''}
-      platzhalter="TT.MM.JJJJ"
+      platzhalter="TT.MM.JJJJ oder JJJJ"
       inputMode="numeric"
-      filtern={datumFiltern}
-      pruefen={(w) => {
-        const p = erschienenPruefen(w);
-        return p.ok ? p.datum : null;
-      }}
+      filtern={erschienenFiltern}
+      pruefen={(w) => erschienenErgebnis(w, jetzt())}
       {...rest}
     />
   );
+}
+
+/** Blatt „Titel“ in den Buchdetails (REQ-094): Muster „Verlag“; Pflichtangabe, leer bzw. nur Leerzeichen ist ungültig. */
+export function BlattTitel({ titel, ...rest }: EinfachProps & { titel: string }) {
+  return (
+    <BlattFeld
+      titel="Titel"
+      kennung="titel"
+      startWert={titel}
+      platzhalter="Buchtitel"
+      maxLength={500}
+      pruefen={(w) => (w.trim() === '' ? null : w.trim())}
+      {...rest}
+    />
+  );
+}
+
+/** Blatt „Autor“ in den Buchdetails (REQ-094): Muster „Verlag“; leer entfernt den Autor (REQ-093). */
+export function BlattAutor({ autor, ...rest }: EinfachProps & { autor?: string }) {
+  return <BlattFeld titel="Autor" kennung="autor" startWert={autor ?? ''} platzhalter="Autor" maxLength={300} pruefen={(w) => w.trim()} {...rest} />;
 }

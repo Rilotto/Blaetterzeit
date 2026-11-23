@@ -229,7 +229,8 @@ describe('REQ-062 Treffer zur ISBN', () => {
     await vi.waitFor(() => expect(blatt()).not.toBeNull(), W);
     expect(norm(zeile('verlag').textContent)).toBe('Verlag');
     expect(feld('Seiten').value).toBe('');
-    expect(feld('Jahr').value).toBe('');
+    // Seit REQ-092: kein Feld „JAHR“; ohne Angabe der Quelle bleibt „Erschienen“ leer.
+    expect(norm(zeile('erschienen').textContent)).toMatch(/^Erschienen\s*›?$/);
     expect(blatt()!.querySelector('[data-cover-hinzufuegen] img')).toBeNull();
     // ändern: ausgefülltes Feld (Titel) und leere Felder (Seiten, Verlag)
     fireEvent.change(feld('Titel'), { target: { value: 'Eigener Titel' } });

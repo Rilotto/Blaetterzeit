@@ -118,6 +118,28 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN beendet_am TEXT',
     ],
   },
+  {
+    version: 10,
+    beschreibung: 'Listen (Sagas, Sammlungen, Bibliotheken), Zugehörigkeit mit Band; Bandnummer aus dem Scan (REQ-095, REQ-096, REQ-099)',
+    anweisungen: [
+      `CREATE TABLE IF NOT EXISTS liste (
+        id TEXT NOT NULL PRIMARY KEY,
+        art TEXT NOT NULL CHECK (art IN ('saga', 'sammlung', 'bibliothek')),
+        name TEXT NOT NULL,
+        geaendert TEXT NOT NULL
+      )`,
+      // Band: ganze Zahl ≥ 1; NULL = kein Band.
+      `CREATE TABLE IF NOT EXISTS liste_buch (
+        liste_id TEXT NOT NULL,
+        buch_id TEXT NOT NULL,
+        band INTEGER,
+        geaendert TEXT NOT NULL,
+        PRIMARY KEY (liste_id, buch_id)
+      )`,
+      // Bandnummer aus dem Barcode-Scan; NULL = keine.
+      'ALTER TABLE buch ADD COLUMN bandnummer INTEGER',
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

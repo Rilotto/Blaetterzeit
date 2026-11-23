@@ -47,12 +47,14 @@ const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(
 
 afterEach(() => cleanup());
 
-it('[REQ-030/GROB] Blatt mit X, Ziehgriff, „Cover hinzufügen“, vier Feldern mit Platzhaltern und „Hinzufügen“; X schließt ohne Speichern', async () => {
+it('[REQ-030/GROB] Blatt mit X, Ziehgriff, „Cover hinzufügen“, Titel/Autor/Seiten mit Platzhaltern (kein „JAHR“) und „Hinzufügen“; X schließt ohne Speichern', async () => {
   const { repo } = await zeige();
   const d = await oeffneBlatt();
   expect(d.querySelector('[data-ziehgriff]')).not.toBeNull();
   expect(d.querySelector('[data-cover-hinzufuegen]')?.textContent).toContain('Cover hinzufügen');
-  for (const [n, p] of [['Titel', 'Buchtitel'], ['Autor', 'Autor'], ['Jahr', '2024'], ['Seiten', '496']]) expect(feld(d, n)).toHaveAttribute('placeholder', p);
+  for (const [n, p] of [['Titel', 'Buchtitel'], ['Autor', 'Autor'], ['Seiten', '496']]) expect(feld(d, n)).toHaveAttribute('placeholder', p);
+  // Seit REQ-092 (2026-11-23): kein Feld „JAHR“.
+  expect(within(d).queryAllByLabelText(/^\s*Jahr\s*$/i)).toHaveLength(0);
   // Seit REQ-060: statt „+ Erscheinungsdatum hinzufügen“ die Zeile „Erschienen“ der Karte „Ausgabe“.
   expect(d.querySelector('[data-ausgabe-zeile="erschienen"]')).not.toBeNull();
   expect(within(d).getByRole('button', { name: 'Hinzufügen' })).toBeInTheDocument();

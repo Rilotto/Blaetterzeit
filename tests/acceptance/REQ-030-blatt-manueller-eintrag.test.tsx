@@ -33,7 +33,6 @@ const MOMO: Buch = { id: '30000000-0000-4000-8000-000000000001', titel: 'Momo', 
 const FELDER: [string, string][] = [
   ['Titel', 'Buchtitel'],
   ['Autor', 'Autor'],
-  ['Jahr', '2024'],
   ['Seiten', '496'],
 ];
 
@@ -127,9 +126,9 @@ function mitFlaeche(start: HTMLElement, grenze: HTMLElement, abwaerts = false): 
   if (!t) throw new Error('kein Element mit Fläche gefunden');
   return t;
 }
-// Seit REQ-060 liegt „Seiten“ in der Karte „Ausgabe“; die Formular-Karte umfasst Titel, Autor und Jahr.
+// Seit REQ-060 liegt „Seiten“ in der Karte „Ausgabe“; seit REQ-092 (2026-11-23) umfasst die Formular-Karte Titel und Autor.
 const karte = () => {
-  const s = feld('Jahr');
+  const s = feld('Autor');
   for (let n = feld('Titel').parentElement; n && n !== d(); n = n.parentElement) {
     if (n.contains(s) && !TRANSPARENT.test(getComputedStyle(n).backgroundColor)) return n;
   }
@@ -172,7 +171,7 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
         xBtn(),
         coverFeld(),
         feld('Titel'),
-        feld('Jahr'),
+        feld('Autor'),
         pille(),
       ];
       reihe.forEach((el, i) => expect(el, `Element ${i}`).toBeTruthy());
@@ -196,7 +195,7 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
   // REQ-030/AK-2 ist laut Hinweis in REQ-030 mit REQ-060 hinfällig („SEITEN“ wandert in die Karte „Ausgabe“,
   // „Erscheinungsdatum“ heißt „Erschienen“). Die Tests prüfen das neue Verhalten (REQ-060/AK-1, AK-2).
   describe('AK-2 (überführt in REQ-060) Felder mit Beschriftung und Platzhaltertext', () => {
-    it.each(FELDER.slice(0, 3))('[REQ-030/AK-2] Feld „%s“ ist leer, mit Platzhalter „%s“ und Beschriftung in Großbuchstaben', async (name, platzhalter) => {
+    it.each(FELDER.slice(0, 2))('[REQ-030/AK-2] Feld „%s“ ist leer, mit Platzhalter „%s“ und Beschriftung in Großbuchstaben', async (name, platzhalter) => {
       await zeige();
       await oeffneBlatt();
       const f = feld(name);
@@ -217,13 +216,22 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
       expect(d().querySelector('[data-ausgabe-zeile="seiten"]')!.contains(f)).toBe(true);
     });
 
-    it('[REQ-030/AK-2] „TITEL“, „AUTOR“, „JAHR“ in der Formular-Karte in dieser Reihenfolge', async () => {
+    // Fassung 2026-11-23 (REQ-092): kein Feld „JAHR“, kein „ERSCHEINUNGSDATUM“ / „+ Erscheinungsdatum hinzufügen“.
+    it('[REQ-030/AK-2] „TITEL“ und „AUTOR“ in der Formular-Karte in dieser Reihenfolge; kein Feld „JAHR“', async () => {
       await zeige();
       await oeffneBlatt();
       expect(karte().contains(feld('Titel'))).toBe(true);
-      expect(karte().contains(feld('Jahr'))).toBe(true);
+      expect(karte().contains(feld('Autor'))).toBe(true);
       expect(vor(feld('Titel'), feld('Autor'))).toBe(true);
-      expect(vor(feld('Autor'), feld('Jahr'))).toBe(true);
+      expect(within(d()).queryAllByLabelText(/^\s*Jahr\s*$/i)).toHaveLength(0);
+      expect(within(d()).queryAllByPlaceholderText('2024')).toHaveLength(0);
+      expect(Array.from(d().querySelectorAll<HTMLElement>('*')).filter((e) => e.children.length === 0 && /^\s*JAHR\s*$/i.test(e.textContent ?? ''))).toHaveLength(0);
+    });
+
+    it('[REQ-030/AK-2] kein „+ Erscheinungsdatum hinzufügen“', async () => {
+      await zeige();
+      await oeffneBlatt();
+      expect(d().textContent).not.toMatch(/Erscheinungsdatum hinzufügen/i);
     });
 
     it('[REQ-030/AK-2] „Erscheinungsdatum“ kommt nicht mehr vor, stattdessen die Zeile „Erschienen“', async () => {
@@ -238,7 +246,7 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
     it.each(FELDER)('[REQ-030/AK-3] „%s“: Eingabe statt „%s“, nach vollständigem Löschen wieder der Platzhalter', async (name, platzhalter) => {
       await zeige();
       await oeffneBlatt();
-      const eingabe = name === 'Jahr' ? '1999' : name === 'Seiten' ? '123' : 'Etwas Text';
+      const eingabe = name === 'Seiten' ? '123' : 'Etwas Text';
       gib(name, eingabe);
       expect(feld(name).value).toBe(eingabe);
       // native Platzhalter (Absprache): der Browser blendet sie bei nicht leerem Wert aus
@@ -346,9 +354,15 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
     });
   });
 
-  // REQ-030/AK-6 ist laut Hinweis in REQ-030 mit REQ-060 hinfällig: „Erschienen“ hat jetzt eine Funktion.
-  // Der Test prüft das neue Verhalten (REQ-060/AK-3): Antippen öffnet die Eingabe, Schließen über X speichert nichts.
-  describe('AK-6 (überführt in REQ-060/AK-3) „Erschienen“ öffnet eine Eingabe', () => {
+  // Fassung 2026-11-23: genau eine Eingabe für die Erscheinungsangabe, die Zeile „Erschienen“ (REQ-060, REQ-092).
+  describe('AK-6 Erscheinungsangabe nur über „Erschienen“', () => {
+    it('[REQ-030/AK-6] genau eine Zeile „Erschienen“, kein weiteres Feld für Jahr oder Datum', async () => {
+      await zeige();
+      await oeffneBlatt();
+      expect(d().querySelectorAll('[data-ausgabe-zeile="erschienen"]')).toHaveLength(1);
+      expect(within(d()).queryAllByLabelText(/Jahr|Erscheinungsdatum|Erschienen/i).filter((e) => !e.closest('[data-ausgabe-zeile="erschienen"]'))).toHaveLength(0);
+    });
+
     it('[REQ-030/AK-6] Antippen von „Erschienen“ öffnet ein Datumsfeld; nichts gespeichert', async () => {
       const { repo } = await zeige();
       await oeffneBlatt();
@@ -449,26 +463,13 @@ describe('REQ-030 Blatt „Manueller Eintrag“', () => {
     });
   });
 
-  describe('AK-12 Jahr nur vier Ziffern', () => {
-    it('[REQ-030/AK-12] Eingabe „20a245“ in einem Schritt (z. B. Einfügen): höchstens vier Ziffern, keine anderen Zeichen', async () => {
+  // Fassung 2026-11-23 (REQ-092): das Feld „JAHR“ entfällt.
+  describe('AK-12 Kein Feld „JAHR“', () => {
+    it('[REQ-030/AK-12] die Formular-Karte enthält kein Feld „JAHR“ (weder Beschriftung noch Eingabe)', async () => {
       await zeige();
       await oeffneBlatt();
-      gib('Jahr', '20a245');
-      expect(feld('Jahr').value).toMatch(/^\d{0,4}$/);
-    });
-
-    it('[REQ-030/AK-12] Zeichen für Zeichen getippt „20a245“ → „2024“', async () => {
-      await zeige();
-      await oeffneBlatt();
-      for (const z of '20a245') gib('Jahr', feld('Jahr').value + z);
-      expect(feld('Jahr').value).toBe('2024');
-    });
-
-    it.each(['-12', '1.5', '19 9', 'abcd', '١٩٩٩'])('[REQ-030/AK-12] Grenzfall „%s“ ergibt nur ASCII-Ziffern', async (wert) => {
-      await zeige();
-      await oeffneBlatt();
-      gib('Jahr', wert);
-      expect(feld('Jahr').value).toMatch(/^[0-9]{0,4}$/);
+      expect(within(karte()).queryAllByLabelText(/^\s*Jahr\s*$/i)).toHaveLength(0);
+      expect(karte().textContent).not.toMatch(/JAHR/i);
     });
   });
 

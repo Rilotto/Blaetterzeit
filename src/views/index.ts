@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import type { MenuePunktId } from '@/navigation/menu';
+import BibliothekAnsicht from './BibliothekAnsicht';
 import BuecherAnsicht from './BuecherAnsicht';
 import ProfilAnsicht from './ProfilAnsicht';
 import StatistikAnsicht from './StatistikAnsicht';
@@ -12,7 +13,7 @@ import UnderConstruction from './UnderConstruction';
 export const ansichten: Record<MenuePunktId, ComponentType> = {
   start: UnderConstruction,
   buecher: BuecherAnsicht,
-  bibliothek: UnderConstruction,
+  bibliothek: BibliothekAnsicht,
   statistik: StatistikAnsicht,
   profil: ProfilAnsicht,
 };

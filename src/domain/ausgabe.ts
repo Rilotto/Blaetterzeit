@@ -250,9 +250,68 @@ export function eintragungsdatumText(eingetragenAm: string | undefined): string 
 
 export type DatumPruefung = { ok: true; datum: string } | { ok: false };
 
-/** „Erschienen“ (REQ-060, AK-3): existierendes Kalenderdatum TT.MM.JJJJ. */
-export function erschienenPruefen(eingabe: string): DatumPruefung {
-  return datumTeile(eingabe) ? { ok: true, datum: eingabe } : { ok: false };
+/**
+ * „Erschienen“ (REQ-060, REQ-092): existierendes Kalenderdatum TT.MM.JJJJ bis heute oder Jahr JJJJ bis zum laufenden
+ * Jahr. Leer ist ebenfalls gültig (Angabe entfernen, REQ-092/REQ-093) und liefert `leer`.
+ */
+export type ErschienenPruefung = { ok: true; leer: true } | { ok: true; datum: string } | { ok: true; jahr: number } | { ok: false };
+
+export function erschienenPruefen(eingabe: string, jetzt: Date = new Date()): ErschienenPruefung {
+  const text = eingabe.trim();
+  if (text === '') return { ok: true, leer: true };
+  if (/^\d{4}$/.test(text)) {
+    const jahr = Number(text);
+    return jahr >= 1 && jahr <= jetzt.getFullYear() ? { ok: true, jahr } : { ok: false };
+  }
+  const p = hinzugefuegtPruefen(text, jetzt);
+  return p.ok ? { ok: true, datum: p.datum } : { ok: false };
+}
+
+/** Geprüfte Eingabe als Text: TT.MM.JJJJ, JJJJ oder leer; ungültig → null (für die Blätter). */
+export function erschienenErgebnis(eingabe: string, jetzt: Date = new Date()): string | null {
+  const p = erschienenPruefen(eingabe, jetzt);
+  if (!p.ok) return null;
+  if ('leer' in p) return '';
+  return 'datum' in p ? p.datum : String(p.jahr);
+}
+
+/** Erscheinungsangabe eines Buches. */
+export interface Erscheinung {
+  erscheinungsjahr?: number;
+  erscheinungsdatum?: string;
+}
+
+/**
+ * Geprüfter Text (TT.MM.JJJJ, JJJJ oder leer) → Erscheinungsangabe. Die neue Angabe ersetzt Datum und Jahr
+ * vollständig (REQ-092): bei Datum ohne Jahr, bei Jahr ohne Datum, leer ohne beides.
+ */
+export function erscheinungAusText(text: string): Erscheinung {
+  if (/^\d{4}$/.test(text)) return { erscheinungsjahr: Number(text) };
+  if (text !== '') return { erscheinungsdatum: text };
+  return {};
+}
+
+/** Zeile „Erschienen“ (REQ-092): Datum wie „Hinzugefügt“ („Feb. 2025“, Vorrang), sonst das Jahr, sonst leer. */
+export function erschienenText(e: Erscheinung): string {
+  const teile = e.erscheinungsdatum ? datumTeile(e.erscheinungsdatum) : undefined;
+  if (teile) return `${MONATE_KURZ[teile[1] - 1]} ${teile[0]}`;
+  return e.erscheinungsjahr !== undefined ? String(e.erscheinungsjahr) : '';
+}
+
+/** Vorbefüllung des Blatts „Erschienen“ (REQ-092, AK-1/AK-10): Datum TT.MM.JJJJ, sonst Jahr, sonst leer. */
+export function erschienenEingabeText(e: Erscheinung): string {
+  if (e.erscheinungsdatum && datumTeile(e.erscheinungsdatum)) return e.erscheinungsdatum;
+  return e.erscheinungsjahr !== undefined ? String(e.erscheinungsjahr) : '';
+}
+
+/**
+ * Feld „Erschienen“: Ziffern und Punkte. Ohne Punkt bleiben bis zu vier Ziffern stehen (Jahr), ab der fünften
+ * Ziffer werden die Punkte wie bei „Hinzugefügt“ gesetzt (REQ-092).
+ */
+export function erschienenFiltern(wert: string): string {
+  if (wert.includes('.')) return wert.replace(/[^\d.]/g, '').slice(0, 10);
+  const z = wert.replace(/\D/g, '').slice(0, 8);
+  return z.length <= 4 ? z : datumFiltern(z);
 }
 
 /** „Hinzugefügt“ (REQ-064): existierendes Kalenderdatum TT.MM.JJJJ, nicht nach dem heutigen Tag (lokale Zeit). */

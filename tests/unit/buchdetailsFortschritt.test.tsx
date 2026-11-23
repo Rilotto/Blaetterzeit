@@ -99,12 +99,13 @@ describe('Statuspille und Statusmenü', () => {
 });
 
 describe('Autor', () => {
-  it('steht unter dem Titel, ohne Autor keine Zeile', async () => {
+  it('steht unter dem Titel, ohne Autor der Platzhalter „unbekannter Autor“ (REQ-094)', async () => {
     await zeige(buch({ autor: 'Michael Ende' }));
     expect(document.querySelector('[data-buchdetails-autor]')).toHaveTextContent('Michael Ende');
     cleanup();
     await zeige(buch());
-    expect(document.querySelector('[data-buchdetails-autor]')).toBeNull();
+    expect(document.querySelector('[data-buchdetails-autor]')).toHaveTextContent('unbekannter Autor');
+    expect(document.querySelector('[data-buchdetails-autor]')).toHaveAttribute('data-autor-platzhalter', 'true');
   });
 });
 

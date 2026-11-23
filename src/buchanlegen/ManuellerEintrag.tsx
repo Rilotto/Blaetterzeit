@@ -24,8 +24,7 @@ import { buchAnlegenFarbe, detailsFarbe, textstufe, bildschirmrandPx, pillenhoeh
 import {
   buchAusEingaben,
   eingabenAusVorbelegung,
-  jahrFiltern,
-  jahrUngueltig,
+  erschienenUngueltig,
   seitenFehlen,
   seitenFiltern,
   titelFehlt,
@@ -324,7 +323,6 @@ export default function ManuellerEintrag({
 }: ManuellerEintragProps) {
   const [eingaben, setEingaben] = useState<Eingaben>(() => eingabenAusVorbelegung(vorbelegung));
   const [titelHinweis, setTitelHinweis] = useState(false);
-  const [jahrFehler, setJahrFehler] = useState(false);
   const [seitenFehler, setSeitenFehler] = useState(false);
   const [unterblatt, setUnterblatt] = useState<Unterblatt>(null);
   const [cover, setCover] = useState<string | null>(vorbelegung?.cover ?? null);
@@ -380,11 +378,10 @@ export default function ManuellerEintrag({
   // Anzeige „Hinzugefügt“ ohne Überschreiben: der Tag des Öffnens (REQ-060, AK-8).
   const [heute] = useState(() => datumText(jetzt ? jetzt() : new Date()));
 
-  const aendern = (feld: 'titel' | 'autor' | 'jahr' | 'seiten', wert: string) => {
+  const aendern = (feld: 'titel' | 'autor' | 'seiten', wert: string) => {
     setEingaben((alt) => ({ ...alt, [feld]: wert }));
     // Hinweis bzw. Hervorhebung verschwinden bei der nächsten Eingabe im jeweiligen Feld (REQ-031, AK-10/AK-14; REQ-060, AK-6).
     if (feld === 'titel') setTitelHinweis(false);
-    if (feld === 'jahr') setJahrFehler(false);
     if (feld === 'seiten') setSeitenFehler(false);
   };
 
@@ -411,12 +408,12 @@ export default function ManuellerEintrag({
   const hinzufuegen = async () => {
     if (speichert.current) return;
     const ohneTitel = titelFehlt(eingaben);
-    const falschesJahr = jahrUngueltig(eingaben);
+    // „Erschienen“ wird schon im Blatt geprüft (REQ-060, REQ-092); hier nur zur Sicherheit.
+    const falschesErschienen = erschienenUngueltig(eingaben, zeit());
     const ohneSeiten = seitenFehlen(eingaben);
     setTitelHinweis(ohneTitel);
-    setJahrFehler(falschesJahr);
     setSeitenFehler(ohneSeiten);
-    if (ohneTitel || falschesJahr || ohneSeiten) return;
+    if (ohneTitel || falschesErschienen || ohneSeiten) return;
     speichert.current = true;
     try {
       const buch = buchAusEingaben(eingaben, zeit());
@@ -587,20 +584,12 @@ export default function ManuellerEintrag({
               </p>
             ) : null}
           </Feld>
+          {/* Kein Feld „JAHR“ mehr: die Erscheinungsangabe steht nur in „Erschienen“ (REQ-092, AK-9). */}
           <Feld
             name="Autor"
             platzhalter="Autor"
             wert={eingaben.autor}
             onWert={(w) => aendern('autor', w)}
-            stil={zeileStil(false)}
-          />
-          <Feld
-            name="Jahr"
-            platzhalter="2024"
-            wert={eingaben.jahr}
-            onWert={(w) => aendern('jahr', jahrFiltern(w))}
-            ziffern
-            fehler={jahrFehler}
             stil={zeileStil(true)}
           />
         </div>
@@ -664,7 +653,11 @@ export default function ManuellerEintrag({
         />
       ) : null}
       {unterblatt === 'preis' ? (
-        <BlattPreis preisCent={eingaben.preisCent} onSichern={(preisCent) => ausgabeSetzen({ preisCent })} onSchliessen={() => setUnterblatt(null)} />
+        <BlattPreis
+          preisCent={eingaben.preisCent}
+          onSichern={(preisCent) => (preisCent === undefined ? ausgabeSetzen({}, ['preisCent']) : ausgabeSetzen({ preisCent }))}
+          onSchliessen={() => setUnterblatt(null)}
+        />
       ) : null}
       {unterblatt === 'verlag' ? (
         <BlattVerlag
@@ -674,10 +667,19 @@ export default function ManuellerEintrag({
         />
       ) : null}
       {unterblatt === 'isbn' ? (
-        <BlattIsbn isbn={eingaben.isbn} onSichern={(isbn) => ausgabeSetzen({ isbn })} onSchliessen={() => setUnterblatt(null)} />
+        <BlattIsbn
+          isbn={eingaben.isbn}
+          onSichern={(isbn) => (isbn ? ausgabeSetzen({ isbn }) : ausgabeSetzen({}, ['isbn']))}
+          onSchliessen={() => setUnterblatt(null)}
+        />
       ) : null}
       {unterblatt === 'erschienen' ? (
-        <BlattErschienen erschienen={eingaben.erschienen} onSichern={(erschienen) => ausgabeSetzen({ erschienen })} onSchliessen={() => setUnterblatt(null)} />
+        <BlattErschienen
+          erschienen={eingaben.erschienen}
+          jetzt={zeit}
+          onSichern={(erschienen) => (erschienen ? ausgabeSetzen({ erschienen }) : ausgabeSetzen({}, ['erschienen']))}
+          onSchliessen={() => setUnterblatt(null)}
+        />
       ) : null}
       {unterblatt === 'hinzugefuegt' ? (
         <BlattHinzugefuegt

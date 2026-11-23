@@ -67,8 +67,8 @@ export interface Buch {
   /** Lesesitzungen: je Erhöhung des Fortschritts eine, Zeitpunkt als ISO-Zeichenkette (REQ-024, REQ-026, REQ-027). */
   sitzungen?: Sitzung[];
   /**
-   * Eintragungsdatum: Zeitpunkt des Anlegens als ISO-Zeichenkette (REQ-041). Wird nur beim Anlegen gesetzt.
-   * Optional, damit ältere Datensätze ohne Datum gelesen werden können (sie gelten als älter als alle datierten).
+   * Eintragungsdatum: Zeitpunkt des Anlegens als ISO-Zeichenkette (REQ-041), änderbar (REQ-064) und leerbar (REQ-093).
+   * Bücher ohne Datum stehen im Abschnitt „Alle Bücher“ oben, A–Z (REQ-093, AK-11/AK-12).
    */
   eingetragenAm?: string;
   /** Bewertungen je Kriterium, ganzzahlig 1–5; fehlender Eintrag = keine Bewertung (REQ-045). */
@@ -102,6 +102,11 @@ export interface Buch {
    * Zeitzone gleich bleibt); fehlend = kein Datum.
    */
   beendetAm?: string;
+  /**
+   * Bandnummer aus dem Barcode-Scan (REQ-099), ganze Zahl ≥ 1. Füllt bei der späteren Zuordnung zu einer Saga das Feld
+   * „Band“ vor; die Bandnummer je Saga selbst liegt bei der Zugehörigkeit (ListenRepository, REQ-096).
+   */
+  bandnummer?: number;
 }
 
 export type Fortschrittsmodus = 'seite' | 'prozent';
@@ -172,6 +177,7 @@ export const OPTIONALE_BUCHFELDER = [
   'hoeheMm',
   'dickeMm',
   'beendetAm',
+  'bandnummer',
 ] as const;
 
 export interface NeuesBuch {
@@ -184,7 +190,12 @@ export interface NeuesBuch {
   seitenanzahl?: number;
   /** Eintragungsdatum (ISO), REQ-041. */
   eingetragenAm?: string;
+  /** Bandnummer aus dem Barcode-Scan (REQ-099). */
+  bandnummer?: number;
 }
+
+/** Bandnummer: ganze Zahl ≥ 1 (REQ-096, REQ-099). */
+export const istBandnummer = (w: unknown): w is number => typeof w === 'number' && Number.isInteger(w) && w >= 1;
 
 /** Prüft, ob ein Wert ein gültiger ISO-Zeitpunkt ist (Eintragungsdatum, REQ-041). */
 export const istZeitpunkt = (wert: unknown): wert is string => typeof wert === 'string' && !Number.isNaN(Date.parse(wert));
@@ -199,6 +210,7 @@ export function neuesBuch(eingabe: NeuesBuch): Buch {
   if (eingabe.erscheinungsdatum !== undefined) buch.erscheinungsdatum = eingabe.erscheinungsdatum;
   if (eingabe.seitenanzahl !== undefined) buch.seitenanzahl = eingabe.seitenanzahl;
   if (eingabe.eingetragenAm !== undefined) buch.eingetragenAm = eingabe.eingetragenAm;
+  if (istBandnummer(eingabe.bandnummer)) buch.bandnummer = eingabe.bandnummer;
   return buch;
 }
 
@@ -265,5 +277,6 @@ export function buchAusDaten(daten: unknown): Buch {
   if (istMassMm(e.hoeheMm)) buch.hoeheMm = e.hoeheMm;
   if (istMassMm(e.dickeMm)) buch.dickeMm = e.dickeMm;
   if (istKalendertag(e.beendetAm)) buch.beendetAm = e.beendetAm;
+  if (istBandnummer(e.bandnummer)) buch.bandnummer = e.bandnummer;
   return buch;
 }

@@ -11,10 +11,15 @@ import type { AnsichtRepository } from './AnsichtRepository';
 import { InMemoryAnsichtRepository } from './InMemoryAnsichtRepository';
 import { RueckfallAnsichtRepository, WebAnsichtRepository } from './WebAnsichtRepository';
 import type { EinstellungRepository } from './EinstellungRepository';
+import type { ListenRepository } from './ListenRepository';
+import { InMemoryListenRepository } from './InMemoryListenRepository';
+import { IndexedDbListenRepository } from './IndexedDbListenRepository';
+import { RueckfallListenRepository } from './RueckfallListenRepository';
 import { InMemoryEinstellungRepository } from './InMemoryEinstellungRepository';
 import { RueckfallEinstellungRepository, WebEinstellungRepository } from './WebEinstellungRepository';
 
-export type { BookRepository, ImageStore, AnsichtRepository, EinstellungRepository };
+export type { BookRepository, ImageStore, AnsichtRepository, EinstellungRepository, ListenRepository };
+export { InMemoryListenRepository } from './InMemoryListenRepository';
 export type { EinstellungSchluessel } from './EinstellungRepository';
 export { InMemoryEinstellungRepository } from './InMemoryEinstellungRepository';
 export type { Uebersichtsansicht } from './AnsichtRepository';
@@ -102,4 +107,29 @@ export function createEinstellungRepository(): EinstellungRepository {
     console.warn('Einstellungsspeicher nicht dauerhaft verfügbar:', fehler);
   }
   return new RueckfallEinstellungRepository(dauerhaft, new InMemoryEinstellungRepository());
+}
+
+/**
+ * Listen und Zugehörigkeiten (REQ-095 bis REQ-099):
+ *  - Android-APK: SQLite (Tabellen `liste`, `liste_buch`, Migration 10)
+ *  - Web/Prototyp: IndexedDB (Stores `listen`, `listenBuecher`, Migration 8)
+ *  - ohne IndexedDB (Testumgebung): Arbeitsspeicher
+ */
+export function createListenRepository(): ListenRepository {
+  const meldung = (fehler: unknown) => console.warn('Listenspeicher nicht dauerhaft verfügbar:', fehler);
+  if (Capacitor.isNativePlatform()) {
+    return new RueckfallListenRepository(async () => {
+      const [{ sqliteOeffnen }, { SqliteListenRepository }] = await Promise.all([
+        import('./sqlite/capacitorSqlite'),
+        import('./SqliteListenRepository'),
+      ]);
+      return new SqliteListenRepository(await sqliteOeffnen());
+    }, meldung);
+  }
+  if (typeof indexedDB === 'undefined') return new InMemoryListenRepository();
+  return new RueckfallListenRepository(async () => {
+    const repo = new IndexedDbListenRepository(indexedDB);
+    await repo.bereit();
+    return repo;
+  }, meldung);
 }

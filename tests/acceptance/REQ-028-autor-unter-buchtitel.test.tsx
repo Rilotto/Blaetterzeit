@@ -263,13 +263,20 @@ describe('REQ-028 Autor unter dem Buchtitel', () => {
     });
   });
 
+  // Fassung 2026-11-23 (REQ-094): ohne Autor steht an der Stelle des Autors „unbekannter Autor“.
   describe('AK-6 Buch ohne Autor', () => {
-    it('[REQ-028/AK-6] keine Autorzeile, kein Platzhaltertext, Statuspille folgt direkt auf den Titel', async () => {
+    it('[REQ-028/AK-6] ohne Autor: unter dem Titel steht genau „unbekannter Autor“, vor der Statuspille', async () => {
       await details(await starte(), buchB({ titel: 'Momo' }));
-      expect(autor()).toBeNull();
-      expect(textZwischen(titel(), pille())).toEqual([]);
+      const zw = textZwischen(titel(), pille());
+      expect(zw.map((e) => norm(e.textContent))).toEqual(['unbekannter Autor']);
+      expect(autor() === null || norm(autor()!.textContent) === 'unbekannter Autor').toBe(true);
     });
-    it('[REQ-028/AK-6] über „Von Hand eintragen“ ohne Autor angelegt: keine Autorzeile', async () => {
+    it('[REQ-028/AK-6] Negativfall: mit Autor erscheint „unbekannter Autor“ nicht', async () => {
+      await details(await starte(), buchB({ titel: 'Momo', autor: 'Michael Ende' }));
+      expect(sek().textContent).not.toContain('unbekannter Autor');
+      expect(norm(autor()?.textContent)).toBe('Michael Ende');
+    });
+    it('[REQ-028/AK-6] über „Von Hand eintragen“ ohne Autor angelegt: „unbekannter Autor“ unter dem Titel', async () => {
       const w = await starte();
       const BA = w.BA;
       render(<BA bildspeicher={bilderFake()} bildquelle={{ scannen: async () => null, galerie: async () => null }} />);
@@ -283,8 +290,7 @@ describe('REQ-028 Autor unter dem Buchtitel', () => {
       await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
       await screen.findByRole('region', { name: 'Buchdetails' });
       await vi.waitFor(() => expect(pille()).not.toBeNull());
-      expect(autor()).toBeNull();
-      expect(textZwischen(titel(), pille())).toEqual([]);
+      expect(textZwischen(titel(), pille()).map((e) => norm(e.textContent))).toEqual(['unbekannter Autor']);
     });
   });
 });

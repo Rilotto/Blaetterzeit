@@ -6,7 +6,9 @@ import {
   createAnsichtRepository,
   createBookRepository,
   createImageStore,
+  createListenRepository,
   type AnsichtRepository,
+  type ListenRepository,
   type BookRepository,
   type ImageStore,
 } from '@/storage';
@@ -16,6 +18,7 @@ let repository: BookRepository | undefined;
 let befuellt: Promise<void> | undefined;
 let bildspeicher: ImageStore | undefined;
 let ansichtSpeicher: AnsichtRepository | undefined;
+let listenSpeicher: ListenRepository | undefined;
 
 /** Ob Demodaten eingespielt werden (Build-Schalter `VITE_DEMODATEN=aus` schaltet sie ab). */
 export function demodatenAktiv(wert: string | undefined = import.meta.env.VITE_DEMODATEN): boolean {
@@ -62,4 +65,10 @@ export function standardBildspeicher(): ImageStore {
 export function standardAnsichtRepository(): AnsichtRepository {
   ansichtSpeicher ??= createAnsichtRepository();
   return ansichtSpeicher;
+}
+
+/** Listenspeicher der App (Sagas, Sammlungen, Bibliotheken; REQ-095), eine Instanz für alle Ansichten. */
+export function standardListenRepository(): ListenRepository {
+  listenSpeicher ??= createListenRepository();
+  return listenSpeicher;
 }

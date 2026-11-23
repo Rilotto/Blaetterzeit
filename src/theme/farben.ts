@@ -1005,3 +1005,64 @@ export const statistikFarbe = (rolle: StatistikFarbrolle): string => rubrikFarbe
 
 /** Blasse Fläche der gewählten Kachel (REF-statistik-01), aus „Primär“ und „Kartenfläche“ gemischt. */
 export const statistikKachelGewaehltFlaeche = `color-mix(in srgb, ${rubrikFarbe('primaer')} 14%, ${rubrikFarbe('kartenflaeche')})`;
+
+/**
+ * Farbrollen der Listen (Sagas, Sammlungen, Bibliotheken): Abschnitt in den Buchdetails, Blatt „Zu einer …
+ * hinzufügen“, Listenübersicht, geöffnete Liste und Saga-Zeile unter dem Autor (REQ-095 bis REQ-099).
+ */
+export type ListenFarbrolle =
+  | 'ueberschrift'
+  | 'zurueckIcon'
+  | 'plusFlaeche'
+  | 'plusIcon'
+  | 'stift'
+  | 'karteFlaeche'
+  | 'trennlinie'
+  | 'name'
+  | 'anzahl'
+  | 'leerText'
+  | 'haekchenRahmen'
+  | 'haekchenFlaeche'
+  | 'haekchenIcon'
+  | 'bandBeschriftung'
+  | 'bandFeldFlaeche'
+  | 'bandFeldRahmen'
+  | 'bandFeldSchrift'
+  | 'fehler'
+  | 'loeschenSchrift'
+  | 'rueckfrageText'
+  | 'neinFlaeche'
+  | 'neinSchrift'
+  | 'sagaZeile';
+
+/** Aus welcher Farbrubrik jede Farbrolle der Listen ihre Farbe bezieht (nur bestehende Rubriken). */
+export const listenFarbrollen: Record<ListenFarbrolle, FarbrubrikId> = {
+  ueberschrift: 'dunkelbraun',
+  zurueckIcon: 'dunkelbraun',
+  plusFlaeche: 'primaer',
+  plusIcon: 'hintergrund',
+  stift: 'primaer',
+  karteFlaeche: 'kartenflaeche',
+  trennlinie: 'sekundaer',
+  name: 'dunkelbraun',
+  anzahl: 'tertiaer',
+  leerText: 'tertiaer',
+  haekchenRahmen: 'sekundaer',
+  haekchenFlaeche: 'primaer',
+  haekchenIcon: 'hintergrund',
+  bandBeschriftung: 'tertiaer',
+  bandFeldFlaeche: 'ghost',
+  bandFeldRahmen: 'ghostframe',
+  bandFeldSchrift: 'dunkelbraun',
+  // Ungültiges Feld (Band, Name) wie das ungültige Feld im Blatt „ISBN“ (REQ-063): Primär.
+  fehler: 'primaer',
+  loeschenSchrift: 'primaer',
+  rueckfrageText: 'dunkelbraun',
+  neinFlaeche: 'ghost',
+  neinSchrift: 'dunkelbraun',
+  // „Band 1 · The Empyrean“ unter dem Autor (REQ-099) wie die Autorzeile in Tertiär.
+  sagaZeile: 'tertiaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle der Listen. */
+export const listenFarbe = (rolle: ListenFarbrolle): string => rubrikFarbe(listenFarbrollen[rolle]);
