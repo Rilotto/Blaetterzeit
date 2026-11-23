@@ -30,3 +30,9 @@ Branch: sprint-10/listen-und-felder, abgezweigt von main (nach dem Merge von Spr
 - Neue Datenhaltung für Listen und Zugehörigkeit mit Band: Migration für SQLite und IndexedDB.
 - Viele alte REQs sind angepasst (Feld „Jahr“, Leeren, „Bibliothek“). Rote Alttests sind zu erwarten.
 - Größerer Sprint. Geschätzter Aufwand: etwa wie Sprint 09.
+
+## Stand 2026-11-23, 14:50 (pausiert auf Wunsch des CEO)
+- Entwickler: Teil A weitgehend umgesetzt. Teil B im Aufbau: Listen-Domain, ListenRepository (InMemory, IndexedDB, SQLite, Rückfall), BibliothekAnsicht, AbschnittListen. Noch nicht verifiziert.
+- Tester: Akzeptanztests REQ-091 bis 094 geschrieben. REQ-095 bis 099 und die Anpassung der Alttests stehen noch aus.
+- Weiter: Entwickler Teil B fertigstellen → Tester Tests 095–099 und Alttests → Gegenprobe → CI → Prototyp.
+- Der WIP-Commit ist nicht CI-grün und darf nicht gemergt werden.
