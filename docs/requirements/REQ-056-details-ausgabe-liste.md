@@ -35,12 +35,12 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
   - Sonderausgabe: gewählte Sonderausgabe, ohne Auswahl „Keins“; Antippen: REQ-058.
   - Fotos: „Cover“ wie im Referenzbild (**Auslegung**).
   - Preis: gespeicherter Preis im Format „12,99 €“; ohne gespeicherten Preis der Text „Trag ein, was du bezahlt hast“ wie im Referenzbild (**Auslegung**); Antippen: REQ-059.
-  - Verlag, ISBN: derzeit leer, ohne Eingabemöglichkeit.
+  - Verlag, ISBN: gespeicherter Verlag bzw. gespeicherte ISBN, ohne Wert rechts leer; Antippen: REQ-063.
   - Erschienen: Erscheinungsjahr (REQ-033).
-  - Hinzugefügt: Eintragungsdatum (REQ-041) als abgekürzter Monat mit Punkt und Jahr (z. B. „Okt. 2026“).
+  - Hinzugefügt: Eintragungsdatum (REQ-041) als abgekürzter Monat mit Punkt und Jahr (z. B. „Okt. 2026“); Antippen: REQ-064.
   - Beendet am: Datum „Beendet am“ im selben Format wie „Hinzugefügt“, ohne Datum rechts leer; Antippen: REQ-085.
 - Wenn eine Zeile keinen Wert hat (Seiten, Format, Exemplar, Erschienen, Verlag, ISBN), muss das System die rechte Seite leer lassen (**Auslegung**).
-- Wenn der Nutzer „Fotos“, „Verlag“, „Erschienen“, „ISBN“ oder „Hinzugefügt“ antippt, darf das System nichts verändern.
+- Wenn der Nutzer „Fotos“ oder „Erschienen“ antippt, darf das System nichts verändern. Das Antippen von „Verlag“ und „ISBN“ regelt REQ-063, das Antippen von „Hinzugefügt“ REQ-064 (Datumsblatt).
 - Das System muss Karte, Trennlinien, Bezeichnungen, Werte und Pfeile farblich wie im Referenzbild darstellen, mit Farben aus zentralen Farbrubriken.
 
 ## Akzeptanzkriterien
@@ -80,13 +80,14 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ### AK-7 Zeilen ohne Funktion
 - **Gegeben** die Karte „Ausgabe“ wird angezeigt
-- **Wenn** der Nutzer „Fotos“, „Verlag“, „Erschienen“, „ISBN“ bzw. „Hinzugefügt“ antippt
+- **Wenn** der Nutzer „Fotos“ bzw. „Erschienen“ antippt
 - **Dann** öffnet sich kein Menü und kein Fenster, und nichts ändert sich
+- **Und** für „Verlag“ und „ISBN“ (Blatt nach REQ-063) sowie „Hinzugefügt“ (Datumsblatt nach REQ-064) gilt dieses AK nicht
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Seitenanzahl ändern (REQ-057), Fenster „Format“ (REQ-058), Preis eingeben (REQ-059).
-- Funktion von Fotos, Eingabe von Verlag und ISBN (To-do-Liste, Could).
+- Funktion von Fotos (To-do-Liste, Could). Eingabe von Verlag und ISBN: REQ-063.
 - „Signiert“ (CEO: nicht umsetzen).
 
 ## Qualitätsanforderungen
@@ -95,7 +96,7 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ## Abhängigkeiten
 
-- **REQ-025, REQ-033, REQ-041, REQ-051, REQ-057, REQ-058, REQ-059, REQ-085.**
+- **REQ-025, REQ-033, REQ-041, REQ-051, REQ-057, REQ-058, REQ-059, REQ-063, REQ-064, REQ-085.**
 
 ## Offene Fragen
 
@@ -111,3 +112,5 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 | 2026-11-21 | CEO (wörtlich): „ja ergänze bitte den Pfeil bei "Maße".“ Zeile „Maße“ (REQ-072) in die Pfeil-Aufzählung (Anforderung, AK-2) aufgenommen. Status unverändert | Anforderungsmanager |
 | 2026-11-21 | Konflikt mit REQ-072 (vom CEO bestätigt: „Maße“ direkt unter „Format“) aufgelöst: Zeilenliste und AK-1 auf elf Zeilen mit „Maße“ nach „Format“, Titel angepasst. Status unverändert | Anforderungsmanager |
 | 2026-11-22 | An REQ-085 angepasst: zwölfte Zeile „Beendet am“ direkt unter „Hinzugefügt“ (Position laut REQ-085), Wert wie „Hinzugefügt“, ohne Pfeil (Auslegung, wie „Hinzugefügt“). Titel, Zeilenliste, AK-1, AK-2 angepasst. Status unverändert | Anforderungsmanager |
+| 2026-11-23 | Widerspruch zu REQ-064 aufgelöst, CEO (wörtlich): „Genau, Req-064 löst damit req-056 ab.“ „Hinzugefügt“ aus den Zeilen ohne Funktion (Anforderung, AK-7) entfernt; Antippen von „Hinzugefügt“ öffnet das Datumsblatt nach REQ-064. Pfeil-Regel (AK-2: „Hinzugefügt“ ohne Pfeil) unverändert. Status unverändert | Anforderungsmanager |
+| 2026-11-23 | Widerspruch zu REQ-063 aufgelöst, CEO (wörtlich): „Ja req-063 ist hier maßgebend.“ Verlag und ISBN: Wert „derzeit leer, ohne Eingabemöglichkeit“ ersetzt durch gespeicherten Wert, Antippen nach REQ-063; aus den Zeilen ohne Funktion (Anforderung, AK-7) und der Abgrenzung entfernt. Pfeil-Regel unverändert. Status unverändert | Anforderungsmanager |
