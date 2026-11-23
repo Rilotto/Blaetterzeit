@@ -44,6 +44,10 @@ describe('„Erschienen“ als Datum oder Jahr (REQ-092)', () => {
   it('Leeren von Fortschritt und Rezension (REQ-093)', () => {
     const buch = b({ aktuelleSeite: 120, seitenanzahl: 400, sitzungen: [{ zeitpunkt: 'z', seite: 120 }] });
     expect(fortschrittEntfernen(buch)).toEqual({ ...b({ seitenanzahl: 400, sitzungen: [{ zeitpunkt: 'z', seite: 120 }] }), id: buch.id });
+    const prozent = fortschrittEntfernen(b({ seitenanzahl: 400, fortschrittProzent: 30, fortschrittsmodus: 'prozent' }));
+    expect(prozent).toMatchObject({ fortschrittsmodus: 'prozent' });
+    expect(prozent).not.toHaveProperty('fortschrittProzent');
+    expect(prozent).not.toHaveProperty('aktuelleSeite');
     expect(rezensionSichern(b(), '  ')).toBeNull();
     expect(rezensionSichern(b({ rezension: 'Gut' }), '')).not.toHaveProperty('rezension');
   });

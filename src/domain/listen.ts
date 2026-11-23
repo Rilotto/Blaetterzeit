@@ -98,9 +98,6 @@ export function bandPruefen(eingabe: string): BandPruefung {
   return band >= 1 ? { ok: true, band } : { ok: false };
 }
 
-/** Feld „Band“: nur Ziffern, höchstens sechs. */
-export const bandFiltern = (wert: string): string => wert.replace(/\D/g, '').slice(0, 6);
-
 const namenVergleich = new Intl.Collator('de', { sensitivity: 'base', numeric: true });
 
 /** Listen A–Z nach Name (REQ-097, REQ-099; Auslegung). */

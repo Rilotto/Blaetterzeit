@@ -240,6 +240,22 @@ describe('REQ-093 Felder leeren', () => {
       const d2 = await neustartAnzeige(id, false);
       expect(norm(d2.querySelector('[data-fortschritt-text]')?.textContent)).toBe('0 / 400');
     });
+
+    // REQ-093 entfernt nur den Fortschritt; der pro Buch gespeicherte Modus bleibt (REQ-024: „Kindle-Buch öffnet direkt in %“).
+    it('[REQ-093/AK-7] Modus „%“ geleert: der gespeicherte Modus „%“ bleibt, das Menü öffnet wieder in „%“ (auch nach Neustart)', async () => {
+      const { d, id } = await mitBuch(buch({ seitenanzahl: 400, fortschrittProzent: 30, fortschrittsmodus: 'prozent', sitzungen: ALT } as Partial<Buch>), false);
+      await tippe(d.querySelector('[role="progressbar"]')!);
+      const dlg = await screen.findByRole('dialog', { name: 'Aktuelle Seite' }, W);
+      const f = within(dlg).queryAllByLabelText('Prozent').find((e) => e.tagName === 'INPUT') as HTMLInputElement;
+      fireEvent.change(f, { target: { value: '' } });
+      await tippe(within(dlg).getByRole('button', { name: 'Sichern' }));
+      await warte(60);
+      expect((await gespeichert(id))?.fortschrittsmodus).toBe('prozent');
+      const d2 = await neustartAnzeige(id, false);
+      await tippe(d2.querySelector('[role="progressbar"]')!);
+      const dlg2 = await screen.findByRole('dialog', { name: 'Aktuelle Seite' }, W);
+      expect(within(dlg2).getByRole('button', { name: '%' })).toHaveAttribute('aria-pressed', 'true');
+    });
   });
 
   describe('AK-8 Eigene Rezension leeren', () => {

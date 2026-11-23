@@ -186,6 +186,60 @@ describe('Buchdetails: Abschnitt, Blatt und Listenübersicht', () => {
     expect(q('[data-listen-pille="sammlung"]')).not.toBeNull();
   });
 
+  it('Feld „Band“ filtert nicht: Buchstaben, negative und Dezimalzahlen werden hervorgehoben, nichts gespeichert (REQ-096)', async () => {
+    const listen = new InMemoryListenRepository();
+    const s = liste('saga', 'The Empyrean');
+    await listen.listeSpeichern(s);
+    await details(b('Fourth Wing'), listen);
+    await tippe(q('[data-listen-pille="saga"]'));
+    await tippe(q(`[data-haekchen="${s.id}"]`));
+    for (const falsch of ['abc', '-1', '1,5', '0']) {
+      gib(q('[data-band-feld]'), falsch);
+      expect(q<HTMLInputElement>('[data-band-feld]')!.value).toBe(falsch);
+      await tippe(q('[data-blatt-sichern="liste"]'));
+      expect(q('[data-band-feld]')).toHaveAttribute('data-fehler', 'true');
+      expect(await listen.zugehoerigkeiten()).toEqual([]);
+    }
+    gib(q('[data-band-feld]'), ' 3 ');
+    expect(q('[data-band-feld]')).not.toHaveAttribute('data-fehler');
+    await tippe(q('[data-blatt-sichern="liste"]'));
+    expect(await listen.zugehoerigkeiten()).toEqual([{ listeId: s.id, buchId: expect.any(String), band: 3 }]);
+  });
+
+  it('Saga-Zeile öffnet die Liste; Buch darin öffnen und zurück zur Liste; zurück zu den Buchdetails (REQ-098 AK-5, REQ-099 AK-4)', async () => {
+    const listen = new InMemoryListenRepository();
+    const s = liste('saga', 'The Empyrean');
+    await listen.listeSpeichern(s);
+    const buch = b('Fourth Wing', { autor: 'Rebecca Yarros' });
+    const zweites = b('Iron Flame');
+    const repo = new InMemoryBookRepository();
+    await repo.save(zweites);
+    await listen.zuordnen({ listeId: s.id, buchId: buch.id, band: 1 });
+    await listen.zuordnen({ listeId: s.id, buchId: zweites.id, band: 2 });
+    await details(buch, listen, repo);
+    await tippe(q(`[data-saga-zeile="${s.id}"]`));
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 10));
+    });
+    expect(q(`[data-geoeffnete-liste="${s.id}"]`)).not.toBeNull();
+    const eintrag = alle('[data-geoeffnete-liste] [data-buchtitel]').find((t) => t.textContent === 'Iron Flame');
+    await tippe(eintrag!);
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 10));
+    });
+    expect(q('[data-buchdetails-titel]')).toHaveTextContent('Iron Flame');
+    await tippe(q('[aria-label="Zurück"]'));
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 10));
+    });
+    expect(q(`[data-geoeffnete-liste="${s.id}"]`)).not.toBeNull();
+    await tippe(q('[aria-label="Zurück"]'));
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 10));
+    });
+    expect(q('[data-buchdetails-titel]')).toHaveTextContent('Fourth Wing');
+  });
+
   it('Titel ändern (Pflicht) und Autor leeren bzw. nachtragen (REQ-094)', async () => {
     const { repo } = await details(b('Der Testroman', { autor: 'Ann Leckie' }));
     await tippe(q('[data-buchdetails-titel]'));

@@ -159,6 +159,25 @@ describe('Fortschritt, Buchlänge und Aktuelle Seite', () => {
     expect((await repo.get(ID))?.fortschrittsmodus).toBeUndefined();
   });
 
+  it('Leeren im Modus „%“ behält den Modus, auch nach Neustart (REQ-024, REQ-093)', async () => {
+    const repo = await zeige(buch({ seitenanzahl: 400, fortschrittsmodus: 'prozent', fortschrittProzent: 30 }));
+    await tippe(screen.getByRole('progressbar'));
+    const dialog = screen.getByRole('dialog', { name: 'Aktuelle Seite' });
+    fireEvent.change(within(dialog).getByRole('textbox', { name: 'Prozent' }), { target: { value: '' } });
+    await tippe(within(dialog).getByRole('button', { name: 'Sichern' }));
+    const gespeichert = (await repo.get(ID))!;
+    expect(gespeichert.fortschrittsmodus).toBe('prozent');
+    expect(gespeichert.fortschrittProzent).toBeUndefined();
+    expect(gespeichert.sitzungen).toBeUndefined();
+    cleanup();
+    render(
+      <BuchDetails buchId={ID} buch={gespeichert} repository={repo} bildspeicher={new InMemoryImageStore()} jetzt={jetzt} onZurueck={() => {}} />,
+    );
+    await act(async () => {});
+    await tippe(screen.getByRole('progressbar'));
+    expect(within(screen.getByRole('dialog', { name: 'Aktuelle Seite' })).getByRole('textbox', { name: 'Prozent' })).toHaveValue('');
+  });
+
   it('Streak 0: Flamme inaktiv, 0 % ohne Fortschritt', async () => {
     await zeige(buch({ seitenanzahl: 400, sitzungen: [{ zeitpunkt: new Date(2026, 10, 10, 9).toISOString() }] }));
     expect(document.querySelector('[data-flamme]')).toHaveAttribute('data-flamme', 'inaktiv');

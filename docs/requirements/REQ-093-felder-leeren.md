@@ -35,7 +35,7 @@ CEO-Antworten (wörtlich, 2026-11-23), Runde 2:
 - Hinzugefügt (REQ-064): Das Buch hat kein Eintragungsdatum, und die Zeile ist rechts leer (Regel für Zeilen ohne Wert, REQ-056). Im Abschnitt „Alle Bücher“ (REQ-035) steht ein Buch ohne Eintragungsdatum an erster Stelle, also dort, wo sonst das zuletzt eingetragene Buch steht (CEO, wörtlich: „ganz oben.“). Mehrere Bücher ohne Eintragungsdatum stehen untereinander A–Z nach Titel (CEO, wörtlich: „erstmal A-Z.“). Die Übersicht „Alle Bücher“ sortiert weiter A–Z und ist nicht betroffen.
 - Beendet am (REQ-085): Das Buch hat kein „Beendet am“, und die Zeile ist rechts leer (REQ-056). Für die Statistik gilt das Buch dann als Buch ohne „Beendet am“ (REQ-081, REQ-084). Wechselt der Status später erneut auf *gelesen*, gilt REQ-085.
 - Aktuelle Seite bzw. Prozentwert (Menü „Aktuelle Seite“, REQ-024): Das Buch hat keinen gespeicherten Fortschritt, und der Lesefortschritt wird wie ohne Fortschritt angezeigt (REQ-023). Das Leeren erhöht den Fortschritt nicht und erzeugt deshalb keine Sitzung (REQ-024, REQ-026). Bereits gespeicherte Sitzungen bleiben unverändert.
-- Eigene Rezension (Schreibfenster, REQ-049): Das Buch hat keine eigene Rezension, und „Deine Rezension“ zeigt den Zustand ohne Rezension („Noch nicht geschrieben“, REQ-047).
+- Eigene Rezension (Schreibfenster, REQ-049): Das Buch hat keine eigene Rezension, und „Deine Rezension“ zeigt den Zustand ohne Rezension nach REQ-047 („Wie fandest du es?“ mit Stift-Symbol).
 - Erschienen: geregelt in REQ-092.
 - Autor: Das Bearbeiten und Leeren ist in REQ-094 geregelt (Blatt wie „Verlag“). Danach steht in den Buchdetails der Platzhalter „unbekannter Autor“.
 
@@ -93,7 +93,7 @@ CEO-Antworten (wörtlich, 2026-11-23), Runde 2:
 ### AK-8 Eigene Rezension leeren
 - **Gegeben** ein Buch mit eigener Rezension
 - **Wenn** der Nutzer im Schreibfenster den Text vollständig löscht und „Sichern“ antippt
-- **Dann** hat das Buch keine eigene Rezension, und „Deine Rezension“ zeigt „Noch nicht geschrieben“ (REQ-047), auch nach einem Neustart
+- **Dann** hat das Buch keine eigene Rezension, und das Schreibfeld unter „Deine Rezension“ zeigt wie bei einem Buch ohne Rezension „Wie fandest du es?“ mit Stift-Symbol (REQ-047, AK-3), ohne „Noch nicht geschrieben“, auch nach einem Neustart
 
 ### AK-9 Pflichtangaben bleiben Pflicht
 - **Gegeben** ein Buch mit 400 Seiten
@@ -138,3 +138,4 @@ Folgende Inhalte bestehender REQs werden mit Umsetzung dieses REQ abgelöst. All
 | 2026-11-23 | CEO-Antworten Runde 3 eingearbeitet: Der Autor wird unter dem Cover bearbeitet und geleert (REQ-094). Bücher ohne Eintragungsdatum stehen in „Alle Bücher“ ganz oben (AK-11 neu). Neu offen: Reihenfolge mehrerer Bücher ohne Eintragungsdatum. Status Entwurf | Anforderungsmanager |
 | 2026-11-23 | CEO: „erstmal A-Z.“ Mehrere Bücher ohne Eintragungsdatum stehen untereinander A–Z (AK-12 neu). Autor nach dem Leeren mit Platzhalter (REQ-094). Keine offenen Fragen. Status Entwurf | Anforderungsmanager |
 | 2026-11-23 | Vom CEO bestätigt (wörtlich): „okay, freigegeben. Starte mit dem nächsten Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-23 | Widerspruch zu REQ-047 behoben (Befund des Testers): Nach dem Leeren der Rezension zeigt das Schreibfeld den Zustand ohne Rezension nach REQ-047 („Wie fandest du es?“ mit Stift-Symbol), nicht „Noch nicht geschrieben“ (Anforderung, AK-8). Abgeleitet aus der CEO-Absicht „Rezension leerbar, danach gilt ‚keine Rezension‘“, keine Verhaltensänderung gegenüber der Abstimmung. Status unverändert | Anforderungsmanager |

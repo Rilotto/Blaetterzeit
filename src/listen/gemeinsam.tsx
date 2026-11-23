@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import iconPlus from '@/assets/icons/icon-plus.png';
 import Icon from '@/components/Icon';
-import { bandFiltern, type Liste, type Zugehoerigkeit } from '@/domain/listen';
+import { type Liste, type Zugehoerigkeit } from '@/domain/listen';
 import type { ListenRepository } from '@/storage';
 import { listenFarbe, textstufe, pillenhoehePx, abstand } from '@/theme';
 
@@ -92,7 +92,11 @@ const bandStil = (fehler: boolean): CSSProperties => ({
   outline: 'none',
 });
 
-/** Optionales Feld „Band“ je angehakter Saga (REQ-096): data-band-feld=<listeId>, ungültig data-fehler="true". */
+/**
+ * Optionales Feld „Band“ je angehakter Saga (REQ-096): data-band-feld=<listeId>, ungültig data-fehler="true".
+ * Die Eingabe wird nicht gefiltert, damit ungültige Angaben (z. B. „0“, „-1“, „1,5“, Buchstaben) wie im Blatt
+ * „ISBN“ hervorgehoben werden, statt stillschweigend verändert zu werden.
+ */
 export function BandFeld({ listeId, wert, fehler, onWert }: { listeId: string; wert: string; fehler: boolean; onWert: (w: string) => void }) {
   return (
     <label style={{ display: 'flex', alignItems: 'center', gap: abstand('s'), ...textstufe('meta'), color: listenFarbe('bandBeschriftung') }}>
@@ -106,7 +110,8 @@ export function BandFeld({ listeId, wert, fehler, onWert }: { listeId: string; w
         data-fehler={fehler ? 'true' : undefined}
         aria-invalid={fehler ? true : undefined}
         value={wert}
-        onChange={(e) => onWert(bandFiltern(e.target.value))}
+        maxLength={10}
+        onChange={(e) => onWert(e.target.value)}
         style={bandStil(fehler)}
       />
     </label>
