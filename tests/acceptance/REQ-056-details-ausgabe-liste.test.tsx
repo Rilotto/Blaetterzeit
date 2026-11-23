@@ -140,6 +140,13 @@ describe('REQ-056 Karte „Ausgabe“', () => {
     expect(wert(d, 'preis')).toBe('12,99 €');
   });
 
+  // Wertebeschreibung (geändert 2026-11-23, REQ-063 maßgebend): Verlag und ISBN zeigen den gespeicherten Wert
+  it('[REQ-056/AK-5] Verlag und ISBN zeigen den gespeicherten Wert', async () => {
+    const { d } = await mitBuch(buch({ verlag: 'Carlsen', isbn: '9783551551672' }));
+    expect(wert(d, 'verlag')).toBe('Carlsen');
+    expect(wert(d, 'isbn')).toBe('9783551551672');
+  });
+
   it('[REQ-056/AK-6] Hinzugefügt 14.10.2026 → „Okt. 2026“', async () => {
     const { d } = await mitBuch(buch({ eingetragenAm: '2026-10-14T12:00:00' }));
     expect(wert(d, 'hinzugefuegt')).toBe('Okt. 2026');
