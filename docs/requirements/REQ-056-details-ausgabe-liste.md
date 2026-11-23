@@ -27,7 +27,7 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 - Das System muss unter „Ausgabe“ eine Karte mit genau diesen Zeilen in dieser Reihenfolge darstellen, je links Bezeichnung, rechts Wert: Seiten, Format, Maße (REQ-072), Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt, Beendet am (REQ-085).
 - Das System darf keine Zeile „Signiert“ darstellen (CEO: „Signiert soll bitte nicht umgesetzt werden.“).
-- Das System muss die Zeilen Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis sowie die Zeile „Maße“ (REQ-072) rechts mit einem Pfeil „›“ darstellen, die übrigen ohne Pfeil; auch „Beendet am“ hat keinen Pfeil (**Auslegung**: REQ-085 legt keinen fest, die Zeile verhält sich wie „Hinzugefügt“, die keinen Pfeil hat).
+- Das System muss alle Zeilen rechts mit einem Pfeil „›“ darstellen (REQ-091).
 - Werte:
   - Seiten: Seitenanzahl des Buches (REQ-025); Antippen: REQ-057.
   - Format: gewähltes Format, bei Print mit gewähltem Unterformat getrennt durch „ · “ (z. B. „Print · Taschenbuch“); Antippen: REQ-058.
@@ -36,11 +36,11 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
   - Fotos: „Cover“ wie im Referenzbild (**Auslegung**).
   - Preis: gespeicherter Preis im Format „12,99 €“; ohne gespeicherten Preis der Text „Trag ein, was du bezahlt hast“ wie im Referenzbild (**Auslegung**); Antippen: REQ-059.
   - Verlag, ISBN: gespeicherter Verlag bzw. gespeicherte ISBN, ohne Wert rechts leer; Antippen: REQ-063.
-  - Erschienen: Erscheinungsjahr (REQ-033).
+  - Erschienen: Erscheinungsdatum im Format von „Hinzugefügt“, ohne Datum das Erscheinungsjahr; Antippen: REQ-092.
   - Hinzugefügt: Eintragungsdatum (REQ-041) als abgekürzter Monat mit Punkt und Jahr (z. B. „Okt. 2026“); Antippen: REQ-064.
   - Beendet am: Datum „Beendet am“ im selben Format wie „Hinzugefügt“, ohne Datum rechts leer; Antippen: REQ-085.
 - Wenn eine Zeile keinen Wert hat (Seiten, Format, Exemplar, Erschienen, Verlag, ISBN), muss das System die rechte Seite leer lassen (**Auslegung**).
-- Wenn der Nutzer „Fotos“ oder „Erschienen“ antippt, darf das System nichts verändern. Das Antippen von „Verlag“ und „ISBN“ regelt REQ-063, das Antippen von „Hinzugefügt“ REQ-064 (Datumsblatt).
+- Wenn der Nutzer „Fotos“ antippt, darf das System nichts verändern. Das Antippen von „Verlag“ und „ISBN“ regelt REQ-063, von „Hinzugefügt“ REQ-064, von „Erschienen“ REQ-092 (jeweils Blatt).
 - Das System muss Karte, Trennlinien, Bezeichnungen, Werte und Pfeile farblich wie im Referenzbild darstellen, mit Farben aus zentralen Farbrubriken.
 
 ## Akzeptanzkriterien
@@ -54,13 +54,13 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 ### AK-2 Pfeile
 - **Gegeben** die Karte „Ausgabe“ wird angezeigt
 - **Wenn** die rechten Enden der Zeilen betrachtet werden
-- **Dann** haben genau Seiten, Format, Exemplar, Sonderausgabe, Fotos und Preis sowie „Maße“ (REQ-072) einen Pfeil „›“
-- **Und** „Hinzugefügt“ und „Beendet am“ haben keinen Pfeil
+- **Dann** haben alle Zeilen einen Pfeil „›“, auch Verlag, Erschienen, ISBN, Hinzugefügt und Beendet am (REQ-091)
 
 ### AK-3 Seiten und Erschienen
-- **Gegeben** ein Buch mit Seitenanzahl 608 und Erscheinungsjahr 2025
+- **Gegeben** ein Buch mit Seitenanzahl 608 und Erscheinungsjahr 2025 ohne Erscheinungsdatum
 - **Wenn** die Karte „Ausgabe“ betrachtet wird
 - **Dann** zeigt „Seiten“ den Wert 608 und „Erschienen“ den Wert 2025
+- **Und** mit Erscheinungsdatum 01.02.2025 zeigt „Erschienen“ „Feb. 2025“ (REQ-092)
 
 ### AK-4 Format, Exemplar, Sonderausgabe
 - **Gegeben** ein Buch mit Format „Print“, Unterformat „Taschenbuch“, Exemplar „Meins“ und ohne Sonderausgabe
@@ -80,9 +80,9 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ### AK-7 Zeilen ohne Funktion
 - **Gegeben** die Karte „Ausgabe“ wird angezeigt
-- **Wenn** der Nutzer „Fotos“ bzw. „Erschienen“ antippt
+- **Wenn** der Nutzer „Fotos“ antippt
 - **Dann** öffnet sich kein Menü und kein Fenster, und nichts ändert sich
-- **Und** für „Verlag“ und „ISBN“ (Blatt nach REQ-063) sowie „Hinzugefügt“ (Datumsblatt nach REQ-064) gilt dieses AK nicht
+- **Und** für „Verlag“ und „ISBN“ (REQ-063), „Hinzugefügt“ (REQ-064) und „Erschienen“ (REQ-092) gilt dieses AK nicht
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -97,6 +97,9 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 ## Abhängigkeiten
 
 - **REQ-025, REQ-033, REQ-041, REQ-051, REQ-057, REQ-058, REQ-059, REQ-063, REQ-064, REQ-085.**
+- **REQ-091 (Entwurf):** Pfeil „›“ an allen zwölf Zeilen. Nach Abstimmung entfallen hier die Pfeil-Regel und AK-2 („Hinzugefügt“ und „Beendet am“ ohne Pfeil).
+- **REQ-092 (Entwurf):** „Erschienen“ über ein Datumsblatt ändern. Nach Abstimmung entfallen hier der Wert „Erscheinungsjahr“, AK-3 (Erschienen) und „Erschienen“ in AK-7 (ohne Funktion) bzw. werden angepasst. Die Zeile „Erschienen“ zeigt dann das Erscheinungsdatum im Format von „Hinzugefügt“.
+- **REQ-093 (Entwurf):** gespeicherte Angaben durch Leeren des Feldes entfernen (u. a. Verlag, ISBN, Preis, Maße).
 
 ## Offene Fragen
 
@@ -114,3 +117,5 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 | 2026-11-22 | An REQ-085 angepasst: zwölfte Zeile „Beendet am“ direkt unter „Hinzugefügt“ (Position laut REQ-085), Wert wie „Hinzugefügt“, ohne Pfeil (Auslegung, wie „Hinzugefügt“). Titel, Zeilenliste, AK-1, AK-2 angepasst. Status unverändert | Anforderungsmanager |
 | 2026-11-23 | Widerspruch zu REQ-064 aufgelöst, CEO (wörtlich): „Genau, Req-064 löst damit req-056 ab.“ „Hinzugefügt“ aus den Zeilen ohne Funktion (Anforderung, AK-7) entfernt; Antippen von „Hinzugefügt“ öffnet das Datumsblatt nach REQ-064. Pfeil-Regel (AK-2: „Hinzugefügt“ ohne Pfeil) unverändert. Status unverändert | Anforderungsmanager |
 | 2026-11-23 | Widerspruch zu REQ-063 aufgelöst, CEO (wörtlich): „Ja req-063 ist hier maßgebend.“ Verlag und ISBN: Wert „derzeit leer, ohne Eingabemöglichkeit“ ersetzt durch gespeicherten Wert, Antippen nach REQ-063; aus den Zeilen ohne Funktion (Anforderung, AK-7) und der Abgrenzung entfernt. Pfeil-Regel unverändert. Status unverändert | Anforderungsmanager |
+| 2026-11-23 | Verweise auf REQ-091 (Pfeile an allen Zeilen) und REQ-092 (Erschienen bearbeiten und leeren) und REQ-093 (Felder leeren), alle Entwurf, unter Abhängigkeiten ergänzt. Text und AKs bleiben bis zur Bestätigung durch den CEO unverändert. Status unverändert | Anforderungsmanager |
+| 2026-11-23 | An REQ-091 und REQ-092 angepasst (beide Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Pfeil an allen Zeilen (AK-2), „Erschienen“ zeigt Datum bzw. Jahr und öffnet ein Blatt (Werte, AK-3, AK-7). Status unverändert | Anforderungsmanager |

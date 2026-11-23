@@ -32,12 +32,12 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 **Darstellung**
 - Das System muss im Blatt „Manueller Eintrag“ (REQ-030) zusätzlich zum bestehenden Inhalt die Karte „Ausgabe“ im Layout des Reiters „Details“ (REQ-056) darstellen, ohne die Zeile „Fotos“.
 - Jede Angabe darf im Blatt nur einmal vorkommen. „SEITEN“ und die Zeile „Seiten“ sind dieselbe Angabe (Seitenanzahl, REQ-025).
-- Das System muss die bisherige Angabe „ERSCHEINUNGSDATUM“ im Blatt als „Erschienen“ bezeichnen; sie ist dieselbe Angabe wie die Zeile „Erschienen“ der Karte „Ausgabe“ (Erscheinungsdatum, REQ-033). Das Feld „JAHR“ bleibt unverändert.
+- Das System muss die bisherige Angabe „ERSCHEINUNGSDATUM“ im Blatt als „Erschienen“ bezeichnen; sie ist dieselbe Angabe wie die Zeile „Erschienen“ der Karte „Ausgabe“ (Erscheinungsdatum, REQ-033). ~~Das Feld „JAHR“ bleibt unverändert.~~ Abgelöst durch REQ-092: Das Feld „JAHR“ entfällt.
 
 **Eingabe**
 - Das System muss dem Nutzer die Möglichkeit bieten, im Blatt „Manueller Eintrag“ vor dem Anlegen jede Angabe der Karte „Ausgabe“ außer „Fotos“ einzugeben: Seiten, Format, Exemplar, Sonderausgabe, Preis, Verlag, Erschienen, ISBN, Hinzugefügt.
 - Die Eingabe erfolgt wie in der kopierten Karte „Ausgabe“: Seiten (REQ-057), Format/Exemplar/Sonderausgabe (REQ-058), Preis (REQ-059), Verlag und ISBN (REQ-063), Hinzugefügt (REQ-064).
-- Das System muss dem Nutzer die Möglichkeit bieten, „Erschienen“ als Datum im Format TT.MM.JJJJ einzugeben (CEO 2026-11-10, To-do-Liste). Damit erhält „+ Erscheinungsdatum hinzufügen“ (REQ-030: ohne Funktion) eine Funktion.
+- Das System muss dem Nutzer die Möglichkeit bieten, „Erschienen“ als Datum im Format TT.MM.JJJJ (CEO 2026-11-10, To-do-Liste) oder nur als Jahr JJJJ einzugeben (REQ-092). Damit erhält „+ Erscheinungsdatum hinzufügen“ (REQ-030: ohne Funktion) eine Funktion.
 
 **Hinzugefügt**
 - Wenn der Nutzer beim Anlegen kein Datum für „Hinzugefügt“ einträgt, muss das System das Eintragungsdatum wie bisher automatisch speichern (REQ-041).
@@ -46,7 +46,7 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 **Pflichtangaben (Änderung gegenüber REQ-031)**
 - Titel und Seitenzahl sind Pflichtangaben. Abweichend von REQ-031 („Der Titel ist die einzige Pflichtangabe“) darf das System ohne Seitenzahl kein Buch anlegen.
 - Wenn der Nutzer „Hinzufügen“ antippt und keine Seitenzahl eingetragen ist, muss das System das Feld der Seitenzahl so hervorheben wie das ungültige Feld „JAHR“ (REQ-031: Hervorhebung in Primär, kein Hinweistext, Hervorhebung endet, sobald der Nutzer etwas im Feld ändert), kein Buch anlegen und das Blatt mit unveränderten Eingaben geöffnet lassen.
-- Unverändert aus REQ-031 bleiben: Verhalten bei fehlendem Titel (Hinweis „Bitte gib einen Titel ein“), Titel nur aus Leerzeichen gilt als leer, Prüfung des Feldes „JAHR“, Standardstatus *ungelesen*, Buchdetails nach dem Anlegen.
+- Unverändert aus REQ-031 bleiben: Verhalten bei fehlendem Titel (Hinweis „Bitte gib einen Titel ein“), Titel nur aus Leerzeichen gilt als leer, Prüfung des Feldes „JAHR“ (geht mit REQ-092 auf „Erschienen“ über), Standardstatus *ungelesen*, Buchdetails nach dem Anlegen.
 - Das Menü „Buchlänge“ (REQ-025) bleibt unverändert für Bücher ohne Seitenzahl (z. B. vorher angelegte).
 
 **Speichern**
@@ -127,6 +127,7 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 - **REQ-031:** AK-2 (leere Seiten), AK-5 (nur Titel genügt), AK-9 (ohne Seiten angelegt) werden mit Umsetzung dieses REQ hinfällig.
 - **REQ-041:** Eintragungsdatum ist dort „nicht änderbar“; hier beim Anlegen überschreibbar.
 - **REQ-025, REQ-033, REQ-034, REQ-056 bis REQ-059, REQ-063, REQ-064.**
+- **REQ-091, REQ-092, REQ-093 (Entwurf):** Pfeile an allen Zeilen der Karte „Ausgabe“. Das Feld „JAHR“ entfällt („Das Feld ‚JAHR‘ bleibt unverändert“ wird hinfällig). Leeren von Angaben. Dieser REQ wird nach der Abstimmung angepasst.
 
 ## Offene Fragen
 
@@ -139,3 +140,4 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 | 2026-11-16 | Erstellt (Entwurf aus dem Änderungsantrag des CEO) | Anforderungsmanager |
 | 2026-11-16 | CEO-Antworten eingearbeitet: nur „Von Hand eintragen“, alle Ausgabe-Angaben außer Fotos, „Hinzugefügt“ automatisch und überschreibbar, Layout „Ausgabe“ ins Blatt kopieren, Pflicht Titel und Seitenzahl, Priorität Should | Anforderungsmanager |
 | 2026-11-16 | CEO-Antwort 5 eingearbeitet: „Erscheinungsdatum“ heißt „Erschienen“ (Eingabe TT.MM.JJJJ), Seiten nur einmal, fehlende Seitenzahl wie ungültiges „JAHR“ hervorgehoben (AK-2, AK-3, AK-5, AK-6). „Hinzugefügt“-Eingabe nach REQ-064. Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
+| 2026-11-23 | An REQ-092 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Feld „JAHR“ entfällt, „Erschienen“ auch als JJJJ. Nur Anforderungstext geändert, AKs unverändert. Status unverändert | Anforderungsmanager |

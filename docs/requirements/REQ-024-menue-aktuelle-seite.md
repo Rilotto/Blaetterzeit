@@ -45,7 +45,7 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 - Im Modus „Seite“ muss das System als aktuelle Seite nur ganze Zahlen von 0 bis zur Seitenanzahl des Buches annehmen.
 - Im Modus „%“ muss das System als Prozentwert nur ganze Zahlen von 0 bis 100 annehmen (Prozent-Eingabe z. B. für Kindle-Bücher); auch hier ist die Seitenanzahl des Buches hinterlegt.
 - Das System darf einen Wert über der Seitenanzahl bzw. über 100 nicht speichern.
-- Ist das Eingabefeld leer, darf das System nicht sichern und muss unter dem Eingabefeld einen kurzen Hinweis anzeigen.
+- Ist das Eingabefeld beim Sichern leer, muss das System den gespeicherten Fortschritt entfernen und das Menü schließen, ohne eine Sitzung anzulegen (REQ-093). Bisherige Sitzungen bleiben unverändert.
 
 **Moduswechsel**
 - Wenn der Nutzer den Modus wechselt, muss das System den eingegebenen Fortschritt anhand der Seitenanzahl in den neuen Modus umrechnen (Seite → % und % → Seite), kaufmännisch auf eine ganze Zahl gerundet; ein leeres Eingabefeld bleibt leer.
@@ -100,11 +100,11 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 - **Wenn** es betrachtet wird
 - **Dann** gibt es keine Schaltflächen „−“/„+“ und keinen Text „Du bist dann auf Seite …“
 
-### AK-8 Leeres Eingabefeld
-- **Gegeben** das Menü ist geöffnet und das Eingabefeld ist leer
+### AK-8 Leeres Eingabefeld entfernt den Fortschritt
+- **Gegeben** ein Buch mit Seitenanzahl 400 und aktueller Seite 120, das Menü ist geöffnet und das Eingabefeld geleert
 - **Wenn** der Nutzer „Sichern“ antippt
-- **Dann** wird nichts gespeichert, das Menü bleibt offen
-- **Und** unter dem Eingabefeld erscheint ein kurzer Hinweis
+- **Dann** ist das Menü geschlossen, das Buch hat keinen gespeicherten Fortschritt, und der Lesefortschritt wird wie ohne Fortschritt angezeigt (REQ-023, REQ-093)
+- **Und** es ist keine Sitzung hinzugekommen, und es erscheint kein Hinweis
 
 ### AK-9 Moduswechsel mit bekannter Seitenanzahl rechnet um
 - **Gegeben** ein Buch mit Seitenanzahl 400, im Modus „Seite“ ist 42 eingetragen
@@ -166,3 +166,4 @@ Referenzbild: [referenzen/REF-buchdetails-03-aktuelle-seite.png](referenzen/REF-
 | 2026-11-10 | Erstellt (Entwurf aus CEO-Beschreibung, Erweiterung 2 und 3) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet: F3 Modus „%“, Obergrenzen, kein −/+, keine Hinweiszeile, Modus je Buch, Umrechnung (neu AK-5, AK-6, AK-7, AK-9, AK-10; AK-3 geändert); F5 Schließen durch Sichern/X/außerhalb, Abdunklung (AK-1, AK-2, neu AK-11); F6 Sitzung nur bei Erhöhung (AK-5 alt → AK-12, neu AK-13); F8 Farben. Leeres Feld (neu AK-8). Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
 | 2026-11-10 | Seitenanzahl ist jetzt immer Voraussetzung (CEO: „Ja, auch beim %-Modus muss ich die Seitenanzahl angeben.“); ohne Seitenanzahl zuerst Menü „Buchlänge“ (REQ-025). Entfallen: „%-Modus braucht keine Seitenanzahl“, Moduswechsel ohne Seitenanzahl, Seitenanzahl beim Schließen. Geändert: AK-1 (Gegeben mit Seitenanzahl), AK-5 (Modus „%“ mit Seitenanzahl 400), AK-10 neu gefasst (kein Menü „Aktuelle Seite“ ohne Seitenanzahl). Prozent-Eingabe bleibt. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
+| 2026-11-23 | An REQ-093 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Leeres Feld sichern entfernt den Fortschritt, ohne Sitzung und ohne Hinweis (Anforderung, AK-8). Status unverändert | Anforderungsmanager |

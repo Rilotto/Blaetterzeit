@@ -21,6 +21,8 @@ Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/
 Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
 > **Hinweis (2026-11-16):** REQ-060 (Abgestimmt) ergänzt das Blatt um die Karte „Ausgabe“ (ohne „Fotos“) und benennt „Erscheinungsdatum“ in „Erschienen“ um (mit Eingabe). Nach dessen Umsetzung sind hier AK-2 und AK-6 hinfällig. Bis dahin gilt dieser REQ unverändert.
+>
+> **Hinweis (2026-11-23):** Mit REQ-092 entfällt das Feld „JAHR“. Die Erscheinungsangabe wird nur über „Erschienen“ eingegeben (TT.MM.JJJJ oder JJJJ). Alle Aussagen dieses REQ zu „JAHR“ und „+ Erscheinungsdatum hinzufügen“ sind abgelöst. AK-2, AK-3, AK-6 und AK-12 sind entsprechend angepasst.
 
 ## Anforderung (Satzschablone)
 
@@ -89,12 +91,13 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 ### AK-2 Felder mit Beschriftung und Platzhaltertext
 - **Gegeben** das Blatt ist neu geöffnet und nichts eingetragen
 - **Wenn** der Nutzer die Formular-Karte betrachtet
-- **Dann** zeigt sie „TITEL“/„Buchtitel“, „AUTOR“/„Autor“, „JAHR“/„2024“ und „SEITEN“/„496“ nebeneinander sowie „ERSCHEINUNGSDATUM“ mit „+ Erscheinungsdatum hinzufügen“
+- **Dann** zeigt sie „TITEL“/„Buchtitel“ und „AUTOR“/„Autor“
+- **Und** es gibt kein Feld „JAHR“ und kein „ERSCHEINUNGSDATUM“ bzw. „+ Erscheinungsdatum hinzufügen“ (REQ-060, REQ-092)
 
 ### AK-3 Platzhaltertext verschwindet bei Eingabe
 - **Gegeben** das Blatt ist geöffnet
-- **Wenn** der Nutzer in eines der Felder „TITEL“, „AUTOR“, „JAHR“ oder „SEITEN“ etwas eingibt
-- **Dann** wird in diesem Feld die Eingabe statt des Platzhaltertexts („Buchtitel“, „Autor“, „2024“ bzw. „496“) angezeigt
+- **Wenn** der Nutzer in eines der Felder „TITEL“ oder „AUTOR“ etwas eingibt
+- **Dann** wird in diesem Feld die Eingabe statt des Platzhaltertexts („Buchtitel“ bzw. „Autor“) angezeigt
 - **Und** wenn der Nutzer die Eingabe wieder vollständig löscht, erscheint dort wieder der Platzhaltertext
 
 ### AK-4 Icons nachgebildet
@@ -108,10 +111,10 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 - **Dann** sind alle Elemente mit dieser Farbrubrik im geänderten Wert dargestellt
 - **Und** kein Element hat einen eigenen, davon abweichenden Farbwert
 
-### AK-6 „+ Erscheinungsdatum hinzufügen“ ohne Funktion
+### AK-6 Erscheinungsangabe nur über „Erschienen“
 - **Gegeben** das Blatt ist geöffnet
-- **Wenn** der Nutzer „+ Erscheinungsdatum hinzufügen“ antippt
-- **Dann** ändert sich im Blatt nichts und es öffnet sich keine Eingabe
+- **Wenn** der Nutzer es betrachtet
+- **Dann** gibt es genau eine Eingabe für die Erscheinungsangabe, die Zeile „Erschienen“ (REQ-060, REQ-092)
 
 ### AK-7 X schließt ohne Speichern
 - **Gegeben** im Blatt sind Titel und Autor eingetragen
@@ -136,10 +139,10 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 - **Dann** ist das Blatt geschlossen und die Seite „Bücher“ wird angezeigt
 - **Und** es wurde kein neues Buch angelegt
 
-### AK-12 Jahr nur vier Ziffern
+### AK-12 Kein Feld „JAHR“
 - **Gegeben** das Blatt ist geöffnet
-- **Wenn** der Nutzer in das Feld „JAHR“ „20a245“ eingibt
-- **Dann** zeigt das Feld höchstens vier Ziffern und keine anderen Zeichen
+- **Wenn** der Nutzer die Formular-Karte betrachtet
+- **Dann** gibt es kein Feld „JAHR“ (REQ-092)
 
 ### AK-9 Pille „Hinzufügen“ immer aktiv dargestellt
 - **Gegeben** das Blatt ist neu geöffnet und kein Feld ist ausgefüllt
@@ -178,3 +181,4 @@ CEO (wörtlich): „'Manueller Eintrag' schließt sich durch einen Klick auf das
 | 2026-11-10 | CEO-Ergänzung: Schließen auch per Android-Zurück-Taste und Herunterziehen am Ziehgriff, jeweils ohne Speichern (neu AK-10, AK-11; AK-8 auf bloßes Antippen des Ziehgriffs reduziert). Platzhaltertexte verschwinden bei allen Feldern (AK-3 erweitert). Vom CEO mit „Ja“ bestätigt: nach X Seite „Bücher“, Jahr nur Ziffern, höchstens vier (neu AK-12). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-10 | Verweis ergänzt: 1–3 Ziffern im Feld „JAHR“ sind ungültig, Hervorhebung in Primär und Verhalten beim Anlegen in REQ-031 (AK-12, AK-13). Status bleibt „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-16 | Hinweis auf REQ-060 (Karte „Ausgabe“ im Blatt) ergänzt; Inhalt unverändert | Anforderungsmanager |
+| 2026-11-23 | An REQ-060 und REQ-092 angepasst (REQ-092 Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Feld „JAHR“ und „+ Erscheinungsdatum hinzufügen“ entfallen (Hinweis, AK-2, AK-3, AK-6, AK-12). Status unverändert | Anforderungsmanager |

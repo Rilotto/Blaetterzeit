@@ -53,7 +53,7 @@ CEO (2026-11-22): Neues Buchfeld „Beendet am“; wird automatisch gesetzt, wen
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Löschen von „Beendet am“ und Verhalten beim Wechsel weg von *gelesen* (keine Festlegung des CEO; für die Zählung siehe REQ-081).
+- Verhalten beim Wechsel weg von *gelesen* (keine Festlegung des CEO; für die Zählung siehe REQ-081). Das Leeren von „Beendet am“ regelt REQ-093: Ein leeres Feld entfernt das Datum beim Sichern.
 - Automatischer Statuswechsel bei 100 % Fortschritt.
 
 ## Qualitätsanforderungen
@@ -71,3 +71,4 @@ CEO (2026-11-22): Neues Buchfeld „Beendet am“; wird automatisch gesetzt, wen
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-22 | Erstellt aus CEO-Festlegungen; Status „Abgestimmt“. Position der Zeile und Anzeige ohne Datum als Auslegung gekennzeichnet | Anforderungsmanager |
+| 2026-11-23 | An REQ-093 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Leeren ist jetzt festgelegt (Abgrenzung). AKs unverändert. Status unverändert | Anforderungsmanager |

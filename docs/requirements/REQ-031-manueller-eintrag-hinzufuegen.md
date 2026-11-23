@@ -21,6 +21,8 @@ Referenzbild: [referenzen/REF-buch-anlegen-02-manueller-eintrag.png](referenzen/
 Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
 > **Hinweis (2026-11-16):** Der Änderungsantrag REQ-060 (Entwurf) macht die Seitenzahl zur Pflichtangabe. Nach dessen Umsetzung sind hier AK-2, AK-5 und AK-9 hinfällig. Bis dahin gilt dieser REQ unverändert.
+>
+> **Hinweis (2026-11-23):** Seitenzahl ist Pflicht (REQ-060). Das Feld „JAHR“ entfällt (REQ-092). Die Prüfung und Hervorhebung gelten jetzt für das Feld „Erschienen“ (gültig: TT.MM.JJJJ oder JJJJ, nicht in der Zukunft). Die Aussagen zu „JAHR“ im Abschnitt „Ungültiges Jahr“ und unter „Anlegen“ sind entsprechend abgelöst. AK-2, AK-5, AK-9 und AK-12 bis AK-14 sind angepasst.
 
 ## Anforderung (Satzschablone)
 
@@ -59,10 +61,10 @@ CEO (wörtlich, 2026-11-10, zur Frage, was bei „Hinzufügen“ mit nur 1–3 Z
 - **Dann** gibt es ein neues Buch mit Titel „Testbuch“, Autor „Vorname Nachname“ und einer ID, die kein anderes Buch hat
 
 ### AK-2 Platzhaltertexte werden nicht gespeichert
-- **Gegeben** ein Titel ist eingetragen, die Felder „JAHR“ und „SEITEN“ sind leer
+- **Gegeben** Titel und Seitenzahl 320 sind eingetragen, „AUTOR“ und „Erschienen“ sind leer
 - **Wenn** der Nutzer das Buch mit „Hinzufügen“ anlegt
-- **Dann** hat das Buch weder ein Erscheinungsjahr 2024 noch 496 Seiten gespeichert
-- **Und** es hat kein Erscheinungsjahr und keine Seitenanzahl
+- **Dann** hat das Buch nicht den Autor „Autor“ gespeichert
+- **Und** es hat keinen Autor und keine Erscheinungsangabe
 
 ### AK-3 Dauerhaft gespeichert
 - **Gegeben** der Nutzer hat ein Buch mit „Hinzufügen“ angelegt
@@ -87,10 +89,10 @@ CEO (wörtlich, 2026-11-10, zur Frage, was bei „Hinzufügen“ mit nur 1–3 Z
 - **Dann** wird kein Buch angelegt, das Blatt bleibt geöffnet
 - **Und** unter dem Feld „TITEL“ steht „Bitte gib einen Titel ein“
 
-### AK-5 Nur Titel genügt
-- **Gegeben** nur das Feld „TITEL“ ist ausgefüllt
+### AK-5 Titel und Seitenzahl genügen
+- **Gegeben** nur Titel und Seitenzahl sind ausgefüllt
 - **Wenn** der Nutzer „Hinzufügen“ antippt
-- **Dann** wird ein neues Buch mit diesem Titel angelegt
+- **Dann** wird ein neues Buch mit diesem Titel angelegt (Seitenzahl Pflicht, REQ-060)
 
 ### AK-6 Standardstatus „ungelesen“
 - **Gegeben** der Nutzer hat ein Buch mit „Hinzufügen“ angelegt
@@ -111,26 +113,26 @@ CEO (wörtlich, 2026-11-10, zur Frage, was bei „Hinzufügen“ mit nur 1–3 Z
 - **Und** das Menü „Buchlänge“ erscheint nicht
 
 ### AK-9 Ohne Seiten wird „Buchlänge“ abgefragt
-- **Gegeben** ein Buch wurde ohne Eintrag im Feld „SEITEN“ angelegt
+- **Gegeben** ein früher ohne Seitenanzahl gespeichertes Buch (heute ist die Seitenzahl beim Anlegen Pflicht, REQ-060)
 - **Wenn** der Nutzer in dessen Buchdetails den Lesefortschritt öffnet
 - **Dann** erscheint das Menü „Buchlänge“ (REQ-025)
 
-### AK-12 Ungültiges Jahr wird hervorgehoben
-- **Gegeben** im Blatt ist der Titel „Testbuch“ eingetragen, im Feld „JAHR“ steht „199“
+### AK-12 Ungültiges „Erschienen“ wird hervorgehoben
+- **Gegeben** im Blatt sind Titel „Testbuch“ und Seitenzahl eingetragen, bei „Erschienen“ steht „199“
 - **Wenn** der Nutzer „Hinzufügen“ antippt
-- **Dann** ist das Feld „JAHR“ in der Farbrubrik „Primär“ hervorgehoben
+- **Dann** ist das Feld „Erschienen“ in der Farbrubrik „Primär“ hervorgehoben
 - **Und** es wird kein Hinweistext angezeigt
 
-### AK-13 Bei ungültigem Jahr wird kein Buch angelegt
-- **Gegeben** im Blatt ist der Titel „Testbuch“ eingetragen, im Feld „JAHR“ steht „19“
+### AK-13 Bei ungültigem „Erschienen“ wird kein Buch angelegt
+- **Gegeben** im Blatt sind Titel „Testbuch“ und Seitenzahl eingetragen, bei „Erschienen“ steht „31.02.2025“
 - **Wenn** der Nutzer „Hinzufügen“ antippt
 - **Dann** wird kein Buch angelegt
-- **Und** das Blatt bleibt geöffnet, Titel und Jahr bleiben unverändert eingetragen
+- **Und** das Blatt bleibt geöffnet, die Eingaben bleiben unverändert
 
-### AK-14 Hervorhebung verschwindet bei Änderung im Feld „JAHR“
-- **Gegeben** das Feld „JAHR“ ist nach „Hinzufügen“ mit der ungültigen Eingabe „199“ in der Farbrubrik „Primär“ hervorgehoben
-- **Wenn** der Nutzer etwas im Feld „JAHR“ ändert (z. B. eine Ziffer ergänzt oder löscht)
-- **Dann** ist das Feld „JAHR“ nicht mehr hervorgehoben
+### AK-14 Hervorhebung verschwindet bei Änderung im Feld „Erschienen“
+- **Gegeben** das Feld „Erschienen“ ist nach „Hinzufügen“ mit der ungültigen Eingabe „199“ hervorgehoben
+- **Wenn** der Nutzer etwas in diesem Feld ändert
+- **Dann** ist es nicht mehr hervorgehoben
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -160,3 +162,4 @@ CEO (wörtlich, 2026-11-10, zur Frage, was bei „Hinzufügen“ mit nur 1–3 Z
 | 2026-11-10 | CEO-Antwort zu „JAHR“ mit 1–3 Ziffern eingearbeitet: Feld „JAHR“ wird bei „Hinzufügen“ in Primär hervorgehoben, kein Hinweistext (neu AK-12). Annahme „kein Buch anlegen, solange ungültig“ gekennzeichnet (neu AK-13), Bestätigung durch den CEO ausstehend. Frage geschlossen. Status bleibt „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-10 | CEO zum Ende der Hervorhebung von „JAHR“: „wenn ich etwas im Feld Jahr ändere“ (neu AK-14). Annahme zu AK-13 (kein Anlegen bei ungültigem Jahr) gilt als bestätigt: Der CEO wurde ausdrücklich darauf hingewiesen und hat nicht widersprochen; Annahme-Vermerk entfernt. Status bleibt „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-16 | Hinweis auf REQ-060 (Seitenzahl wird Pflicht) ergänzt; Inhalt unverändert | Anforderungsmanager |
+| 2026-11-23 | An REQ-060 und REQ-092 angepasst (REQ-092 Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Seitenzahl Pflicht (AK-2, AK-5, AK-9). Prüfung und Hervorhebung von „JAHR“ gehen auf „Erschienen“ über (AK-12 bis AK-14). Status unverändert | Anforderungsmanager |

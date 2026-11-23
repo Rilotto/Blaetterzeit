@@ -36,8 +36,8 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - Das System muss diese beiden Texte in derselben Schriftgröße, Schriftart und Schriftstärke wie „Alle ansehen ›“ im Abschnitt „Noch zu lesen“ (REQ-009) darstellen und diese Schriftwerte aus derselben zentralen Definition beziehen wie „Alle ansehen ›“. Konkrete Schriftgrößen sind kein Akzeptanzkriterium.
 - Das System muss diese beiden Texte weiterhin unter dem jeweiligen Cover-Platzhalter an der Titelstelle darstellen (CEO: „dennoch wie bisher unter dem Platzhalter“).
 - *Annahme (nicht blockierend, Bestätigung durch den CEO im Prototyp):* Wenn ein solcher Text mehr als zwei Zeilen benötigt, schneidet das System ihn nach der zweiten Zeile mit Auslassungspunkten ab (analog Buchtitel-Regel, REQ-009 AK-9).
-- Das System darf in diesen Abschnitten keine weiteren Elemente (z. B. „Alle ansehen ›“, Bücher, Sagas, Sammlungen) darstellen.
-- Wenn der Nutzer eine Überschrift, einen Platzhalter oder einen Platzhaltertext dieser Abschnitte antippt, darf sich in der App nichts ändern.
+- ~~Das System darf in diesen Abschnitten keine weiteren Elemente (z. B. „Alle ansehen ›“, Bücher, Sagas, Sammlungen) darstellen.~~ Abgelöst durch REQ-097: „Alle ansehen ›“ steht immer neben den Überschriften. Gibt es Listen, zeigen die Abschnitte sie an Stelle des einzelnen Platzhalters.
+- Wenn der Nutzer eine Überschrift, einen Platzhalter oder einen Platzhaltertext dieser Abschnitte antippt, darf sich in der App nichts ändern. Das gilt, solange es keine Liste der Art gibt (REQ-097).
 
 ## Akzeptanzkriterien
 
@@ -52,7 +52,7 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - **Dann** sind beide in der Farbe der Farbrubrik „Tertiär“ dargestellt
 
 ### AK-3 Je ein Cover-Platzhalter ohne Titel
-- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Gegeben** die Seite „Bücher“ wird angezeigt, und es gibt keine Saga und keine Sammlung (mit Listen: REQ-097)
 - **Wenn** die Abschnitte „Sagas“ und „Sammlungen“ betrachtet werden
 - **Dann** steht unter jeder Überschrift genau ein Cover-Platzhalter (REQ-010)
 - **Und** der Cover-Platzhalter selbst zeigt keinen Buchtitel (Text unter dem Platzhalter: AK-6, AK-7)
@@ -62,18 +62,19 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - **Wenn** dessen Cover-Platzhalter mit den Platzhaltern der Abschnitte „Sagas“ und „Sammlungen“ verglichen wird
 - **Dann** haben alle dieselbe Breite und Höhe
 
-### AK-5 Keine Funktion
-- **Gegeben** die Seite „Bücher“ wird angezeigt
+### AK-5 Keine Funktion ohne Listen
+- **Gegeben** die Seite „Bücher“ wird angezeigt, und es gibt keine Saga und keine Sammlung
 - **Wenn** der Nutzer eine Überschrift oder einen Platzhalter der Abschnitte „Sagas“ oder „Sammlungen“ antippt
 - **Dann** ändert sich in der App nichts
+- **Und** „Alle ansehen ›“ neben den Überschriften ist davon ausgenommen (öffnet die Listenübersicht, REQ-097)
 
 ### AK-6 Text unter dem Platzhalter „Sagas“
-- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Gegeben** die Seite „Bücher“ wird angezeigt, und es gibt keine Saga
 - **Wenn** der Abschnitt „Sagas“ betrachtet wird
 - **Dann** steht unter dem Cover-Platzhalter an der Titelstelle genau der Text „Deine nächste Saga wartet auf dich!“
 
 ### AK-7 Text unter dem Platzhalter „Sammlungen“
-- **Gegeben** die Seite „Bücher“ wird angezeigt
+- **Gegeben** die Seite „Bücher“ wird angezeigt, und es gibt keine Sammlung
 - **Wenn** der Abschnitt „Sammlungen“ betrachtet wird
 - **Dann** steht unter dem Cover-Platzhalter an der Titelstelle genau der Text „Wie wäre es mit einer neuen Sammlung?“
 
@@ -104,8 +105,8 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Jede echte Saga- oder Sammlungsfunktion (Anlegen, Anzeigen, Zuordnen von Büchern).
-- „Alle ansehen ›“ in diesen Abschnitten.
+- Jede echte Saga- oder Sammlungsfunktion (REQ-095 bis REQ-099).
+- „Alle ansehen ›“ in diesen Abschnitten (REQ-097).
 - Konkrete Maße und Farbwerte als Akzeptanzkriterium.
 
 ## Qualitätsanforderungen
@@ -119,6 +120,7 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 - **REQ-005:** Farbrubrik der Überschrift „Deine Bücher“.
 - **REQ-011:** Vorbild für Position (Titelstelle) und Farbrubrik „Primär“ der Platzhaltertexte.
 - **REQ-009:** „Alle ansehen ›“ als Vorbild für Schriftgröße, -art, -stärke und Farbe der Platzhaltertexte (gemeinsame zentrale Definition).
+- **REQ-097 (Entwurf):** Mit dessen Umsetzung werden die Abschnitte „Sagas“ und „Sammlungen“ zum Einstieg in die Listenübersichten. „Antippen ändert nichts“ und die Abgrenzung „keine echte Saga- oder Sammlungsfunktion“ werden dann abgelöst. Platzhalter und Texte bleiben, solange es keine Liste gibt. Neben beiden Überschriften erscheint immer „Alle ansehen ›“, was das bisherige Verbot ablöst (REQ-097).
 
 ## Offene Fragen
 
@@ -133,3 +135,4 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 | 2026-11-09 | Erstellt aus CEO-Antwort F4. Eigener REQ statt Teil von REQ-009, weil es ein eigenständiges, unabhängig prüfbares Seitenelement ohne Buchlogik ist (atomar) und später durch echte Saga-/Sammlungs-REQs ersetzt werden kann, ohne REQ-009 zu berühren. Vom CEO bestätigt 2026-11-09, Status „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-09 | Ergänzung auf CEO-Wunsch (wörtlich): „Lass uns bei beiden Abschnitten einen Text unter den Platzhaltern machen. einmal: Wie wäre es mit einer neuen Sammlung? und einmal: Deine nächste Saga wartet auf dich!“ Neu: AK-6 (Text Sagas), AK-7 (Text Sammlungen), AK-8 (Farbrubrik Primär), AK-9 (Antippen der Texte ohne Wirkung). AK-3 angepasst: „darunter kein Text“ ersetzt durch „Cover-Platzhalter zeigt keinen Buchtitel“, da sonst Widerspruch zu AK-6/AK-7. Darstellung (Titelstelle, Primär) vom Scrum Master angekündigt, CEO hat nicht widersprochen; Prüfung im Prototyp. REQ war nicht eingefroren; Status von „Implementiert“ auf „In Umsetzung“ | Anforderungsmanager |
 | 2026-11-09 | Ergänzung auf CEO-Wunsch (wörtlich): „Für den nächsten Prototypen: Die Schrift unter dem Platzhalter bei Saga und Sammlung: Maximal zweizeilig, Schriftgröße, -art und -farbe wie das 'Alle ansehen' bei dem Abschnitt 'Noch zu lesen'. Der Text soll dennoch wie bisher unter dem Platzhalter sein.“ Neu: AK-10 (höchstens zwei Zeilen, Position unverändert; Auslassungspunkte bei Überlänge als nicht blockierende Annahme), AK-11 (Schrift wie „Alle ansehen ›“ über gemeinsame zentrale Definition). AK-8 unverändert gültig (Primär = Farbe von „Alle ansehen ›“), Hinweis ergänzt. REQ nicht eingefroren; Status bleibt „In Umsetzung“ | Anforderungsmanager |
+| 2026-11-23 | An REQ-097 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Platzhalter, Texte und „keine Funktion“ gelten nur, solange es keine Liste der Art gibt (AK-3, AK-5, AK-6, AK-7). „Alle ansehen ›“ ist jetzt erlaubt (Anforderung, Abgrenzung). Status unverändert | Anforderungsmanager |

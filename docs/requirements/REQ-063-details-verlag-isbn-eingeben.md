@@ -31,7 +31,7 @@ Bisher (CEO, 2026-11-15, REQ-056): Verlag und ISBN „aktuell leer, bitte ohne E
 
 **ISBN**
 - Wenn der Nutzer die Zeile „ISBN“ antippt, muss das System ein gleich aufgebautes Blatt anzeigen, dessen Feld nur Ziffern annimmt, zusätzlich „X“ als letzte Stelle einer 10-stelligen ISBN (Prüfziffer 10). Eine vorhandene ISBN steht im Feld.
-- Eine ISBN ist gültig, wenn sie 10 oder 13 Stellen hat und ihre Prüfziffer stimmt.
+- Eine ISBN ist gültig, wenn sie 10 oder 13 Stellen hat und ihre Prüfziffer stimmt. Ein leeres Feld ist nicht ungültig: Sichern entfernt Verlag bzw. ISBN (REQ-093).
 - Wenn der Nutzer „Sichern“ antippt und die ISBN ungültig ist, muss das System das Feld so hervorheben wie das ungültige Feld „JAHR“ (REQ-031: Primär, kein Hinweistext, bis der Nutzer etwas im Feld ändert), nichts speichern und das Blatt geöffnet lassen.
 - Wenn die ISBN gültig ist, muss das System sie bei „Sichern“ dauerhaft speichern, das Blatt schließen und sie in der Zeile „ISBN“ anzeigen.
 
@@ -110,3 +110,4 @@ Bisher (CEO, 2026-11-15, REQ-056): Verlag und ISBN „aktuell leer, bitte ohne E
 | 2026-11-16 | Vom CEO angenommenen Vorschlag eingearbeitet (Blätter für Verlag und ISBN, Prüfung der ISBN). „Hinzugefügt“ in REQ-064 ausgelagert. Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
 | 2026-11-18 | Android-Zurück-Taste ergänzt (schließt die Blätter Verlag und ISBN und verwirft die Eingabe), AK-6 erweitert. Anlass ist Befund 3 des Testers, beauftragt vom Scrum Master. Status unverändert | Anforderungsmanager |
 | 2026-11-18 | AK-3 und Anforderung angepasst: Bei ISBN-10 ist „X“ an letzter Stelle erlaubt (Prüfziffer 10). Der Scrum Master hat seinen eigenen, vom CEO angenommenen Vorschlag „nur Ziffern“ korrigiert (sprints/sprint-06/plan.md, „Hinweise / kleine Klärungen“). Status unverändert | Anforderungsmanager |
+| 2026-11-23 | An REQ-093 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Ein leeres Feld ist nicht ungültig, Sichern entfernt die Angabe. Nur Anforderungstext geändert, AKs unverändert. Status unverändert | Anforderungsmanager |

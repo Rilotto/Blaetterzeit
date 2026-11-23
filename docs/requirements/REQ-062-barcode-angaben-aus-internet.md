@@ -111,6 +111,7 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 ## Abhängigkeiten
 
 - **REQ-061, REQ-060, REQ-030, REQ-031, REQ-032, REQ-019.**
+- **REQ-092, REQ-099 (Entwurf):** Ein geliefertes Jahr geht künftig in „Erschienen“ statt in „JAHR“. Eine gelieferte Reihe führt nicht zu einer automatischen Saga-Zuordnung. Eine gelieferte Bandnummer wird gespeichert und bei der späteren Saga-Zuordnung im Feld „Band“ vorausgefüllt (REQ-099). Dieser REQ wird nach der Abstimmung angepasst.
 - **Randbedingung:** erster Internetzugriff der App (Android-Berechtigung, Web-Prototyp). Ob dafür ein ADR nötig ist, entscheidet der Entwickler.
 
 ## Offene Fragen
