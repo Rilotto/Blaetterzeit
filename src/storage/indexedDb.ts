@@ -8,6 +8,9 @@ export const STORE_BILDER = 'bilder';
 export const STORE_BUECHER = 'buecher';
 export const STORE_LISTEN = 'listen';
 export const STORE_LISTEN_BUECHER = 'listenBuecher';
+export const STORE_ZITATE = 'zitate';
+export const STORE_PROFIL = 'profil';
+export const STORE_JAHRESZIELE = 'jahresziele';
 
 /** Versionierte Schemaänderungen (Index = Zielversion - 1). */
 const MIGRATIONEN: ((db: IDBDatabase, tx: IDBTransaction) => void)[] = [
@@ -52,6 +55,13 @@ const MIGRATIONEN: ((db: IDBDatabase, tx: IDBTransaction) => void)[] = [
   (db) => {
     db.createObjectStore(STORE_LISTEN, { keyPath: 'id' });
     db.createObjectStore(STORE_LISTEN_BUECHER, { keyPath: ['listeId', 'buchId'] });
+  },
+  // Version 9: Zitate je Buch (REQ-105), Name im Profil (REQ-107, Schlüssel „name“) und Jahresziel je Jahr (REQ-104).
+  // Neue Stores, vorhandene Daten bleiben unverändert.
+  (db) => {
+    db.createObjectStore(STORE_ZITATE, { keyPath: 'id' });
+    db.createObjectStore(STORE_PROFIL);
+    db.createObjectStore(STORE_JAHRESZIELE, { keyPath: 'jahr' });
   },
 ];
 

@@ -7,6 +7,10 @@ import {
   createBookRepository,
   createImageStore,
   createListenRepository,
+  createProfilRepository,
+  createZitatRepository,
+  type ProfilRepository,
+  type ZitatRepository,
   type AnsichtRepository,
   type ListenRepository,
   type BookRepository,
@@ -19,6 +23,8 @@ let befuellt: Promise<void> | undefined;
 let bildspeicher: ImageStore | undefined;
 let ansichtSpeicher: AnsichtRepository | undefined;
 let listenSpeicher: ListenRepository | undefined;
+let zitatSpeicher: ZitatRepository | undefined;
+let profilSpeicher: ProfilRepository | undefined;
 
 /** Ob Demodaten eingespielt werden (Build-Schalter `VITE_DEMODATEN=aus` schaltet sie ab). */
 export function demodatenAktiv(wert: string | undefined = import.meta.env.VITE_DEMODATEN): boolean {
@@ -71,4 +77,16 @@ export function standardAnsichtRepository(): AnsichtRepository {
 export function standardListenRepository(): ListenRepository {
   listenSpeicher ??= createListenRepository();
   return listenSpeicher;
+}
+
+/** Zitatspeicher der App (REQ-105, REQ-106), eine Instanz für alle Ansichten. */
+export function standardZitatRepository(): ZitatRepository {
+  zitatSpeicher ??= createZitatRepository();
+  return zitatSpeicher;
+}
+
+/** Speicher für Name und Jahresziel (REQ-107, REQ-104), eine Instanz für alle Ansichten. */
+export function standardProfilRepository(): ProfilRepository {
+  profilSpeicher ??= createProfilRepository();
+  return profilSpeicher;
 }

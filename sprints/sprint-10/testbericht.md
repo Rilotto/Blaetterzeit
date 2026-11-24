@@ -56,3 +56,13 @@ Stand 2026-11-23: nicht freigabefähig wegen F1. F1 ist inzwischen behoben, aktu
 - Gegenprobe: 3/3 erkannt. Herausnehmen beim Sichern der Auswahl fehlt (2 rot), Listenbild wird nicht gespeichert (16 rot), Entfernen bzw. Mitlöschen wirkt nicht (3 rot).
 - Risiko: Bündige Namen, echte Pixelgröße und Farbdesigns lassen sich in jsdom nicht prüfen, das gehört zur Sichtprüfung. Für den Zuschnitt prüft der Test einen hochkant liegenden Startrahmen zwischen 0,6 und 0,7, der Entwickler setzt 2:3 um.
 - Empfehlung: freigabefähig, sobald die CI (`npm run verify`) für den Branch grün ist.
+
+## Nachtrag 2026-11-24: Teil C – REQ-101 bis REQ-107, REQ-043 (AK-3, AK-8 angepasst)
+- Tests: neu `REQ-101` … `REQ-107` (je AK mehrere Varianten, dazu Grenzfälle: Tageszeit auf Minute und Sekunde, Wechsel während der Anzeige, Wochen-, Monats- und Jahreswechsel, Jahresziel an den Jahresgrenzen und nur Status *gelesen*, numerische Sortierung der Zitate, Zitat des Tages über 10 Folgetage und stabil beim Hinzufügen bzw. Löschen anderer Zitate). In `REQ-043` sind AK-8 (Notizbuch zeigt „Zitate“) und AK-3 (Buch mit Zitaten öffnet mit „Rezension“) angepasst. Der grobe Test zu REQ-043 bleibt unverändert.
+- Platzhalter auf „Start“: REQ-002 AK-12 und REQ-004 gelten nur für Menüpunkte ohne festgelegte Zielansicht und nennen „Start“ nicht. Seit REQ-101 hat kein Menüpunkt mehr eine undefinierte Zielansicht. In `REQ-002`, `REQ-004` (fein) und `tests/grob/REQ-004-grob` wird diese Bedingung deshalb simuliert: Per `vi.mock('@/views')` bekommt „Start“ die Platzhalteransicht der App. Die Prüfungen selbst sind unverändert.
+- Lokal: `tsc -b` grün, Lint mit Exit 0 (2 Warnungen `react(refs)` in `BuchDetails.tsx`). REQ-10[1-7], REQ-043, REQ-002, REQ-004 und grob REQ-004/REQ-043 liefen zweimal hintereinander mit 230/230 grün.
+- Ergebnis: REQ-101 AK-1–6, REQ-102 AK-1–7, REQ-103 AK-1–3, REQ-104 AK-1–5, REQ-105 AK-1–10, REQ-106 AK-1–5, REQ-107 AK-1–4 und REQ-043 AK-1–8 bestanden. Die volle Suite läuft nur in der CI.
+- Gegenprobe: 4/4 erkannt. Tageszeit-Grenze 10:00 (2 rot), Zitat des Tages nicht gemerkt (2 rot), Jahresziel ohne Statusprüfung (1 rot), Zitat löschen nicht gespeichert (4 rot).
+- Hinweis an den Scrum Master: REQ-101 AK-2 nennt „Montag, 24.11.2026“, der 24.11.2026 ist aber ein Dienstag. Getestet wird mit echtem Datum (Mo 23.11. und Di 24.11.). Der Anforderungsmanager sollte das AK berichtigen.
+- Risiken: Linienstil der Icons, Lage der Bereiche und Umrandung von „heute“ sind nur über Kennzeichen bzw. Reihenfolge prüfbar, Sichtprüfung im Prototyp. Die Uhr wird laut Entwickler alle 5 s abgefragt, getestet ist der Wechsel innerhalb von 61 s.
+- Empfehlung: freigabefähig, sobald die CI (`npm run verify`) für den Branch grün ist.

@@ -2,9 +2,11 @@
  * Akzeptanztests REQ-043 – Buchdetails: Reiterleiste.
  * Schnittstellen laut Entwickler (Sprint 05): [data-reiterleiste], [data-reiter=id][data-aktiv],
  * [data-reiter-bezeichnung], [data-reiterpille], [data-reiter-bereich=id]. Optik/„smooth“ prüft der CEO.
+ * Angepasst Sprint 10 Teil C (REQ-043 AK-3/AK-8 an REQ-105/REQ-106): „Notizbuch“ zeigt „Zitate“; Öffnen über
+ * „Zitat des Tages“ mit „Notizbuch“ prüft tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx.
  */
 import '@testing-library/jest-dom/vitest';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import type { CSSProperties } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Buch } from '@/domain/buch';
@@ -137,16 +139,59 @@ describe('REQ-043 Reiterleiste', () => {
     expect(p1.style.transition).toMatch(/left|transform|translate/);
   });
 
-  it('[REQ-043/AK-8] „Notizbuch“ und „Figuren & Orte“ zeigen „under construction :)“ in Tertiär', async () => {
+  it('[REQ-043/AK-8] „Figuren & Orte“ zeigt „under construction :)“ in Tertiär', async () => {
     const d = await zeige();
-    for (const id of ['notizbuch', 'figuren']) {
-      await tippe(reiterVon(d, id));
-      const bereich = d.querySelector<HTMLElement>(`[data-reiter-bereich="${id}"]`)!;
-      const text = [...bereich.querySelectorAll<HTMLElement>('*')].find((e) => e.textContent?.trim() === 'under construction :)' && e.children.length === 0);
-      expect(text, id).toBeTruthy();
-      let el: HTMLElement | null = text!;
-      while (el && !el.style.color) el = el.parentElement;
-      expect(el?.style.color).toBe('var(--bz-farbe-tertiaer)');
-    }
+    await tippe(reiterVon(d, 'figuren'));
+    const bereich = d.querySelector<HTMLElement>('[data-reiter-bereich="figuren"]')!;
+    const text = [...bereich.querySelectorAll<HTMLElement>('*')].find((e) => e.textContent?.trim() === 'under construction :)' && e.children.length === 0);
+    expect(text).toBeTruthy();
+    let el: HTMLElement | null = text!;
+    while (el && !el.style.color) el = el.parentElement;
+    expect(el?.style.color).toBe('var(--bz-farbe-tertiaer)');
+  });
+
+  it('[REQ-043/AK-8] „Notizbuch“ zeigt den Abschnitt „Zitate“ und kein „under construction :)“ (REQ-105)', async () => {
+    const d = await zeige();
+    await tippe(reiterVon(d, 'notizbuch'));
+    const bereich = await vi.waitFor(() => {
+      const b = d.querySelector<HTMLElement>('[data-reiter-bereich="notizbuch"]');
+      expect(b?.textContent).toContain('Zitate');
+      return b!;
+    });
+    expect(bereich.textContent).not.toContain('under construction');
+    expect(screen.getByRole('button', { name: /Zitat hinzufügen/ })).toBeInTheDocument();
+    // Wechsel Notizbuch → Figuren → Notizbuch: Platzhalter nur bei „Figuren & Orte“
+    await tippe(reiterVon(d, 'figuren'));
+    expect(d.querySelector('[data-reiter-bereich="figuren"]')?.textContent).toContain('under construction :)');
+    await tippe(reiterVon(d, 'notizbuch'));
+    expect(d.querySelector('[data-reiter-bereich="notizbuch"]')?.textContent).not.toContain('under construction');
+  });
+
+  it('[REQ-043/AK-3] auch ein Buch mit Zitaten öffnet normal (nicht über „Zitat des Tages“) mit aktivem „Rezension“', async () => {
+    const b = buch({ titel: 'Mit Zitat' });
+    const repo = new InMemoryBookRepository();
+    await repo.save(b);
+    const ansicht = () => (
+      <div style={farbVariablen() as CSSProperties}>
+        <BuchDetails buchId={b.id} repository={repo} bildspeicher={bilder} bildquelle={{ scannen: async () => null, galerie: async () => null }} onZurueck={() => {}} />
+      </div>
+    );
+    render(ansicht());
+    let d = await screen.findByRole('region', { name: 'Buchdetails' });
+    await vi.waitFor(() => expect(d.querySelector('[data-reiterleiste]')).not.toBeNull());
+    await tippe(reiterVon(d, 'notizbuch'));
+    await tippe(await screen.findByRole('button', { name: /Zitat hinzufügen/ }));
+    const blatt = await screen.findByRole('dialog');
+    await act(async () => {
+      fireEvent.change(within(blatt).getByLabelText('Zitat'), { target: { value: 'Ein Zitat.' } });
+    });
+    await tippe(within(blatt).getByRole('button', { name: 'Sichern' }));
+    await vi.waitFor(() => expect(d.textContent).toContain('Ein Zitat.'));
+    cleanup();
+    render(ansicht());
+    d = await screen.findByRole('region', { name: 'Buchdetails' });
+    await vi.waitFor(() => expect(d.querySelector('[data-reiterleiste]')).not.toBeNull());
+    expect(aktive(d).map((x) => x.getAttribute('data-reiter'))).toEqual(['rezension']);
+    expect(d.querySelector('[data-reiter-bereich="rezension"]')).not.toBeNull();
   });
 });

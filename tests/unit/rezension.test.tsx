@@ -96,7 +96,7 @@ const zeile = (id: string) => document.querySelector(`[data-kriterium="${id}"]`)
 const symbol = (id: string, n: number) => zeile(id).querySelector(`[data-symbol-nr="${n}"]`)!;
 
 describe('Reiterleiste und Reiter „Rezension“ in den Buchdetails', () => {
-  it('Rezension aktiv, Bezeichnung nur im aktiven Reiter, Wechsel zeigt „under construction :)“', async () => {
+  it('Rezension aktiv, Bezeichnung nur im aktiven Reiter, Wechsel: Notizbuch zeigt „Zitate“ (REQ-105), Figuren & Orte „under construction :)“', async () => {
     await zeige(buch());
     const reiter = [...document.querySelectorAll('[data-reiter]')];
     expect(reiter.map((r) => r.getAttribute('aria-label'))).toEqual(['Rezension', 'Notizbuch', 'Figuren & Orte', 'Details']);
@@ -106,7 +106,10 @@ describe('Reiterleiste und Reiter „Rezension“ in den Buchdetails', () => {
     await tippe(document.querySelector('[data-reiter="notizbuch"]')!);
     expect(document.querySelector('[data-reiter="notizbuch"] [data-reiter-bezeichnung]')).toHaveTextContent('Notizbuch');
     expect(document.querySelector('[data-reiter-bereich="rezension"]')).toBeNull();
-    expect(document.querySelector('[data-reiter-bereich="notizbuch"]')).toHaveTextContent('under construction :)');
+    expect(document.querySelector('[data-reiter-bereich="notizbuch"]')).toHaveTextContent('Zitate');
+    expect(document.querySelector('[data-reiter-bereich="notizbuch"]')).not.toHaveTextContent('under construction :)');
+    await tippe(document.querySelector('[data-reiter="figuren"]')!);
+    expect(document.querySelector('[data-reiter-bereich="figuren"]')).toHaveTextContent('under construction :)');
     expect((document.querySelector('[data-reiterpille]') as HTMLElement).style.transition).toContain('left');
   });
 

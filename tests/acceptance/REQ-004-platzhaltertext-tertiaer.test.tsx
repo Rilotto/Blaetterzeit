@@ -26,6 +26,15 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import App from '@/App';
 import { farbrubriken } from '@/theme';
 
+// Sprint 10 Teil C: Seit REQ-101 hat „Start“ eine Zielansicht; kein Menüpunkt ist mehr ohne Zielansicht.
+// Die Bedingung „Zielansicht noch nicht definiert“ (REQ-002 AK-12, REQ-004) wird deshalb simuliert: „Start“ bekommt
+// für diese Datei die Platzhalteransicht der App. Die Startseite selbst prüfen die Tests zu REQ-101.
+vi.mock('@/views', async (importOriginal) => {
+  const orig = await importOriginal<typeof import('@/views')>();
+  const { default: UnderConstruction } = await import('@/views/UnderConstruction');
+  return { ...orig, ansichten: { ...orig.ansichten, start: UnderConstruction } };
+});
+
 // ---------------------------------------------------------------------------
 // Dateisystem-Zugriff (gleiches Muster wie REQ-002/003: dynamisch, minimal typisiert)
 // ---------------------------------------------------------------------------

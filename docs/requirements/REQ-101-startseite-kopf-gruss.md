@@ -23,7 +23,7 @@ CEO (2026-11-24, Vision und zwei abgenommene Konzeptskizzen, über den Scrum Mas
 - Die Startseite zeigt von oben nach unten: Kopf (dieser REQ), „Gerade am Lesen“ (REQ-102), „Diese Woche“ mit Lesesträhne (REQ-103), Jahresziel (REQ-104), „Zitat des Tages“ (REQ-106). Die Reihenfolge folgt der Aufzählung des CEO (**Auslegung**).
 
 **Kopf**
-- Das System muss oben das heutige Datum mit Wochentag und die aktuelle Uhrzeit (24-Stunden-Format, lokale Gerätezeit) anzeigen und die Anzeige mindestens minütlich aktualisieren (**Auslegung**: Format z. B. „Montag, 24. November · 14:05“).
+- Das System muss oben das heutige Datum mit Wochentag und die aktuelle Uhrzeit (24-Stunden-Format, lokale Gerätezeit) anzeigen und die Anzeige mindestens minütlich aktualisieren (**Auslegung**: Format z. B. „Dienstag, 24. November · 14:05“).
 - Darunter muss das System den Gruß nach Tageszeit mit dem Namen anzeigen, z. B. „Guten Morgen, Christine“, und daneben das Tageszeit-Icon:
   - 05:00–09:59: „Guten Morgen“, Sonnenaufgang
   - 10:00–16:59: „Hallo“, Sonne (CEO, 2026-11-24: „Hallo“)
@@ -42,7 +42,7 @@ CEO (2026-11-24, Vision und zwei abgenommene Konzeptskizzen, über den Scrum Mas
 - **Dann** steht dort die Startseite mit Kopf und kein „under construction :)“
 
 ### AK-2 Datum und Uhrzeit
-- **Gegeben** Gerätezeit Montag, 24.11.2026, 14:05
+- **Gegeben** Gerätezeit Dienstag, 24.11.2026, 14:05
 - **Wenn** die Startseite angezeigt wird
 - **Dann** zeigt der Kopf Wochentag, Datum und „14:05“
 
@@ -92,3 +92,4 @@ CEO (2026-11-24, Vision und zwei abgenommene Konzeptskizzen, über den Scrum Mas
 | 2026-11-24 | Erstellt aus CEO-Vision und abgenommener Konzeptskizze, Entwurf | Anforderungsmanager |
 | 2026-11-24 | CEO-Antworten: Tagesgruß „Hallo“. Name „Im Profil selbst anlegen können“ (REQ-107), ohne Namen nur der Gruß (AK-3 ergänzt, AK-6 neu). Keine offenen Fragen. Status Entwurf | Anforderungsmanager |
 | 2026-11-24 | Vom CEO bestätigt (wörtlich): „sieht alles super aus! Danke!“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-24 | Befund des Testers: Der 24.11.2026 ist ein Dienstag. Wochentag im Beispiel von AK-2 und im Formatbeispiel der Anforderung von „Montag“ auf „Dienstag“ korrigiert. Kein geändertes Verhalten. Status unverändert | Anforderungsmanager |

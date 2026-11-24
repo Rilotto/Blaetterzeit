@@ -5,7 +5,7 @@ import iconMehr from '@/assets/icons/icon-mehr.png';
 import { zuschneiden } from '@/bild/bildverarbeitung';
 import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
 import type { Ecken } from '@/bild/entzerren';
-import { standardBildspeicher, standardListenRepository, standardRepository } from '@/buecher/buchQuelle';
+import { standardBildspeicher, standardListenRepository, standardRepository, standardZitatRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattAktuelleSeite from '@/buchdetails/BlattAktuelleSeite';
 import BlattBuchlaenge from '@/buchdetails/BlattBuchlaenge';
@@ -20,6 +20,7 @@ import Statuspille from '@/buchdetails/Statuspille';
 import { kopfSchaltflaecheStil } from '@/buchdetails/stile';
 import { KOPF_ICON, KOPF_SCHALTFLAECHE, RAND, darstellungsMasse, seitenverhaeltnis } from '@/buchdetails/masse';
 import BlattMasse from '@/buchdetails/BlattMasse';
+import Notizbuch from '@/buchdetails/reiter/Notizbuch';
 import ReiterBereich from '@/buchdetails/reiter/ReiterBereich';
 import Reiterleiste from '@/buchdetails/reiter/Reiterleiste';
 import { START_REITER, type ReiterId } from '@/buchdetails/reiter/rezension';
@@ -28,6 +29,7 @@ import Schreibfenster from '@/buchdetails/reiter/Schreibfenster';
 import Zuschnitt from '@/buchdetails/Zuschnitt';
 import Icon from '@/components/Icon';
 import { beendetAusText, eintragungsdatumAusText, erscheinungAusText, erschienenEingabeText, type Formatangaben, type Masse } from '@/domain/ausgabe';
+import type { Zitat } from '@/domain/zitat';
 import { sagaZeileText, sagenDesBuches, type ListenArt } from '@/domain/listen';
 import BlattZuListe from '@/listen/BlattZuListe';
 import { useListen } from '@/listen/gemeinsam';
@@ -35,7 +37,7 @@ import ListenNavigation, { type ListenZiel } from '@/listen/ListenNavigation';
 import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
 import { statusSetzen, type Buch, type Fortschrittsmodus, type LesestatusId } from '@/domain/buch';
 import { fortschrittEntfernen, fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
-import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore, type ListenRepository } from '@/storage';
+import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore, type ListenRepository, type ZitatRepository } from '@/storage';
 import { ansicht3dFarbe, ansicht3dSchatten, buchdetailsFarbe, fortschrittFarbe, listenFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
 
 export interface BuchDetailsProps {
@@ -52,6 +54,14 @@ export interface BuchDetailsProps {
   jetzt?: () => Date;
   /** Listenspeicher (Sagas, Sammlungen, Bibliotheken, REQ-095); ohne Angabe der der App. In Tests ersetzbar. */
   listenRepository?: ListenRepository;
+  /** Zitatspeicher (Reiter „Notizbuch“, REQ-105); ohne Angabe der der App. In Tests ersetzbar. */
+  zitatRepository?: ZitatRepository;
+  /**
+   * Reiter beim Öffnen: ohne Angabe „Rezension“ (REQ-043, AK-3); über „Zitat des Tages“ „Notizbuch“ (REQ-106, AK-4).
+   */
+  startReiter?: ReiterId;
+  /** Bereits geladene Zitate des Buches (z. B. von der Startseite), damit das Notizbuch sofort gefüllt ist. */
+  zitateVorab?: Zitat[];
   /** Zurück zur Seite „Bücher“. */
   onZurueck: () => void;
 }
@@ -190,8 +200,12 @@ export default function BuchDetails({
   repository,
   jetzt = systemzeit,
   listenRepository,
+  zitatRepository,
+  startReiter = START_REITER,
+  zitateVorab,
   onZurueck,
 }: BuchDetailsProps) {
+  const zitatRepo = useMemo(() => zitatRepository ?? standardZitatRepository(), [zitatRepository]);
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
   const listenRepo = useMemo(() => listenRepository ?? standardListenRepository(), [listenRepository]);
   const { listen, zug, neuLaden: listenNeuLaden } = useListen(listenRepo);
@@ -204,8 +218,8 @@ export default function BuchDetails({
   const basis = vorgegeben && vorgegeben.id === buchId ? vorgegeben : geladen;
   const buch = geaendert && geaendert.id === buchId ? geaendert : basis;
   const [blatt, setBlatt] = useState<Blatt>(null);
-  // Aktiver Reiter; beim Öffnen „Rezension“ (REQ-043, AK-3).
-  const [reiter, setReiter] = useState<ReiterId>(START_REITER);
+  // Aktiver Reiter; beim Öffnen „Rezension“ (REQ-043, AK-3), über „Zitat des Tages“ „Notizbuch“ (REQ-106).
+  const [reiter, setReiter] = useState<ReiterId>(startReiter);
   const ausstehend = useRef<Promise<void> | null>(null);
   const [bilder, setBilder] = useState<Bilder>({});
   const [menue, setMenue] = useState<Bildbereich | null>(null);
@@ -611,6 +625,7 @@ export default function BuchDetails({
               onPille: (art) => setListenBlatt(art),
               onZeile: (art) => setListenZiel({ art: 'uebersicht', listenArt: art, buchId: buch.id }),
             }}
+            notizbuch={<Notizbuch buchId={buch.id} repository={zitatRepo} jetzt={jetzt} vorab={zitateVorab} />}
           />
         </>
       ) : null}

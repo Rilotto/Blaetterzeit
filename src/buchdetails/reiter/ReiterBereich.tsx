@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { KriteriumId } from '@/domain/bewertung';
 import type { Buch } from '@/domain/buch';
 import UnderConstruction from '@/views/UnderConstruction';
@@ -31,10 +31,12 @@ interface Props {
   onErschienen?: () => void;
   /** Abschnitt „Sagas, Sammlungen und Bibliotheken“ (REQ-095). */
   listen?: ListenAbschnittProps;
+  /** Inhalt des Reiters „Notizbuch“: Abschnitt „Zitate“ (REQ-105). */
+  notizbuch?: ReactNode;
 }
 
-/** Inhalt des aktiven Reiters (REQ-043). Notizbuch und Figuren & Orte: „under construction :)“. */
-export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSchreiben, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet, onErschienen, listen }: Props) {
+/** Inhalt des aktiven Reiters (REQ-043). Notizbuch: Zitate (REQ-105). Figuren & Orte: „under construction :)“. */
+export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSchreiben, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet, onErschienen, listen, notizbuch }: Props) {
   if (reiter === 'details') {
     return (
       <div role="tabpanel" aria-label="Details" data-reiter-bereich="details">
@@ -59,6 +61,13 @@ export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSch
       <div role="tabpanel" aria-label="Rezension" data-reiter-bereich="rezension">
         <Bewertung bewertungen={buch.bewertungen} onAntippen={onBewertungAntippen} />
         <DeineRezension rezension={buch.rezension} onSchreiben={onSchreiben} />
+      </div>
+    );
+  }
+  if (reiter === 'notizbuch') {
+    return (
+      <div role="tabpanel" aria-label="Notizbuch" data-reiter-bereich="notizbuch">
+        {notizbuch}
       </div>
     );
   }

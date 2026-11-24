@@ -21,14 +21,15 @@ CEO (2026-11-24, über den Scrum Master): Im Reiter „Notizbuch“ ein Abschnit
 **Reiter**
 - Wenn der Reiter „Notizbuch“ (REQ-043) aktiv ist, muss das System an Stelle von „under construction :)“ den Abschnitt „Zitate“ anzeigen (Überschrift im Stil der Abschnittsüberschriften im Reiter „Details“, REQ-051, **Auslegung**).
 - Ohne Zitate muss das System darunter eine gestrichelte Pille „+ Zitat hinzufügen“ im Muster von REQ-052 bzw. REQ-095 anzeigen (je Stil angepasst, REQ-071).
-- Mit Zitaten muss das System die Zitate untereinander anzeigen, je mit Zitattext (vollständig), darunter „Wer sagt es?“ und „S. <Seite>“, soweit vorhanden. Sortierung aufsteigend nach Seite, Zitate ohne Seite am Ende, bei gleicher bzw. ohne Seite in der Reihenfolge des Anlegens (**Auslegung**). Dazu ein „+“ zum Hinzufügen weiterer Zitate (Lage nach der Konzeptskizze, kein Akzeptanzkriterium).
+- Mit Zitaten muss das System die Zitate untereinander anzeigen, je mit Zitattext (vollständig), darunter „Wer sagt es?“ und „S. <Seite>“, soweit vorhanden: ohne Seite nur der Sprecher, ohne Sprecher nur die Seite, ohne beides nur der Text. Sortierung aufsteigend nach Seite, Zitate ohne Seite am Ende, bei gleicher bzw. ohne Seite in der Reihenfolge des Anlegens (**Auslegung**). Dazu ein „+“ zum Hinzufügen weiterer Zitate (Lage nach der Konzeptskizze, kein Akzeptanzkriterium).
 
 **Blatt „Zitat“**
 - Antippen von „+ Zitat hinzufügen“ bzw. „+“ öffnet ein Blatt von unten (Muster REQ-063) mit: Feld „Zitat“ (mehrzeilig, ohne Längenbegrenzung wie REQ-049, Pflicht), Feld „Wer sagt es?“ (einzeilig, freier Text, optional), Feld „Seite“ (optional, ganze Zahl ≥ 1, **Auslegung**) und „Sichern“.
-- „Sichern“ speichert das Zitat dauerhaft zum Buch (ADR-0002) und schließt das Blatt. Ist das Feld „Zitat“ leer oder nur Leerzeichen, oder ist die Seite ungültig, hebt das System das betroffene Feld hervor wie in REQ-063 und speichert nichts.
+- Leere Felder zeigen Platzhaltertexte, die kein eingetragener Wert sind (wie REQ-030): „Zitat“ → „Was soll bleiben?“, „Wer sagt es?“ → „Xaden“, „Seite“ → „214“ (CEO-bestätigter Konzeptentwurf, 2026-11-24).
+- „Sichern“ speichert das Zitat dauerhaft zum Buch (ADR-0002) und schließt das Blatt. Ist das Feld „Zitat“ leer oder nur Leerzeichen, oder ist die Seite ungültig, darf das System nichts speichern und muss das betroffene Feld in Primär hervorheben wie bei der ISBN (REQ-063: kein Hinweistext, bis der Nutzer etwas im Feld ändert).
 - Schließen ohne „Sichern“ verwirft die Eingabe.
 - Antippen eines vorhandenen Zitats öffnet dasselbe Blatt, vorbefüllt, mit zusätzlich „Zitat löschen“ unter „Sichern“. „Wer sagt es?“ und „Seite“ lassen sich leeren (REQ-093).
-- „Zitat löschen“ zeigt eine Rückfrage (**Auslegung**, wie „Liste löschen“ in REQ-098). Bestätigt der Nutzer, löscht das System das Zitat und schließt das Blatt.
+- „Zitat löschen“ zeigt eine Rückfrage mit den Knöpfen „Abbrechen“ und „Löschen“. „Löschen“ löscht das Zitat und schließt das Blatt, „Abbrechen“ lässt alles unverändert.
 - Der Reiter „Figuren & Orte“ bleibt unverändert (REQ-043).
 
 ## Akzeptanzkriterien
@@ -46,7 +47,18 @@ CEO (2026-11-24, über den Scrum Master): Im Reiter „Notizbuch“ ein Abschnit
 ### AK-3 Zitat ist Pflicht
 - **Gegeben** das Blatt „Zitat“ ist geöffnet, „Zitat“ ist leer bzw. (zweiter Durchlauf) nur Leerzeichen
 - **Wenn** der Nutzer „Sichern“ antippt
-- **Dann** ist das Feld „Zitat“ hervorgehoben, das Blatt bleibt offen, und es wurde nichts gespeichert
+- **Dann** ist das Feld „Zitat“ in Primär hervorgehoben, ohne Hinweistext, das Blatt bleibt offen, und es wurde nichts gespeichert
+
+### AK-9 Platzhalter in leeren Feldern
+- **Gegeben** das Blatt „Zitat“ ist über „+ Zitat hinzufügen“ geöffnet
+- **Wenn** die leeren Felder betrachtet werden
+- **Dann** zeigen sie „Was soll bleiben?“, „Xaden“ und „214“
+- **Und** wird „Sichern“ nur mit einem Zitattext angetippt, ist weder „Xaden“ noch 214 gespeichert
+
+### AK-10 Anzeige je nach Angaben
+- **Gegeben** ein Zitat mit Sprecher „Violet“ ohne Seite und ein Zitat ohne Sprecher und ohne Seite
+- **Wenn** der Abschnitt betrachtet wird
+- **Dann** zeigt das erste nur zusätzlich „Violet“, das zweite nur den Text
 
 ### AK-4 Nur Zitat genügt
 - **Gegeben** im Blatt ist nur das Feld „Zitat“ ausgefüllt
@@ -65,9 +77,9 @@ CEO (2026-11-24, über den Scrum Master): Im Reiter „Notizbuch“ ein Abschnit
 
 ### AK-7 Löschen mit Rückfrage
 - **Gegeben** das Blatt eines vorhandenen Zitats ist geöffnet
-- **Wenn** der Nutzer „Zitat löschen“ antippt und die Rückfrage bestätigt
+- **Wenn** der Nutzer „Zitat löschen“ antippt und in der Rückfrage „Löschen“ wählt
 - **Dann** ist das Zitat entfernt, auch nach einem Neustart
-- **Und** verneint er, bleibt es erhalten
+- **Und** wählt er „Abbrechen“, bleibt es erhalten
 - **Und** war es das einzige Zitat, steht wieder „+ Zitat hinzufügen“ da
 
 ### AK-8 Schließen ohne Sichern verwirft
@@ -99,3 +111,4 @@ CEO (2026-11-24, über den Scrum Master): Im Reiter „Notizbuch“ ein Abschnit
 |---|---|---|
 | 2026-11-24 | Erstellt aus CEO-Vision und abgenommener Konzeptskizze, Entwurf | Anforderungsmanager |
 | 2026-11-24 | Vom CEO bestätigt (wörtlich): „sieht alles super aus! Danke!“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-24 | Details aus dem Konzeptentwurf übernommen, vom CEO bestätigt (wörtlich): „perfekt! Bitte auch so umsetzen“. Platzhalter „Was soll bleiben?“, „Xaden“, „214“ (AK-9 neu). Leeres Zitat wird in Primär hervorgehoben wie bei der ISBN (AK-3). Anzeige je nach Sprecher und Seite (AK-10 neu). Rückfrage mit „Abbrechen“ und „Löschen“ (AK-7). Status unverändert | Anforderungsmanager |

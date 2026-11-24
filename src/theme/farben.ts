@@ -1078,3 +1078,58 @@ export const listenFarbrollen: Record<ListenFarbrolle, FarbrubrikId> = {
 
 /** CSS-Ausdruck einer Farbrolle der Listen. */
 export const listenFarbe = (rolle: ListenFarbrolle): string => rubrikFarbe(listenFarbrollen[rolle]);
+
+/** Farbrollen der Startseite (REQ-101 bis REQ-104, REQ-106). */
+export type StartFarbrolle =
+  | 'datum'
+  | 'gruss'
+  | 'tageszeitIcon'
+  | 'abschnittsueberschrift'
+  | 'karteFlaeche'
+  | 'buchtitel'
+  | 'autor'
+  | 'leerText'
+  | 'jahreszielText'
+  | 'jahreszielFestlegen'
+  | 'zitatText'
+  | 'zitatQuelle'
+  | 'zitatZeichen';
+
+export const startFarbrollen: Record<StartFarbrolle, FarbrubrikId> = {
+  datum: 'tertiaer',
+  gruss: 'dunkelbraun',
+  // Tageszeit-Icon in der Akzentfarbe (REQ-101, AK-5: Farbrubrik „Primär“).
+  tageszeitIcon: 'primaer',
+  abschnittsueberschrift: 'tertiaer',
+  karteFlaeche: 'kartenflaeche',
+  buchtitel: 'dunkelbraun',
+  autor: 'tertiaer',
+  // Hinweis „Gerade kein Buch offen“ wie Platzhaltertexte (REQ-004) in Tertiär.
+  leerText: 'tertiaer',
+  jahreszielText: 'dunkelbraun',
+  jahreszielFestlegen: 'primaer',
+  zitatText: 'dunkelbraun',
+  zitatQuelle: 'tertiaer',
+  zitatZeichen: 'primaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle der Startseite. */
+export const startFarbe = (rolle: StartFarbrolle): string => rubrikFarbe(startFarbrollen[rolle]);
+
+/** Farbrollen des Reiters „Notizbuch“ und des Blatts „Zitat“ (REQ-105). */
+export type NotizbuchFarbrolle = 'zitatText' | 'sprecher' | 'seite' | 'trennlinie' | 'plusFlaeche' | 'plusIcon' | 'feldFehler' | 'loeschenSchrift';
+
+export const notizbuchFarbrollen: Record<NotizbuchFarbrolle, FarbrubrikId> = {
+  zitatText: 'dunkelbraun',
+  sprecher: 'tertiaer',
+  seite: 'tertiaer',
+  trennlinie: 'ghostframe',
+  plusFlaeche: 'primaer',
+  plusIcon: 'hintergrund',
+  // Leeres Zitat bzw. ungültige Seite wie das ungültige Feld im Blatt „ISBN“ (REQ-063): Primär.
+  feldFehler: 'primaer',
+  loeschenSchrift: 'primaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle des Reiters „Notizbuch“. */
+export const notizbuchFarbe = (rolle: NotizbuchFarbrolle): string => rubrikFarbe(notizbuchFarbrollen[rolle]);

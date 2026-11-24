@@ -40,7 +40,7 @@ describe('Migrationen Listen und Bandnummer (REQ-095, REQ-099)', () => {
     const db = await nodeSqlite();
     await migrieren(db, MIGRATIONEN.filter((m) => m.version <= 9));
     await db.ausfuehren("INSERT INTO buch (id, titel, status, geaendert) VALUES ('x', 'Alt', 'ungelesen', '2026-01-01T00:00:00.000Z')");
-    expect(await migrieren(db)).toBe(10);
+    expect(await migrieren(db)).toBe(11);
     const repo = new SqliteBookRepository(db);
     expect(await repo.get('x')).toEqual({ id: 'x', titel: 'Alt', status: 'ungelesen' });
     await repo.save({ id: 'x', titel: 'Alt', status: 'ungelesen', bandnummer: 2 });

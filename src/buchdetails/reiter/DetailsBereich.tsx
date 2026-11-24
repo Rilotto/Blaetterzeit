@@ -69,7 +69,7 @@ export interface ListenAbschnittProps {
 }
 
 // Überschriften wie REF-details-01/-02: normale Schreibweise, größer, Dunkelbraun (nicht Großbuchstaben wie „BEWERTUNG“).
-const ueberschriftStil: CSSProperties = {
+export const ueberschriftStil: CSSProperties = {
   ...abschnittUeberschriftStil,
   ...textstufe('abschnitt'),
   fontWeight: 600,
@@ -112,7 +112,7 @@ const gefuelltStil: CSSProperties = {
   color: detailsFarbe('pilleGefuelltSchrift'),
 };
 
-const gestricheltStil: CSSProperties = {
+export const gestricheltStil: CSSProperties = {
   ...pilleBasis,
   margin: 0,
   border: `1.5px dashed ${detailsFarbe('pilleGestricheltRahmen')}`,
