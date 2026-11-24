@@ -291,11 +291,12 @@ describe('Geöffnete Liste, Seite „Bücher“ und Menüpunkt „Bibliothek“ 
     expect(q('[data-buecherzahl]')).toHaveTextContent('3 Bücher');
     await tippe(q('[data-sortierknopf]'));
     expect(titel()).toEqual(['House of Earth and Blood', 'House of Flame and Shadow', 'House of Sky and Breath']);
-    // Plus legt eine Saga an, kein Buch.
+    // Plus öffnet die Bücherauswahl, legt weder Liste noch Buch an (REQ-098, AK-6).
     await tippe(q('[data-geoeffnete-liste] [data-liste-neu]'));
-    gib(q('[data-blatt-feld="liste-name"]'), 'Neu');
-    await tippe(q('[data-liste-anlegen]'));
-    expect((await listen.listen()).map((l) => l.name).sort()).toEqual(['Alpha', 'Crescent City', 'Neu']);
+    expect(q('[data-blatt-buecher-waehlen]')).not.toBeNull();
+    expect(q('[data-blatt-feld="liste-name"]')).toBeNull();
+    await tippe(document.querySelector('[data-blatt-hintergrund]'));
+    expect((await listen.listen()).map((l) => l.name).sort()).toEqual(['Alpha', 'Crescent City']);
     expect(await repo.list()).toHaveLength(4);
     // Umbenennen.
     await tippe(q('[data-liste-stift]'));

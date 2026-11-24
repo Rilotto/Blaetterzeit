@@ -38,6 +38,10 @@ export interface BlattFeldProps {
   onSchliessen: () => void;
   /** Weitere Elemente unter „Sichern“ (z. B. „Liste löschen“, REQ-098). */
   unten?: ReactNode;
+  /** Weitere Elemente zwischen Feld und „Sichern“ (z. B. Bildfeld „Liste bearbeiten“, REQ-100). */
+  mitte?: ReactNode;
+  /** Jede Eingabe (z. B. um den Entwurf über einen Zwischenschritt wie den Zuschnitt zu behalten). */
+  onEingabe?: (wert: string) => void;
 }
 
 /**
@@ -58,6 +62,8 @@ export default function BlattFeld({
   onSichern,
   onSchliessen,
   unten,
+  mitte,
+  onEingabe,
 }: BlattFeldProps) {
   const [eingabe, setEingabe] = useState(startWert);
   const [fehler, setFehler] = useState(false);
@@ -86,7 +92,9 @@ export default function BlattFeld({
         placeholder={platzhalter}
         value={eingabe}
         onChange={(e) => {
-          setEingabe(filtern(e.target.value));
+          const w = filtern(e.target.value);
+          setEingabe(w);
+          onEingabe?.(w);
           setFehler(false);
         }}
         onKeyDown={(e) => {
@@ -98,6 +106,7 @@ export default function BlattFeld({
           ...(fehler ? { border: `2px solid ${fortschrittFarbe('eingabeFehler')}`, color: fortschrittFarbe('eingabeFehler') } : {}),
         }}
       />
+      {mitte}
       <button type="button" data-blatt-sichern={kennung} onClick={sichern} style={sichernStil}>
         Sichern
       </button>

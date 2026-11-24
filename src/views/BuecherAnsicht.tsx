@@ -16,6 +16,7 @@ import Uebersicht from '@/buecher/Uebersicht';
 import type { Buch } from '@/domain/buch';
 import { useListen } from '@/listen/gemeinsam';
 import ListenNavigation, { type ListenZiel } from '@/listen/ListenNavigation';
+import { useListenbilder } from '@/listen/listenbild';
 import type { AnsichtRepository, BookRepository, ImageStore, ListenRepository } from '@/storage';
 import BuchDetails from './BuchDetails';
 import { abstand } from '@/theme';
@@ -136,6 +137,7 @@ export default function BuecherAnsicht({
   const [stand, setStand] = useState(0);
   const alle = useBuecher(buecher, repository, stand);
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
+  const listenbilder = useListenbilder(speicher, listen);
   const scanner = useMemo(() => barcodeScanner ?? standardBarcodeScanner(), [barcodeScanner]);
   const isbnSucheAktiv = useMemo(() => isbnSuche ?? standardIsbnSuche(), [isbnSuche]);
   const ansichtSpeicher = useMemo(() => ansichtRepository ?? standardAnsichtRepository(), [ansichtRepository]);
@@ -300,6 +302,7 @@ export default function BuecherAnsicht({
           key={art}
           art={art}
           listen={listen}
+          listenbilder={listenbilder}
           onAlleAnsehen={() => {
             setMenueOffen(false);
             setAnsicht({ art: 'listen', ziel: { art: 'uebersicht', listenArt: art } });

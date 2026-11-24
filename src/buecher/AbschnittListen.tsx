@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import CoverPlatzhalter from '@/components/CoverPlatzhalter';
-import { coverBreite } from '@/components/coverFlaeche';
+import { coverBreite, coverFlaecheStil } from '@/components/coverFlaeche';
 import { listenDerArt, type Liste, type ListenArt } from '@/domain/listen';
 import { buecherFarbe, stilRolle } from '@/theme';
 import { alleAnsehenStil, buchreiheStil } from './AbschnittNochZuLesen';
@@ -12,6 +12,8 @@ interface Props {
   art: Extract<ListenArt, 'saga' | 'sammlung'>;
   /** Alle Listen; `undefined`, solange sie geladen werden. */
   listen: Liste[] | undefined;
+  /** Listenbilder je Listen-ID (REQ-100): an Stelle des Cover-Platzhalters. */
+  listenbilder?: Record<string, string>;
   /** „Alle ansehen ›“: Listenübersicht der Art (REQ-097, AK-10). */
   onAlleAnsehen: () => void;
   /** Liste angetippt: direkt die geöffnete Liste (REQ-097, AK-8). */
@@ -24,6 +26,13 @@ const eintragStil: CSSProperties = {
   minWidth: 0,
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
+};
+
+const bildStil: CSSProperties = {
+  ...coverFlaecheStil,
+  display: 'block',
+  // Nie verzerrt (REQ-100, AK-8).
+  objectFit: 'cover',
 };
 
 const nameStil: CSSProperties = {
@@ -40,7 +49,7 @@ const nameStil: CSSProperties = {
  * „Alle ansehen ›“; mit Listen je Liste ein Cover-Platzhalter mit dem Namen an der Titelstelle (A–Z, horizontale
  * Reihe wie „Noch zu lesen“); ohne Listen der bisherige Platzhalter ohne Funktion.
  */
-export default function AbschnittListen({ art, listen, onAlleAnsehen, onListeAntippen }: Props) {
+export default function AbschnittListen({ art, listen, listenbilder, onAlleAnsehen, onListeAntippen }: Props) {
   const konf = art === 'saga' ? abschnittKonfiguration.sagas : abschnittKonfiguration.sammlungen;
   // Solange die Listen laden, steht der Platzhalter (wie ohne Listen, REQ-012).
   const eigene = listenDerArt(listen ?? [], art);
@@ -58,7 +67,11 @@ export default function AbschnittListen({ art, listen, onAlleAnsehen, onListeAnt
         <ul aria-label={konf.titel} style={buchreiheStil}>
           {eigene.map((l) => (
             <li key={l.id} data-listeneintrag={l.id} style={eintragStil} onClick={() => onListeAntippen(l)}>
-              <CoverPlatzhalter />
+              {listenbilder?.[l.id] ? (
+                <img data-listenbild={l.id} src={listenbilder[l.id]} alt="" {...stilRolle('cover')} style={bildStil} />
+              ) : (
+                <CoverPlatzhalter />
+              )}
               <p data-listentitel="" {...stilRolle('buchtitel')} style={nameStil}>
                 {l.name}
               </p>

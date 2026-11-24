@@ -1033,7 +1033,12 @@ export type ListenFarbrolle =
   | 'rueckfrageText'
   | 'neinFlaeche'
   | 'neinSchrift'
-  | 'sagaZeile';
+  | 'sagaZeile'
+  | 'auswahlFlaeche'
+  | 'auswahlRahmen'
+  | 'bildFeldFlaeche'
+  | 'bildFeldRahmen'
+  | 'bildFeldInhalt';
 
 /** Aus welcher Farbrubrik jede Farbrolle der Listen ihre Farbe bezieht (nur bestehende Rubriken). */
 export const listenFarbrollen: Record<ListenFarbrolle, FarbrubrikId> = {
@@ -1062,6 +1067,13 @@ export const listenFarbrollen: Record<ListenFarbrolle, FarbrubrikId> = {
   neinSchrift: 'dunkelbraun',
   // „Band 1 · The Empyrean“ unter dem Autor (REQ-099) wie die Autorzeile in Tertiär.
   sagaZeile: 'tertiaer',
+  // Markiertes Buch im Blatt „Bücher auswählen“ (REQ-098, AK-7): Fläche Ghost, Rahmen Primär.
+  auswahlFlaeche: 'ghost',
+  auswahlRahmen: 'primaer',
+  // Bildfeld im Blatt „Liste bearbeiten“ (REQ-100) wie das Feld „Cover hinzufügen“ (REQ-032).
+  bildFeldFlaeche: 'ghost',
+  bildFeldRahmen: 'ghostframe',
+  bildFeldInhalt: 'tertiaer',
 };
 
 /** CSS-Ausdruck einer Farbrolle der Listen. */

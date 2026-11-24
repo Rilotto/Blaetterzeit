@@ -106,7 +106,7 @@ const angehakt = (cb: HTMLElement) => (cb as HTMLInputElement).checked === true 
 function plus(root: HTMLElement = document.body) {
   const k = within(root)
     .queryAllByRole('button')
-    .filter((b) => norm(b.textContent) === '+' || /^(\+|Neue (Saga|Sammlung|Bibliothek)|Liste anlegen|Neue Liste)$/i.test(b.getAttribute('aria-label') ?? ''));
+    .filter((b) => norm(b.textContent) === '+' || /^(\+|Neue (Saga|Sammlung|Bibliothek)|Liste anlegen|Neue Liste|Bücher (hinzufügen|auswählen))$/i.test(b.getAttribute('aria-label') ?? ''));
   expect(k.length, '„+“').toBeGreaterThan(0);
   return k.at(-1)!;
 }
@@ -309,33 +309,226 @@ describe('REQ-098 Geöffnete Liste', () => {
     });
   });
 
-  describe('AK-6 Plus legt eine Liste derselben Art an', () => {
-    it('[REQ-098/AK-6] Saga „The Empyrean“ geöffnet: Plus, „Crescent City“ → Saga angelegt, kein Buch, kein Menü „Buch hinzufügen“; Liste bleibt angezeigt', async () => {
-      const w = await starte();
-      const bs = await fuenfBuecher(w);
-      const s = await liste(w, 'saga', 'The Empyrean');
-      await zuordnen(w, s, bs[0], 1);
-      await oeffne(w, s);
-      const buecherVorher = (await w.repo.list()).length;
-      await neuerName(document.body, 'Crescent City');
+  // --------------------------------------------------------------------------- Plus: Bücherauswahl (AK-6 bis AK-9)
+  /** Saga „The Empyrean“ mit „Fourth Wing“ (Band 1), außerdem „Onyx Storm“ und „Iron Flame“ gespeichert. */
+  async function empyrean(art: ListenArt = 'saga', name = 'The Empyrean') {
+    const w = await starte();
+    const fw = buch('Fourth Wing');
+    const os = buch('Onyx Storm');
+    const ir = buch('Iron Flame');
+    for (const b of [fw, os, ir]) await w.repo.save(b);
+    const l = await liste(w, art, name);
+    await zuordnen(w, l, fw, art === 'saga' ? 1 : undefined);
+    await oeffne(w, l);
+    return { w, l, fw, os, ir };
+  }
+  /** Plus der geöffneten Liste antippen und das Auswahlblatt liefern. */
+  async function auswahl() {
+    const dialogeVorher = screen.queryAllByRole('dialog').length;
+    await tippe(plus());
+    await vi.waitFor(() => expect(screen.queryAllByRole('dialog').length, 'Blatt „Bücher auswählen“').toBeGreaterThan(dialogeVorher), W);
+    await warte(40);
+    return blatt();
+  }
+  const MARKIERBAR = ['checkbox', 'option', 'switch', 'menuitemcheckbox', 'button'] as const;
+  /** Eintrag eines Buches im Auswahlblatt (Rolle mit Namen, der den Titel enthält). */
+  function eintrag(bl: HTMLElement, titel: string): HTMLElement {
+    for (const r of MARKIERBAR) {
+      const k = within(bl)
+        .queryAllByRole(r)
+        .filter((e) => (e.getAttribute('aria-label') ?? norm(e.textContent)).includes(titel) || norm(e.closest('label')?.textContent).includes(titel));
+      if (k.length) return k[0];
+    }
+    throw new Error(`kein Eintrag „${titel}“ im Auswahlblatt`);
+  }
+  const istMarkiert = (e: HTMLElement) =>
+    (e as HTMLInputElement).checked === true || ['aria-checked', 'aria-pressed', 'aria-selected'].some((a) => e.getAttribute(a) === 'true');
+  /** Titel im Blatt in Dokumentreihenfolge (nur die drei bzw. übergebenen Titel). */
+  function blattReihenfolge(bl: HTMLElement, titel: string[]) {
+    const pos = titel.map((t) => ({ t, el: textEls(t, bl)[0] ?? eintrag(bl, t) }));
+    return pos.sort((a, b) => (vor(a.el, b.el) ? -1 : 1)).map((x) => x.t);
+  }
+  const zugVon = async (w: Welt, l: Liste) => (await w.listen.zugehoerigkeiten()).filter((z) => z.listeId === l.id);
+  const DREI_TITEL = ['Fourth Wing', 'Iron Flame', 'Onyx Storm'];
+
+  describe('AK-6 Plus zeigt alle Bücher zur Auswahl, enthaltene vormarkiert', () => {
+    it('[REQ-098/AK-6] Saga „The Empyrean“: Blatt mit allen Büchern A–Z, „Fourth Wing“ markiert, die anderen nicht; ohne Suche, scrollbar', async () => {
+      await empyrean();
+      const bl = await auswahl();
+      expect(blattReihenfolge(bl, ['Onyx Storm', 'Fourth Wing', 'Iron Flame'])).toEqual(DREI_TITEL);
+      expect(istMarkiert(eintrag(bl, 'Fourth Wing'))).toBe(true);
+      expect(istMarkiert(eintrag(bl, 'Iron Flame'))).toBe(false);
+      expect(istMarkiert(eintrag(bl, 'Onyx Storm'))).toBe(false);
+      expect(within(bl).queryAllByRole('searchbox')).toHaveLength(0);
+      expect(within(bl).getByRole('button', { name: 'Sichern' })).toBeInTheDocument();
+      const scroll = Array.from(bl.querySelectorAll<HTMLElement>('*')).concat(bl).some((e) => /auto|scroll/.test(getComputedStyle(e).overflowY || getComputedStyle(e).overflow) && e.contains(textEls('Onyx Storm', bl)[0] ?? eintrag(bl, 'Onyx Storm')));
+      expect(scroll, 'scrollbare Liste').toBe(true);
+    });
+
+    it('[REQ-098/AK-6] je Buch Cover bzw. Cover-Platzhalter: drei Einträge, keine Bandnummer, keine Liste und kein Buch angelegt, kein Menü „Buch hinzufügen“', async () => {
+      const { w } = await empyrean();
+      const listenVorher = (await w.listen.listen()).length;
+      const bl = await auswahl();
+      for (const t of DREI_TITEL) expect(eintrag(bl, t), t).toBeDefined();
+      expect(textEls(/^Band \d+/, bl)).toHaveLength(0);
+      expect(within(bl).queryAllByRole('textbox')).toHaveLength(0);
       expect(screen.queryByRole('menu', { name: 'Buch hinzufügen' })).toBeNull();
       expect(screen.queryByRole('dialog', { name: 'Manueller Eintrag' })).toBeNull();
       await warte(60);
-      const ls = await w.listen.listen();
-      expect(ls.map((l) => [l.art, l.name]).sort()).toEqual([['saga', 'Crescent City'], ['saga', 'The Empyrean']]);
-      expect((await w.repo.list()).length).toBe(buecherVorher);
-      expect(ueberschrift('The Empyrean')).toBeDefined();
+      expect((await w.listen.listen()).length).toBe(listenVorher);
+      expect((await w.repo.list()).length).toBe(3);
     });
 
-    it('[REQ-098/AK-6] Variante Sammlung: Plus legt eine Sammlung an (keine Saga, kein Buch)', async () => {
-      const w = await starte();
-      await fuenfBuecher(w);
-      const l = await liste(w, 'sammlung', 'Lieblingsbücher');
-      await oeffne(w, l);
-      await neuerName(document.body, 'Sommer 2026');
+    it.each(['sammlung', 'bibliothek'] as const)('[REQ-098/AK-6] Variante %s: Plus zeigt dieselbe Auswahl (A–Z, enthaltenes Buch vormarkiert), legt keine Liste an', async (art) => {
+      const { w } = await empyrean(art, art === 'sammlung' ? 'Lieblingsbücher' : 'Zuhause');
+      const bl = await auswahl();
+      expect(blattReihenfolge(bl, ['Iron Flame', 'Onyx Storm', 'Fourth Wing'])).toEqual(DREI_TITEL);
+      expect(istMarkiert(eintrag(bl, 'Fourth Wing'))).toBe(true);
+      expect(istMarkiert(eintrag(bl, 'Onyx Storm'))).toBe(false);
+      expect(within(bl).queryAllByRole('textbox')).toHaveLength(0);
       await warte(60);
-      expect((await w.listen.listen()).find((x) => x.name === 'Sommer 2026')?.art).toBe('sammlung');
-      expect(await w.listen.zugehoerigkeiten()).toEqual([]);
+      expect((await w.listen.listen()).length).toBe(1);
+    });
+
+    it('[REQ-098/AK-6] Grenzfall: Liste ohne Bücher → alle Bücher unmarkiert; Buch in einer anderen Liste ist hier nicht vormarkiert', async () => {
+      const w = await starte();
+      const [a, b] = [buch('Alpha'), buch('Beta')];
+      for (const x of [a, b]) await w.repo.save(x);
+      const andere = await liste(w, 'saga', 'Andere');
+      await zuordnen(w, andere, a, 1);
+      const leer = await liste(w, 'saga', 'Leer');
+      await oeffne(w, leer);
+      const bl = await auswahl();
+      expect(istMarkiert(eintrag(bl, 'Alpha'))).toBe(false);
+      expect(istMarkiert(eintrag(bl, 'Beta'))).toBe(false);
+    });
+  });
+
+  describe('AK-7 Markieren und Entmarkieren', () => {
+    it('[REQ-098/AK-7] „Iron Flame“, „Onyx Storm“, nochmals „Onyx Storm“ → „Fourth Wing“ und „Iron Flame“ markiert, „Onyx Storm“ nicht', async () => {
+      await empyrean();
+      const bl = await auswahl();
+      await tippe(eintrag(bl, 'Iron Flame'));
+      await tippe(eintrag(bl, 'Onyx Storm'));
+      expect(istMarkiert(eintrag(blatt(), 'Onyx Storm'))).toBe(true);
+      await tippe(eintrag(blatt(), 'Onyx Storm'));
+      expect(istMarkiert(eintrag(blatt(), 'Fourth Wing'))).toBe(true);
+      expect(istMarkiert(eintrag(blatt(), 'Iron Flame'))).toBe(true);
+      expect(istMarkiert(eintrag(blatt(), 'Onyx Storm'))).toBe(false);
+    });
+
+    it('[REQ-098/AK-7] vormarkiertes Buch entmarkieren und wieder markieren; Markieren allein speichert nichts', async () => {
+      const { w, l, fw } = await empyrean();
+      const bl = await auswahl();
+      await tippe(eintrag(bl, 'Fourth Wing'));
+      expect(istMarkiert(eintrag(blatt(), 'Fourth Wing'))).toBe(false);
+      await tippe(eintrag(blatt(), 'Iron Flame'));
+      await warte(60);
+      expect((await zugVon(w, l)).map((z) => z.buchId)).toEqual([fw.id]);
+      await tippe(eintrag(blatt(), 'Fourth Wing'));
+      expect(istMarkiert(eintrag(blatt(), 'Fourth Wing'))).toBe(true);
+    });
+  });
+
+  describe('AK-8 Sichern übernimmt Hinzufügen und Herausnehmen', () => {
+    it('[REQ-098/AK-8] „Iron Flame“ markiert, „Fourth Wing“ entmarkiert, Sichern → nur „Iron Flame“, „1 Buch“, Blatt zu; auch nach Neustart; „Fourth Wing“ bleibt als Buch', async () => {
+      const { l, fw, ir } = await empyrean();
+      const bl = await auswahl();
+      await tippe(eintrag(bl, 'Iron Flame'));
+      await tippe(eintrag(blatt(), 'Fourth Wing'));
+      await sichern(blatt());
+      await vi.waitFor(() => expect(screen.queryAllByRole('dialog')).toHaveLength(0), W);
+      await vi.waitFor(() => expect(anzahlText()).toEqual(['1 Buch']), W);
+      expect(textEls('Iron Flame').length).toBeGreaterThan(0);
+      expect(textEls('Fourth Wing')).toHaveLength(0);
+      await warte(60);
+      cleanup();
+      const w2 = await starte();
+      expect((await zugVon(w2, l)).map((z) => z.buchId)).toEqual([ir.id]);
+      expect(await w2.repo.get(fw.id)).toBeDefined();
+      expect((await w2.repo.list()).length).toBe(3);
+      await oeffne(w2, l);
+      expect(anzahlText()).toEqual(['1 Buch']);
+      expect(textEls('Iron Flame').length).toBeGreaterThan(0);
+    });
+
+    it('[REQ-098/AK-8] Mehrfachauswahl: zwei Bücher hinzufügen → „3 Bücher“; enthaltenes Buch behält Band 1, neues ohne Scan-Band bekommt keinen Band', async () => {
+      const { w, l, fw, os, ir } = await empyrean();
+      const bl = await auswahl();
+      await tippe(eintrag(bl, 'Iron Flame'));
+      await tippe(eintrag(blatt(), 'Onyx Storm'));
+      await sichern(blatt());
+      await vi.waitFor(() => expect(anzahlText()).toEqual(['3 Bücher']), W);
+      await warte(60);
+      const zug = await zugVon(w, l);
+      expect(zug.map((z) => z.buchId).sort()).toEqual([fw.id, os.id, ir.id].sort());
+      expect(zug.find((z) => z.buchId === fw.id)?.band).toBe(1);
+      expect(zug.find((z) => z.buchId === ir.id)?.band).toBeUndefined();
+      expect(zug.find((z) => z.buchId === os.id)?.band).toBeUndefined();
+    });
+
+    it('[REQ-098/AK-8] Bandnummer aus dem Scan: neu hinzugefügtes Buch mit Scan-Band 3 erhält in der Saga Band 3', async () => {
+      const w = await starte();
+      const gescannt = buch('Onyx Storm', { bandnummer: 3 });
+      await w.repo.save(gescannt);
+      const s = await liste(w, 'saga', 'The Empyrean');
+      await oeffne(w, s);
+      await tippe(eintrag(await auswahl(), 'Onyx Storm'));
+      await sichern(blatt());
+      await vi.waitFor(() => expect(anzahlText()).toEqual(['1 Buch']), W);
+      await warte(60);
+      expect(await zugVon(w, s)).toEqual([{ listeId: s.id, buchId: gescannt.id, band: 3 }]);
+    });
+
+    it('[REQ-098/AK-8] Grenzfall: alle entmarkieren und sichern → Liste bleibt bestehen, leer, Bücher bleiben', async () => {
+      const { w, l } = await empyrean('sammlung', 'Lieblingsbücher');
+      await tippe(eintrag(await auswahl(), 'Fourth Wing'));
+      await sichern(blatt());
+      await vi.waitFor(() => expect(screen.queryAllByRole('dialog')).toHaveLength(0), W);
+      await warte(60);
+      expect(await zugVon(w, l)).toEqual([]);
+      expect((await w.listen.listen()).map((x) => x.id)).toEqual([l.id]);
+      expect((await w.repo.list()).length).toBe(3);
+      expect(ueberschrift('Lieblingsbücher')).toBeDefined();
+    });
+
+    it('[REQ-098/AK-8] Sichern ohne Änderung lässt Zugehörigkeit und Band unverändert; andere Listen bleiben unberührt', async () => {
+      const { w, l, fw, ir } = await empyrean();
+      const andere = await liste(w, 'sammlung', 'Andere');
+      await zuordnen(w, andere, ir);
+      await sichern(await auswahl());
+      await vi.waitFor(() => expect(screen.queryAllByRole('dialog')).toHaveLength(0), W);
+      await warte(60);
+      expect(await zugVon(w, l)).toEqual([{ listeId: l.id, buchId: fw.id, band: 1 }]);
+      expect(await zugVon(w, andere)).toEqual([{ listeId: andere.id, buchId: ir.id }]);
+    });
+  });
+
+  describe('AK-9 Schließen ohne Sichern verwirft', () => {
+    it('[REQ-098/AK-9] Markierungen geändert, Blatt geschlossen → Saga enthält unverändert nur „Fourth Wing“ (Band 1), auch nach Neustart', async () => {
+      const { l, fw } = await empyrean();
+      const bl = await auswahl();
+      await tippe(eintrag(bl, 'Iron Flame'));
+      await tippe(eintrag(blatt(), 'Fourth Wing'));
+      await schliessen(blatt());
+      await vi.waitFor(() => expect(screen.queryAllByRole('dialog')).toHaveLength(0), W);
+      expect(anzahlText()).toEqual(['1 Buch']);
+      expect(textEls('Fourth Wing').length).toBeGreaterThan(0);
+      expect(textEls('Iron Flame')).toHaveLength(0);
+      await warte(60);
+      cleanup();
+      const w2 = await starte();
+      expect(await zugVon(w2, l)).toEqual([{ listeId: l.id, buchId: fw.id, band: 1 }]);
+    });
+
+    it('[REQ-098/AK-9] nach Verwerfen öffnet das Plus erneut mit dem gespeicherten Stand (nur „Fourth Wing“ markiert)', async () => {
+      await empyrean('bibliothek', 'Zuhause');
+      await tippe(eintrag(await auswahl(), 'Onyx Storm'));
+      await schliessen(blatt());
+      await vi.waitFor(() => expect(screen.queryAllByRole('dialog')).toHaveLength(0), W);
+      const bl = await auswahl();
+      expect(istMarkiert(eintrag(bl, 'Fourth Wing'))).toBe(true);
+      expect(istMarkiert(eintrag(bl, 'Onyx Storm'))).toBe(false);
     });
   });
 

@@ -8,6 +8,7 @@ import BuchDetails from '@/views/BuchDetails';
 import { useListen } from './gemeinsam';
 import ListeAnsicht from './ListeAnsicht';
 import Listenuebersicht from './Listenuebersicht';
+import { useListenbilder } from './listenbild';
 
 /** Ein Schritt der Listen-Navigation (REQ-097, REQ-098). */
 export type ListenZiel =
@@ -45,6 +46,7 @@ export default function ListenNavigation({
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
   const ansichtSpeicher = useMemo(() => ansichtRepository ?? standardAnsichtRepository(), [ansichtRepository]);
   const { listen, zug, neuLaden } = useListen(listenRepo);
+  const listenbilder = useListenbilder(speicher, listen);
   const [verlauf, setVerlauf] = useState<ListenZiel[]>([start]);
   const [stand, setStand] = useState(0);
   const [buecher, setBuecher] = useState<Buch[] | undefined>(undefined);
@@ -119,6 +121,9 @@ export default function ListenNavigation({
         frontcover={cover}
         repository={listenRepo}
         ansichtRepository={ansichtSpeicher}
+        bildspeicher={speicher}
+        listenbild={listenbilder[liste.id]}
+        bildquelle={bildquelle}
         onGeaendert={neuLaden}
         onGeloescht={() =>
           // Danach die Listenübersicht dieser Art (REQ-098, AK-4).
@@ -143,6 +148,7 @@ export default function ListenNavigation({
       listen={listen}
       zug={zug}
       buecher={buecher}
+      listenbilder={listenbilder}
       repository={listenRepo}
       onGeaendert={neuLaden}
       onListeOeffnen={(l) => oeffnen({ art: 'liste', listeId: l.id })}

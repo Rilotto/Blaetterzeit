@@ -167,3 +167,32 @@ export function buecherDerListeSortiert(
   const nachBand = alphabetisch(mitBand).sort((a, b) => band.get(a.id)! - band.get(b.id)!);
   return [...nachBand, ...alphabetisch(ohneBand)];
 }
+
+/** Bücher A–Z nach Titel für das Blatt „Bücher auswählen“ (REQ-098, AK-6). */
+export const buecherAZ = (buecher: readonly Buch[]): Buch[] => alphabetisch([...buecher]);
+
+/** Vormarkierung im Blatt „Bücher auswählen“: die Bücher, die schon in der Liste sind (REQ-098, AK-6). */
+export const buecherInListe = (zug: readonly Zugehoerigkeit[], listeId: string): Set<string> =>
+  new Set(zug.filter((z) => z.listeId === listeId).map((z) => z.buchId));
+
+/**
+ * Änderungen beim „Sichern“ im Blatt „Bücher auswählen“ (REQ-098, AK-8): neu markierte Bücher werden aufgenommen
+ * (bei Sagas mit der Bandnummer aus dem Barcode-Scan, REQ-099, sonst ohne Band), entmarkierte vorher enthaltene
+ * herausgenommen. Bereits enthaltene, weiter markierte Bücher bleiben unverändert (Bandnummer bleibt).
+ */
+export function auswahlAenderungen(
+  liste: Pick<Liste, 'id' | 'art'>,
+  zug: readonly Zugehoerigkeit[],
+  markiert: ReadonlySet<string>,
+  buecher: readonly Buch[],
+): { aufnehmen: Zugehoerigkeit[]; herausnehmen: string[] } {
+  const vorher = buecherInListe(zug, liste.id);
+  const aufnehmen: Zugehoerigkeit[] = [];
+  for (const b of buecher) {
+    if (!markiert.has(b.id) || vorher.has(b.id)) continue;
+    const band = liste.art === 'saga' && istBandnummer(b.bandnummer) ? b.bandnummer : undefined;
+    aufnehmen.push(band === undefined ? { listeId: liste.id, buchId: b.id } : { listeId: liste.id, buchId: b.id, band });
+  }
+  const herausnehmen = [...vorher].filter((id) => !markiert.has(id));
+  return { aufnehmen, herausnehmen };
+}

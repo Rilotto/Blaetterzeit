@@ -8,6 +8,7 @@ import type { ListenRepository } from '@/storage';
 import { listenFarbe, textstufe, kartenSchatten, bildschirmrandPx, abstand, stilRolle } from '@/theme';
 import { NeueListeEingabe } from './BlattZuListe';
 import { BandFeld, Haekchen, PlusSchaltflaeche } from './gemeinsam';
+import { ListenbildOderPlatzhalter } from './Listenbild';
 
 interface Props {
   art: ListenArt;
@@ -17,6 +18,8 @@ interface Props {
   zug: Zugehoerigkeit[];
   /** Vorhandene Bücher (für die Anzahl); ohne Angabe zählen alle Zugehörigkeiten. */
   buecher?: Buch[];
+  /** Listenbilder je Listen-ID (REQ-100); ohne Bild ein Platzhalter gleicher Größe. */
+  listenbilder?: Record<string, string>;
   repository: ListenRepository;
   /** Nach jeder Änderung: Listen neu laden. */
   onGeaendert: () => Promise<void> | void;
@@ -81,7 +84,7 @@ const nameKnopfStil: CSSProperties = {
  * Listenübersicht einer Art (REQ-097): alle Listen A–Z mit Name und Anzahl der Bücher, „+“ für eine neue Liste;
  * mit Buch im Kontext zusätzlich Häkchen (sofort wirksam) und bei Sagas das Feld „Band“.
  */
-export default function Listenuebersicht({ art, buch, listen, zug, buecher, repository, onGeaendert, onListeOeffnen, onZurueck }: Props) {
+export default function Listenuebersicht({ art, buch, listen, zug, buecher, listenbilder, repository, onGeaendert, onListeOeffnen, onZurueck }: Props) {
   const texte = listenArt(art);
   const [neuOffen, setNeuOffen] = useState(false);
   const [baende, setBaende] = useState<Record<string, string>>({});
@@ -157,6 +160,7 @@ export default function Listenuebersicht({ art, buch, listen, zug, buecher, repo
             return (
               <li key={l.id} data-liste-zeile={l.id} {...stilRolle('eintrag')} style={zeileStil(i === alle.length - 1)}>
                 {buch ? <Haekchen listeId={l.id} name={l.name} an={an} onUmschalten={() => umschalten(l)} /> : null}
+                <ListenbildOderPlatzhalter listeId={l.id} bild={listenbilder?.[l.id]} />
                 <button type="button" data-liste-oeffnen={l.id} onClick={() => onListeOeffnen(l)} style={nameKnopfStil}>
                   <span data-liste-name="" style={{ ...textstufe('text'), fontWeight: 600, color: listenFarbe('name') }}>
                     {l.name}
