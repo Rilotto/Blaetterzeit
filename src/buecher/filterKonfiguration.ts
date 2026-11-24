@@ -54,3 +54,6 @@ export const uebersichtKonfiguration: Record<string, UebersichtDefinition> = {
   gerade_am_lesen: { listenname: 'Gerade am Lesen', vonSeiteOeffnen: true },
   noch_zu_lesen: { listenname: 'Noch zu lesen', vonSeiteOeffnen: false },
 };
+
+/** Überschrift des Bereichs der Startseite mit den Büchern *am lesen* (REQ-102): Name des passenden Filters. */
+export const geradeAmLesenTitel: string = filterKonfiguration.find((f) => f.id === 'gerade_am_lesen')?.name ?? '';

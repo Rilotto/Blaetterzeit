@@ -7,6 +7,7 @@ import Flamme from '@/buchdetails/Flamme';
 import Fortschritt from '@/buchdetails/Fortschritt';
 import { ZitatQuelle } from '@/buchdetails/reiter/Notizbuch';
 import type { ReiterId } from '@/buchdetails/reiter/rezension';
+import { geradeAmLesenTitel } from '@/buecher/filterKonfiguration';
 import { standardBildspeicher, standardProfilRepository, standardRepository, standardZitatRepository } from '@/buecher/buchQuelle';
 import CoverPlatzhalter from '@/components/CoverPlatzhalter';
 import { coverFlaecheStil } from '@/components/coverFlaeche';
@@ -332,8 +333,8 @@ export default function StartAnsicht({
         </div>
       </header>
 
-      <section aria-label="Gerade am Lesen" data-start-abschnitt="lesen" style={abschnittStil}>
-        <h2 style={ueberschriftStil}>Gerade am Lesen</h2>
+      <section aria-label={geradeAmLesenTitel} data-start-abschnitt="lesen" style={abschnittStil}>
+        <h2 style={ueberschriftStil}>{geradeAmLesenTitel}</h2>
         {buecher === undefined ? null : lesend.length === 0 ? (
           <p data-start-leer="" style={leerStil}>
             Gerade kein Buch offen
