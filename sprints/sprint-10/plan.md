@@ -36,3 +36,8 @@ Branch: sprint-10/listen-und-felder, abgezweigt von main (nach dem Merge von Spr
 - Tester: Akzeptanztests REQ-091 bis 094 geschrieben. REQ-095 bis 099 und die Anpassung der Alttests stehen noch aus.
 - Weiter: Entwickler Teil B fertigstellen → Tester Tests 095–099 und Alttests → Gegenprobe → CI → Prototyp.
 - Der WIP-Commit ist nicht CI-grün und darf nicht gemergt werden.
+
+## Erweiterung 2026-11-24 (CEO bestätigt: „passt für mich :)“)
+- REQ-098 geändert: Das Plus in einer geöffneten Liste (alle drei Arten) öffnet ein Blatt mit allen Büchern A–Z. Bücher, die schon in der Liste sind, sind vormarkiert. Übernommen wird erst mit „Sichern“.
+- REQ-100 neu: Listenbild im Cover-Format. Es wird im Blatt „Liste bearbeiten“ gesetzt und erscheint in der geöffneten Liste, in der Listenübersicht und auf der Seite „Bücher“.
+- Prototyp erst auf ausdrückliche Bitte. Bis dahin nur Commit und CI.

@@ -108,7 +108,7 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkte 4 und 7: Je Liste werden Name
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Geöffnete Liste, Umbenennen und Löschen (REQ-098).
-- Individuelle „Titelbilder“ für Listen (CEO: „später“).
+- Individuelle „Titelbilder“ für Listen (CEO: „später“). Inzwischen in REQ-100 (Entwurf) festgelegt.
 
 ## Qualitätsanforderungen
 
@@ -120,6 +120,7 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkte 4 und 7: Je Liste werden Name
 - **REQ-009, REQ-010** (Muster für Reihe, Platzhalter und Titelstelle).
 - **REQ-002:** Die Zielansicht des Menüpunkts „Bibliothek“ ist dort nicht definiert („under construction :)“). Sie wird hier festgelegt.
 - **REQ-095, REQ-096, REQ-098, REQ-013, REQ-036, ADR-0002.**
+- **REQ-100 (Entwurf):** Listenbild links neben dem Namen in der Listenübersicht (ohne Bild ein Platzhalter) und an Stelle des Cover-Platzhalters auf der Seite „Bücher“.
 
 ## Offene Fragen
 
