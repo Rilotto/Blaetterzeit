@@ -41,3 +41,15 @@ Branch: sprint-10/listen-und-felder, abgezweigt von main (nach dem Merge von Spr
 - REQ-098 geändert: Das Plus in einer geöffneten Liste (alle drei Arten) öffnet ein Blatt mit allen Büchern A–Z. Bücher, die schon in der Liste sind, sind vormarkiert. Übernommen wird erst mit „Sichern“.
 - REQ-100 neu: Listenbild im Cover-Format. Es wird im Blatt „Liste bearbeiten“ gesetzt und erscheint in der geöffneten Liste, in der Listenübersicht und auf der Seite „Bücher“.
 - Prototyp erst auf ausdrückliche Bitte. Bis dahin nur Commit und CI.
+
+## Erweiterung 2026-11-24, Teil C (CEO: „b“ → in Sprint 10 aufnehmen)
+- REQ-101 Startseite: Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit mit Namen und Icon
+- REQ-102 „Gerade am Lesen“: alle Bücher „am Lesen“, Fortschritt direkt eintragen; ohne Buch der Hinweis „Gerade kein Buch offen“
+- REQ-103 „Diese Woche“ und Lesesträhne
+- REQ-104 Jahresziel: Kachel und Blatt
+- REQ-105 Zitate im Reiter „Notizbuch“
+- REQ-106 Zitat des Tages
+- REQ-107 Name im Profil, Abschnitt „Du“
+- Angepasster Alt-REQ: REQ-043 (AK-3, AK-8)
+- Gegenprobe minimal, höchstens 4 Fehler: Zitat speichern/löschen, Zitat des Tages stabil je Tag, Jahresziel-Zählung, Tageszeit-Grenzen
+- Prototyp danach für den gesamten Sprint 10 (beauftragt)

@@ -33,3 +33,4 @@ Gepflegt vom Anforderungsmanager. Hier stehen Wünsche, die der CEO ausdrücklic
 
 - 2026-11-09 (Scrum Master): REQ-016 um die CEO-Entscheidung ergänzen, dass der Hinweis „Kamera nicht verfügbar“ auch bei verweigertem Zugriff erscheint. Zitat: „Ja, der Hinweis soll weiterhin bestehen.“
 - 2026-11-09 (Scrum Master): Vor dem ersten Einfrieren die Geräteprüfung auf dem S23 Ultra durchführen: Kamera, durchsichtiger Hintergrund, Neustart. Außerdem den Text von REQ-006 bereinigen („Bereich bleibt leer“) und eine Fehlerbehandlung für das Laden der Bücher ergänzen.
+| 2026-11-24 | Verknüpfung „Wer sagt es?“ (Zitate) mit dem Reiter „Figuren & Orte“ | „gern später mit dem reiter figuren und orte verknüpfen“ | REQ-105 |

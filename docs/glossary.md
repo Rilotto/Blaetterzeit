@@ -71,6 +71,10 @@ Gepflegt vom Anforderungsmanager. Im Code werden die englischen Bezeichner verwe
 | Saga | – | Liste der Art „Buchreihe“ (z. B. „The Empyrean“). Je Buch optional mit Bandnummer, sortierbar A–Z oder nach Bänden (Entwurf, REQ-095 bis REQ-099). |
 | Sammlung | – | Frei benannte Liste, z. B. „Meine Lieblingsbücher“ (Entwurf, REQ-095). |
 | Bandnummer | – | Optionale Nummer eines Buches innerhalb einer Saga (ganze Zahl ≥ 1, Auslegung). Wird in den Buchdetails als „Band 1 · The Empyrean“ unter dem Autor angezeigt (Entwurf, REQ-096, REQ-099). |
+| Startseite | – | Zielansicht des Menüpunkts „Start“: Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon, „Gerade am Lesen“, „Diese Woche“ mit Lesesträhne, Jahresziel, „Zitat des Tages“ (Entwurf, REQ-101 bis REQ-104, REQ-106). |
+| Jahresziel | – | Je Kalenderjahr optional festgelegte Zahl zu lesender Bücher. Die Startseite zeigt „X von Y Büchern <Jahr>“, X wird gezählt wie „Bücher“ in der Statistik (Entwurf, REQ-104). |
+| Zitat | – | Je Buch im Reiter „Notizbuch“ gespeicherter Text (Pflicht) mit optional „Wer sagt es?“ und Seite, sortiert nach Seite (Entwurf, REQ-105). |
+| Zitat des Tages | – | Je Kalendertag eines der gespeicherten Zitate aller Bücher, auf der Startseite mit Buchtitel und Seite. Ohne Zitate entfällt die Kachel (Entwurf, REQ-106). |
 | Listenbild | – | Optionales, vom Nutzer hinterlegtes Bild einer Liste, immer im Cover-Format. Hinterlegt wird es im Blatt „Liste bearbeiten“ über Kamera oder Galerie mit Zuschnitt. Angezeigt wird es links neben dem Namen in geöffneter Liste und Listenübersicht sowie an Stelle des Cover-Platzhalters auf der Seite „Bücher“ (Entwurf, REQ-100). |
 | Listenübersicht | – | Flächendeckendes Fenster mit allen Listen einer Art, je mit Name und Anzahl der Bücher, „+“ für eine neue Liste. Aus den Buchdetails geöffnet zusätzlich mit Häkchen je Liste (Entwurf, REQ-097). |
 | Theme | `Theme` | Veraltet, abgelöst durch „Farbdesign“ und „Schriftwahl“ (REQ-001 ersetzt durch REQ-068). |
