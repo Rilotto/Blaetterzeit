@@ -22,3 +22,8 @@ Die CI baut die vorherige und die neue Version, signiert beide mit demselben Tes
 - REQ-068 erweitert: neue Designs „Minztraube“ (hell) und „Traubennacht“ (dunkel)
 - REQ-110 neu: Pillen „Hell“ und „Dunkel“ in der Farbauswahl
 - Gegenprobe höchstens 1 Fehler: Auswahl des Designs bleibt gespeichert
+
+## Gesammelte Punkte für den nächsten Durchlauf
+- BUG (High), 2026-11-25: Buchdetails, Kennzahlen-Box: Die Beschriftung „Längster Streak für dieses Buch“ läuft über die Box hinaus und überlappt „gelesen“.
+  - Beschriftung ändern in „Längste Serie“ (REQ-109). Wortlaut CEO: „Ändern wir den Text bitte unter der Flamme zu Längste Serie. Wenn der Text nicht in die Boxen passt, sollen sinnvolle Zeilenumbrüche mit Silbentrennung entstehen.“
+  - Auslegung: Der Umbruch mit Silbentrennung (lang="de", hyphens:auto) gilt für alle Beschriftungen in Kennzahlen-Boxen der App (Buchdetails, Statistik-Kacheln, Startseite). Text läuft nie über die Box hinaus.
