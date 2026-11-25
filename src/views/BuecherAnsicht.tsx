@@ -295,6 +295,8 @@ export default function BuecherAnsicht({
         frontcover={frontcover}
         onBuchAntippen={oeffnen}
         onAlleAnsehen={() => uebersichtOeffnen('noch_zu_lesen')}
+        // Platzhalter öffnet dasselbe Menü wie die Plus-Schaltfläche (REQ-011 AK-3, REQ-029).
+        onLeereListeAntippen={() => setMenueOffen(true)}
       />
       {/* Sagas und Sammlungen (REQ-012, REQ-097): „Alle ansehen ›“ öffnet die Listenübersicht, eine Liste direkt die Liste. */}
       {(['saga', 'sammlung'] as const).map((art) => (

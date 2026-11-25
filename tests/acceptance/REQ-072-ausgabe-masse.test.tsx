@@ -139,9 +139,9 @@ describe('REQ-072 Maße', () => {
   describe('AK-2 Anzeige', () => {
     const wertEl = (d: ParentNode) => zeile(d, 'masse').querySelector<HTMLElement>('[data-zeile-wert]')!;
     it.each([
-      [{ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 }, 'ca. 12,0 × 19,0 × 2,4 cm'],
+      [{ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 }, 'ca. 13,8 × 21,8 × 2,4 cm'],
       [{ format: 'print', unterformat: 'hardcover', seitenanzahl: 400 }, 'ca. 14,8 × 21,0 × 2,8 cm'],
-      [{}, 'ca. 12,0 × 19,0 × 2,5 cm'],
+      [{}, 'ca. 13,8 × 21,8 × 2,5 cm'],
     ] as [Partial<Buch>, string][])('[REQ-072/AK-2] ohne Maße %j → Vorschlag „%s“, kursiv/abgeschwächt, nichts gespeichert', async (m, soll) => {
       const { d, id } = await mitBuch(buch(m));
       expect(wert(d)).toBe(soll);
@@ -184,7 +184,7 @@ describe('REQ-072 Maße', () => {
       );
       expect(labels).toEqual(['BREITE', 'HÖHE', 'DICKE']);
       for (const f of ['breite', 'hoehe', 'dicke'] as const) expect(feld(f).getAttribute('inputmode')).toBe('decimal');
-      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['12,0', '19,0', '2,4']);
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['13,8', '21,8', '2,4']);
       expect(norm(b.querySelector('[data-masse-hinweis]')?.textContent)).toBe('in Zentimetern');
       expect(norm(b.querySelector('[data-masse-sichern]')?.textContent)).toBe('Sichern');
     });
@@ -266,7 +266,7 @@ describe('REQ-072 Maße', () => {
       await gib('hoehe', '');
       await sichern();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      expect(wert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      expect(wert(d)).toBe('ca. 13,8 × 21,8 × 2,4 cm');
       const g = await gespeichert(id);
       expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([undefined, undefined, undefined]);
     });
@@ -356,12 +356,12 @@ describe('REQ-072 Maße', () => {
       const m = await oeffneManuell();
       const ids = Array.from(m.querySelectorAll('[data-ausgabe-zeile]')).map((z) => z.getAttribute('data-ausgabe-zeile'));
       expect(ids[ids.indexOf('format') + 1]).toBe('masse');
-      expect(wert(m)).toBe('ca. 12,0 × 19,0 × 2,5 cm');
+      expect(wert(m)).toBe('ca. 13,8 × 21,8 × 2,5 cm');
       fireEvent.change(meFeld('Titel'), { target: { value: 'Maßbuch' } });
       fireEvent.change(meFeld('Seiten'), { target: { value: '300' } });
-      await vi.waitFor(() => expect(wert(m)).toBe('ca. 12,0 × 19,0 × 1,9 cm'), W);
+      await vi.waitFor(() => expect(wert(m)).toBe('ca. 13,8 × 21,8 × 1,9 cm'), W);
       await oeffne(m);
-      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['12,0', '19,0', '1,9']);
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['13,8', '21,8', '1,9']);
       await gib('breite', '12');
       await gib('hoehe', '18,5');
       await gib('dicke', '4.2');
@@ -384,7 +384,7 @@ describe('REQ-072 Maße', () => {
       const m = await oeffneManuell();
       fireEvent.change(meFeld('Titel'), { target: { value: 'Ohne Maß' } });
       fireEvent.change(meFeld('Seiten'), { target: { value: '400' } });
-      await vi.waitFor(() => expect(wert(m)).toBe('ca. 12,0 × 19,0 × 2,4 cm'), W);
+      await vi.waitFor(() => expect(wert(m)).toBe('ca. 13,8 × 21,8 × 2,4 cm'), W);
       await tippe(within(me()!).getByRole('button', { name: 'Hinzufügen' }));
       await vi.waitFor(() => expect(me()).toBeNull(), W);
       const neu = (await w.repo.list()).find((b) => b.titel === 'Ohne Maß')!;
@@ -402,7 +402,7 @@ describe('REQ-072 Maße', () => {
       expect(fehler('dicke')).toBe(true);
       await tippe(blatt()!.querySelector('[aria-label="Schließen"]')!);
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      expect(wert(me()!)).toBe('ca. 12,0 × 19,0 × 2,5 cm');
+      expect(wert(me()!)).toBe('ca. 13,8 × 21,8 × 2,5 cm');
       // Blatt sauber schließen (hält den Verlauf der Zurück-Taste für die Folgetests sauber)
       await tippe(within(me()!).getByRole('button', { name: 'Schließen' }));
       await vi.waitFor(() => expect(me()).toBeNull(), W);
@@ -452,9 +452,9 @@ describe('REQ-072 Maße', () => {
 
     it('[REQ-072/AK-8] keine Quelle liefert Maße → nichts übernommen/gespeichert; Zeile und Blatt zeigen den Schätz-Vorschlag', async () => {
       const w = await scanneUndTippe([{ quelle: 'openlibrary', angaben: { titel: 'Ohne', isbn: ISBN, seitenanzahl: 400 } }]);
-      expect(wert(me()!)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      expect(wert(me()!)).toBe('ca. 13,8 × 21,8 × 2,4 cm');
       await oeffne(me()!);
-      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['12,0', '19,0', '2,4']);
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['13,8', '21,8', '2,4']);
       await tippe(blatt()!.querySelector('[aria-label="Schließen"]')!);
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
       await tippe(within(me()!).getByRole('button', { name: 'Hinzufügen' }));
@@ -520,7 +520,7 @@ describe('REQ-072 Maße', () => {
 
     it('[REQ-072/AK-9] Taschenbuch ohne Maße → Format auf Hardcover ändern und sichern → Zeile zeigt Hardcover-Schätzwerte, nichts gespeichert', async () => {
       const { d, id } = await mitBuch(tb400());
-      expect(wert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      expect(wert(d)).toBe('ca. 13,8 × 21,8 × 2,4 cm');
       await formatAufHardcover(d);
       await vi.waitFor(() => expect(wert(d)).toBe('ca. 14,8 × 21,0 × 2,8 cm'), W);
       await oeffne(d);
@@ -537,7 +537,7 @@ describe('REQ-072 Maße', () => {
       else if (weg === 'Zurück-Taste') await zurueckTaste();
       else await herunterziehen();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      expect(wert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      expect(wert(d)).toBe('ca. 13,8 × 21,8 × 2,4 cm');
       const g = await gespeichert(id);
       expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([undefined, undefined, undefined]);
     });
@@ -547,21 +547,21 @@ describe('REQ-072 Maße', () => {
       await oeffne(d);
       await sichern();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      await vi.waitFor(() => expect(wert(d)).toBe('12,0 × 19,0 × 2,4 cm'), W);
+      await vi.waitFor(() => expect(wert(d)).toBe('13,8 × 21,8 × 2,4 cm'), W);
       const w = zeile(d, 'masse').querySelector<HTMLElement>('[data-zeile-wert]')!;
       expect(w.getAttribute('data-zeile-vorschlag')).not.toBe('true');
       expect(getComputedStyle(w).fontStyle).not.toBe('italic');
       const g = await gespeichert(id);
-      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([120, 190, 24]);
+      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([138, 218, 24]);
     });
 
     it('[REQ-072/AK-9] nach dem Sichern folgen die Werte nicht mehr dem Format', async () => {
       const { d } = await mitBuch(tb400());
       await oeffne(d);
       await sichern();
-      await vi.waitFor(() => expect(wert(d)).toBe('12,0 × 19,0 × 2,4 cm'), W);
+      await vi.waitFor(() => expect(wert(d)).toBe('13,8 × 21,8 × 2,4 cm'), W);
       await formatAufHardcover(d);
-      expect(wert(d)).toBe('12,0 × 19,0 × 2,4 cm');
+      expect(wert(d)).toBe('13,8 × 21,8 × 2,4 cm');
     });
   });
 });

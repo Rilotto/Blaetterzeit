@@ -36,7 +36,7 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 | Position | Name | standardmäßig aktiv | Filterlogik |
 |---|---|---|---|
 | 1 | Alle | nein | alle Bücher, unabhängig vom Lesestatus (REQ-039) |
-| 2 | Für dich | ja | vorerst: Seite „Bücher“ mit ihren Abschnitten; Personalisierung später (To-do) |
+| 2 | Für dich | ja | Seite „Bücher“ mit den Abschnitten, die der Nutzer im Blatt „„Für dich“ anpassen“ als sichtbar gewählt hat (REQ-108; Standard: alle) |
 | 3 | Gerade am Lesen | nein | Bücher mit Lesestatus *am lesen* (REQ-042) |
 | 4 | Noch zu lesen | nein | Bücher gemäß Abschnittszuordnung „Noch zu lesen“ (REQ-009, REQ-040) |
 
@@ -133,3 +133,4 @@ Vorgabe des CEO (wörtlich, Auszug): „Ich möchte im Laufe der Entwicklung sel
 | 2026-11-09 | Vom CEO bestätigt („ja“), Status „Abgestimmt“. Inhalt unverändert | Anforderungsmanager |
 | 2026-11-12 | CEO-Antworten zu REQ-039/REQ-040: neuer Filter „Alle“ an Position 1 („an erster Stelle vor "Für Dich"“), Filterlogik „alle Bücher“; Filterlogik „Noch zu lesen“ = Abschnittszuordnung (wirkt in den Übersichten). Tabelle, Filterlogik-Rahmen und AK-8 angepasst. REQ nicht eingefroren; Statuswechsel durch den Scrum Master | Anforderungsmanager |
 | 2026-11-12 | CEO-Antwort Runde 3: „Für dich“ = Seite „Bücher“ wie gehabt, „Gerade am Lesen“ = Status *am lesen* (REQ-042). Tabelle angepasst | Anforderungsmanager |
+| 2026-11-25 | Filterlogik „Für dich“: zeigt nur die im Blatt „„Für dich“ anpassen“ gewählten Abschnitte (REQ-108). Das ist eine Einstellung der Abschnitte, keine Bearbeitung der Filterkonfiguration; AK-9 gilt unverändert. AKs unverändert, Status unverändert | Anforderungsmanager |
