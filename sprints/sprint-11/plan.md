@@ -42,3 +42,8 @@ Die CI baut die vorherige und die neue Version, signiert beide mit demselben Tes
 - NEU (Funktion, voller Weg mit Tester), 2026-11-25: Karte „Ausgabe“ in den Buchdetails bekommt eine neue Zeile „Band“ direkt unter „Exemplar“. Wortlaut CEO: „Der Band soll aus dem ISBN Code auch ausgelesen werden, sofern er hinterlegt ist“.
   - Entscheidung CEO: „a“, also eine Bandnummer pro Buch. Zeile „Band“ und Saga zeigen immer denselben Wert; eine Änderung an einer Stelle ändert ihn auch an der anderen. Betrifft REQ-096, 097 und 099; die bisherige Zugehörigkeit.band je Saga wird damit abgelöst.
   - Auslegung, vom CEO ohne Gegenrede: Pfeil, Ändern und Leeren über ein Blatt wie bei „Verlag“; die Zeile erscheint auch im Manuellen Eintrag; Barcode-Scan füllt sie wie bisher Buch.bandnummer; ganze Zahl ab 1. Ein Buch in mehreren Sagas hat dort überall denselben Band.
+- NEU (kleine Funktion), 2026-11-25: In Profil › App kommt eine neue Zeile „Versionsinfo“. Wortlaut CEO: „in dieser ist immer die jeweilige Appversion fest hinterlegt und kann auch nicht geändert werden manuell. Die App hat aktuell 0.11“.
+  - Auslegung:
+    - Die Zeile ist nur zur Anzeige da: kein Pfeil, keine Funktion beim Antippen.
+    - Der Wert stammt aus einer einzigen Quelle im Build, nämlich package.json „version“. Daraus werden auch versionName der APK und das Release-Tag abgeleitet, damit beide nie auseinanderlaufen.
+    - Aktueller Stand: 0.11.0. Angezeigt wird „0.11“, die Patch-Stelle nur, wenn sie größer als 0 ist.
