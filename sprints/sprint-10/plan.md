@@ -53,3 +53,9 @@ Branch: sprint-10/listen-und-felder, abgezweigt von main (nach dem Merge von Spr
 - Angepasster Alt-REQ: REQ-043 (AK-3, AK-8)
 - Gegenprobe minimal, höchstens 4 Fehler: Zitat speichern/löschen, Zitat des Tages stabil je Tag, Jahresziel-Zählung, Tageszeit-Grenzen
 - Prototyp danach für den gesamten Sprint 10 (beauftragt)
+
+## Erweiterung 2026-11-25, Teil D (CEO: „das soll in den nächsten Prototyp mit rein“)
+- REQ-108 Gesamt-Streak: Flamme angezündet, ausgegraut oder 0 (Startseite und Statistik)
+- REQ-109 Buch-Streak: „Längster Streak für dieses Buch“, gezählt als Rekord
+- Angepasste Alt-REQs: REQ-026, 027, 087, 103
+- Gegenprobe höchstens 2 Fehler: Zustand ausgegraut/angezündet, Rekordberechnung
