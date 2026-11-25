@@ -47,3 +47,9 @@ Die CI baut die vorherige und die neue Version, signiert beide mit demselben Tes
     - Die Zeile ist nur zur Anzeige da: kein Pfeil, keine Funktion beim Antippen.
     - Der Wert stammt aus einer einzigen Quelle im Build, nämlich package.json „version“. Daraus werden auch versionName der APK und das Release-Tag abgeleitet, damit beide nie auseinanderlaufen.
     - Aktueller Stand: 0.11.0. Angezeigt wird „0.11“, die Patch-Stelle nur, wenn sie größer als 0 ist.
+- NEU (kleine Funktion), 2026-11-25: Standard-Zitat. Wortlaut CEO: „Füge bitte als Standard-Zitat folgendes ein: "Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot." - Kodex des Drachenreiters / Fourth Wing“
+  - Auslegung:
+    - Die Kachel „Zitat des Tages“ auf der Startseite (REQ-106) zeigt dieses Zitat, solange keine eigenen Zitate gespeichert sind. Bisher entfiel die Kachel in diesem Fall.
+    - Sprecher: „Kodex des Drachenreiters“. Buch: „Fourth Wing“.
+    - Das Standard-Zitat ist nicht im Notizbuch eines Buches gespeichert. Antippen öffnet deshalb nichts.
+    - Sobald es mindestens ein eigenes Zitat gibt, gilt wieder die normale Auswahl aus den eigenen Zitaten.
