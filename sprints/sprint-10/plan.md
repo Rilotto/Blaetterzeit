@@ -63,3 +63,4 @@ Branch: sprint-10/listen-und-felder, abgezweigt von main (nach dem Merge von Spr
 ## Gesammelte Mini-Änderungen (gebündelt, vor dem nächsten Prototyp umsetzen)
 - 2026-11-25: Hauptleiste unten (Start, Bücher …) tiefer setzen, den Abstand von der Schriftunterkante zum Bildschirmrand halbieren. Wortlaut CEO: „Der Abstand zwischen der unteren Kante der Schrift und dem Ende des Bildschirmes müsste bitte halbiert werden.“
 - 2026-11-25: Zitate in Anführungszeichen anzeigen. Wortlaut CEO: „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“. Gilt im Notizbuch und beim Zitat des Tages, im deutschen Stil „…“ wie in der Konzeptskizze.
+- 2026-11-25: Karte „Gerade am Lesen“ (Startseite, REQ-102): Cover etwa 1,5-mal so groß. Seitenzahl bzw. Prozent rechts neben dem Fortschrittsbalken statt darunter. Der Balken nimmt die restliche Breite ein, linksbündig unter Titel und Autor. Konzeptskizze vom CEO bestätigt: „passt, danke“.
