@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Bildquelle } from '@/bild/bildquelle';
-import { buchAusEingaben, jahrFiltern, jahrUngueltig, LEERE_EINGABEN, seitenFiltern, titelFehlt } from '@/buchanlegen/eingabe';
+import { buchAusEingaben, eingabenAusVorbelegung, erschienenUngueltig, LEERE_EINGABEN, seitenFiltern, titelFehlt } from '@/buchanlegen/eingabe';
 import { demodatenAktiv, demodatenEinspielen } from '@/buecher/buchQuelle';
 import { demoBuecher } from '@/buecher/demodaten';
 import { buchAusDaten, istErscheinungsdatum } from '@/domain/buch';
@@ -20,29 +20,42 @@ const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeA
 afterEach(() => cleanup());
 
 describe('Eingaberegeln Manueller Eintrag', () => {
-  it('Jahr: nur Ziffern, höchstens vier', () => {
-    expect(jahrFiltern('20a245')).toBe('2024');
-    expect(jahrFiltern('abc')).toBe('');
+  it('Seiten: nur Ziffern', () => {
     expect(seitenFiltern('3x50')).toBe('350');
   });
 
-  it('Titel aus Leerzeichen fehlt, Jahr mit 1–3 Ziffern ist ungültig, leer ist gültig', () => {
+  it('Titel aus Leerzeichen fehlt; „Erschienen“ ungültig bei 1–3 Ziffern, Zukunft oder unmöglichem Datum (REQ-031, REQ-092)', () => {
+    const jetzt = new Date(2026, 10, 23, 12);
     expect(titelFehlt({ ...LEERE_EINGABEN, titel: '   ' })).toBe(true);
-    expect(jahrUngueltig({ ...LEERE_EINGABEN, jahr: '199' })).toBe(true);
-    expect(jahrUngueltig({ ...LEERE_EINGABEN, jahr: '' })).toBe(false);
-    expect(jahrUngueltig({ ...LEERE_EINGABEN, jahr: '1999' })).toBe(false);
+    expect(erschienenUngueltig({ ...LEERE_EINGABEN, erschienen: '199' }, jetzt)).toBe(true);
+    expect(erschienenUngueltig({ ...LEERE_EINGABEN, erschienen: '31.02.2025' }, jetzt)).toBe(true);
+    expect(erschienenUngueltig({ ...LEERE_EINGABEN, erschienen: '2027' }, jetzt)).toBe(true);
+    expect(erschienenUngueltig({ ...LEERE_EINGABEN }, jetzt)).toBe(false);
+    expect(erschienenUngueltig({ ...LEERE_EINGABEN, erschienen: '2019' }, jetzt)).toBe(false);
   });
 
-  it('baut ein Buch ohne Platzhalterwerte und mit Status „ungelesen“', () => {
-    const b = buchAusEingaben({ titel: ' Testbuch ', autor: '', jahr: '', seiten: '12' }, new Date('2026-11-12T10:00:00.000Z'));
+  it('baut ein Buch ohne Platzhalterwerte; „Erschienen“ als Jahr oder Datum (REQ-092)', () => {
+    const b = buchAusEingaben({ titel: ' Testbuch ', autor: '', seiten: '12' }, new Date('2026-11-12T10:00:00.000Z'));
     expect(Object.keys(b).sort()).toEqual(['eingetragenAm', 'id', 'seitenanzahl', 'status', 'titel']);
     expect(b.eingetragenAm).toBe('2026-11-12T10:00:00.000Z');
     expect(b).toMatchObject({ titel: 'Testbuch', status: 'ungelesen' });
-    const v = buchAusEingaben({ titel: 'T', autor: 'A B', jahr: '2019', seiten: '350' });
+    const v = buchAusEingaben({ titel: 'T', autor: 'A B', seiten: '350', erschienen: '2019' });
     expect(v).toMatchObject({ autor: 'A B', erscheinungsjahr: 2019, seitenanzahl: 350 });
     expect(v.erscheinungsdatum).toBeUndefined();
-    expect(() => buchAusEingaben({ ...LEERE_EINGABEN, titel: 'T', seiten: '1', jahr: '19' })).toThrow();
+    const d = buchAusEingaben({ titel: 'T', autor: '', seiten: '350', erschienen: '15.03.2021' });
+    expect(d.erscheinungsdatum).toBe('15.03.2021');
+    expect(d.erscheinungsjahr).toBeUndefined();
+    expect(() => buchAusEingaben({ ...LEERE_EINGABEN, titel: 'T', seiten: '1', erschienen: '19' })).toThrow();
     expect(() => buchAusEingaben({ ...LEERE_EINGABEN, titel: 'T' })).toThrow('Seitenzahl fehlt');
+  });
+
+  it('Vorbelegung: Jahr ohne Datum geht nach „Erschienen“, Bandnummer wird übernommen, ungültiger Band nicht (REQ-092, REQ-099)', () => {
+    expect(eingabenAusVorbelegung({ erscheinungsjahr: 2019 }).erschienen).toBe('2019');
+    expect(eingabenAusVorbelegung({ erscheinungsjahr: 2019, erscheinungsdatum: '03.02.2019' }).erschienen).toBe('03.02.2019');
+    expect(eingabenAusVorbelegung({ bandnummer: 2 }).bandnummer).toBe(2);
+    expect(eingabenAusVorbelegung({ bandnummer: 0 }).bandnummer).toBeUndefined();
+    const b = buchAusEingaben({ ...eingabenAusVorbelegung({ titel: 'T', seitenanzahl: 10, bandnummer: 2, reihe: 'The Empyrean' }) });
+    expect(b.bandnummer).toBe(2);
   });
 
   it('Erscheinungsdatum TT.MM.JJJJ und Datensätze ohne Ersatzwerte', () => {
@@ -114,7 +127,7 @@ describe('Buch anlegen über das Plus-Menü', () => {
     expect(blatt()).toBeNull();
   });
 
-  it('ohne Titel: Hinweis, nichts gespeichert; ungültiges Jahr markiert', async () => {
+  it('ohne Titel: Hinweis, nichts gespeichert; kein Feld „Jahr“, ungültiges „Erschienen“ bleibt im Blatt markiert', async () => {
     const { repo } = starte();
     const b = oeffneBlatt();
     fireEvent.change(within(b).getByLabelText('Autor'), { target: { value: 'A' } });
@@ -122,12 +135,17 @@ describe('Buch anlegen über das Plus-Menü', () => {
     expect(within(b).getByRole('alert')).toHaveTextContent('Bitte gib einen Titel ein');
     fireEvent.change(within(b).getByLabelText('Titel'), { target: { value: 'T' } });
     expect(within(b).queryByRole('alert')).toBeNull();
-    fireEvent.change(within(b).getByLabelText('Jahr'), { target: { value: '199' } });
-    fireEvent.click(within(b).getByRole('button', { name: 'Hinzufügen' }));
-    expect(within(b).getByLabelText('Jahr')).toHaveAttribute('data-fehler', 'true');
-    expect(within(b).queryByRole('alert')).toBeNull();
-    fireEvent.change(within(b).getByLabelText('Jahr'), { target: { value: '1999' } });
-    expect(within(b).getByLabelText('Jahr')).not.toHaveAttribute('data-fehler');
+    expect(within(b).queryByLabelText('Jahr')).toBeNull();
+    fireEvent.click(b.querySelector('[data-ausgabe-zeile="erschienen"]')!);
+    const feld = document.querySelector<HTMLInputElement>('[data-blatt-feld="erschienen"]')!;
+    fireEvent.change(feld, { target: { value: '199' } });
+    fireEvent.click(document.querySelector('[data-blatt-sichern="erschienen"]')!);
+    expect(feld).toHaveAttribute('data-fehler', 'true');
+    fireEvent.change(feld, { target: { value: '1999' } });
+    expect(feld).not.toHaveAttribute('data-fehler');
+    fireEvent.click(document.querySelector('[data-blatt-sichern="erschienen"]')!);
+    expect(document.querySelector('[data-blatt-feld="erschienen"]')).toBeNull();
+    expect(b.querySelector('[data-ausgabe-zeile="erschienen"]')).toHaveTextContent('1999');
     await act(async () => {});
     expect(await repo.list()).toEqual([]);
     expect(blatt()).not.toBeNull();
@@ -139,7 +157,9 @@ describe('Buch anlegen über das Plus-Menü', () => {
     const b = oeffneBlatt();
     fireEvent.change(within(b).getByLabelText('Titel'), { target: { value: 'Testbuch' } });
     fireEvent.change(within(b).getByLabelText('Autor'), { target: { value: 'Vorname Nachname' } });
-    fireEvent.change(within(b).getByLabelText('Jahr'), { target: { value: '2019' } });
+    fireEvent.click(b.querySelector('[data-ausgabe-zeile="erschienen"]')!);
+    fireEvent.change(document.querySelector('[data-blatt-feld="erschienen"]')!, { target: { value: '2019' } });
+    fireEvent.click(document.querySelector('[data-blatt-sichern="erschienen"]')!);
     fireEvent.change(within(b).getByLabelText('Seiten'), { target: { value: '350' } });
     fireEvent.click(within(b).getByRole('button', { name: 'Cover hinzufügen' }));
     fireEvent.click(screen.getByRole('menuitem', { name: /Aus Galerie auswählen/ }));

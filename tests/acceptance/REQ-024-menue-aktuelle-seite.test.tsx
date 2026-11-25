@@ -363,25 +363,51 @@ describe('REQ-024 Menü „Aktuelle Seite“', () => {
     });
   });
 
-  describe('AK-8 Leeres Eingabefeld', () => {
-    it.each(['Seite', '%'] as const)('[REQ-024/AK-8] Modus „%s“, Feld geleert: nichts gespeichert, Blatt bleibt offen, Hinweis unter dem Feld', async (m) => {
-      const b = MIT();
+  // Fassung 2026-11-23 (REQ-093): leeres Feld sichern entfernt den Fortschritt, ohne Sitzung und ohne Hinweis.
+  describe('AK-8 Leeres Eingabefeld entfernt den Fortschritt', () => {
+    const ALT = [{ zeitpunkt: '2026-11-10T08:00:00.000Z', seite: 60 }, { zeitpunkt: '2026-11-11T08:00:00.000Z', seite: 120 }];
+    it.each(['Seite', '%'] as const)('[REQ-024/AK-8] Modus „%s“, 400 Seiten, Seite 120, Feld geleert: Menü zu, kein Fortschritt, Anzeige wie ohne Fortschritt, keine neue Sitzung, kein Hinweis', async (m) => {
+      const b = MIT({ aktuelleSeite: 120, sitzungen: ALT });
       await details(await starte(), b);
       const d = await oeffneAS();
       await tippe(knopf(d, m));
       const f = feldAS(d);
       gib(f, '');
-      const vorher = norm(d.textContent);
       await tippe(knopf(d, 'Sichern'));
-      expect(blattAS()).not.toBeNull();
-      const nachher = norm(d.textContent);
-      expect(nachher.length, 'ein Hinweis erscheint').toBeGreaterThan(vorher.length);
-      const neu = Array.from(d.querySelectorAll<HTMLElement>('*')).filter((e) => e.children.length === 0 && norm(e.textContent) && !vorher.includes(norm(e.textContent)));
-      expect(neu.length, 'neuer Hinweistext').toBeGreaterThan(0);
-      expect(vor(f, neu[0]), 'Hinweis steht unter dem Feld').toBe(true);
+      await warte(60);
+      expect(blattAS(), 'Menü geschlossen').toBeNull();
+      expect(screen.queryByRole('alert'), 'kein Hinweis').toBeNull();
+      expect(document.querySelector('[data-hinweis]'), 'kein Hinweis').toBeNull();
+      expect(norm(ftext()?.textContent)).toBe('0 / 400');
+      expect(herz()).toBeNull();
       const g = await gespeichert(b.id);
-      expect(g?.aktuelleSeite).toBe(10);
+      expect(g?.aktuelleSeite).toBeUndefined();
+      expect(g?.fortschrittProzent).toBeUndefined();
+      expect(g?.sitzungen).toEqual(ALT);
+    });
+
+    it('[REQ-024/AK-8] Modus „%“ mit gespeichertem Prozentwert 30: leeres Feld entfernt ihn', async () => {
+      const b = buchB({ seitenanzahl: 400, fortschrittProzent: 30, fortschrittsmodus: 'prozent', sitzungen: [] });
+      await details(await starte(), b);
+      const d = await oeffneAS();
+      gib(eingabe(d, 'Prozent'), '');
+      await tippe(knopf(d, 'Sichern'));
+      await warte(60);
+      expect(blattAS()).toBeNull();
+      const g = await gespeichert(b.id);
+      expect(g?.fortschrittProzent).toBeUndefined();
+      expect(g?.aktuelleSeite).toBeUndefined();
       expect(anzahl(g)).toBe(0);
+    });
+
+    it('[REQ-024/AK-8] Feld geleert, aber über „Schließen“ verlassen: Fortschritt bleibt 120 (Verwerfen wie bisher)', async () => {
+      const b = MIT({ aktuelleSeite: 120 });
+      await details(await starte(), b);
+      const d = await oeffneAS();
+      gib(feldAS(d), '');
+      await tippe(within(d).getByLabelText('Schließen'));
+      await warte(60);
+      expect((await gespeichert(b.id))?.aktuelleSeite).toBe(120);
     });
   });
 

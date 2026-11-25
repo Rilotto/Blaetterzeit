@@ -75,9 +75,15 @@ export const rezensionLeer = (text: string): boolean => text.trim() === '';
 
 /**
  * Sichert eine Rezension (REQ-049): Text ungekürzt und unverändert, ohne Längenbegrenzung.
- * Leerer Text → null (nichts wird gespeichert).
+ * Leerer Text: ohne gespeicherte Rezension → null (nichts geschieht); mit gespeicherter Rezension wird sie
+ * entfernt (REQ-049 AK-8, REQ-093 AK-8).
  */
 export function rezensionSichern(buch: Buch, text: string): Buch | null {
-  if (rezensionLeer(text)) return null;
+  if (rezensionLeer(text)) {
+    if (buch.rezension === undefined) return null;
+    const neu: Buch = { ...buch };
+    delete neu.rezension;
+    return neu;
+  }
   return { ...buch, rezension: text };
 }

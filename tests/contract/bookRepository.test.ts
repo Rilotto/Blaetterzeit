@@ -160,7 +160,7 @@ describe('Migrationen Eintragungsdatum (REQ-041)', () => {
     await db.ausfuehren(
       `INSERT INTO buch (id, titel, status, sitzungen, geaendert) VALUES ('x', 'Alt', 'gelesen', '[{"zeitpunkt":"2026-01-01T10:00:00.000Z"}]', '2026-01-01T00:00:00.000Z')`,
     );
-    expect(await migrieren(db)).toBe(9);
+    expect(await migrieren(db)).toBe(Math.max(...MIGRATIONEN.map((m) => m.version)));
     const repo = new SqliteBookRepository(db);
     expect(await repo.get('x')).toEqual({ id: 'x', titel: 'Alt', status: 'gelesen', sitzungen: [{ zeitpunkt: '2026-01-01T10:00:00.000Z' }] });
     const neu = { id: 'x', titel: 'Alt', status: 'gelesen' as const, beendetAm: '2019-03-14', sitzungen: [{ zeitpunkt: '2026-01-01T10:00:00.000Z' }, { zeitpunkt: '2026-01-02T10:00:00.000Z', seite: 40 }] };

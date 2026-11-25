@@ -22,7 +22,7 @@ Befund: Die Buchdaten (REQ-008, `src/domain/buch.ts`) enthalten bisher kein Eint
 
 - Wenn ein Buch angelegt wird (REQ-031), muss das System den Zeitpunkt des Anlegens als Eintragungsdatum des Buches speichern.
 - Das System muss das Eintragungsdatum dauerhaft mit dem Buch speichern (REQ-034, ADR-0002).
-- Das System darf dem Nutzer keine Möglichkeit bieten, das Eintragungsdatum zu ändern.
+- ~~Das System darf dem Nutzer keine Möglichkeit bieten, das Eintragungsdatum zu ändern.~~ Abgelöst: Ändern über REQ-060 und REQ-064, Leeren über REQ-093.
 
 ## Akzeptanzkriterien
 
@@ -57,3 +57,4 @@ Befund: Die Buchdaten (REQ-008, `src/domain/buch.ts`) enthalten bisher kein Eint
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-12 | Erstellt aus CEO-Antwort F1 | Anforderungsmanager |
+| 2026-11-23 | An REQ-064 und REQ-093 angepasst (REQ-093 Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Das Eintragungsdatum ist änderbar und leerbar. Ein Buch ohne Eintragungsdatum ist damit möglich (REQ-093 AK-11, AK-12). Nur Anforderungstext geändert, AKs unverändert. Status unverändert | Anforderungsmanager |

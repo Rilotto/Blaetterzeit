@@ -22,11 +22,20 @@
  */
 import '@testing-library/jest-dom/vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from '@/App';
 // Zentrale Farbdefinition (Design-Tokens). Bewusst importiert statt Hexwerte im
 // Test, damit Farbänderungen auf Zuruf (CLAUDE.md) keinen Test brechen.
 import { farbrubriken } from '@/theme';
+
+// Sprint 10 Teil C: Seit REQ-101 hat „Start“ eine Zielansicht; kein Menüpunkt ist mehr ohne Zielansicht.
+// Die Bedingung „Zielansicht noch nicht definiert“ (REQ-002 AK-12, REQ-004) wird deshalb simuliert: „Start“ bekommt
+// für diese Datei die Platzhalteransicht der App. Die Startseite selbst prüfen die Tests zu REQ-101.
+vi.mock('@/views', async (importOriginal) => {
+  const orig = await importOriginal<typeof import('@/views')>();
+  const { default: UnderConstruction } = await import('@/views/UnderConstruction');
+  return { ...orig, ansichten: { ...orig.ansichten, start: UnderConstruction } };
+});
 
 // ---------------------------------------------------------------------------
 // Dateisystem-Zugriff (nur für AK-5, Farben, AK-10)
@@ -699,11 +708,15 @@ describe('REQ-002 Untere Hauptnavigation', () => {
     // REQ-066/AK-1, dass „under construction :)“ NICHT erscheint.
     // Sprint 09: „Statistik“ hat mit REQ-079 eine definierte Zielansicht (Seite „Dein Lesen“); dort prüft
     // REQ-079/AK-1, dass „under construction :)“ NICHT erscheint.
-    const DEFINIERTE_ZIELANSICHTEN = ['Bücher', 'Profil', 'Statistik']; // REQ-005, REQ-066, REQ-079
+    // Sprint 10: „Bibliothek“ hat mit REQ-097 eine definierte Zielansicht (Listenübersicht „Bibliotheken“); dort prüft
+    // REQ-097/AK-7, dass „under construction :)“ NICHT erscheint.
+    // Sprint 10 Teil C: „Start“ hat mit REQ-101 eine definierte Zielansicht; dort prüft REQ-101/AK-1, dass
+    // „under construction :)“ NICHT erscheint. Hier wird „Start“ ohne Zielansicht simuliert (vi.mock oben).
+    const DEFINIERTE_ZIELANSICHTEN = ['Bücher', 'Profil', 'Statistik', 'Bibliothek']; // REQ-005, REQ-066, REQ-079, REQ-097 (+ Start, REQ-101)
     const OHNE_ZIELANSICHT = LABELS.filter((l) => !DEFINIERTE_ZIELANSICHTEN.includes(l));
 
-    it('[REQ-002/AK-12] Voraussetzung: es gibt weiterhin Menüpunkte ohne definierte Zielansicht', () => {
-      expect(OHNE_ZIELANSICHT).toEqual(['Start', 'Bibliothek']);
+    it('[REQ-002/AK-12] Voraussetzung: der für diese Datei simulierte Menüpunkt ohne Zielansicht ist „Start“', () => {
+      expect(OHNE_ZIELANSICHT).toEqual(['Start']);
     });
 
     it.each(OHNE_ZIELANSICHT)('[REQ-002/AK-12] bei aktivem "%s" (ohne definierte Zielansicht) zeigt der Inhaltsbereich genau "under construction :)"', (label) => {

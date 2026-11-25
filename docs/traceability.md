@@ -18,7 +18,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-9 | 1 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
-| REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-12 | 4 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
+| REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-12 | 3 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-002 | Untere Hauptnavigation mit fünf Menüpunkten | Implementiert | AK-13 | 8 | 0 | tests/acceptance/REQ-002-hauptnavigation.test.tsx |
 | REQ-003 | Zentral definierte App-Schrift | Implementiert | AK-1 | 8 | 0 | tests/acceptance/REQ-003-schriftart.test.tsx |
 | REQ-003 | Zentral definierte App-Schrift | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-003-schriftart.test.tsx |
@@ -192,7 +192,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
 | REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-6 | 8 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
 | REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
-| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
+| REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
 | REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-9 | 13 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
 | REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-10 | 2 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
 | REQ-024 | Buchdetails – Menü „Aktuelle Seite“ und Sichern des Fortschritts | Implementiert | AK-11 | 4 | 0 | tests/acceptance/REQ-024-menue-aktuelle-seite.test.tsx |
@@ -226,7 +226,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
 | REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
 | REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
-| REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
+| REQ-028 | Buchdetails – Autor unter dem Buchtitel | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-028-autor-unter-buchtitel.test.tsx |
 | REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
 | REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
 | REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
@@ -238,15 +238,15 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-029 | Seite „Bücher“ – Menü nach Antippen der Plus-Schaltfläche mit der Option „Von Hand eintragen“ | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-029-plus-menue-buch-hinzufuegen.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
-| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-5 | 34 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
-| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-10 | 2 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-11 | 1 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
-| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-12 | 7 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
+| REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-12 | 1 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-030 | Blatt „Manueller Eintrag“ – Aufbau und Eingabefelder | Implementiert | AK-9 | 1 | 0 | tests/acceptance/REQ-030-blatt-manueller-eintrag.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
@@ -258,10 +258,10 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx<br>tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
-| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx<br>tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-025-seitenanzahl-abfragen.test.tsx<br>tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-12 | 5 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
-| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-13 | 4 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
-| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-14 | 4 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-13 | 3 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
+| REQ-031 | Manueller Eintrag – neues Buch mit „Hinzufügen“ anlegen | Implementiert | AK-14 | 3 | 0 | tests/acceptance/REQ-031-manueller-eintrag-hinzufuegen.test.tsx |
 | REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
 | REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
 | REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-3 | 6 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
@@ -272,7 +272,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-032 | Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-032-manueller-eintrag-cover-hinzufuegen.test.tsx |
 | REQ-033 | Buchdaten – Erscheinungsjahr und Erscheinungsdatum | Implementiert | AK-1 | 6 | 0 | tests/acceptance/REQ-033-buchdaten-jahr-erscheinungsdatum.test.tsx |
 | REQ-033 | Buchdaten – Erscheinungsjahr und Erscheinungsdatum | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-033-buchdaten-jahr-erscheinungsdatum.test.tsx |
-| REQ-033 | Buchdaten – Erscheinungsjahr und Erscheinungsdatum | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-033-buchdaten-jahr-erscheinungsdatum.test.tsx |
+| REQ-033 | Buchdaten – Erscheinungsjahr und Erscheinungsdatum | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-033-buchdaten-jahr-erscheinungsdatum.test.tsx |
 | REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
 | REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
 | REQ-034 | Buchdaten dauerhaft speichern | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-034-buchdaten-dauerhaft-speichern.test.tsx |
@@ -332,12 +332,12 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-042 | Übersicht „Gerade am Lesen“ über die Filterpille | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-042-uebersicht-gerade-am-lesen.test.tsx |
 | REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
 | REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
 | REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
 | REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
 | REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
 | REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
-| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-8 | 1 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
+| REQ-043 | Buchdetails – Reiterleiste mit wandernder Pille | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-043-buchdetails-reiterleiste.test.tsx |
 | REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-044-rezension-bereich-bewertung.test.tsx |
 | REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-044-rezension-bereich-bewertung.test.tsx |
 | REQ-044 | Reiter „Rezension“ – Bereich „Bewertung“ mit 14 Bewertungskriterien | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-044-rezension-bereich-bewertung.test.tsx |
@@ -371,7 +371,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
 | REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
 | REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
-| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
+| REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
 | REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-9 | 9 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
 | REQ-049 | Reiter „Rezension“ – Schreibfenster für die eigene Rezension | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-049-rezension-schreibfenster.test.tsx |
 | REQ-051 | Reiter „Details“ – Aufbau mit fünf Abschnittsüberschriften | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-051-details-aufbau-ueberschriften.test.tsx |
@@ -387,10 +387,10 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
 | REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
 | REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
 | REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
 | REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
 | REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
@@ -440,14 +440,14 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-3 | 7 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
-| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
+| REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
 | REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
 | REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
 | REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
-| REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-4 | 7 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
+| REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-4 | 6 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
 | REQ-064 | Reiter „Details“ – Datum „Hinzugefügt“ über ein Blatt ändern | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-064-details-hinzugefuegt-aendern.test.tsx |
 | REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
 | REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
@@ -593,3 +593,121 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-089 | Seite „Statistik“ – Jahreskalender mit zwölf Mini-Kalendern | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-089-statistik-jahreskalender.test.tsx |
 | REQ-090 | Seite „Statistik“ – Gestaltung aus Farbrubriken, in allen Farbdesigns und Stilen | Implementiert | AK-1 | 6 | 0 | tests/acceptance/REQ-090-statistik-farbdesigns-stile.test.tsx |
 | REQ-090 | Seite „Statistik“ – Gestaltung aus Farbrubriken, in allen Farbdesigns und Stilen | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-090-statistik-farbdesigns-stile.test.tsx |
+| REQ-091 | Karte „Ausgabe“ – Pfeil „›“ auch bei Verlag, Erschienen, ISBN, Hinzugefügt und Beendet am | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-091-ausgabe-pfeile-alle-zeilen.test.tsx |
+| REQ-091 | Karte „Ausgabe“ – Pfeil „›“ auch bei Verlag, Erschienen, ISBN, Hinzugefügt und Beendet am | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-091-ausgabe-pfeile-alle-zeilen.test.tsx |
+| REQ-091 | Karte „Ausgabe“ – Pfeil „›“ auch bei Verlag, Erschienen, ISBN, Hinzugefügt und Beendet am | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-091-ausgabe-pfeile-alle-zeilen.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-9 | 1 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-10 | 3 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-11 | 4 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-12 | 4 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-092 | „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt | Implementiert | AK-13 | 2 | 0 | tests/acceptance/REQ-092-details-erschienen-aendern.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-11 | 2 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-12 | 2 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-8 | 1 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-093 | Gespeicherte Angaben durch Leeren des Feldes entfernen | Implementiert | AK-10 | 3 | 0 | tests/acceptance/REQ-093-felder-leeren.test.tsx |
+| REQ-094 | Buchdetails – Titel und Autor unter dem Cover über ein Blatt ändern, Autor leeren, Platzhalter „unbekannter Autor“ | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-094-titel-autor-aendern.test.tsx |
+| REQ-094 | Buchdetails – Titel und Autor unter dem Cover über ein Blatt ändern, Autor leeren, Platzhalter „unbekannter Autor“ | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-094-titel-autor-aendern.test.tsx |
+| REQ-094 | Buchdetails – Titel und Autor unter dem Cover über ein Blatt ändern, Autor leeren, Platzhalter „unbekannter Autor“ | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-094-titel-autor-aendern.test.tsx |
+| REQ-094 | Buchdetails – Titel und Autor unter dem Cover über ein Blatt ändern, Autor leeren, Platzhalter „unbekannter Autor“ | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-094-titel-autor-aendern.test.tsx |
+| REQ-094 | Buchdetails – Titel und Autor unter dem Cover über ein Blatt ändern, Autor leeren, Platzhalter „unbekannter Autor“ | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-094-titel-autor-aendern.test.tsx |
+| REQ-094 | Buchdetails – Titel und Autor unter dem Cover über ein Blatt ändern, Autor leeren, Platzhalter „unbekannter Autor“ | Implementiert | AK-6 | 6 | 0 | tests/acceptance/REQ-094-titel-autor-aendern.test.tsx |
+| REQ-095 | Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-095-listen-abschnitt-buchdetails.test.tsx |
+| REQ-095 | Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-095-listen-abschnitt-buchdetails.test.tsx |
+| REQ-095 | Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-095-listen-abschnitt-buchdetails.test.tsx |
+| REQ-095 | Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails | Implementiert | AK-4 | 6 | 0 | tests/acceptance/REQ-095-listen-abschnitt-buchdetails.test.tsx |
+| REQ-095 | Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-095-listen-abschnitt-buchdetails.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-4 | 10 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-10 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-8 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-6 | 7 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
+| REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-2 | 7 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
+| REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
+| REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
+| REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
+| REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
+| REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
+| REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
+| REQ-101 | Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-101-startseite-kopf-gruss.test.tsx |
+| REQ-101 | Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-101-startseite-kopf-gruss.test.tsx |
+| REQ-101 | Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-101-startseite-kopf-gruss.test.tsx |
+| REQ-101 | Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-101-startseite-kopf-gruss.test.tsx |
+| REQ-101 | Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon | Implementiert | AK-4 | 6 | 0 | tests/acceptance/REQ-101-startseite-kopf-gruss.test.tsx |
+| REQ-101 | Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-101-startseite-kopf-gruss.test.tsx |
+| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
+| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
+| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
+| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
+| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
+| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
+| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
+| REQ-103 | Startseite – „Diese Woche“ mit Covern je Tag und Lesesträhne | Implementiert | AK-1 | 5 | 0 | tests/acceptance/REQ-103-startseite-woche-straehne.test.tsx |
+| REQ-103 | Startseite – „Diese Woche“ mit Covern je Tag und Lesesträhne | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-103-startseite-woche-straehne.test.tsx |
+| REQ-103 | Startseite – „Diese Woche“ mit Covern je Tag und Lesesträhne | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-103-startseite-woche-straehne.test.tsx |
+| REQ-104 | Startseite – Jahresziel „X von Y Büchern“ mit Blatt zum Festlegen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-104-startseite-jahresziel.test.tsx |
+| REQ-104 | Startseite – Jahresziel „X von Y Büchern“ mit Blatt zum Festlegen | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-104-startseite-jahresziel.test.tsx |
+| REQ-104 | Startseite – Jahresziel „X von Y Büchern“ mit Blatt zum Festlegen | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-104-startseite-jahresziel.test.tsx |
+| REQ-104 | Startseite – Jahresziel „X von Y Büchern“ mit Blatt zum Festlegen | Implementiert | AK-4 | 9 | 0 | tests/acceptance/REQ-104-startseite-jahresziel.test.tsx |
+| REQ-104 | Startseite – Jahresziel „X von Y Büchern“ mit Blatt zum Festlegen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-104-startseite-jahresziel.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-3 | 8 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-10 | 2 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-4 | 1 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
+| REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
+| REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
+| REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |

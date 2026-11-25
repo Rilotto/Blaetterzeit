@@ -6,16 +6,18 @@ import type { Bildquelle } from '@/bild/bildquelle';
 import type { Vorbelegung } from '@/buchanlegen/eingabe';
 import ManuellerEintrag from '@/buchanlegen/ManuellerEintrag';
 import AbschnittAlleBuecher from '@/buecher/AbschnittAlleBuecher';
+import AbschnittListen from '@/buecher/AbschnittListen';
 import AbschnittNochZuLesen from '@/buecher/AbschnittNochZuLesen';
-import { abschnittKonfiguration } from '@/buecher/abschnittKonfiguration';
-import { ladeBuecher, standardAnsichtRepository, standardBildspeicher } from '@/buecher/buchQuelle';
+import { ladeBuecher, standardAnsichtRepository, standardBildspeicher, standardListenRepository } from '@/buecher/buchQuelle';
 import Filterleiste from '@/buecher/Filterleiste';
 import { filterKonfiguration, uebersichtKonfiguration, type FilterDefinition } from '@/buecher/filterKonfiguration';
 import Kopfbereich from '@/buecher/Kopfbereich';
-import PlatzhalterAbschnitt from '@/buecher/PlatzhalterAbschnitt';
 import Uebersicht from '@/buecher/Uebersicht';
 import type { Buch } from '@/domain/buch';
-import type { AnsichtRepository, BookRepository, ImageStore } from '@/storage';
+import { useListen } from '@/listen/gemeinsam';
+import ListenNavigation, { type ListenZiel } from '@/listen/ListenNavigation';
+import { useListenbilder } from '@/listen/listenbild';
+import type { AnsichtRepository, BookRepository, ImageStore, ListenRepository } from '@/storage';
 import BuchDetails from './BuchDetails';
 import { abstand } from '@/theme';
 
@@ -38,6 +40,8 @@ interface Props {
   barcodeScanner?: BarcodeScanner;
   /** ISBN-Suche (REQ-062); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
   isbnSuche?: IsbnSuche;
+  /** Listenspeicher (Sagas, Sammlungen, Bibliotheken, REQ-095); ohne Angabe der der App. In Tests ersetzbar. */
+  listenRepository?: ListenRepository;
 }
 
 const seiteStil: CSSProperties = {
@@ -101,7 +105,8 @@ type Ansicht =
   | { art: 'liste' }
   | { art: 'scan' }
   | { art: 'eintrag'; vorbelegung?: Vorbelegung }
-  | { art: 'details'; buch: Buch };
+  | { art: 'details'; buch: Buch }
+  | { art: 'listen'; ziel: ListenZiel };
 
 /** Wo der Nutzer im Reiter „Bücher“ steht: Seite „Bücher“ oder eine Übersicht (REQ-036, REQ-040, REQ-042). */
 type Ort = { art: 'seite' } | { art: 'uebersicht'; liste: string };
@@ -124,11 +129,15 @@ export default function BuecherAnsicht({
   ansichtRepository,
   barcodeScanner,
   isbnSuche,
+  listenRepository,
 }: Props) {
+  const listenRepo = useMemo(() => listenRepository ?? standardListenRepository(), [listenRepository]);
+  const { listen, neuLaden: listenNeuLaden } = useListen(listenRepo);
   const filterliste = filter ?? filterKonfiguration;
   const [stand, setStand] = useState(0);
   const alle = useBuecher(buecher, repository, stand);
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
+  const listenbilder = useListenbilder(speicher, listen);
   const scanner = useMemo(() => barcodeScanner ?? standardBarcodeScanner(), [barcodeScanner]);
   const isbnSucheAktiv = useMemo(() => isbnSuche ?? standardIsbnSuche(), [isbnSuche]);
   const ansichtSpeicher = useMemo(() => ansichtRepository ?? standardAnsichtRepository(), [ansichtRepository]);
@@ -172,16 +181,38 @@ export default function BuecherAnsicht({
     setOrt({ art: 'seite' });
   };
 
+  if (ansicht.art === 'listen') {
+    return (
+      <ListenNavigation
+        start={ansicht.ziel}
+        onZurueck={() => {
+          void listenNeuLaden();
+          zurueck(true);
+        }}
+        repository={repository}
+        listenRepository={listenRepo}
+        bildspeicher={speicher}
+        bildquelle={bildquelle}
+        ansichtRepository={ansichtSpeicher}
+        jetzt={jetzt}
+      />
+    );
+  }
+
   if (ansicht.art === 'details') {
     return (
       <BuchDetails
+        listenRepository={listenRepo}
         buchId={ansicht.buch.id}
         buch={ansicht.buch}
         bildquelle={bildquelle}
         bildspeicher={speicher}
         repository={repository}
         jetzt={jetzt}
-        onZurueck={() => zurueck(true)}
+        onZurueck={() => {
+          void listenNeuLaden();
+          zurueck(true);
+        }}
       />
     );
   }
@@ -265,8 +296,23 @@ export default function BuecherAnsicht({
         onBuchAntippen={oeffnen}
         onAlleAnsehen={() => uebersichtOeffnen('noch_zu_lesen')}
       />
-      <PlatzhalterAbschnitt {...abschnittKonfiguration.sagas} />
-      <PlatzhalterAbschnitt {...abschnittKonfiguration.sammlungen} />
+      {/* Sagas und Sammlungen (REQ-012, REQ-097): „Alle ansehen ›“ öffnet die Listenübersicht, eine Liste direkt die Liste. */}
+      {(['saga', 'sammlung'] as const).map((art) => (
+        <AbschnittListen
+          key={art}
+          art={art}
+          listen={listen}
+          listenbilder={listenbilder}
+          onAlleAnsehen={() => {
+            setMenueOffen(false);
+            setAnsicht({ art: 'listen', ziel: { art: 'uebersicht', listenArt: art } });
+          }}
+          onListeAntippen={(l) => {
+            setMenueOffen(false);
+            setAnsicht({ art: 'listen', ziel: { art: 'liste', listeId: l.id } });
+          }}
+        />
+      ))}
       <AbschnittAlleBuecher
         buecher={alle}
         frontcover={frontcover}

@@ -19,7 +19,10 @@ const MARKE = 'bzZurueck';
 /** Spätestens nach dieser Zeit gilt ein ausstehendes „Zurück“ als erledigt (Absicherung, falls kein popstate kommt). */
 export const ZURUECK_FRIST_MS = 1000;
 
-let naechstesKennzeichen = 1;
+// Startwert zufällig: Nach einem Neuladen der Seite (bzw. erneutem Laden des Moduls) liegen im Verlauf noch
+// Einträge mit Kennzeichen der vorherigen Instanz. Gleiche Kennzeichen würden ein verspätetes `popstate`
+// fälschlich als echtes „Zurück“ zustellen und ein gerade geöffnetes Fenster schließen.
+let naechstesKennzeichen = 1 + Math.floor(Math.random() * 1_000_000_000);
 /** Kennzeichen der Einträge, deren Entfernen per history.back() ausgelöst wurde und noch aussteht. */
 const ausstehend: number[] = [];
 let warteschlange: (() => void)[] = [];

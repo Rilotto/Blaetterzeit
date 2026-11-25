@@ -47,17 +47,23 @@ const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(
 
 afterEach(() => cleanup());
 
-it('[REQ-031/GROB] ohne Titel Hinweis und nichts gespeichert, ungültiges Jahr markiert; gültig → Buch „ungelesen“ gespeichert, Buchdetails erscheinen', async () => {
+it('[REQ-031/GROB] ohne Titel Hinweis und nichts gespeichert, ungültiges „Erschienen“ markiert; gültig → Buch „ungelesen“ gespeichert, Buchdetails erscheinen', async () => {
   const { repo } = await zeige();
   const d = await oeffneBlatt();
   await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
   expect(screen.getByRole('alert').textContent).toContain('Bitte gib einen Titel ein');
   fireEvent.change(feld(d, 'Titel'), { target: { value: 'Momo' } });
-  fireEvent.change(feld(d, 'Jahr'), { target: { value: '99' } });
-  await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
-  expect(feld(d, 'Jahr')).toHaveAttribute('data-fehler', 'true');
+  // Seit REQ-092 (2026-11-23): Prüfung über „Erschienen“ (eigenes Blatt) statt Feld „JAHR“.
+  await tippe(d.querySelector('[data-ausgabe-zeile="erschienen"]')!);
+  const ef = () => document.querySelector<HTMLInputElement>('[data-blatt-feld="erschienen"]')!;
+  fireEvent.change(ef(), { target: { value: '99' } });
+  await tippe(document.querySelector('[data-blatt-sichern="erschienen"]')!);
+  if (!document.querySelector('[data-blatt-feld="erschienen"]')) await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
+  expect(d.querySelector('[data-ausgabe-zeile="erschienen"] [data-fehler="true"], [data-ausgabe-zeile="erschienen"][data-fehler="true"]') ?? (document.querySelector('[data-blatt-feld="erschienen"][data-fehler="true"]'))).not.toBeNull();
   expect(repo.save).not.toHaveBeenCalled();
-  fireEvent.change(feld(d, 'Jahr'), { target: { value: '1973' } });
+  if (!document.querySelector('[data-blatt-feld="erschienen"]')) await tippe(d.querySelector('[data-ausgabe-zeile="erschienen"]')!);
+  fireEvent.change(ef(), { target: { value: '1973' } });
+  await tippe(document.querySelector('[data-blatt-sichern="erschienen"]')!);
   fireEvent.change(feld(d, 'Autor'), { target: { value: 'Michael Ende' } });
   fireEvent.change(feld(d, 'Seiten'), { target: { value: '300' } });
   await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));

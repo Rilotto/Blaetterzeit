@@ -36,12 +36,12 @@ Die Priorität „Must“ und der Status „Abgestimmt“ stützen sich auf dies
 ## Akzeptanzkriterien
 
 ### AK-1 Angelegtes Buch übersteht Neuladen/Neustart mit allen Angaben
-- **Gegeben** der Nutzer hat ein Buch mit Titel, Autor, Erscheinungsjahr und Seitenanzahl angelegt
+- **Gegeben** der Nutzer hat ein Buch mit Titel, Autor, Erscheinungsjahr und Seitenanzahl angelegt. Das Erscheinungsjahr wird über „Erschienen“ als JJJJ eingetragen, ein Feld „JAHR“ gibt es nicht mehr (REQ-092)
 - **Wenn** die App neu geladen bzw. neu gestartet wird
 - **Dann** ist das Buch mit derselben ID und unveränderten Angaben (Titel, Autor, Erscheinungsjahr, Seitenanzahl, Lesestatus *ungelesen*) vorhanden
 
-### AK-2 Buch nur mit Pflichtangabe
-- **Gegeben** der Nutzer hat ein Buch nur mit Titel angelegt
+### AK-2 Buch nur mit Pflichtangaben
+- **Gegeben** der Nutzer hat ein Buch nur mit den Pflichtangaben Titel und Seitenzahl angelegt (REQ-060)
 - **Wenn** die App neu geladen bzw. neu gestartet wird
 - **Dann** ist das Buch mit seinem Titel vorhanden, und die optionalen Angaben fehlen weiterhin, ohne dass Ersatzwerte erscheinen
 
@@ -105,3 +105,4 @@ Die Priorität „Must“ und der Status „Abgestimmt“ stützen sich auf dies
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-10 | Erstellt nach CEO-Anweisung (Sprint 04, Teil A). Status „Abgestimmt“ auf ausdrückliche CEO-Anweisung | Anforderungsmanager |
+| 2026-11-23 | An REQ-060 und REQ-092 angepasst (REQ-092 Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Das Erscheinungsjahr wird über „Erschienen“ als JJJJ eingetragen (AK-1). Pflichtangaben sind Titel und Seitenzahl (AK-2). AK-5 widerspricht nicht und bleibt unverändert. Anlass ist ein CI-Befund in Sprint 10. Status unverändert | Anforderungsmanager |

@@ -118,6 +118,56 @@ export const MIGRATIONEN: readonly Migration[] = [
       'ALTER TABLE buch ADD COLUMN beendet_am TEXT',
     ],
   },
+  {
+    version: 10,
+    beschreibung: 'Listen (Sagas, Sammlungen, Bibliotheken), Zugehörigkeit mit Band; Bandnummer aus dem Scan (REQ-095, REQ-096, REQ-099)',
+    anweisungen: [
+      `CREATE TABLE IF NOT EXISTS liste (
+        id TEXT NOT NULL PRIMARY KEY,
+        art TEXT NOT NULL CHECK (art IN ('saga', 'sammlung', 'bibliothek')),
+        name TEXT NOT NULL,
+        geaendert TEXT NOT NULL
+      )`,
+      // Band: ganze Zahl ≥ 1; NULL = kein Band.
+      `CREATE TABLE IF NOT EXISTS liste_buch (
+        liste_id TEXT NOT NULL,
+        buch_id TEXT NOT NULL,
+        band INTEGER,
+        geaendert TEXT NOT NULL,
+        PRIMARY KEY (liste_id, buch_id)
+      )`,
+      // Bandnummer aus dem Barcode-Scan; NULL = keine.
+      'ALTER TABLE buch ADD COLUMN bandnummer INTEGER',
+    ],
+  },
+  {
+    version: 11,
+    beschreibung: 'Zitate je Buch, Name im Profil, Jahresziel je Jahr (REQ-105, REQ-107, REQ-104)',
+    anweisungen: [
+      // Seite: ganze Zahl ≥ 1; NULL = keine. Sprecher („Wer sagt es?“): NULL = keiner. angelegt_am: ISO-Zeitpunkt.
+      `CREATE TABLE IF NOT EXISTS zitat (
+        id TEXT NOT NULL PRIMARY KEY,
+        buch_id TEXT NOT NULL,
+        text TEXT NOT NULL,
+        sprecher TEXT,
+        seite INTEGER,
+        angelegt_am TEXT NOT NULL,
+        geaendert TEXT NOT NULL
+      )`,
+      'CREATE INDEX IF NOT EXISTS zitat_buch ON zitat (buch_id)',
+      // Angaben zur Person als Schlüssel-Wert-Paare; vorerst nur „name“.
+      `CREATE TABLE IF NOT EXISTS profil (
+        schluessel TEXT NOT NULL PRIMARY KEY,
+        wert TEXT NOT NULL,
+        geaendert TEXT NOT NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS jahresziel (
+        jahr INTEGER NOT NULL PRIMARY KEY,
+        ziel INTEGER NOT NULL CHECK (ziel >= 1),
+        geaendert TEXT NOT NULL
+      )`,
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

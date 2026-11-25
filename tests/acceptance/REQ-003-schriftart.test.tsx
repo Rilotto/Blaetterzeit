@@ -18,8 +18,17 @@
  */
 import '@testing-library/jest-dom/vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import App from '@/App';
+
+// Sprint 10 Teil C: Seit REQ-101 hat „Start“ eine Zielansicht; kein Menüpunkt ist mehr ohne Zielansicht.
+// Die Bedingung „Zielansicht noch nicht definiert“ wird deshalb simuliert: „Start“ bekommt für diese Datei die
+// Platzhalteransicht der App. Die Startseite selbst prüfen die Tests zu REQ-101.
+vi.mock('@/views', async (importOriginal) => {
+  const orig = await importOriginal<typeof import('@/views')>();
+  const { default: UnderConstruction } = await import('@/views/UnderConstruction');
+  return { ...orig, ansichten: { ...orig.ansichten, start: UnderConstruction } };
+});
 
 // ---------------------------------------------------------------------------
 // Dateisystem-Zugriff (gleiches Muster wie REQ-002: dynamisch, minimal typisiert)

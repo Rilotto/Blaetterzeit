@@ -61,7 +61,7 @@ it('[REQ-034/GROB] angelegtes Buch mit allen Angaben und Cover übersteht einen 
     render(<A1 repository={repo1} bildspeicher={bilder1} bildquelle={{ scannen: async () => PNG, galerie: async () => PNG }} />);
     await screen.findByRole('heading', { name: 'Deine Bücher' });
     const d = await oeffneBlatt();
-    for (const [n, v] of [['Titel', 'Dauerbuch'], ['Autor', 'Vorname Nachname'], ['Jahr', '2019'], ['Seiten', '350']]) fireEvent.change(feld(d, n), { target: { value: v } });
+    for (const [n, v] of [['Titel', 'Dauerbuch'], ['Autor', 'Vorname Nachname'], ['Seiten', '350']] /* Feld „JAHR“ entfällt seit REQ-092 */) fireEvent.change(feld(d, n), { target: { value: v } });
     await tippe(d.querySelector('[data-cover-hinzufuegen]')!);
     await tippe(within(screen.getByRole('menu', { name: 'Bild hinzufügen' })).getByRole('menuitem', { name: 'Aus Galerie auswählen' }));
     await tippe(within(await screen.findByRole('region', { name: 'Zuschnitt' })).getByRole('button', { name: 'Bestätigen' }));
@@ -77,7 +77,7 @@ it('[REQ-034/GROB] angelegtes Buch mit allen Angaben und Cover übersteht einen 
     const repo2 = st2.createBookRepository();
     const b = (await repo2.list()).filter((x) => x.titel === 'Dauerbuch');
     expect(b).toHaveLength(1);
-    expect(b[0]).toMatchObject({ titel: 'Dauerbuch', autor: 'Vorname Nachname', erscheinungsjahr: 2019, seitenanzahl: 350, status: 'ungelesen' });
+    expect(b[0]).toMatchObject({ titel: 'Dauerbuch', autor: 'Vorname Nachname', seitenanzahl: 350, status: 'ungelesen' });
     expect(await st2.createImageStore().get(b[0].id, 'cover')).toBeTruthy();
   } finally {
     vi.unstubAllGlobals();

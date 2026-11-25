@@ -93,7 +93,7 @@ describe('Reiter „Details“', () => {
       'Genres',
       'Tropes',
       'Inhaltswarnungen',
-      'Sammlungen und Bibliotheken',
+      'Sagas, Sammlungen und Bibliotheken',
       'Ausgabe',
     ]);
     expect(document.querySelectorAll('[data-details-bearbeiten]')).toHaveLength(3);
@@ -105,17 +105,21 @@ describe('Reiter „Details“', () => {
     expect(zeilen.map((z) => z.querySelector('[data-zeile-bezeichnung]')!.textContent)).toEqual([
       'Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt', 'Beendet am',
     ]);
-    expect(zeilen.filter((z) => z.querySelector('[data-zeile-pfeil]')).map((z) => z.getAttribute('data-ausgabe-zeile'))).toEqual([
-      'seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis',
-    ]);
+    // Alle zwölf Zeilen mit Pfeil (REQ-091).
+    expect(zeilen.filter((z) => z.querySelector('[data-zeile-pfeil]'))).toHaveLength(12);
     expect(wert('seiten')).toBe('608');
     expect(wert('erschienen')).toBe('2025');
     expect(wert('sonderausgabe')).toBe('Keins');
     expect(wert('preis')).toBe('Trag ein, was du bezahlt hast');
     await tippe(q('[data-ausgabe-zeile="fotos"]')!);
     await tippe(q('[data-details-bearbeiten="genres"]')!);
-    await tippe(q('[data-sammlung-hinzufuegen]')!);
     expect(q('[role="dialog"]')).toBeNull();
+    // Drei gestrichelte Listen-Pillen untereinander (REQ-095).
+    expect([...document.querySelectorAll('[data-listen-pille]')].map((p) => p.textContent)).toEqual([
+      '+ Zu einer Saga hinzufügen',
+      '+ Zu einer Sammlung hinzufügen',
+      '+ Zu einer Bibliothek hinzufügen',
+    ]);
   });
 
   it('Seiten ändern: vorbefüllt, kleiner als aktuelle Seite nicht sicherbar, kein Menü „Aktuelle Seite“', async () => {

@@ -91,21 +91,35 @@ describe('REQ-056 Karte „Ausgabe“', () => {
     expect(bereich(d).textContent).not.toMatch(/Signiert/i);
   });
 
-  it('[REQ-056/AK-2] genau Seiten, Format, Maße, Exemplar, Sonderausgabe, Fotos, Preis haben den Pfeil „›“; Hinzugefügt und Beendet am ohne', async () => {
-    const { d } = await mitBuch(buch({ seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00', status: 'gelesen', beendetAm: '2026-11-03' }));
-    const mit = zeilen(d).filter((z) => z.querySelector('[data-zeile-pfeil]')).map((z) => z.getAttribute('data-ausgabe-zeile'));
-    expect(mit).toEqual(['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis']);
-    for (const z of zeilen(d).filter((z) => z.querySelector('[data-zeile-pfeil]'))) expect(norm(z.querySelector('[data-zeile-pfeil]')!.textContent)).toBe('›');
-    for (const id of ['verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet']) {
-      expect(zeile(d, id).querySelector('[data-zeile-pfeil]')).toBeNull();
-      expect(zeile(d, id).textContent).not.toContain('›');
+  // Fassung 2026-11-23 (REQ-091): alle Zeilen haben den Pfeil „›“, auch Verlag, Erschienen, ISBN, Hinzugefügt und Beendet am.
+  it.each([
+    ['mit Werten', { seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00', status: 'gelesen', beendetAm: '2026-11-03', verlag: 'Carlsen', isbn: '9783551551672' }],
+    ['ohne Werte', {}],
+  ] as const)('[REQ-056/AK-2] alle zwölf Zeilen haben genau einen Pfeil „›“ (%s)', async (_n, felder) => {
+    const { d } = await mitBuch(buch(felder as Partial<Buch>));
+    expect(zeilen(d)).toHaveLength(12);
+    for (const z of zeilen(d)) {
+      const id = z.getAttribute('data-ausgabe-zeile');
+      const p = z.querySelectorAll('[data-zeile-pfeil]');
+      expect(p, `${id}: Pfeil`).toHaveLength(1);
+      expect(norm(p[0].textContent), id!).toBe('›');
     }
   });
 
-  it('[REQ-056/AK-3] Seiten 608 und Erschienen 2025', async () => {
+  // Fassung 2026-11-23 (REQ-092): Erschienen zeigt das Datum im Format von „Hinzugefügt“, ohne Datum das Jahr.
+  it('[REQ-056/AK-3] Seiten 608 und Erschienen 2025 (Jahr ohne Datum)', async () => {
     const { d } = await mitBuch(buch({ seitenanzahl: 608, erscheinungsjahr: 2025 }));
     expect(wert(d, 'seiten')).toBe('608');
     expect(wert(d, 'erschienen')).toBe('2025');
+  });
+
+  it.each([
+    [{ erscheinungsdatum: '01.02.2025' }, 'Feb. 2025'],
+    [{ erscheinungsdatum: '01.02.2025', erscheinungsjahr: 2019 }, 'Feb. 2025'],
+    [{ erscheinungsdatum: '14.10.2026' }, 'Okt. 2026'],
+  ] as const)('[REQ-056/AK-3] mit Erscheinungsdatum %j zeigt „Erschienen“ „%s“', async (felder, text) => {
+    const { d } = await mitBuch(buch(felder as Partial<Buch>));
+    expect(wert(d, 'erschienen')).toBe(text);
   });
 
   it('[REQ-056/AK-4] Print · Taschenbuch, Meins, Keins', async () => {
@@ -152,9 +166,9 @@ describe('REQ-056 Karte „Ausgabe“', () => {
     expect(wert(d, 'hinzugefuegt')).toBe('Okt. 2026');
   });
 
-  // Seit REQ-063 (Verlag, ISBN) und REQ-064 (Hinzugefügt) haben diese Zeilen eine Funktion; AK-7 gilt nur noch für
-  // „Fotos“ und „Erschienen“. Für die übrigen: Blatt öffnet sich, Schließen ohne Sichern ändert nichts.
-  it.each(['fotos', 'erschienen'])('[REQ-056/AK-7] „%s“ antippen: kein Menü/Fenster, nichts ändert sich', async (id) => {
+  // Fassung 2026-11-23: AK-7 gilt nur noch für „Fotos“. Verlag, ISBN (REQ-063), Hinzugefügt (REQ-064) und Erschienen (REQ-092)
+  // öffnen ein Blatt; Schließen ohne Sichern ändert nichts.
+  it.each(['fotos'])('[REQ-056/AK-7] „%s“ antippen: kein Menü/Fenster, nichts ändert sich', async (id) => {
     const b = buch({ seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00' });
     const { w, d } = await mitBuch(b);
     const vorher = await zustand(w, d, b.id);
@@ -163,7 +177,7 @@ describe('REQ-056 Karte „Ausgabe“', () => {
     expect(await zustand(w, d, b.id)).toEqual(vorher);
   });
 
-  it.each(['verlag', 'isbn', 'hinzugefuegt'])('[REQ-056/AK-7] (geändert durch REQ-063/064) „%s“ öffnet ein Blatt; Schließen über X ändert nichts', async (id) => {
+  it.each(['verlag', 'isbn', 'hinzugefuegt', 'erschienen'])('[REQ-056/AK-7] (geändert durch REQ-063/064/092) „%s“ öffnet ein Blatt; Schließen über X ändert nichts', async (id) => {
     const b = buch({ seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00' });
     const { w, d } = await mitBuch(b);
     const vorher = await zustand(w, d, b.id);

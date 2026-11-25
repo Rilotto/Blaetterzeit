@@ -194,7 +194,8 @@ describe('REQ-063 Verlag und ISBN', () => {
     expect((await gespeichert(id))?.isbn).toBeUndefined();
   });
 
-  it.each(['9783551551670', '12345', '978355155167', ''])('[REQ-063/AK-4] ungültige ISBN „%s“: Feld in Primär markiert, kein Hinweistext, Blatt offen, nichts gespeichert', async (ein) => {
+  // '' entfernt (2026-11-23): ein leeres Feld ist laut Anforderungstext nicht mehr ungültig (REQ-093).
+  it.each(['9783551551670', '12345', '978355155167'])('[REQ-063/AK-4] ungültige ISBN „%s“: Feld in Primär markiert, kein Hinweistext, Blatt offen, nichts gespeichert', async (ein) => {
     const { d, id } = await mitBuch();
     await oeffne(d, 'isbn');
     gib('isbn', ein);

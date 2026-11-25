@@ -70,6 +70,24 @@ async function legeAn(felder: Record<string, string>, mitCover = false) {
   const d = await screen.findByRole('dialog', { name: 'Manueller Eintrag' });
   // Seitenzahl ist seit REQ-060 Pflicht: ohne Angabe wird „100“ eingetragen.
   for (const [k, v] of Object.entries({ Seiten: '100', ...felder })) {
+    // Seit REQ-092 (2026-11-23): kein Feld „JAHR“; das Erscheinungsjahr wird über „Erschienen“ als JJJJ eingetragen.
+    if (k === 'Jahr') {
+      await act(async () => {
+        fireEvent.click(d.querySelector('[data-ausgabe-zeile="erschienen"]')!);
+        await new Promise((r) => setTimeout(r, 20));
+      });
+      const f = await vi.waitFor(() => {
+        const e = document.querySelector<HTMLInputElement>('[data-blatt-feld="erschienen"]');
+        expect(e).not.toBeNull();
+        return e!;
+      });
+      fireEvent.change(f, { target: { value: v } });
+      await act(async () => {
+        fireEvent.click(document.querySelector('[data-blatt-sichern="erschienen"]')!);
+        await new Promise((r) => setTimeout(r, 20));
+      });
+      continue;
+    }
     fireEvent.change(within(d).getByLabelText(new RegExp(`^\\s*${k}\\s*$`, 'i')), { target: { value: v } });
   }
   if (mitCover) {
@@ -113,7 +131,7 @@ afterEach(() => {
 // ===========================================================================
 describe('REQ-034 Buchdaten dauerhaft speichern', () => {
   describe('AK-1 Angelegtes Buch übersteht Neuladen/Neustart mit allen Angaben', () => {
-    it('[REQ-034/AK-1] Titel, Autor, Jahr, Seiten: nach Neustart gleiche ID und unveränderte Angaben, Status „ungelesen“', async () => {
+    it('[REQ-034/AK-1] Titel, Autor, Jahr (über „Erschienen“), Seiten: nach Neustart gleiche ID und unveränderte Angaben, Status „ungelesen“', async () => {
       const s1 = await starte();
       await zeige(s1);
       await legeAn({ Titel: 'Dauerbuch', Autor: 'Vorname Nachname', Jahr: '2019', Seiten: '350' });

@@ -11,10 +11,25 @@ import type { AnsichtRepository } from './AnsichtRepository';
 import { InMemoryAnsichtRepository } from './InMemoryAnsichtRepository';
 import { RueckfallAnsichtRepository, WebAnsichtRepository } from './WebAnsichtRepository';
 import type { EinstellungRepository } from './EinstellungRepository';
+import type { ListenRepository } from './ListenRepository';
+import { InMemoryListenRepository } from './InMemoryListenRepository';
+import { IndexedDbListenRepository } from './IndexedDbListenRepository';
+import { RueckfallListenRepository } from './RueckfallListenRepository';
 import { InMemoryEinstellungRepository } from './InMemoryEinstellungRepository';
 import { RueckfallEinstellungRepository, WebEinstellungRepository } from './WebEinstellungRepository';
+import type { ZitatRepository } from './ZitatRepository';
+import { InMemoryZitatRepository } from './InMemoryZitatRepository';
+import { IndexedDbZitatRepository } from './IndexedDbZitatRepository';
+import { RueckfallZitatRepository } from './RueckfallZitatRepository';
+import type { ProfilRepository } from './ProfilRepository';
+import { InMemoryProfilRepository } from './InMemoryProfilRepository';
+import { IndexedDbProfilRepository } from './IndexedDbProfilRepository';
+import { RueckfallProfilRepository } from './RueckfallProfilRepository';
 
-export type { BookRepository, ImageStore, AnsichtRepository, EinstellungRepository };
+export type { BookRepository, ImageStore, AnsichtRepository, EinstellungRepository, ListenRepository, ZitatRepository, ProfilRepository };
+export { InMemoryZitatRepository } from './InMemoryZitatRepository';
+export { InMemoryProfilRepository } from './InMemoryProfilRepository';
+export { InMemoryListenRepository } from './InMemoryListenRepository';
 export type { EinstellungSchluessel } from './EinstellungRepository';
 export { InMemoryEinstellungRepository } from './InMemoryEinstellungRepository';
 export type { Uebersichtsansicht } from './AnsichtRepository';
@@ -102,4 +117,79 @@ export function createEinstellungRepository(): EinstellungRepository {
     console.warn('Einstellungsspeicher nicht dauerhaft verfügbar:', fehler);
   }
   return new RueckfallEinstellungRepository(dauerhaft, new InMemoryEinstellungRepository());
+}
+
+/**
+ * Listen und Zugehörigkeiten (REQ-095 bis REQ-099):
+ *  - Android-APK: SQLite (Tabellen `liste`, `liste_buch`, Migration 10)
+ *  - Web/Prototyp: IndexedDB (Stores `listen`, `listenBuecher`, Migration 8)
+ *  - ohne IndexedDB (Testumgebung): Arbeitsspeicher
+ */
+export function createListenRepository(): ListenRepository {
+  const meldung = (fehler: unknown) => console.warn('Listenspeicher nicht dauerhaft verfügbar:', fehler);
+  if (Capacitor.isNativePlatform()) {
+    return new RueckfallListenRepository(async () => {
+      const [{ sqliteOeffnen }, { SqliteListenRepository }] = await Promise.all([
+        import('./sqlite/capacitorSqlite'),
+        import('./SqliteListenRepository'),
+      ]);
+      return new SqliteListenRepository(await sqliteOeffnen());
+    }, meldung);
+  }
+  if (typeof indexedDB === 'undefined') return new InMemoryListenRepository();
+  return new RueckfallListenRepository(async () => {
+    const repo = new IndexedDbListenRepository(indexedDB);
+    await repo.bereit();
+    return repo;
+  }, meldung);
+}
+
+/**
+ * Zitate (REQ-105, REQ-106):
+ *  - Android-APK: SQLite (Tabelle `zitat`, Migration 11)
+ *  - Web/Prototyp: IndexedDB (Store `zitate`, Migration 9)
+ *  - ohne IndexedDB (Testumgebung): Arbeitsspeicher
+ */
+export function createZitatRepository(): ZitatRepository {
+  const meldung = (fehler: unknown) => console.warn('Zitatspeicher nicht dauerhaft verfügbar:', fehler);
+  if (Capacitor.isNativePlatform()) {
+    return new RueckfallZitatRepository(async () => {
+      const [{ sqliteOeffnen }, { SqliteZitatRepository }] = await Promise.all([
+        import('./sqlite/capacitorSqlite'),
+        import('./SqliteZitatRepository'),
+      ]);
+      return new SqliteZitatRepository(await sqliteOeffnen());
+    }, meldung);
+  }
+  if (typeof indexedDB === 'undefined') return new InMemoryZitatRepository();
+  return new RueckfallZitatRepository(async () => {
+    const repo = new IndexedDbZitatRepository(indexedDB);
+    await repo.bereit();
+    return repo;
+  }, meldung);
+}
+
+/**
+ * Name im Profil (REQ-107) und Jahresziel je Jahr (REQ-104):
+ *  - Android-APK: SQLite (Tabellen `profil`, `jahresziel`, Migration 11)
+ *  - Web/Prototyp: IndexedDB (Stores `profil`, `jahresziele`, Migration 9)
+ *  - ohne IndexedDB (Testumgebung): Arbeitsspeicher
+ */
+export function createProfilRepository(): ProfilRepository {
+  const meldung = (fehler: unknown) => console.warn('Profilspeicher nicht dauerhaft verfügbar:', fehler);
+  if (Capacitor.isNativePlatform()) {
+    return new RueckfallProfilRepository(async () => {
+      const [{ sqliteOeffnen }, { SqliteProfilRepository }] = await Promise.all([
+        import('./sqlite/capacitorSqlite'),
+        import('./SqliteProfilRepository'),
+      ]);
+      return new SqliteProfilRepository(await sqliteOeffnen());
+    }, meldung);
+  }
+  if (typeof indexedDB === 'undefined') return new InMemoryProfilRepository();
+  return new RueckfallProfilRepository(async () => {
+    const repo = new IndexedDbProfilRepository(indexedDB);
+    await repo.bereit();
+    return repo;
+  }, meldung);
 }

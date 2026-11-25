@@ -31,7 +31,8 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 - Das System muss den aktiven Reiter durch eine innenliegende Pille („rote Pille“) mit Icon und Bezeichnung kennzeichnen; nicht aktive Reiter zeigen nur ihr Icon.
 - Wenn die Buchdetails geöffnet werden, muss das System den Reiter „Rezension“ als aktiv darstellen.
 - Wenn der Nutzer das Icon eines nicht aktiven Reiters antippt, muss das System die innenliegende Pille in einer fließenden Bewegung zu diesem Reiter wandern lassen und den zugehörigen Bereich anzeigen.
-- Wenn der Reiter „Notizbuch“ oder „Figuren & Orte“ aktiv ist, muss das System in dessen Bereich den Platzhaltertext „under construction :)“ in der Platzhalter-Textfarbe (REQ-002, REQ-004) anzeigen.
+- Wenn der Reiter „Figuren & Orte“ aktiv ist, muss das System in dessen Bereich den Platzhaltertext „under construction :)“ in der Platzhalter-Textfarbe (REQ-002, REQ-004) anzeigen. Der Reiter „Notizbuch“ zeigt den Abschnitt „Zitate“ (REQ-105).
+- Werden die Buchdetails über „Zitat des Tages“ geöffnet, ist der Reiter „Notizbuch“ aktiv (REQ-106). In allen anderen Fällen gilt „Rezension“.
 - Die Breite der Reiterleiste darf sich beim Reiterwechsel nicht ändern.
 - Das System muss Leiste, Pille, Icons und Schrift farblich wie im Referenzbild darstellen, mit Farben aus zentralen Farbrubriken.
 
@@ -49,7 +50,7 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 
 ### AK-3 Rezension beim Öffnen aktiv
 - **Gegeben** ein beliebiges Buch
-- **Wenn** dessen Buchdetails geöffnet werden
+- **Wenn** dessen Buchdetails geöffnet werden (außer über „Zitat des Tages“, REQ-106)
 - **Dann** ist der Reiter „Rezension“ aktiv und sein Bereich wird angezeigt
 
 ### AK-4 Bezeichnung nur im aktiven Reiter
@@ -74,10 +75,11 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 - **Wenn** der Nutzer einen anderen Reiter antippt
 - **Dann** bewegt sich die innenliegende Pille über einen Übergang zur neuen Stelle und springt nicht
 
-### AK-8 Notizbuch und Figuren & Orte zeigen „under construction :)“
+### AK-8 Figuren & Orte zeigt „under construction :)“, Notizbuch die Zitate
 - **Gegeben** die Buchdetails werden angezeigt
-- **Wenn** der Nutzer nacheinander „Notizbuch“ und „Figuren & Orte“ antippt
-- **Dann** zeigt der Bereich jeweils „under construction :)“ in der Farbrubrik „Tertiär“ (REQ-004)
+- **Wenn** der Nutzer „Figuren & Orte“ bzw. (zweiter Durchlauf) „Notizbuch“ antippt
+- **Dann** zeigt „Figuren & Orte“ „under construction :)“ in der Farbrubrik „Tertiär“ (REQ-004)
+- **Und** „Notizbuch“ zeigt den Abschnitt „Zitate“ und kein „under construction :)“ (REQ-105)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -92,6 +94,8 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 ## Abhängigkeiten
 
 - **REQ-013:** Buchdetails. **REQ-026:** Statistik-Pille. **REQ-002, REQ-004:** Platzhaltertext „under construction :)“ in Tertiär.
+- **REQ-105 (Entwurf):** Mit dessen Umsetzung zeigt „Notizbuch“ den Abschnitt „Zitate“ statt „under construction :)“ (Anforderung und AK-8 werden dann für „Notizbuch“ angepasst, „Figuren & Orte“ bleibt).
+- **REQ-106 (Entwurf):** Über „Zitat des Tages“ öffnen die Buchdetails mit aktivem Reiter „Notizbuch“ (Ausnahme zu AK-3).
 
 ## Offene Fragen
 
@@ -106,3 +110,5 @@ Referenzbilder: [referenzen/REF-rezension-01-bewertung.png](referenzen/REF-rezen
 | 2026-11-15 | CEO-Antwort: übrige Reiter zeigen „under construction :)“ (neu AK-8) | Anforderungsmanager |
 | 2026-11-15 | Reiter „Details“ erhält Inhalt (REQ-051 ff.) und zeigt kein „under construction :)“ mehr (AK-8 angepasst); Referenzbild REF-rezension-02-details.png (vom CEO gelöscht) durch REF-details-01-uebersicht.png ersetzt | Anforderungsmanager |
 | 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |
+| 2026-11-24 | Verweise auf REQ-105 und REQ-106 (Entwurf) unter Abhängigkeiten ergänzt. AKs bleiben bis zur Abstimmung unverändert. Status unverändert | Anforderungsmanager |
+| 2026-11-24 | An REQ-105 und REQ-106 angepasst (Abgestimmt, CEO: „sieht alles super aus! Danke!“): „Notizbuch“ zeigt „Zitate“ statt Platzhalter, über „Zitat des Tages“ öffnet „Notizbuch“ statt „Rezension“ (Anforderung, AK-3, AK-8). Status unverändert | Anforderungsmanager |

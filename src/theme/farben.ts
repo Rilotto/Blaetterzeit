@@ -1005,3 +1005,131 @@ export const statistikFarbe = (rolle: StatistikFarbrolle): string => rubrikFarbe
 
 /** Blasse Fläche der gewählten Kachel (REF-statistik-01), aus „Primär“ und „Kartenfläche“ gemischt. */
 export const statistikKachelGewaehltFlaeche = `color-mix(in srgb, ${rubrikFarbe('primaer')} 14%, ${rubrikFarbe('kartenflaeche')})`;
+
+/**
+ * Farbrollen der Listen (Sagas, Sammlungen, Bibliotheken): Abschnitt in den Buchdetails, Blatt „Zu einer …
+ * hinzufügen“, Listenübersicht, geöffnete Liste und Saga-Zeile unter dem Autor (REQ-095 bis REQ-099).
+ */
+export type ListenFarbrolle =
+  | 'ueberschrift'
+  | 'zurueckIcon'
+  | 'plusFlaeche'
+  | 'plusIcon'
+  | 'stift'
+  | 'karteFlaeche'
+  | 'trennlinie'
+  | 'name'
+  | 'anzahl'
+  | 'leerText'
+  | 'haekchenRahmen'
+  | 'haekchenFlaeche'
+  | 'haekchenIcon'
+  | 'bandBeschriftung'
+  | 'bandFeldFlaeche'
+  | 'bandFeldRahmen'
+  | 'bandFeldSchrift'
+  | 'fehler'
+  | 'loeschenSchrift'
+  | 'rueckfrageText'
+  | 'neinFlaeche'
+  | 'neinSchrift'
+  | 'sagaZeile'
+  | 'auswahlFlaeche'
+  | 'auswahlRahmen'
+  | 'bildFeldFlaeche'
+  | 'bildFeldRahmen'
+  | 'bildFeldInhalt';
+
+/** Aus welcher Farbrubrik jede Farbrolle der Listen ihre Farbe bezieht (nur bestehende Rubriken). */
+export const listenFarbrollen: Record<ListenFarbrolle, FarbrubrikId> = {
+  ueberschrift: 'dunkelbraun',
+  zurueckIcon: 'dunkelbraun',
+  plusFlaeche: 'primaer',
+  plusIcon: 'hintergrund',
+  stift: 'primaer',
+  karteFlaeche: 'kartenflaeche',
+  trennlinie: 'sekundaer',
+  name: 'dunkelbraun',
+  anzahl: 'tertiaer',
+  leerText: 'tertiaer',
+  haekchenRahmen: 'sekundaer',
+  haekchenFlaeche: 'primaer',
+  haekchenIcon: 'hintergrund',
+  bandBeschriftung: 'tertiaer',
+  bandFeldFlaeche: 'ghost',
+  bandFeldRahmen: 'ghostframe',
+  bandFeldSchrift: 'dunkelbraun',
+  // Ungültiges Feld (Band, Name) wie das ungültige Feld im Blatt „ISBN“ (REQ-063): Primär.
+  fehler: 'primaer',
+  loeschenSchrift: 'primaer',
+  rueckfrageText: 'dunkelbraun',
+  neinFlaeche: 'ghost',
+  neinSchrift: 'dunkelbraun',
+  // „Band 1 · The Empyrean“ unter dem Autor (REQ-099) wie die Autorzeile in Tertiär.
+  sagaZeile: 'tertiaer',
+  // Markiertes Buch im Blatt „Bücher auswählen“ (REQ-098, AK-7): Fläche Ghost, Rahmen Primär.
+  auswahlFlaeche: 'ghost',
+  auswahlRahmen: 'primaer',
+  // Bildfeld im Blatt „Liste bearbeiten“ (REQ-100) wie das Feld „Cover hinzufügen“ (REQ-032).
+  bildFeldFlaeche: 'ghost',
+  bildFeldRahmen: 'ghostframe',
+  bildFeldInhalt: 'tertiaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle der Listen. */
+export const listenFarbe = (rolle: ListenFarbrolle): string => rubrikFarbe(listenFarbrollen[rolle]);
+
+/** Farbrollen der Startseite (REQ-101 bis REQ-104, REQ-106). */
+export type StartFarbrolle =
+  | 'datum'
+  | 'gruss'
+  | 'tageszeitIcon'
+  | 'abschnittsueberschrift'
+  | 'karteFlaeche'
+  | 'buchtitel'
+  | 'autor'
+  | 'leerText'
+  | 'jahreszielText'
+  | 'jahreszielFestlegen'
+  | 'zitatText'
+  | 'zitatQuelle'
+  | 'zitatZeichen';
+
+export const startFarbrollen: Record<StartFarbrolle, FarbrubrikId> = {
+  datum: 'tertiaer',
+  gruss: 'dunkelbraun',
+  // Tageszeit-Icon in der Akzentfarbe (REQ-101, AK-5: Farbrubrik „Primär“).
+  tageszeitIcon: 'primaer',
+  abschnittsueberschrift: 'tertiaer',
+  karteFlaeche: 'kartenflaeche',
+  buchtitel: 'dunkelbraun',
+  autor: 'tertiaer',
+  // Hinweis „Gerade kein Buch offen“ wie Platzhaltertexte (REQ-004) in Tertiär.
+  leerText: 'tertiaer',
+  jahreszielText: 'dunkelbraun',
+  jahreszielFestlegen: 'primaer',
+  zitatText: 'dunkelbraun',
+  zitatQuelle: 'tertiaer',
+  zitatZeichen: 'primaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle der Startseite. */
+export const startFarbe = (rolle: StartFarbrolle): string => rubrikFarbe(startFarbrollen[rolle]);
+
+/** Farbrollen des Reiters „Notizbuch“ und des Blatts „Zitat“ (REQ-105). */
+export type NotizbuchFarbrolle = 'zitatText' | 'sprecher' | 'seite' | 'trennlinie' | 'plusFlaeche' | 'plusIcon' | 'feldFehler' | 'loeschenSchrift';
+
+export const notizbuchFarbrollen: Record<NotizbuchFarbrolle, FarbrubrikId> = {
+  zitatText: 'dunkelbraun',
+  sprecher: 'tertiaer',
+  seite: 'tertiaer',
+  trennlinie: 'ghostframe',
+  plusFlaeche: 'primaer',
+  plusIcon: 'hintergrund',
+  // Leeres Zitat bzw. ungültige Seite wie das ungültige Feld im Blatt „ISBN“ (REQ-063): Primär.
+  feldFehler: 'primaer',
+  loeschenSchrift: 'primaer',
+};
+
+/** CSS-Ausdruck einer Farbrolle des Reiters „Notizbuch“. */
+export const notizbuchFarbe = (rolle: NotizbuchFarbrolle): string => rubrikFarbe(notizbuchFarbrollen[rolle]);

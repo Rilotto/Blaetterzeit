@@ -40,6 +40,18 @@ const jahrAus = (wert: string | undefined): number | undefined => {
   return m ? Number(m[1]) : undefined;
 };
 
+/**
+ * Bandnummer aus einer Bandangabe der Reihe, z. B. DNB 490/830 $v „2“, „Bd. 2“, „Band 2“, „Vol. 2“ oder
+ * Open Library „The Empyrean ; 2“, „#2“ (REQ-099). Nur ganze Zahl ≥ 1, sonst undefined.
+ */
+export function bandAus(angabe: string | undefined): number | undefined {
+  if (!angabe) return undefined;
+  const t = angabe.trim();
+  const m = /^(\d{1,4})\b/.exec(t) ?? /(?:Bd\.?|Band|Vol\.?|Volume|Teil|Book|Buch|#|;)\s*(\d{1,4})\b/i.exec(t);
+  const n = m ? Number(m[1]) : NaN;
+  return Number.isInteger(n) && n >= 1 ? n : undefined;
+}
+
 /** Seitenzahl aus einer Umfangsangabe wie „XII, 345 Seiten“, „345 S.“ oder „345 p.“. */
 export function seitenAus(umfang: string | undefined): number | undefined {
   const m = umfang?.match(/(\d+)\s*(?:Seiten|S\.|S\b|p\.|pages)/i);
@@ -179,10 +191,14 @@ export function dnbTrefferLesen(xml: string, gesuchteIsbn: string): Treffer[] {
     const medium = f.filter((x) => x.tag === '337' || x.tag === '338' || x.tag === '250').map((x) => unterfeld(x, 'a') ?? '').join(' ');
     const preisCent = preisCentAus(bezug);
     const fmt = formatAus(bezug).format ? formatAus(bezug) : formatAus(medium);
+    // Reihe und Band (REQ-099): 490 (Gesamttitelangabe) bzw. 830 (Nebeneintragung Gesamttitel), $a Name, $v Band.
+    const reiheFeld = erstes('490') ?? erstes('830');
+    const reihe = textBereinigen(unterfeld(reiheFeld, 'a'));
+    const bandnummer = bandAus(unterfeld(reiheFeld, 'v'));
     const t: Treffer = {
       quelle: 'dnb',
       // Maße (REQ-072, AK-8): Höhe aus 300 $c.
-      angaben: ohneLeere({ titel, autor, verlag, erscheinungsjahr: jahr, seitenanzahl: seiten, isbn, ...fmt, preisCent, ...dnbMasseAus(unterfeld(erstes('300'), 'c')) }),
+      angaben: ohneLeere({ titel, autor, verlag, erscheinungsjahr: jahr, seitenanzahl: seiten, isbn, ...fmt, preisCent, ...dnbMasseAus(unterfeld(erstes('300'), 'c')), reihe, bandnummer }),
       coverUrl: dnbCoverUrl(gesuchteIsbn),
     };
     if (brauchbar(t)) ergebnis.push(t);
@@ -206,6 +222,8 @@ interface OlEintrag {
   publish_date?: unknown;
   physical_format?: unknown;
   price?: unknown;
+  /** Reihe, z. B. ["The Empyrean ; 2"] (nicht immer vorhanden). */
+  series?: unknown;
   physical_dimensions?: unknown;
   /** Bei jscmd=details liegt der Ausgabe-Datensatz unter „details“. */
   details?: { physical_dimensions?: unknown };
@@ -222,6 +240,15 @@ const namen = (liste: unknown): string[] =>
     : [];
 
 const zeichen = (w: unknown): string | undefined => (typeof w === 'string' ? w : undefined);
+
+/** Reihe und Band aus Open-Library-„series“ (Zeichenkette oder Liste), z. B. „The Empyrean ; 2“ (REQ-099). */
+function reiheAusOl(series: unknown): { reihe?: string; bandnummer?: number } {
+  const erste = Array.isArray(series) ? series.find((x) => typeof x === 'string') : series;
+  if (typeof erste !== 'string') return {};
+  const [name, ...rest] = erste.split(/\s*[;,#]\s*/);
+  const bandnummer = bandAus(rest.join(' ')) ?? bandAus(/#\s*\d+/.exec(erste)?.[0]);
+  return { reihe: textBereinigen(name), ...(bandnummer !== undefined ? { bandnummer } : {}) };
+}
 
 /** Liest die Antwort der Open-Library-Books-API. Unlesbare Antworten ergeben keine Treffer. */
 export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Treffer[] {
@@ -260,6 +287,8 @@ export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Tre
         // Preis und Format (REQ-062 AK-9), nur falls die Quelle sie liefert.
         ...formatAus(zeichen(eintrag.physical_format)),
         preisCent: preisCentAus(zeichen(eintrag.price)),
+        // Reihe und Band (REQ-099), nur falls die Quelle sie liefert.
+        ...reiheAusOl(eintrag.series),
         // Maße (REQ-072, AK-8), nur falls eindeutig.
         ...openLibraryMasseAus(zeichen(eintrag.physical_dimensions) ?? zeichen(eintrag.details?.physical_dimensions)),
       }),

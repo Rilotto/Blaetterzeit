@@ -13,6 +13,15 @@ import { createEinstellungRepository, InMemoryEinstellungRepository, type Einste
 import { InMemoryImageStore } from '@/storage/InMemoryImageStore';
 import StatistikAnsicht from '@/views/StatistikAnsicht';
 
+// Sprint 10 Teil C: Seit REQ-101 hat „Start“ eine Zielansicht; kein Menüpunkt ist mehr ohne Zielansicht.
+// Die Bedingung „Zielansicht noch nicht definiert“ wird deshalb simuliert: „Start“ bekommt für diese Datei die
+// Platzhalteransicht der App. Die Startseite selbst prüfen die Tests zu REQ-101.
+vi.mock('@/views', async (importOriginal) => {
+  const orig = await importOriginal<typeof import('@/views')>();
+  const { default: UnderConstruction } = await import('@/views/UnderConstruction');
+  return { ...orig, ansichten: { ...orig.ansichten, start: UnderConstruction } };
+});
+
 vi.mock('@/buecher/demodaten', () => ({ demoBuecher: [] }));
 beforeEach(() => localStorage.clear());
 afterEach(() => {
@@ -70,7 +79,8 @@ describe('REQ-079 Kopf und Zeitraum-Pillen', () => {
 
   it('[REQ-079/AK-1] Gegenstück: andere Menüpunkte ohne Zielansicht zeigen weiterhin den Platzhalter, nicht „Dein Lesen“', async () => {
     render(<App einstellungRepository={new InMemoryEinstellungRepository()} />);
-    await tippe(within(nav()).getByRole('button', { name: 'Bibliothek' }));
+    // Seit REQ-097 hat „Bibliothek“ eine Zielansicht; „Start“ ist weiterhin ohne Ziel (REQ-002).
+    await tippe(within(nav()).getByRole('button', { name: 'Start' }));
     expect(norm(screen.getByRole('main').textContent)).toBe('under construction :)');
     expect(screen.queryByText('Dein Lesen')).toBeNull();
   });

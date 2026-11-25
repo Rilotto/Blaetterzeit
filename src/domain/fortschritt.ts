@@ -34,9 +34,12 @@ export function seiteVon(buch: Buch): number {
 /** Fortschritt als ganze Prozentzahl für die Statistik-Pille (REQ-026). */
 export const fortschrittGerundet = (buch: Buch): number => kaufmaennisch(fortschrittExakt(buch));
 
-/** Angabe unter dem Balken: „42 / 400“ bzw. „5 %“ (REQ-023). */
+/**
+ * Angabe unter dem Balken: „42 / 400“ bzw. „5 %“ (REQ-023). Ohne Fortschrittswert wie ein Buch ohne
+ * Fortschritt „0 / <Seitenanzahl>“, auch wenn der gespeicherte Modus „%“ ist (REQ-023 AK-8, REQ-093 AK-7).
+ */
 export function fortschrittText(buch: Buch): string {
-  if (modusVon(buch) === 'prozent') return `${buch.fortschrittProzent ?? 0} %`;
+  if (modusVon(buch) === 'prozent' && buch.fortschrittProzent !== undefined) return `${buch.fortschrittProzent} %`;
   return `${buch.aktuelleSeite ?? 0} / ${buch.seitenanzahl ?? 0}`;
 }
 
@@ -88,6 +91,18 @@ export function fortschrittSichern(buch: Buch, modus: Fortschrittsmodus, wert: n
   const sitzungen: Sitzung[] = [...(buch.sitzungen ?? [])];
   if (nachher > vorher) sitzungen.push({ zeitpunkt: jetzt.toISOString(), seite: seiteVon(neu) });
   if (sitzungen.length > 0) neu.sitzungen = sitzungen;
+  return neu;
+}
+
+/**
+ * Fortschritt leeren (REQ-024 AK-8, REQ-093 AK-7): aktuelle Seite und Prozentwert entfallen.
+ * Der gespeicherte Fortschrittsmodus bleibt erhalten (REQ-024: Modus pro Buch gespeichert).
+ * Es entsteht keine Sitzung; bisherige Sitzungen bleiben unverändert.
+ */
+export function fortschrittEntfernen(buch: Buch): Buch {
+  const neu: Buch = { ...buch };
+  delete neu.aktuelleSeite;
+  delete neu.fortschrittProzent;
   return neu;
 }
 

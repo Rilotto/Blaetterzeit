@@ -3,6 +3,7 @@ import { masseVorschlagText } from '@/buchdetails/masse';
 import {
   PREIS_LEER,
   beendetText,
+  erschienenText,
   exemplarText,
   formatText,
   hatMasse,
@@ -12,6 +13,7 @@ import {
   sonderausgabeText,
 } from '@/domain/ausgabe';
 import type { Buch } from '@/domain/buch';
+import { LISTENARTEN, listenDesBuches, listenNamenText, type Liste, type ListenArt, type Zugehoerigkeit } from '@/domain/listen';
 import { detailsFarbe, textstufe, kartenSchatten, abstand, bildschirmrand, stilRolle } from '@/theme';
 import { RAND } from '../masse';
 import { abschnittKopfStil, abschnittUeberschriftStil, karteStil } from './rezension';
@@ -31,8 +33,7 @@ export type AusgabeZeile =
   | 'hinzugefuegt'
   | 'beendet';
 
-/** Zeilen mit Pfeil „›“ (REQ-056, AK-2). */
-const MIT_PFEIL: readonly AusgabeZeile[] = ['seiten', 'format', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'masse'];
+/** Alle Zeilen der Karte „Ausgabe“ haben einen Pfeil „›“ (REQ-091, REQ-056), auch im Manuellen Eintrag. */
 
 interface Props {
   buch: Buch;
@@ -51,10 +52,24 @@ interface Props {
   onHinzugefuegt?: () => void;
   /** Zeile „Beendet am“ angetippt (REQ-085). */
   onBeendet?: () => void;
+  /** Zeile „Erschienen“ angetippt (REQ-092). */
+  onErschienen?: () => void;
+  /** Abschnitt „Sagas, Sammlungen und Bibliotheken“ (REQ-095). */
+  listen?: ListenAbschnittProps;
+}
+
+/** Daten und Aktionen des Abschnitts „Sagas, Sammlungen und Bibliotheken“ (REQ-095). */
+export interface ListenAbschnittProps {
+  listen: Liste[];
+  zug: Zugehoerigkeit[];
+  /** Pille „+ Zu einer … hinzufügen“ angetippt: Blatt (REQ-096). */
+  onPille: (art: ListenArt) => void;
+  /** Zeile „In Saga/Sammlung/Bibliotheken“ angetippt: Listenübersicht (REQ-097). */
+  onZeile: (art: ListenArt) => void;
 }
 
 // Überschriften wie REF-details-01/-02: normale Schreibweise, größer, Dunkelbraun (nicht Großbuchstaben wie „BEWERTUNG“).
-const ueberschriftStil: CSSProperties = {
+export const ueberschriftStil: CSSProperties = {
   ...abschnittUeberschriftStil,
   ...textstufe('abschnitt'),
   fontWeight: 600,
@@ -97,7 +112,7 @@ const gefuelltStil: CSSProperties = {
   color: detailsFarbe('pilleGefuelltSchrift'),
 };
 
-const gestricheltStil: CSSProperties = {
+export const gestricheltStil: CSSProperties = {
   ...pilleBasis,
   margin: 0,
   border: `1.5px dashed ${detailsFarbe('pilleGestricheltRahmen')}`,
@@ -107,16 +122,8 @@ const gestricheltStil: CSSProperties = {
   WebkitTapHighlightColor: 'transparent',
 };
 
-const sammlungStil: CSSProperties = {
-  ...pilleBasis,
-  margin: `0 ${RAND}px`,
-  border: `1.5px solid ${detailsFarbe('sammlungRahmen')}`,
-  background: 'none',
-  fontWeight: 500,
-  color: detailsFarbe('sammlungSchrift'),
-  cursor: 'pointer',
-  WebkitTapHighlightColor: 'transparent',
-};
+// Pillen des Abschnitts „Sagas, Sammlungen und Bibliotheken“: untereinander, linksbündig (REQ-095).
+const listenPillenStil: CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: abstand('s'), margin: `0 ${RAND}px` };
 
 export const karteDetails: CSSProperties = {
   ...karteStil,
@@ -203,6 +210,51 @@ function Pillen({ id, namen, leerText }: { id: string; namen: string[] | undefin
   );
 }
 
+/**
+ * Inhalt des Abschnitts „Sagas, Sammlungen und Bibliotheken“ (REQ-095): je Art ohne Zugehörigkeit eine gestrichelte
+ * Pille (wie Genres/Tropes, REQ-052), je Art mit Zugehörigkeit die Zeile „In …“ mit den Namen und Pfeil.
+ */
+function ListenAbschnitt({ buch, daten }: { buch: Buch; daten?: ListenAbschnittProps }) {
+  const arten = LISTENARTEN.map((a) => ({ a, drin: daten ? listenDesBuches(daten.listen, daten.zug, buch.id, a.id) : [] }));
+  // Reihenfolge Saga, Sammlung, Bibliothek; aufeinanderfolgende Zeilen teilen sich eine Karte.
+  const gruppen: { zeilen: boolean; arten: typeof arten }[] = [];
+  for (const x of arten) {
+    const zeile = x.drin.length > 0;
+    const letzte = gruppen[gruppen.length - 1];
+    if (letzte && letzte.zeilen === zeile) letzte.arten.push(x);
+    else gruppen.push({ zeilen: zeile, arten: [x] });
+  }
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: abstand('m') }}>
+      {gruppen.map((g) =>
+        g.zeilen ? (
+          <div key={g.arten[0].a.id} data-listen-karte="" {...stilRolle('karte')} style={karteDetails}>
+            {g.arten.map(({ a, drin }, i) => (
+              <KartenZeile
+                key={a.id}
+                zeilenAttribute={{ 'data-listen-zeile': a.id }}
+                beschriftung={a.zeile}
+                wert={listenNamenText(drin)}
+                pfeil
+                letzte={i === g.arten.length - 1}
+                onAntippen={() => daten?.onZeile(a.id)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div key={g.arten[0].a.id} style={listenPillenStil} data-pillen="listen">
+            {g.arten.map(({ a }) => (
+              <button key={a.id} type="button" data-pille-gestrichelt="" data-listen-pille={a.id} onClick={() => daten?.onPille(a.id)} style={gestricheltStil}>
+                {a.pille}
+              </button>
+            ))}
+          </div>
+        ),
+      )}
+    </div>
+  );
+}
+
 function Zeile({
   id,
   beschriftung,
@@ -229,7 +281,7 @@ function Zeile({
   /** Feld hervorgehoben wie ungültiges „JAHR“ (REQ-060, AK-5). */
   fehler?: boolean;
 }) {
-  const pfeil = MIT_PFEIL.includes(id);
+  const pfeil = true;
   if (eingabe !== undefined) {
     return (
       <label
@@ -246,6 +298,10 @@ function Zeile({
           {beschriftung}
         </span>
         {eingabe}
+        {/* Pfeil an jeder Zeile, auch an der Eingabezeile „Seiten“ im Manuellen Eintrag (REQ-091, AK-3). */}
+        <span data-zeile-pfeil="" aria-hidden="true" style={pfeilStil}>
+          ›
+        </span>
       </label>
     );
   }
@@ -384,8 +440,7 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
 }
 
 /** Reiter „Details“ (REQ-051 bis REQ-056, REQ-063, REQ-064). */
-export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet }: Props) {
-  const erschienen = buch.erscheinungsjahr ?? (buch.erscheinungsdatum ? Number(buch.erscheinungsdatum.slice(6)) : undefined);
+export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet, onErschienen, listen }: Props) {
   return (
     <div style={{ paddingBottom: abstand('s') }}>
       <Abschnitt id="genres" titel="Genres" bearbeiten>
@@ -397,26 +452,14 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMa
       <Abschnitt id="inhaltswarnungen" titel="Inhaltswarnungen" bearbeiten>
         <Pillen id="inhaltswarnungen" namen={buch.inhaltswarnungen} leerText="Warnungen markieren" />
       </Abschnitt>
-      <Abschnitt id="sammlungen" titel="Sammlungen und Bibliotheken">
-        {/* Beides sichtbar, ohne Funktion; kein Bibliotheksname (REQ-055). */}
-        <button type="button" data-sammlung-hinzufuegen="" style={sammlungStil}>
-          Zu einer Sammlung hinzufügen
-        </button>
-        <div {...stilRolle('karte')} style={{ ...karteDetails, marginTop: abstand('m') }}>
-          <button type="button" data-in-bibliotheken="" {...stilRolle('eintrag')} style={zeileStil(true, false)}>
-            <span style={bezeichnungStil}>In Bibliotheken</span>
-            <span style={wertStil(false)} />
-            <span aria-hidden="true" style={pfeilStil}>
-              ›
-            </span>
-          </button>
-        </div>
+      <Abschnitt id="sammlungen" titel="Sagas, Sammlungen und Bibliotheken">
+        <ListenAbschnitt buch={buch} daten={listen} />
       </Abschnitt>
       <Abschnitt id="ausgabe" titel="Ausgabe">
         <AusgabeKarte
           werte={{
             seiten: buch.seitenanzahl !== undefined ? String(buch.seitenanzahl) : '',
-            erschienen: erschienen !== undefined && !Number.isNaN(erschienen) ? String(erschienen) : '',
+            erschienen: erschienenText(buch),
             hinzugefuegt: hinzugefuegtText(buch.eingetragenAm),
             beendet: beendetText(buch.beendetAm),
           }}
@@ -432,6 +475,7 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMa
             isbn: onIsbn,
             hinzugefuegt: onHinzugefuegt,
             beendet: onBeendet,
+            erschienen: onErschienen,
           }}
         />
       </Abschnitt>

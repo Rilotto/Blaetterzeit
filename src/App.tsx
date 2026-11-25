@@ -2,6 +2,7 @@ import { useMemo, useState, type CSSProperties } from 'react';
 import { DesignAnbieter, useDesign } from '@/design/designwahl';
 import Hauptnavigation from '@/navigation/Hauptnavigation';
 import { startMenuePunkt, type MenuePunktId } from '@/navigation/menu';
+import { UhrAnbieter, type Uhr } from '@/plattform/uhr';
 import { createEinstellungRepository, type EinstellungRepository } from '@/storage';
 import {
   farbVariablen,
@@ -52,13 +53,17 @@ const standardEinstellungRepository = () => (einstellungSpeicher ??= createEinst
 interface Props {
   /** Speicher der App-Einstellungen (Designwahl); in Tests ersetzbar. */
   einstellungRepository?: EinstellungRepository;
+  /** Uhr für Datum und Uhrzeit (Startseite, REQ-101 ff.); ohne Angabe die Systemzeit. In Tests ersetzbar. */
+  jetzt?: Uhr;
 }
 
-export default function App({ einstellungRepository }: Props) {
+export default function App({ einstellungRepository, jetzt }: Props) {
   const repo = useMemo(() => einstellungRepository ?? standardEinstellungRepository(), [einstellungRepository]);
   return (
     <DesignAnbieter repository={repo}>
-      <AppInhalt />
+      <UhrAnbieter jetzt={jetzt}>
+        <AppInhalt />
+      </UhrAnbieter>
     </DesignAnbieter>
   );
 }
@@ -78,7 +83,7 @@ function AppInhalt() {
   return (
     <div data-app-wurzel="" data-farbdesign={farbdesign} data-schrift={schriftId} data-stil={stil} style={appStil(farbdesign, schriftId)}>
       <main style={inhaltStil}>
-        <Ansicht key={aufruf} />
+        <Ansicht key={aufruf} navigieren={auswaehlen} />
       </main>
       <Hauptnavigation aktiv={aktiv} onAuswahl={auswaehlen} />
     </div>

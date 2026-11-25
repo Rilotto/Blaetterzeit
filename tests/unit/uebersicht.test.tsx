@@ -17,13 +17,16 @@ const b = (titel: string, status: Buch['status'] = 'ungelesen', extra: Partial<B
 });
 
 describe('Fachlogik Übersichten', () => {
-  it('nachEintragung: neueste zuerst, undatierte danach in umgekehrter Anlegereihenfolge', () => {
+  it('nachEintragung: undatierte zuerst A–Z, dann neueste zuerst (REQ-093 AK-11/AK-12)', () => {
     const a = b('A', 'ungelesen', { eingetragenAm: datum(1) });
     const c = b('C', 'gelesen', { eingetragenAm: datum(3) });
     const x = b('X');
     const y = b('Y');
     const kaputt = b('K', 'ungelesen', { eingetragenAm: 'kein Datum' });
-    expect(nachEintragung([x, a, y, c, kaputt]).map((z) => z.titel)).toEqual(['C', 'A', 'K', 'Y', 'X']);
+    expect(nachEintragung([x, a, y, c, kaputt]).map((z) => z.titel)).toEqual(['K', 'X', 'Y', 'C', 'A']);
+    const zorn = b('Zorn');
+    const asche = b('Asche');
+    expect(nachEintragung([a, zorn, c, asche]).map((z) => z.titel)).toEqual(['Asche', 'Zorn', 'C', 'A']);
   });
 
   it('neuesteBuecher: höchstens 10', () => {

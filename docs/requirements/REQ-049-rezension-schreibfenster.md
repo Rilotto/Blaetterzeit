@@ -34,7 +34,7 @@ Referenzbilder: [referenzen/REF-rezension-03-schreiben-tastatur.png](referenzen/
 - Das System muss ein Eingabefeld mit dem Platzhaltertext „Wie fandest du es?“ darstellen, in das der Nutzer beliebig langen, mehrzeiligen Text eingeben kann.
 - Das System muss unten eine Schaltfläche „Sichern“ in Farbrubrik „Primär“ darstellen.
 - Wenn der Nutzer bei nicht leerem Eingabefeld „Sichern“ antippt, muss das System den Text als Rezension dieses Buches dauerhaft speichern (über Neustart hinweg, Repository-Schnittstelle, ADR-0002), das Schreibfenster schließen und den vollständigen Text im Schreibfeld (REQ-047) anzeigen.
-- Wenn der Nutzer bei leerem Eingabefeld „Sichern“ antippt, darf das System nichts tun.
+- Wenn der Nutzer bei leerem Eingabefeld „Sichern“ antippt und keine Rezension gespeichert ist, darf das System nichts tun. Ist eine Rezension gespeichert, entfernt das System sie (REQ-093).
 - Wenn der Nutzer das Schreibfenster ohne „Sichern“ schließt (X, Herunterziehen am Griff, Tippen außerhalb, Android-Zurück-Taste), darf das System nichts speichern; der eingegebene Text geht verloren und eine zuvor gesicherte Rezension bleibt unverändert.
 - Das System darf im Schreibfenster weder Kreis noch „Noch nicht geschrieben“ noch „Enthält Spoiler“ noch „Öffentlich“ darstellen.
 - Das System muss Elemente und Farben wie in den Referenzbildern darstellen, mit Farben aus zentralen Farbrubriken.
@@ -79,11 +79,11 @@ Referenzbilder: [referenzen/REF-rezension-03-schreiben-tastatur.png](referenzen/
 - **Dann** stand beim Öffnen der bisherige Text im Eingabefeld
 - **Und** danach zeigt das Schreibfeld den geänderten Text
 
-### AK-8 Leeres Feld sichern bewirkt nichts
-- **Gegeben** das Eingabefeld ist leer bzw. (zweiter Durchlauf) der Nutzer hat den Text einer gesicherten Rezension vollständig gelöscht
-- **Wenn** er „Sichern“ antippt
+### AK-8 Leeres Feld sichern ohne gespeicherte Rezension bewirkt nichts
+- **Gegeben** für das Buch ist keine Rezension gespeichert, und das Eingabefeld ist leer
+- **Wenn** der Nutzer „Sichern“ antippt
 - **Dann** bleibt das Schreibfenster offen und es wird nichts gespeichert
-- **Und** eine zuvor gesicherte Rezension bleibt unverändert
+- **Und** hat er stattdessen den Text einer gesicherten Rezension vollständig gelöscht, entfernt „Sichern“ die Rezension (REQ-093, AK-8)
 
 ### AK-9 Schließen ohne Sichern verwirft
 - **Gegeben** der Nutzer hat im Schreibfenster Text eingegeben, ohne zu sichern
@@ -119,3 +119,4 @@ Referenzbilder: [referenzen/REF-rezension-03-schreiben-tastatur.png](referenzen/
 | 2026-11-15 | Erstellt aus CEO-Antwort 6 und Referenzbildern 03/04 | Anforderungsmanager |
 | 2026-11-15 | CEO-Antworten eingearbeitet: Verwerfen ohne Sichern, Bearbeiten, leeres Feld bewirkt nichts, dauerhafte Speicherung, Sterne nur Anzeige bzw. ohne Bewertung nichts, Kreis/„Noch nicht geschrieben“ entfällt (neu AK-3, AK-6 bis AK-9) | Anforderungsmanager |
 | 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |
+| 2026-11-23 | An REQ-093 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Leeres Feld sichern entfernt eine gespeicherte Rezension (Anforderung, AK-8). Status unverändert | Anforderungsmanager |

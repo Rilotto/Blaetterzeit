@@ -37,6 +37,12 @@ interface Props {
   onBuchAntippen: (buch: Buch) => void;
   /** Kopfbereich „Deine Bücher“ mit Plus-Schaltfläche (REQ-005), vom Aufrufer gestellt. */
   kopf: ReactNode;
+  /** Geöffnete Liste (REQ-098): ohne Filterleiste. */
+  ohneFilterleiste?: boolean;
+  /** Eigene, bereits sortierte Auswahl statt Filterlogik + A–Z (geöffnete Liste, REQ-098); die Suche wirkt danach. */
+  auswahl?: (buecher: Buch[]) => Buch[];
+  /** Beschriftung und Funktion des Sortierknopfs; ohne Angabe „Zuletzt“ ohne Funktion (REQ-036, AK-5). */
+  sortierung?: { text: string; onAntippen?: () => void };
 }
 
 const zeileStil: CSSProperties = {
@@ -368,16 +374,20 @@ export default function Uebersicht({
   onFilter,
   onBuchAntippen,
   kopf,
+  ohneFilterleiste = false,
+  auswahl,
+  sortierung,
 }: Props) {
   const [ansicht, ansichtWaehlen] = useAnsicht(ansichtRepository, listeId);
   const definition = filter.find((f) => f.id === listeId);
-  const liste = buecher === undefined ? undefined : buecherDerListe(definition, buecher, suche);
+  const liste =
+    buecher === undefined ? undefined : auswahl ? suchen(auswahl(buecher), suche) : buecherDerListe(definition, buecher, suche);
   const beschriftung = suchfeldText(listenname);
 
   return (
     <div data-uebersicht={listeId} data-ansicht={ansicht ?? ''} style={{ paddingBottom: abstand('xl') }}>
       {kopf}
-      <Filterleiste filter={filter} buecher={buecher ?? []} aktivId={listeId} onAntippen={onFilter} />
+      {ohneFilterleiste ? null : <Filterleiste filter={filter} buecher={buecher ?? []} aktivId={listeId} onAntippen={onFilter} />}
       <label style={suchfeldRahmenStil}>
         <Icon datei="icon-lupe.png" url={iconLupe} farbe={uebersichtFarbe('suchfeldIcon')} groesse={20} />
         <input
@@ -419,9 +429,9 @@ export default function Uebersicht({
             <ListenSymbol />
           </button>
         </div>
-        {/* REQ-036, AK-5: ohne Funktion (To-do: nach Eintragungsdatum sortieren/filtern). */}
-        <button type="button" data-sortierknopf="" style={sortierStil}>
-          Zuletzt
+        {/* REQ-036, AK-5: ohne Funktion (To-do: nach Eintragungsdatum sortieren/filtern); in Sagas umschaltbar (REQ-098). */}
+        <button type="button" data-sortierknopf="" onClick={sortierung?.onAntippen} style={sortierStil}>
+          {sortierung?.text ?? 'Zuletzt'}
         </button>
       </div>
       {liste === undefined || ansicht === undefined || liste.length === 0 ? null : ansicht === 'raster' ? (

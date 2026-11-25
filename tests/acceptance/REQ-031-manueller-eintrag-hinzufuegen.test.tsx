@@ -98,15 +98,38 @@ function farbwerte(el: HTMLElement) {
   const cs = getComputedStyle(el);
   return [cs.color, cs.borderTopColor, cs.borderBottomColor, cs.backgroundColor, cs.outlineColor, cs.boxShadow];
 }
-function jahrMarkierung() {
-  const jahr = feld('Jahr');
-  const d = screen.getByRole('dialog', { name: 'Manueller Eintrag' });
-  return Array.from(d.querySelectorAll<HTMLElement>('[data-fehler="true"]')).filter((e) => e === jahr || e.contains(jahr));
+// Seit REQ-092 (2026-11-23): Erscheinungsangabe nur über „Erschienen“ (Zeile der Karte „Ausgabe“, eigenes Blatt nach REQ-060).
+const erschZeile = () => screen.getByRole('dialog', { name: 'Manueller Eintrag' }).querySelector<HTMLElement>('[data-ausgabe-zeile="erschienen"]')!;
+const erschFeld = () => document.querySelector<HTMLInputElement>('[data-blatt-feld="erschienen"]');
+/** Trägt bei „Erschienen“ einen Wert ein und tippt im Blatt „Sichern“. Gibt zurück, ob das Blatt danach offen ist. */
+async function erschienen(wert: string) {
+  await act(async () => {
+    fireEvent.click(erschZeile());
+    await new Promise((r) => setTimeout(r, 20));
+  });
+  await vi.waitFor(() => expect(erschFeld()).not.toBeNull());
+  fireEvent.change(erschFeld()!, { target: { value: wert } });
+  await act(async () => {
+    fireEvent.click(document.querySelector('[data-blatt-sichern="erschienen"]')!);
+    await new Promise((r) => setTimeout(r, 30));
+  });
+  return erschFeld() !== null;
 }
-function jahrInPrimaer() {
-  const jahr = feld('Jahr');
-  const els = [jahr, ...jahrMarkierung()];
-  return els.some((e) => farbwerte(e).some((w) => w.includes(primaer())));
+/** Markierte Elemente am Feld „Erschienen“ (im offenen Blatt oder an der Zeile im Manuellen Eintrag). */
+function erschMarkierung() {
+  const ziel = erschFeld() ?? erschZeile();
+  const els = [ziel, ...Array.from(ziel.querySelectorAll<HTMLElement>('*'))];
+  for (let n = ziel.parentElement; n && n.getAttribute('role') !== 'dialog'; n = n.parentElement) els.push(n);
+  return els.filter((e) => e.getAttribute('data-fehler') === 'true' || e.getAttribute('aria-invalid') === 'true');
+}
+function erschInPrimaer() {
+  const ziel = erschFeld() ?? erschZeile();
+  return [ziel, ...erschMarkierung()].some((e) => farbwerte(e).some((w) => w.includes(primaer())));
+}
+/** Ungültiges „Erschienen“ eintragen und „Hinzufügen“ antippen (falls das Erschienen-Blatt das Sichern schon abweist, bleibt es offen). */
+async function ungueltigesErschienen(wert: string) {
+  const offen = await erschienen(wert);
+  if (!offen) await hinzufuegen();
 }
 async function mitIndexedDb<T>(fn: () => Promise<T>) {
   vi.stubGlobal('indexedDB', new IDBFactory());
@@ -156,10 +179,15 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
       expect(new Set(ids).size).toBe(2);
     });
 
-    it('[REQ-031/AK-1] alle Angaben werden gespeichert: Jahr als Erscheinungsjahr, Seiten als Seitenanzahl (Zahlen)', async () => {
+    it('[REQ-031/AK-1] alle Angaben werden gespeichert: „Erschienen“ 2019 als Erscheinungsjahr, Seiten als Seitenanzahl (Zahlen)', async () => {
       const repo = repoFake();
       await zeige(repo);
-      await legeAn({ Titel: 'Testbuch', Autor: 'Vorname Nachname', Jahr: '2019', Seiten: '350' });
+      await oeffneBlatt();
+      gib('Titel', 'Testbuch');
+      gib('Autor', 'Vorname Nachname');
+      gib('Seiten', '350');
+      expect(await erschienen('2019')).toBe(false);
+      await hinzufuegen();
       const [b] = neue(repo);
       expect(b).toMatchObject({ titel: 'Testbuch', autor: 'Vorname Nachname', erscheinungsjahr: 2019, seitenanzahl: 350, status: 'ungelesen' });
     });
@@ -180,16 +208,15 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
     });
   });
 
-  // REQ-031/AK-2 ist laut Hinweis in REQ-031 mit REQ-060 hinfällig (leere Seiten sind nicht mehr möglich).
-  // Überführt: Seiten eingetragen, übrige optionale Felder leer – Platzhalter werden weiterhin nicht gespeichert.
-  describe('AK-2 (überführt in REQ-060) Platzhaltertexte werden nicht gespeichert', () => {
-    it('[REQ-031/AK-2] leere Felder Jahr/Autor bei Seiten 350: weder 2024 noch 496 noch Platzhaltertexte, die Angaben fehlen', async () => {
+  // Fassung 2026-11-23: Titel und Seitenzahl 320, „AUTOR“ und „Erschienen“ leer.
+  describe('AK-2 Platzhaltertexte werden nicht gespeichert', () => {
+    it('[REQ-031/AK-2] Seiten 320, Autor und „Erschienen“ leer: kein Autor „Autor“, kein Autor, keine Erscheinungsangabe', async () => {
       const repo = repoFake();
       await zeige(repo);
-      await legeAn({ Titel: 'Testbuch', Seiten: '350' });
+      await legeAn({ Titel: 'Testbuch', Seiten: '320' });
       const [b] = neue(repo);
       expect(b.erscheinungsjahr).toBeUndefined();
-      expect(b.seitenanzahl).toBe(350);
+      expect(b.seitenanzahl).toBe(320);
       expect(b.autor).toBeUndefined();
       expect(b.erscheinungsdatum).toBeUndefined();
       const werte = Object.values(b).map(String);
@@ -202,7 +229,10 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
       await mitIndexedDb(async () => {
         const s1 = await zentral();
         await zeige(s1.createBookRepository(), s1.createImageStore());
-        await legeAn({ Titel: 'Dauerbuch', Autor: 'Vorname Nachname', Jahr: '2019', Seiten: '350' });
+        await oeffneBlatt();
+        for (const [k, v] of [['Titel', 'Dauerbuch'], ['Autor', 'Vorname Nachname'], ['Seiten', '350']]) gib(k, v);
+        await erschienen('2019');
+        await hinzufuegen();
         await screen.findByRole('region', { name: 'Buchdetails' });
         cleanup();
         const s2 = await zentral();
@@ -281,8 +311,7 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
     });
   });
 
-  // REQ-031/AK-5 ist laut Hinweis in REQ-031 mit REQ-060 hinfällig. Überführt in REQ-060/AK-5 und AK-7.
-  describe('AK-5 (überführt in REQ-060) Titel und Seitenzahl genügen', () => {
+  describe('AK-5 Titel und Seitenzahl genügen', () => {
     it('[REQ-031/AK-5] nur der Titel ist ausgefüllt: kein Buch, Blatt bleibt offen', async () => {
       const repo = repoFake();
       await zeige(repo);
@@ -341,96 +370,108 @@ describe('REQ-031 Neues Buch mit „Hinzufügen“ anlegen', () => {
     });
   });
 
-  // REQ-031/AK-9 ist laut Hinweis in REQ-031 mit REQ-060 hinfällig. Überführt in REQ-060/AK-5.
-  describe('AK-9 (überführt in REQ-060/AK-5) Ohne Seiten wird kein Buch angelegt', () => {
-    it('[REQ-031/AK-9] ohne Eintrag in „Seiten“: kein Buch, Feld „Seiten“ markiert, kein Hinweistext', async () => {
+  // Fassung 2026-11-23: früher ohne Seitenanzahl gespeichertes Buch → Lesefortschritt öffnen zeigt „Buchlänge“ (REQ-025).
+  describe('AK-9 Ohne Seiten wird „Buchlänge“ abgefragt', () => {
+    it('[REQ-031/AK-9] altes Buch ohne Seitenanzahl: Lesefortschritt öffnen → Menü „Buchlänge“', async () => {
+      await mitIndexedDb(async () => {
+        const st = await zentral();
+        const BD = (await import('@/views/BuchDetails')).default;
+        const repo = st.createBookRepository();
+        await repo.save({ id: '31000000-0000-4000-8000-000000000009', titel: 'Altbuch', status: 'am_lesen' });
+        render(<BD buchId="31000000-0000-4000-8000-000000000009" bildspeicher={speicherFake()} bildquelle={{ scannen: async () => null, galerie: async () => null }} onZurueck={() => {}} />);
+        const d = await screen.findByRole('region', { name: 'Buchdetails' });
+        const herz = await vi.waitFor(() => {
+          const h = d.querySelector<HTMLElement>('[data-fortschritt-herz]');
+          expect(h).not.toBeNull();
+          return h!;
+        });
+        await act(async () => {
+          fireEvent.click(herz);
+          await new Promise((r) => setTimeout(r, 20));
+        });
+        expect(await screen.findByRole('dialog', { name: 'Buchlänge' })).toBeInTheDocument();
+      });
+    });
+
+    it('[REQ-031/AK-9] heute ist die Seitenzahl Pflicht: ohne Seiten wird kein Buch angelegt (REQ-060)', async () => {
       const repo = repoFake();
       await zeige(repo);
       await legeAn({ Titel: 'Testbuch', Seiten: '' });
       expect(repo.save).not.toHaveBeenCalled();
       expect(blatt()).toBeVisible();
-      expect(feld('Seiten')).toHaveAttribute('aria-invalid', 'true');
-      expect(screen.queryByRole('alert')).toBeNull();
     });
   });
 
-  describe('AK-12 Ungültiges Jahr wird hervorgehoben', () => {
-    it.each(['1', '19', '199'])('[REQ-031/AK-12] Jahr „%s“: Feld „JAHR“ markiert und in „Primär“, kein Hinweistext', async (jahr) => {
+  // Fassung 2026-11-23 (REQ-092): Prüfung und Hervorhebung gehen vom Feld „JAHR“ auf „Erschienen“ über
+  // (gültig: TT.MM.JJJJ oder JJJJ, nicht in der Zukunft). Wo die Hervorhebung erscheint (Erschienen-Blatt beim Sichern oder
+  // Zeile nach „Hinzufügen“), legt der REQ nicht fest; geprüft wird beides tolerant.
+  describe('AK-12 Ungültiges „Erschienen“ wird hervorgehoben', () => {
+    it.each(['199', '19', '1'])('[REQ-031/AK-12] „Erschienen“ „%s“: Feld in „Primär“ hervorgehoben, kein Hinweistext', async (wert) => {
       await zeige();
       await oeffneBlatt();
       gib('Titel', 'Testbuch');
-      gib('Jahr', jahr);
-      const textVorher = blatt()!.textContent;
-      expect(jahrMarkierung(), 'vor „Hinzufügen“ nicht markiert').toHaveLength(0);
-      expect(jahrInPrimaer(), 'vor „Hinzufügen“ nicht in Primär').toBe(false);
-      await hinzufuegen();
-      expect(jahrMarkierung().length).toBeGreaterThan(0);
-      expect(jahrInPrimaer()).toBe(true);
+      gib('Seiten', '100');
+      await ungueltigesErschienen(wert);
+      expect(erschMarkierung().length).toBeGreaterThan(0);
+      expect(erschInPrimaer()).toBe(true);
       expect(screen.queryByRole('alert')).toBeNull();
-      expect(blatt()!.textContent, 'kein zusätzlicher Text').toBe(textVorher);
     });
 
-    it('[REQ-031/AK-12] Gegenprobe: ein vierstelliges Jahr wird nicht markiert und als Erscheinungsjahr gespeichert', async () => {
+    it.each(['2019', '15.03.2021'])('[REQ-031/AK-12] Gegenprobe: gültiges „Erschienen“ %s wird nicht markiert und gespeichert', async (wert) => {
       const repo = repoFake();
       await zeige(repo);
-      await legeAn({ Titel: 'Testbuch', Jahr: '1999' });
-      expect(neue(repo)[0].erscheinungsjahr).toBe(1999);
-    });
-
-    it('[REQ-031/AK-12] fehlender Titel und ungültiges Jahr zugleich: Hinweis und Markierung', async () => {
-      const repo = repoFake();
-      await zeige(repo);
-      await legeAn({ Jahr: '19' });
-      expect(screen.getByRole('alert')).toHaveTextContent(HINWEIS);
-      expect(jahrMarkierung().length).toBeGreaterThan(0);
-      expect(repo.save).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('AK-13 Bei ungültigem Jahr wird kein Buch angelegt', () => {
-    it.each(['1', '19', '199'])('[REQ-031/AK-13] Jahr „%s“: kein Buch, Blatt offen, Titel und Jahr unverändert', async (jahr) => {
-      const repo = repoFake();
-      await zeige(repo);
-      await legeAn({ Titel: 'Testbuch', Jahr: jahr, Autor: 'A. B.' });
-      expect(repo.save).not.toHaveBeenCalled();
-      expect(blatt()).toBeVisible();
-      expect(feld('Titel').value).toBe('Testbuch');
-      expect(feld('Jahr').value).toBe(jahr);
-      expect(feld('Autor').value).toBe('A. B.');
-      expect(screen.queryByRole('region', { name: 'Buchdetails' })).toBeNull();
-    });
-
-    it('[REQ-031/AK-13] nach Korrektur auf vier Ziffern wird das Buch angelegt', async () => {
-      const repo = repoFake();
-      await zeige(repo);
-      await legeAn({ Titel: 'Testbuch', Jahr: '19' });
-      gib('Jahr', '1984');
+      await oeffneBlatt();
+      gib('Titel', 'Testbuch');
+      gib('Seiten', '100');
+      expect(await erschienen(wert)).toBe(false);
+      expect(erschMarkierung()).toHaveLength(0);
       await hinzufuegen();
-      expect(neue(repo).map((b) => b.erscheinungsjahr)).toEqual([1984]);
+      const [b] = neue(repo);
+      if (wert === '2019') expect([b.erscheinungsjahr, b.erscheinungsdatum]).toEqual([2019, undefined]);
+      else expect(b.erscheinungsdatum).toBe('15.03.2021');
     });
   });
 
-  describe('AK-14 Hervorhebung verschwindet bei Änderung im Feld „JAHR“', () => {
+  describe('AK-13 Bei ungültigem „Erschienen“ wird kein Buch angelegt', () => {
+    it.each(['31.02.2025', '199', '01.01.2999'])('[REQ-031/AK-13] „Erschienen“ „%s“: kein Buch, Blatt offen, Eingaben unverändert', async (wert) => {
+      const repo = repoFake();
+      await zeige(repo);
+      await oeffneBlatt();
+      gib('Titel', 'Testbuch');
+      gib('Autor', 'A. B.');
+      gib('Seiten', '100');
+      await ungueltigesErschienen(wert);
+      expect(repo.save).not.toHaveBeenCalled();
+      expect(blatt()).toBeInTheDocument();
+      expect(screen.queryByRole('region', { name: 'Buchdetails' })).toBeNull();
+      if (erschFeld()) expect(erschFeld()!.value).toBe(wert);
+      expect(feld('Titel').value).toBe('Testbuch');
+      expect(feld('Autor').value).toBe('A. B.');
+      expect(feld('Seiten').value).toBe('100');
+    });
+  });
+
+  describe('AK-14 Hervorhebung verschwindet bei Änderung im Feld „Erschienen“', () => {
     it.each([
       ['Ziffer ergänzt', '1990'],
       ['Ziffer gelöscht', '19'],
       ['Feld geleert', ''],
-    ])('[REQ-031/AK-14] „199“ markiert, %s → nicht mehr markiert', async (_w, neu) => {
+    ])('[REQ-031/AK-14] „199“ hervorgehoben, %s → nicht mehr hervorgehoben', async (_w, neu) => {
       await zeige();
-      await legeAn({ Titel: 'Testbuch', Jahr: '199' });
-      expect(jahrMarkierung().length).toBeGreaterThan(0);
-      gib('Jahr', neu);
-      expect(jahrMarkierung()).toHaveLength(0);
-      expect(jahrInPrimaer()).toBe(false);
-    });
-
-    it('[REQ-031/AK-14] nach Entfernen der Markierung markiert erneutes „Hinzufügen“ mit ungültigem Jahr wieder', async () => {
-      await zeige();
-      await legeAn({ Titel: 'Testbuch', Jahr: '199' });
-      gib('Jahr', '19');
-      expect(jahrMarkierung()).toHaveLength(0);
-      await hinzufuegen();
-      expect(jahrMarkierung().length).toBeGreaterThan(0);
+      await oeffneBlatt();
+      gib('Titel', 'Testbuch');
+      gib('Seiten', '100');
+      await ungueltigesErschienen('199');
+      expect(erschMarkierung().length).toBeGreaterThan(0);
+      if (!erschFeld()) {
+        await act(async () => {
+          fireEvent.click(erschZeile());
+          await new Promise((r) => setTimeout(r, 20));
+        });
+      }
+      fireEvent.change(erschFeld()!, { target: { value: neu } });
+      expect(erschMarkierung()).toHaveLength(0);
+      expect(erschInPrimaer()).toBe(false);
     });
   });
 });

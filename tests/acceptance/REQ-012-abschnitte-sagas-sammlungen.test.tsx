@@ -196,15 +196,17 @@ describe('REQ-012 Abschnitte „Sagas“ und „Sammlungen“', () => {
       expect(p.contains(textIn(abschnitt(name)))).toBe(false);
     });
 
-    it.each(BEIDE)('[REQ-012/AK-3] „%s“: außer Überschrift und Platzhaltertext kein Text, kein Buchtitel, keine weiteren Elemente', (name) => {
+    // Fassung 2026-11-23 (REQ-097): „Alle ansehen ›“ steht jetzt immer neben der Überschrift; sonst nichts Weiteres.
+    it.each(BEIDE)('[REQ-012/AK-3] „%s“ ohne Listen: außer Überschrift, „Alle ansehen ›“ und Platzhaltertext kein Text, kein Buchtitel, keine weiteren Elemente', (name) => {
       zeige([buch('Ein Titel')]);
       const s = abschnitt(name);
       const h = within(s).getByRole('heading');
-      const rest = (s.textContent ?? '').replace(h.textContent ?? '', '').replace(textIn(s).textContent ?? '', '').trim();
+      const alle = within(s).getByRole('button', { name: 'Alle ansehen ›' });
+      const rest = (s.textContent ?? '').replace(h.textContent ?? '', '').replace(alle.textContent ?? '', '').replace(textIn(s).textContent ?? '', '').trim();
       expect(rest).toBe('');
       expect(within(s).queryByText('Ein Titel')).toBeNull();
-      expect(s.querySelectorAll('[data-buchtitel], [data-leere-liste], img, ul, li, button, a')).toHaveLength(0);
-      expect(within(s).queryByText(/Alle ansehen/)).toBeNull();
+      expect(s.querySelectorAll('[data-buchtitel], [data-leere-liste], img, ul, li, a')).toHaveLength(0);
+      expect(Array.from(s.querySelectorAll('button')).filter((b) => b !== alle)).toHaveLength(0);
     });
 
     it('[REQ-012/AK-3] es ist derselbe Cover-Platzhalter wie im Bucheintrag (REQ-010, wiederverwendet)', () => {
@@ -248,8 +250,9 @@ describe('REQ-012 Abschnitte „Sagas“ und „Sammlungen“', () => {
   });
 
   // ---------------------------------------------------------------- AK-5
-  describe('AK-5 Keine Funktion', () => {
-    it('[REQ-012/AK-5] Antippen von Überschriften und Platzhaltern ändert in der App nichts', async () => {
+  // Fassung 2026-11-23: gilt, solange es keine Saga und keine Sammlung gibt; „Alle ansehen ›“ ist ausgenommen (REQ-097).
+  describe('AK-5 Keine Funktion ohne Listen', () => {
+    it('[REQ-012/AK-5] ohne Listen: Antippen von Überschriften und Platzhaltern ändert in der App nichts', async () => {
       render(<App />);
       fireEvent.click(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
       await within(abschnitt('Noch zu lesen')).findByRole('list');
@@ -266,11 +269,14 @@ describe('REQ-012 Abschnitte „Sagas“ und „Sammlungen“', () => {
       expect(document.body.innerHTML).toBe(vorher);
     });
 
-    it('[REQ-012/AK-5] die Abschnitte enthalten keine bedienbaren Elemente', () => {
+    it('[REQ-012/AK-5] ohne Listen: außer „Alle ansehen ›“ enthalten die Abschnitte keine bedienbaren Elemente', () => {
       zeige();
       for (const name of BEIDE) {
         const s = abschnitt(name);
-        expect(s.querySelectorAll('a[href], button, input, [role="button"], [role="link"], [tabindex]')).toHaveLength(0);
+        const alle = within(s).getByRole('button', { name: 'Alle ansehen ›' });
+        const bedienbar = Array.from(s.querySelectorAll('a[href], button, input, [role="button"], [role="link"], [tabindex]'));
+        expect(bedienbar.filter((e) => e !== alle && !alle.contains(e))).toHaveLength(0);
+        expect(platzhalterIn(s).closest('button, a, [role="button"]')).toBeNull();
       }
     });
   });

@@ -24,7 +24,7 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
 - Das System muss zu jedem Buch optional ein Erscheinungsjahr speichern können (eingetragen im Feld „JAHR“, REQ-030/REQ-031); ein Buch ohne Erscheinungsjahr ist zulässig.
 - Das System muss zu jedem Buch optional ein Erscheinungsdatum als exaktes Kalenderdatum (Tag, Monat, Jahr; Darstellung TT.MM.JJJJ) speichern können; ein Buch ohne Erscheinungsdatum ist zulässig.
-- Eine Eingabemöglichkeit für das Erscheinungsdatum gibt es derzeit nicht (REQ-030, To-do-Liste); neu angelegte Bücher haben daher kein Erscheinungsdatum.
+- ~~Eine Eingabemöglichkeit für das Erscheinungsdatum gibt es derzeit nicht.~~ Abgelöst: Eingabe von Datum oder Jahr nur über „Erschienen“ (REQ-060, REQ-092). Das Feld „JAHR“ entfällt, vorhandene Jahr-Werte bleiben gespeichert.
 - Das System muss bestehende Bücher ohne diese Angaben unverändert weiterführen.
 - Das System muss beide Angaben ausschließlich über die Repository-Schnittstelle lesen und speichern (ADR-0002).
 
@@ -41,10 +41,10 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 - **Wenn** die App sie lädt
 - **Dann** sind sie mit allen bisherigen Angaben vorhanden
 
-### AK-3 Neues Buch ohne Erscheinungsdatum
-- **Gegeben** der Nutzer legt im Blatt „Manueller Eintrag“ ein Buch an
+### AK-3 Neues Buch ohne Angabe bei „Erschienen“
+- **Gegeben** der Nutzer legt im Blatt „Manueller Eintrag“ ein Buch an und lässt „Erschienen“ leer
 - **Wenn** die Buchdaten gelesen werden
-- **Dann** hat das Buch kein Erscheinungsdatum
+- **Dann** hat das Buch weder Erscheinungsdatum noch Erscheinungsjahr (Eingabe nur über „Erschienen“, REQ-060, REQ-092)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -57,6 +57,7 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 ## Abhängigkeiten
 
 - **REQ-008** (Buchdaten), **REQ-030**, **REQ-031**, **ADR-0002**.
+- **REQ-092 (Entwurf):** Das Feld „JAHR“ entfällt. Vorhandene Erscheinungsjahre bleiben gespeichert und werden ohne Datum als Jahr angezeigt. Dieser REQ wird nach der Abstimmung angepasst.
 
 ## Offene Fragen
 
@@ -69,3 +70,4 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 | 2026-11-10 | Erstellt (Entwurf, Erweiterung der Buchdaten aus REQ-008) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F2: Jahr = Erscheinungsjahr, Erscheinungsdatum = exaktes Datum TT.MM.JJJJ, noch ohne Eingabe (neu AK-3, AK-1 präzisiert, Titel angepasst). Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
 | 2026-11-10 | Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-23 | An REQ-060 und REQ-092 angepasst (REQ-092 Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Eingabe nur über „Erschienen“, kein Feld „JAHR“ (Anforderung, AK-3). Status unverändert | Anforderungsmanager |

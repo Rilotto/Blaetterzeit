@@ -21,7 +21,7 @@ Referenzbilder: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-detail
 ## Anforderung (Satzschablone)
 
 - Wenn der Reiter „Details“ (REQ-043) aktiv ist, muss das System dessen Bereich anstelle von „under construction :)“ anzeigen.
-- Das System muss im Bereich „Details“ genau diese Überschriften in dieser Reihenfolge darstellen: „Genres“, „Tropes“, „Inhaltswarnungen“, „Sammlungen und Bibliotheken“, „Ausgabe“.
+- Das System muss im Bereich „Details“ genau diese Überschriften in dieser Reihenfolge darstellen: „Genres“, „Tropes“, „Inhaltswarnungen“, „Sagas, Sammlungen und Bibliotheken“ (REQ-095), „Ausgabe“.
 - Das System muss rechts neben den Überschriften „Genres“, „Tropes“ und „Inhaltswarnungen“ je ein „Bearbeiten“ wie im Referenzbild darstellen (CEO 2026-11-15: „ja, aber aktuell ohne Funktion (To-Do Liste -> Could)“).
 - Wenn der Nutzer ein „Bearbeiten“ antippt, darf das System nichts verändern.
 - Das System muss die Überschriften im selben Stil wie die Überschriften im Reiter „Rezension“ und farblich wie im Referenzbild darstellen, mit Farben aus zentralen Farbrubriken.
@@ -31,7 +31,7 @@ Referenzbilder: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-detail
 ### AK-1 Fünf Überschriften
 - **Gegeben** die Buchdetails werden angezeigt
 - **Wenn** der Nutzer den Reiter „Details“ antippt
-- **Dann** stehen dort von oben nach unten „Genres“, „Tropes“, „Inhaltswarnungen“, „Sammlungen und Bibliotheken“, „Ausgabe“
+- **Dann** stehen dort von oben nach unten „Genres“, „Tropes“, „Inhaltswarnungen“, „Sagas, Sammlungen und Bibliotheken“, „Ausgabe“ (REQ-095)
 
 ### AK-2 Kein Platzhaltertext
 - **Gegeben** der Reiter „Details“ ist aktiv
@@ -68,3 +68,4 @@ Referenzbilder: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-detail
 | 2026-11-15 | Erstellt aus CEO-Vorgabe „Reiter Details“ | Anforderungsmanager |
 | 2026-11-15 | CEO-Antwort 5: „Bearbeiten“ sichtbar ohne Funktion (neu AK-3); Funktion auf To-do-Liste (Could) | Anforderungsmanager |
 | 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |
+| 2026-11-23 | An REQ-095 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Die vierte Überschrift heißt „Sagas, Sammlungen und Bibliotheken“ (Anforderung, AK-1). Anlass ist ein CI-Befund in Sprint 10. Status unverändert | Anforderungsmanager |

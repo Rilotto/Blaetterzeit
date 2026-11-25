@@ -156,7 +156,7 @@ interface Props {
   sterne?: BewertungsWert;
   /** Bisher gesicherte Rezension: steht bearbeitbar im Eingabefeld (REQ-049, AK-7). */
   rezension?: string;
-  /** „Sichern“ bei nicht leerem Eingabefeld (REQ-049, AK-5). */
+  /** „Sichern“ bei nicht leerem Eingabefeld (REQ-049, AK-5) bzw. leerem Feld mit gespeicherter Rezension (REQ-093). */
   onSichern: (text: string) => void;
   /** Schließen ohne Sichern (X, Herunterziehen, Tippen außerhalb, Zurück-Taste): nichts wird gespeichert. */
   onSchliessen: () => void;
@@ -180,8 +180,9 @@ export default function Schreibfenster({ titel, autor, sterne, rezension, onSich
   };
 
   const sichern = () => {
-    // Leeres Eingabefeld: nichts tun, Fenster bleibt offen (REQ-049, AK-8).
-    if (rezensionLeer(text)) return;
+    // Leeres Eingabefeld ohne gespeicherte Rezension: nichts tun, Fenster bleibt offen (REQ-049, AK-8).
+    // Mit gespeicherter Rezension entfernt „Sichern“ sie (REQ-093, AK-8).
+    if (rezensionLeer(text) && !rezension) return;
     verlassen();
     onSichern(text);
   };

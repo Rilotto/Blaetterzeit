@@ -147,7 +147,7 @@ describe('REQ-060 Manueller Eintrag mit Angaben der Karte „Ausgabe“', () => 
     expect(d().querySelector('[data-ausgabe-zeile="fotos"]')).toBeNull();
     expect(d().textContent).not.toMatch(/Fotos/);
     // bisheriger Inhalt bleibt
-    for (const n of ['Titel', 'Autor', 'Jahr']) expect(feld(n)).toBeInTheDocument();
+    for (const n of ['Titel', 'Autor']) expect(feld(n)).toBeInTheDocument();
     expect(d().querySelector('[data-cover-hinzufuegen]')).not.toBeNull();
     expect(within(d()).getByRole('button', { name: 'Hinzufügen' })).toBeInTheDocument();
   });
@@ -160,8 +160,8 @@ describe('REQ-060 Manueller Eintrag mit Angaben der Karte „Ausgabe“', () => 
     expect(Array.from(d().querySelectorAll('*')).filter((e) => /^\s*SEITEN\s*$/i.test(e.textContent ?? '') && e.children.length === 0)).toHaveLength(1);
     expect(d().querySelectorAll('[data-ausgabe-zeile="erschienen"]')).toHaveLength(1);
     expect(d().textContent).not.toMatch(/Erscheinungsdatum/i);
-    // „JAHR“ bleibt unverändert
-    expect(feld('Jahr')).toHaveAttribute('placeholder', '2024');
+    // Seit REQ-092 (2026-11-23): das Feld „JAHR“ entfällt (Anforderungstext REQ-060 angepasst).
+    expect(within(d()).queryAllByLabelText(/^\s*Jahr\s*$/i)).toHaveLength(0);
   });
 
   it.each([

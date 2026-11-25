@@ -20,21 +20,19 @@ Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-
 
 ## Anforderung (Satzschablone)
 
-- Das System muss unter „Sammlungen und Bibliotheken“ die umrandete Pille „Zu einer Sammlung hinzufügen“ und darunter die Karte „In Bibliotheken“ mit Pfeil „›“ wie im Referenzbild darstellen (**Auslegung**: „keine Funktion“ = sichtbar, ohne Funktion).
-- Das System darf in der Karte „In Bibliotheken“ keinen Bibliotheksnamen darstellen (**Auslegung**: der Name im Referenzbild ist ein fremdes Beispiel).
-- Wenn der Nutzer die Pille oder die Karte antippt, darf das System nichts verändern.
+- **Abgelöst durch REQ-095 bis REQ-097 (Abgestimmt 2026-11-23).** Der bisherige Inhalt (umrandete Pille „Zu einer Sammlung hinzufügen“ und Karte „In Bibliotheken“ ohne Namen und ohne Funktion) entfällt. Abschnittsname, Pillen und Zeilen regelt REQ-095.
 
 ## Akzeptanzkriterien
 
-### AK-1 Elemente vorhanden
+### AK-1 Abschnitt umbenannt (abgelöst durch REQ-095)
 - **Gegeben** der Reiter „Details“ ist aktiv
-- **Wenn** der Abschnitt „Sammlungen und Bibliotheken“ betrachtet wird
-- **Dann** stehen dort „Zu einer Sammlung hinzufügen“ und die Karte „In Bibliotheken“ ohne Namen
+- **Wenn** der Abschnitt betrachtet wird
+- **Dann** heißt er „Sagas, Sammlungen und Bibliotheken“, und es gibt keinen Abschnitt „Sammlungen und Bibliotheken“ mehr (Inhalt: REQ-095)
 
-### AK-2 Ohne Funktion
-- **Gegeben** der Abschnitt wird angezeigt
-- **Wenn** der Nutzer „Zu einer Sammlung hinzufügen“ bzw. „In Bibliotheken“ antippt
-- **Dann** öffnet sich kein Menü und kein Fenster, und nichts ändert sich
+### AK-2 Keine Elemente ohne Funktion (abgelöst durch REQ-095)
+- **Gegeben** ein Buch in keiner Liste, der Abschnitt wird angezeigt
+- **Wenn** der Nutzer die Pille „+ Zu einer Sammlung hinzufügen“ antippt
+- **Dann** öffnet sich das Blatt zum Hinzufügen (REQ-096), und es gibt keine Karte „In Bibliotheken“ ohne Funktion
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -47,6 +45,7 @@ Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-
 ## Abhängigkeiten
 
 - **REQ-051, REQ-012.**
+- **REQ-095 (Entwurf):** löst diesen REQ mit Umsetzung vollständig ab (Abschnitt „Sagas, Sammlungen und Bibliotheken“ mit drei gestrichelten Pillen bzw. Zeilen „In Saga/Sammlung/Bibliotheken“ mit Funktion, REQ-096, REQ-097).
 
 ## Offene Fragen
 
@@ -59,3 +58,4 @@ Referenzbild: [referenzen/REF-details-01-uebersicht.png](referenzen/REF-details-
 | 2026-11-15 | Erstellt (Platzhalter für offenen Inhalt) | Anforderungsmanager |
 | 2026-11-15 | CEO-Antwort 4: sichtbar ohne Funktion (Auslegung), kein Bibliotheksname; AKs ergänzt | Anforderungsmanager |
 | 2026-11-15 | Status „Abgestimmt“ (CEO 2026-11-15, über den Scrum Master: „Der Rest ist in Ordnung.“) | Anforderungsmanager |
+| 2026-11-23 | Durch REQ-095 bis REQ-097 abgelöst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“). Anforderung, AK-1 und AK-2 auf das neue Verhalten umgestellt. Status unverändert | Anforderungsmanager |

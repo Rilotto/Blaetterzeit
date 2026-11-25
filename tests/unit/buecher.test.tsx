@@ -87,7 +87,7 @@ describe('Abschnitt „Noch zu lesen“', () => {
 });
 
 describe('Seite „Bücher“', () => {
-  it('Kopfbereich, Sagas und Sammlungen mit je einem Cover-Platzhalter', () => {
+  it('Kopfbereich, Sagas und Sammlungen ohne Listen mit je einem Cover-Platzhalter und „Alle ansehen ›“ (REQ-012, REQ-097)', () => {
     render(<BuecherAnsicht buecher={[]} />);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Deine Bücher');
     expect(screen.getByRole('button', { name: 'Filter und Einstellungen' }).querySelector('[data-icon="icon-regler.png"]')).not.toBeNull();
@@ -102,7 +102,7 @@ describe('Seite „Bücher“', () => {
       expect(texte).toHaveLength(1);
       expect(texte[0].textContent).toBe(text);
       expect(texte[0].style.color).toBe('var(--bz-farbe-primaer)');
-      expect(abschnitt.textContent).toBe(name + text);
+      expect(abschnitt.textContent).toBe(name + 'Alle ansehen ›' + text);
     }
   });
 

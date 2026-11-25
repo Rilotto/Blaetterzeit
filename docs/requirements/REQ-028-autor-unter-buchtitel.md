@@ -32,7 +32,7 @@ Antworten des CEO (wörtlich, 2026-11-10):
 
 **Annahmen (nicht blockierend, vom CEO im Prototyp zu prüfen)**
 - Passt der Name nicht in eine Zeile, schneidet das System ihn am Zeilenende ab und macht das mit „…“ kenntlich (analog zum Buchtitel, REQ-018).
-- Hat ein Buch keinen Autor, entfällt die Autorzeile; die Statuspille folgt direkt auf den Titel.
+- ~~Hat ein Buch keinen Autor, entfällt die Autorzeile.~~ Abgelöst durch REQ-094: Ohne Autor steht „unbekannter Autor“.
 - Der Autorname wird als ein Text in Lesereihenfolge („Vorname Nachname“ bzw. ein einzelner Name) gespeichert und unverändert angezeigt.
 
 ## Randbedingungen
@@ -72,13 +72,12 @@ Antworten des CEO (wörtlich, 2026-11-10):
 ### AK-6 Buch ohne Autor
 - **Gegeben** ein Buch ohne Autor
 - **Wenn** die Buchdetails angezeigt werden
-- **Dann** gibt es unter dem Buchtitel keine Autorzeile und keinen Platzhaltertext
-- **Und** die Statuspille folgt direkt auf den Buchtitel
+- **Dann** steht unter dem Buchtitel an der Stelle des Autors der Platzhalter „unbekannter Autor“ (REQ-094)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Mehrere Autoren je Buch (CEO: „Nur ein Autor“).
-- Eingeben oder Bearbeiten des Autors durch den Nutzer.
+- Eingeben oder Bearbeiten des Autors durch den Nutzer (REQ-094).
 - Anzeige des Autors in Buchlisten (Bucheintrag, REQ-009).
 
 ## Qualitätsanforderungen
@@ -100,3 +99,4 @@ Antworten des CEO (wörtlich, 2026-11-10):
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-10 | Erstellt aus CEO-Vorgabe und Antworten („Tertiär klingt gut.“, „Nur ein Autor, auch nur ein Name wie bei Alchemised ist in Ordnung.“). Annahmen: Abschneiden mit „…“, keine Zeile ohne Autor. Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
+| 2026-11-23 | An REQ-094 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Ohne Autor steht „unbekannter Autor“ (AK-6, Annahme). Status unverändert | Anforderungsmanager |

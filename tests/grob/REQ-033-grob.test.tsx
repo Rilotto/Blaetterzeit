@@ -47,7 +47,7 @@ const feld = (d: HTMLElement, n: string) => within(d).getByLabelText(new RegExp(
 
 afterEach(() => cleanup());
 
-it('[REQ-033/GROB] Jahr und Erscheinungsdatum optional, über das Repository unverändert; neue Bücher ohne Erscheinungsdatum', async () => {
+it('[REQ-033/GROB] Jahr und Erscheinungsdatum optional, über das Repository unverändert; „Erschienen“ leer → keine Erscheinungsangabe', async () => {
   const { buchAusDaten, istErscheinungsdatum } = await import('@/domain/buch');
   const { createBookRepository } = await import('@/storage');
   const repo = createBookRepository();
@@ -64,10 +64,11 @@ it('[REQ-033/GROB] Jahr und Erscheinungsdatum optional, über das Repository unv
   const d = await oeffneBlatt();
   fireEvent.change(feld(d, 'Titel'), { target: { value: 'Neu' } });
   fireEvent.change(feld(d, 'Seiten'), { target: { value: '100' } }); // Pflicht seit REQ-060
-  fireEvent.change(feld(d, 'Jahr'), { target: { value: '2024' } });
+  // Seit REQ-092 (2026-11-23): kein Feld „JAHR“; „Erschienen“ bleibt leer.
+  expect(within(d).queryAllByLabelText(/^\s*Jahr\s*$/i)).toHaveLength(0);
   await tippe(within(d).getByRole('button', { name: 'Hinzufügen' }));
   await screen.findByRole('region', { name: 'Buchdetails' });
   const neu = f.repo.save.mock.calls[0][0];
-  expect(neu.erscheinungsjahr).toBe(2024);
+  expect(neu.erscheinungsjahr).toBeUndefined();
   expect(neu.erscheinungsdatum).toBeUndefined();
 });

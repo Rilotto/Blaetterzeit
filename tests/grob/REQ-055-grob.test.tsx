@@ -37,15 +37,18 @@ const norm = (t: string | null | undefined) => (t ?? '').replace(/[\s  ]+/g, ' '
 const bereich = (d: HTMLElement) => d.querySelector<HTMLElement>('[data-reiter-bereich="details"]')!;
 const abschnitt = (d: HTMLElement, id: string) => bereich(d).querySelector<HTMLElement>(`[data-details-abschnitt="${id}"]`)!;
 
-it('[REQ-055/GROB] Pille „Zu einer Sammlung hinzufügen“, darunter „In Bibliotheken“; Antippen ändert nichts', async () => {
+// Fassung 2026-11-23: REQ-055 ist durch REQ-095 bis REQ-097 abgelöst (Abschnitt umbenannt, Pille mit Funktion).
+void abschnitt;
+it('[REQ-055/GROB] Abschnitt „Sagas, Sammlungen und Bibliotheken“; „+ Zu einer Sammlung hinzufügen“ öffnet ein Blatt, keine Karte „In Bibliotheken“ ohne Liste', async () => {
   const { d, repo, id } = await details();
-  const sammlung = abschnitt(d, 'sammlungen').querySelector<HTMLElement>('[data-sammlung-hinzufuegen]')!;
-  const bib = abschnitt(d, 'sammlungen').querySelector<HTMLElement>('[data-in-bibliotheken]')!;
-  expect(norm(sammlung.textContent)).toBe('Zu einer Sammlung hinzufügen');
-  expect(sammlung.compareDocumentPosition(bib) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  const hs = Array.from(bereich(d).querySelectorAll('h1, h2, h3, h4, [role="heading"]')).map((h) => norm(h.textContent));
+  expect(hs).toContain('Sagas, Sammlungen und Bibliotheken');
+  expect(hs).not.toContain('Sammlungen und Bibliotheken');
+  expect(bereich(d).textContent).not.toMatch(/In Bibliotheken/);
+  const pille = Array.from(bereich(d).querySelectorAll<HTMLElement>('button, [role="button"]')).find((b) => norm(b.textContent) === '+ Zu einer Sammlung hinzufügen');
+  expect(pille).toBeDefined();
   const vorher = JSON.stringify(await repo.get(id));
-  await tippe(sammlung);
-  await tippe(bib);
-  expect(document.querySelectorAll('[role="dialog"], [role="menu"]')).toHaveLength(0);
+  await tippe(pille!);
+  await vi.waitFor(() => expect(document.querySelectorAll('[role="dialog"]').length).toBeGreaterThan(0));
   expect(JSON.stringify(await repo.get(id))).toBe(vorher);
 });

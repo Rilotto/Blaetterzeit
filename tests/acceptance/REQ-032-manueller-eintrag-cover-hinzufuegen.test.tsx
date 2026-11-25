@@ -199,10 +199,9 @@ describe('REQ-032 Cover beim manuellen Eintrag', () => {
       await oeffneBlatt();
       gib('Titel', 'Testbuch');
       gib('Autor', 'Vorname Nachname');
-      gib('Jahr', '2001');
       gib('Seiten', '320');
       await merkeVor();
-      expect([feld('Titel').value, feld('Autor').value, feld('Jahr').value, feld('Seiten').value]).toEqual(['Testbuch', 'Vorname Nachname', '2001', '320']);
+      expect([feld('Titel').value, feld('Autor').value, feld('Seiten').value]).toEqual(['Testbuch', 'Vorname Nachname', '320']);
       expect(repo.save).not.toHaveBeenCalled();
       expect(s.put).not.toHaveBeenCalled();
     });

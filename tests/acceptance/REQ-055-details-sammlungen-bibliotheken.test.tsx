@@ -1,9 +1,9 @@
 /**
- * Akzeptanztests REQ-055 – Details: Sammlungen und Bibliotheken (sichtbar, ohne Funktion).
- * Schnittstellen laut Entwickler: [data-details-abschnitt=sammlungen], [data-sammlung-hinzufuegen], [data-in-bibliotheken].
+ * Akzeptanztests REQ-055 – Details: Abschnitt umbenannt; abgelöst durch REQ-095 bis REQ-097 (Fassung 2026-11-23).
+ * Ermittelt über Rollen und Texte (Überschrift „Sagas, Sammlungen und Bibliotheken“, Pillen als Schaltflächen, Blatt role=dialog).
  */
 import '@testing-library/jest-dom/vitest';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import type { ComponentType } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -67,25 +67,48 @@ async function zustand(w: Welt, d: HTMLElement, id: string) {
   return { html: bereich(d).innerHTML, dialoge: dialoge(), buch: JSON.stringify(await w.repo.get(id)) };
 }
 
-const sammlung = (d: HTMLElement) => abschnitt(d, 'sammlungen').querySelector<HTMLElement>('[data-sammlung-hinzufuegen]')!;
-const bib = (d: HTMLElement) => abschnitt(d, 'sammlungen').querySelector<HTMLElement>('[data-in-bibliotheken]')!;
+// Aus dem gemeinsamen Kopf, hier nicht alles genutzt (noUnusedLocals).
+void [abschnitt, warte, zustand];
+const ABSCHNITT = 'Sagas, Sammlungen und Bibliotheken';
+const ueberschriften = (d: HTMLElement) => Array.from(bereich(d).querySelectorAll('h1, h2, h3, h4, [role="heading"]')).map((h) => norm(h.textContent));
+/** Abschnitt ab seiner Überschrift bis zur nächsten Überschrift (Elemente dazwischen). */
+function abschnittElemente(d: HTMLElement) {
+  const hs = Array.from(bereich(d).querySelectorAll<HTMLElement>('h1, h2, h3, h4, [role="heading"]'));
+  const i = hs.findIndex((h) => norm(h.textContent) === ABSCHNITT);
+  expect(i, `Überschrift „${ABSCHNITT}“`).toBeGreaterThanOrEqual(0);
+  const von = hs[i];
+  const bis = hs[i + 1];
+  return Array.from(bereich(d).querySelectorAll<HTMLElement>('*')).filter(
+    (e) => von.compareDocumentPosition(e) & Node.DOCUMENT_POSITION_FOLLOWING && !von.contains(e) && (!bis || e.compareDocumentPosition(bis) & Node.DOCUMENT_POSITION_FOLLOWING),
+  );
+}
+const pilleSammlung = (d: HTMLElement) =>
+  abschnittElemente(d).find((e) => (e.tagName === 'BUTTON' || e.getAttribute('role') === 'button') && norm(e.textContent) === '+ Zu einer Sammlung hinzufügen');
 
-describe('REQ-055 Sammlungen und Bibliotheken', () => {
-  it('[REQ-055/AK-1] Pille „Zu einer Sammlung hinzufügen“ und darunter Karte „In Bibliotheken“ ohne Namen', async () => {
+describe('REQ-055 (abgelöst durch REQ-095) Abschnitt „Sagas, Sammlungen und Bibliotheken“', () => {
+  it('[REQ-055/AK-1] der Abschnitt heißt „Sagas, Sammlungen und Bibliotheken“; „Sammlungen und Bibliotheken“ gibt es nicht mehr', async () => {
     const { d } = await mitBuch();
-    expect(norm(sammlung(d).textContent)).toBe('Zu einer Sammlung hinzufügen');
-    expect(sammlung(d).compareDocumentPosition(bib(d)) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    // Nur Bezeichnung und Pfeil, kein Bibliotheksname
-    expect(norm(bib(d).textContent).replace(/ /g, '')).toBe('InBibliotheken›');
+    const h = ueberschriften(d);
+    expect(h).toContain(ABSCHNITT);
+    expect(h).not.toContain('Sammlungen und Bibliotheken');
+    expect(h.filter((t) => t === ABSCHNITT)).toHaveLength(1);
   });
 
-  it.each(['sammlung', 'bibliotheken'])('[REQ-055/AK-2] „%s“ antippen: kein Menü, kein Fenster, nichts ändert sich', async (was) => {
-    const b = buch();
-    const { w, d } = await mitBuch(b);
-    const vorher = await zustand(w, d, b.id);
-    await tippe(was === 'sammlung' ? sammlung(d) : bib(d));
-    await warte(60);
-    expect(await zustand(w, d, b.id)).toEqual(vorher);
-    expect(document.querySelectorAll('[role="menu"]').length).toBe(0);
+  it('[REQ-055/AK-2] Buch in keiner Liste: „+ Zu einer Sammlung hinzufügen“ öffnet das Blatt zum Hinzufügen', async () => {
+    const { d } = await mitBuch();
+    expect(dialoge()).toBe(0);
+    const p = pilleSammlung(d);
+    expect(p, 'Pille „+ Zu einer Sammlung hinzufügen“').toBeDefined();
+    await tippe(p!);
+    await vi.waitFor(() => expect(screen.getAllByRole('dialog').length).toBeGreaterThan(0), W);
+    const blatt = screen.getAllByRole('dialog').at(-1)!;
+    expect(within(blatt).getByRole('button', { name: 'Sichern' })).toBeInTheDocument();
+  });
+
+  it('[REQ-055/AK-2] es gibt keine Karte „In Bibliotheken“ ohne Funktion (ohne Zugehörigkeit steht nur die Pille)', async () => {
+    const { d } = await mitBuch();
+    const texte = abschnittElemente(d).map((e) => norm(e.textContent));
+    expect(texte.some((t) => /^In Bibliotheken/.test(t))).toBe(false);
+    expect(abschnittElemente(d).some((e) => norm(e.textContent) === '+ Zu einer Bibliothek hinzufügen')).toBe(true);
   });
 });

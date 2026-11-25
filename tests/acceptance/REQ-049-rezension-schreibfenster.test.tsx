@@ -205,7 +205,7 @@ describe('REQ-049 Schreibfenster', () => {
     expect((await gespeichert(id))?.rezension).toBe('Alter Text, ergänzt');
   });
 
-  it('[REQ-049/AK-8] leeres Eingabefeld: Sichern lässt das Fenster offen und speichert nichts', async () => {
+  it('[REQ-049/AK-8] keine Rezension gespeichert, leeres Eingabefeld: Sichern lässt das Fenster offen und speichert nichts', async () => {
     const { w, d, id } = await mitBuch();
     const spy = vi.spyOn(w.repo, 'save');
     await oeffne(d);
@@ -216,22 +216,39 @@ describe('REQ-049 Schreibfenster', () => {
     expect((await gespeichert(id))?.rezension).toBeUndefined();
   });
 
-  it('[REQ-049/AK-8] gesicherte Rezension vollständig gelöscht: Sichern bewirkt nichts, alte Rezension bleibt', async () => {
-    const { d, id } = await mitBuch(buch({ rezension: 'Bleibt erhalten' } as Partial<Buch>));
+  // Fassung 2026-11-23 (REQ-093): bei gespeicherter Rezension entfernt „Sichern“ mit leerem Feld die Rezension.
+  it('[REQ-049/AK-8] gesicherte Rezension vollständig gelöscht: Sichern entfernt sie, Fenster zu, Schreibfeld ohne Rezension, auch nach Neustart', async () => {
+    const { d, id } = await mitBuch(buch({ rezension: 'Wird entfernt' } as Partial<Buch>));
+    await oeffne(d);
+    expect(eingabe().value).toBe('Wird entfernt');
+    schreibe('');
+    await sichern();
+    await vi.waitFor(() => expect(fenster()).toBeNull());
+    expect(anzeige(d)).toBeNull();
+    expect(platzhalter(d)).toBe('Wie fandest du es?');
+    await warte();
+    expect((await gespeichert(id))?.rezension).toBeUndefined();
+    const d2 = await zeige(await starte(), id);
+    expect(platzhalter(d2)).toBe('Wie fandest du es?');
+  });
+
+  it('[REQ-049/AK-8] nach dem Entfernen lässt sich wieder eine Rezension schreiben', async () => {
+    const { d, id } = await mitBuch(buch({ rezension: 'Alt' } as Partial<Buch>));
     await oeffne(d);
     schreibe('');
     await sichern();
-    expect(fenster()).not.toBeNull();
-    await schliesse('X');
-    expect(anzeige(d)).toBe('Bleibt erhalten');
+    await vi.waitFor(() => expect(fenster()).toBeNull());
+    await oeffne(d);
+    expect(eingabe().value).toBe('');
+    schreibe('Neu');
+    await sichern();
     await warte();
-    expect((await gespeichert(id))?.rezension).toBe('Bleibt erhalten');
+    expect((await gespeichert(id))?.rezension).toBe('Neu');
   });
 
-  it('[REQ-049/AK-8] Fachfunktion: leerer Text wird nicht gesichert', () => {
-    const b = buch({ rezension: 'Alt' } as Partial<Buch>);
-    const r = rezensionSichern(b, '');
-    expect(r === null || r === undefined || r.rezension === 'Alt').toBe(true);
+  it('[REQ-049/AK-8] Fachfunktion: leerer Text ohne gespeicherte Rezension ergibt keine Rezension', () => {
+    const r = rezensionSichern(buch(), '');
+    expect(r === null || r === undefined || r.rezension === undefined).toBe(true);
     expect(rezensionSichern(buch(), 'Neu')?.rezension).toBe('Neu');
   });
 
