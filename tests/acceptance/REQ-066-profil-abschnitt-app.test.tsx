@@ -46,6 +46,8 @@ async function profil() {
 }
 const anzeige = () => norm(document.querySelector('[data-profil-zeile="design"] [data-design-anzeige]')?.textContent);
 const fenster = () => screen.queryByRole('dialog', { name: 'Design' });
+/** Pille „Hell“ / „Dunkel“ (REQ-110) über Rolle und Text. */
+const gruppenPille = (f: HTMLElement, name: 'Hell' | 'Dunkel') => within(f).getByRole('tab', { name });
 
 describe('REQ-066 Profil › App › Design', () => {
   it('[REQ-066/AK-1] Profil antippen: Überschrift „App“ in Stufe „Label“, darunter Karte mit genau einer Zeile „Design“', async () => {
@@ -141,6 +143,7 @@ describe('REQ-066 Profil › App › Design', () => {
     await vi.waitFor(() => expect(anzeige()).toBe('Salbei · Systemschrift · Klassisch ›'), W);
     await tippe(zeile);
     const f = await screen.findByRole('dialog', { name: 'Design' }, W);
+    await tippe(gruppenPille(f, 'Dunkel'));
     await tippe(f.querySelector('button[data-farbdesign="nachtlektuere"]')!);
     await tippe(f.querySelector('[data-design-reiter="schriftart"]')!);
     await tippe(f.querySelector('button[data-schrift-zeile="fraunces"]')!);

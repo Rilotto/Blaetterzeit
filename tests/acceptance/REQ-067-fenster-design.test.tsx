@@ -31,6 +31,8 @@ async function tippe(el: Element) {
 }
 const wurzel = () => document.querySelector<HTMLElement>('[data-app-wurzel]')!;
 const fenster = () => screen.queryByRole('dialog', { name: 'Design' });
+/** Pille „Hell“ / „Dunkel“ (REQ-110) über Rolle und Text. */
+const gruppenPille = (f: HTMLElement, name: 'Hell' | 'Dunkel') => within(f).getByRole('tab', { name });
 const reiter = (id: 'farben' | 'schriftart') => fenster()!.querySelector<HTMLElement>(`[data-design-reiter="${id}"]`)!;
 const farbZeilen = () => Array.from(fenster()!.querySelectorAll<HTMLElement>('button[data-farbdesign]'));
 const schriftZeilen = () => Array.from(fenster()!.querySelectorAll<HTMLElement>('button[data-schrift-zeile]'));
@@ -104,6 +106,7 @@ describe('REQ-067 Fenster „Design“', () => {
   it('[REQ-067/AK-3] anderes Farbdesign antippen: Mini-Buchkarte zeigt sofort dessen Farben', async () => {
     await oeffne();
     const vorher = vorschau().style.getPropertyValue('--bz-farbe-hintergrund');
+    await tippe(gruppenPille(fenster()!, 'Dunkel'));
     await tippe(fenster()!.querySelector('button[data-farbdesign="nachtlektuere"]')!);
     const nachher = vorschau().style.getPropertyValue('--bz-farbe-hintergrund') || wurzel().style.getPropertyValue('--bz-farbe-hintergrund');
     expect(nachher.toLowerCase()).toBe(farbdesigns.nachtlektuere.werte.hintergrund.toLowerCase());

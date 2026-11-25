@@ -1,0 +1,1 @@
+- 2026-11-25 REQ-068 (neu: AK-1–3) + REQ-110 (AK-1–6): 9 betroffene Dateien lokal grün, 115/115 (dot), Typecheck und Lint ohne Fehler. Alttests REQ-066/067/069 auf Pille „Dunkel“/„Hell“ angepasst. Gegenprobe (gespeicherte Design-Auswahl verfälscht): 7 Tests rot, erkannt. Volle Suite: nur CI.

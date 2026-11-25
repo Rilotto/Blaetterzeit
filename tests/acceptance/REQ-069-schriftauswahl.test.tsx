@@ -144,6 +144,8 @@ describe('REQ-069 Schriftauswahl', () => {
     expect(wurzel()).toHaveAttribute('data-farbdesign', 'nachtlektuere');
     expect(wurzel()).toHaveAttribute('data-schrift', 'system');
     await tippe(f.querySelector('[data-design-reiter="farben"]')!);
+    // Nachtlektüre aktiv → Pille „Dunkel“ (REQ-110); Salbei steht unter „Hell“
+    await tippe(within(f).getByRole('tab', { name: 'Hell' }));
     await tippe(f.querySelector('button[data-farbdesign="salbei"]')!);
     expect(wurzel()).toHaveAttribute('data-farbdesign', 'salbei');
     expect(wurzel()).toHaveAttribute('data-schrift', 'system');
