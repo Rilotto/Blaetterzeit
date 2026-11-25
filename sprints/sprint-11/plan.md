@@ -53,3 +53,10 @@ Die CI baut die vorherige und die neue Version, signiert beide mit demselben Tes
     - Sprecher: „Kodex des Drachenreiters“. Buch: „Fourth Wing“.
     - Das Standard-Zitat ist nicht im Notizbuch eines Buches gespeichert. Antippen öffnet deshalb nichts.
     - Sobald es mindestens ein eigenes Zitat gibt, gilt wieder die normale Auswahl aus den eigenen Zitaten.
+- BUG, 2026-11-25: Maße nach dem Barcode-Scan. Wortlaut CEO: „wenn die Maße eines Buches nicht online verfügbar sind, sollen bitte die Standardmaße eines Taschenbuches verwendet werden. Wenn online abrufbar ist, ob der gescannte Code ein Taschenbuch oder Hardcover ist, sollen jeweils dafür entsprechende Standardwerte hergenommen werden.“
+  - Bezug: REQ-077 (Standardmaße je Format, ohne Format gilt Taschenbuch) und REQ-062 (Barcode-Scan).
+  - Auslegung:
+    - Liefert die Online-Abfrage ein Format (z. B. Open Library „physical_format“: Paperback oder Hardcover), setzt der Scan das Format entsprechend (Print › Taschenbuch bzw. Hardcover).
+    - Liefert die Abfrage keine Maße, gelten die Standardmaße dieses Formats, ohne Format die des Taschenbuchs.
+    - Online gefundene Maße haben Vorrang.
+  - Der Entwickler prüft zuerst, warum es heute nicht greift: ob das Format beim Scan nicht gesetzt wird oder ob die Standardmaße nicht angezeigt bzw. verwendet werden.
