@@ -138,6 +138,16 @@ jobs:
           cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
           cp app/build/outputs/apk/debug/app-debug.apk "$RUNNER_TEMP/neu.apk"
 
+      - name: Beide APKs mit dem festen Debug-Testschlüssel neu signieren
+        # Robust gegen Basisstände ohne debug-signingConfig und gegen gecachte Schlüssel:
+        # beide APKs werden nach dem Build einheitlich mit android/app/debug.keystore signiert.
+        run: |
+          APKSIGNER="$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -n 1)apksigner"
+          for APK in "$RUNNER_TEMP/basis.apk" "$RUNNER_TEMP/neu.apk"; do
+            "$APKSIGNER" sign --ks android/app/debug.keystore --ks-pass pass:android \
+              --ks-key-alias androiddebugkey --key-pass pass:android "$APK"
+          done
+
       - name: Beide APKs tragen dieselbe Signatur
         run: |
           APKSIGNER="$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -n 1)apksigner"
