@@ -3,6 +3,7 @@ import BlattUnten, { blattEingabeStil, sichernStil } from '@/buchdetails/BlattUn
 import type { Buch } from '@/domain/buch';
 import {
   bandPruefen,
+  type BandPruefung,
   listenArt,
   listenDerArt,
   listenNamePruefen,
@@ -21,6 +22,11 @@ interface Props {
   listen: Liste[];
   zug: Zugehoerigkeit[];
   repository: ListenRepository;
+  /**
+   * Bandnummer des Buches speichern (REQ-112; undefined = keine). Wird beim „Sichern“ nur aufgerufen, wenn das Feld
+   * „Band“ angezeigt war und sich der Wert geändert hat.
+   */
+  onBandnummer: (band: number | undefined) => Promise<void>;
   /** Nach „Sichern“: gespeichert, Blatt schließen und neu laden. */
   onGesichert: () => void;
   /** Schließen ohne „Sichern“: alles verwerfen (REQ-096, AK-5). */
@@ -93,20 +99,21 @@ export function NeueListeEingabe({ platzhalter, onAnlegen }: { platzhalter: stri
 
 /**
  * Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ (REQ-096): alle Listen der Art mit Häkchen
- * (Mehrfachauswahl), bei Sagas je angehakter Saga das Feld „Band“, „+“ für eine neue Liste und „Sichern“.
+ * (Mehrfachauswahl), bei Sagas genau ein Feld „Band“ mit der Bandnummer des Buches (REQ-112), sobald mindestens
+ * eine Saga angehakt ist, „+“ für eine neue Liste und „Sichern“.
  */
-export default function BlattZuListe({ art, buch, listen, zug, repository, onGesichert, onSchliessen }: Props) {
+export default function BlattZuListe({ art, buch, listen, zug, repository, onBandnummer, onGesichert, onSchliessen }: Props) {
   const texte = listenArt(art);
   const eigene = zug.filter((z) => z.buchId === buch.id);
   const [neue, setNeue] = useState<Liste[]>([]);
   const [haken, setHaken] = useState<Set<string>>(() => new Set(eigene.map((z) => z.listeId)));
-  const [baende, setBaende] = useState<Record<string, string>>(() =>
-    Object.fromEntries(eigene.filter((z) => z.band !== undefined).map((z) => [z.listeId, String(z.band)])),
-  );
-  const [fehler, setFehler] = useState<Set<string>>(new Set());
+  const startBand = buch.bandnummer !== undefined ? String(buch.bandnummer) : '';
+  const [band, setBand] = useState(startBand);
+  const [fehler, setFehler] = useState(false);
   const [eingabe, setEingabe] = useState(false);
   const speichert = useState({ laeuft: false })[0];
   const alle = listenDerArt([...listen, ...neue], art);
+  const mitBandFeld = art === 'saga' && haken.size > 0;
 
   const umschalten = (id: string, an = !haken.has(id)) => {
     setHaken((alt) => {
@@ -115,10 +122,6 @@ export default function BlattZuListe({ art, buch, listen, zug, repository, onGes
       else n.delete(id);
       return n;
     });
-    // Bandnummer aus dem Barcode-Scan vorausfüllen (REQ-099, AK-6).
-    if (an && art === 'saga' && baende[id] === undefined && buch.bandnummer !== undefined) {
-      setBaende((b) => ({ ...b, [id]: String(buch.bandnummer) }));
-    }
   };
 
   const anlegen = (name: string) => {
@@ -130,15 +133,9 @@ export default function BlattZuListe({ art, buch, listen, zug, repository, onGes
 
   const sichern = async () => {
     if (speichert.laeuft) return;
-    const ungueltig = new Set<string>();
-    const band = new Map<string, number | undefined>();
-    for (const id of haken) {
-      const p = art === 'saga' ? bandPruefen(baende[id] ?? '') : { ok: true as const };
-      if (!p.ok) ungueltig.add(id);
-      else band.set(id, p.band);
-    }
-    if (ungueltig.size > 0) {
-      setFehler(ungueltig);
+    const p: BandPruefung = mitBandFeld ? bandPruefen(band) : { ok: true };
+    if (!p.ok) {
+      setFehler(true);
       return;
     }
     speichert.laeuft = true;
@@ -146,12 +143,13 @@ export default function BlattZuListe({ art, buch, listen, zug, repository, onGes
       for (const l of neue) await repository.listeSpeichern(l);
       for (const l of alle) {
         if (haken.has(l.id)) {
-          const b = band.get(l.id);
-          await repository.zuordnen(b === undefined ? { listeId: l.id, buchId: buch.id } : { listeId: l.id, buchId: buch.id, band: b });
+          await repository.zuordnen({ listeId: l.id, buchId: buch.id });
         } else if (eigene.some((z) => z.listeId === l.id)) {
           await repository.herausnehmen(l.id, buch.id);
         }
       }
+      // Bandnummer gehört zum Buch (REQ-112): nur speichern, wenn das Feld sichtbar war und sich etwas geändert hat.
+      if (mitBandFeld && p.band !== buch.bandnummer) await onBandnummer(p.band);
     } catch (e) {
       console.warn('Listen konnten nicht gespeichert werden:', e);
     } finally {
@@ -172,25 +170,20 @@ export default function BlattZuListe({ art, buch, listen, zug, repository, onGes
                 <span data-liste-name="" style={nameStil}>
                   {l.name}
                 </span>
-                {art === 'saga' && an ? (
-                  <BandFeld
-                    listeId={l.id}
-                    wert={baende[l.id] ?? ''}
-                    fehler={fehler.has(l.id)}
-                    onWert={(w) => {
-                      setBaende((b) => ({ ...b, [l.id]: w }));
-                      setFehler((f) => {
-                        const n = new Set(f);
-                        n.delete(l.id);
-                        return n;
-                      });
-                    }}
-                  />
-                ) : null}
               </li>
             );
           })}
         </ul>
+        {mitBandFeld ? (
+          <BandFeld
+            wert={band}
+            fehler={fehler}
+            onWert={(w) => {
+              setBand(w);
+              setFehler(false);
+            }}
+          />
+        ) : null}
         {eingabe ? (
           <NeueListeEingabe platzhalter={texte.neu} onAnlegen={anlegen} />
         ) : (

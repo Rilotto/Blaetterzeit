@@ -51,11 +51,18 @@ describe('Fachlogik Listen (REQ-095 bis REQ-099)', () => {
 
   it('Sortierung nach Bänden, ohne Band danach A–Z; A–Z nach Titel', () => {
     const s = liste('saga', 'Crescent City');
-    const [b2, b1, b3, ohne1, ohne2] = [b('House of Sky and Breath'), b('House of Earth and Blood'), b('House of Flame and Shadow'), b('Zeta'), b('Alpha')];
+    // Bandnummer gehört zum Buch (REQ-112).
+    const [b2, b1, b3, ohne1, ohne2] = [
+      b('House of Sky and Breath', { bandnummer: 2 }),
+      b('House of Earth and Blood', { bandnummer: 1 }),
+      b('House of Flame and Shadow', { bandnummer: 3 }),
+      b('Zeta'),
+      b('Alpha'),
+    ];
     const zug = [
-      { listeId: s.id, buchId: b2.id, band: 2 },
-      { listeId: s.id, buchId: b1.id, band: 1 },
-      { listeId: s.id, buchId: b3.id, band: 3 },
+      { listeId: s.id, buchId: b2.id },
+      { listeId: s.id, buchId: b1.id },
+      { listeId: s.id, buchId: b3.id },
       { listeId: s.id, buchId: ohne1.id },
       { listeId: s.id, buchId: ohne2.id },
     ];
@@ -81,13 +88,18 @@ describe('Fachlogik Listen (REQ-095 bis REQ-099)', () => {
     const l = liste('sammlung', 'Lieblingsbücher');
     const buch = b('Fourth Wing');
     const zug = [
-      { listeId: e.id, buchId: buch.id, band: 1 },
+      { listeId: e.id, buchId: buch.id },
       { listeId: c.id, buchId: buch.id },
       { listeId: l.id, buchId: 'anderes' },
     ];
     expect(listenNamenText(listenDesBuches([e, c, l], zug, buch.id, 'saga'))).toBe('Crescent City, The Empyrean');
     expect(listenDesBuches([e, c, l], zug, buch.id, 'sammlung')).toEqual([]);
-    expect(sagenDesBuches([e, c, l], zug, buch.id).map((x) => sagaZeileText(x.liste.name, x.band))).toEqual(['Crescent City', 'Band 1 · The Empyrean']);
+    // Ohne Bandnummer nur die Namen, mit Bandnummer in allen Saga-Zeilen dieselbe (REQ-099, REQ-112).
+    expect(sagenDesBuches([e, c, l], zug, buch).map((x) => sagaZeileText(x.liste.name, x.band))).toEqual(['Crescent City', 'The Empyrean']);
+    expect(sagenDesBuches([e, c, l], zug, { ...buch, bandnummer: 1 }).map((x) => sagaZeileText(x.liste.name, x.band))).toEqual([
+      'Band 1 · Crescent City',
+      'Band 1 · The Empyrean',
+    ]);
     expect(anzahlJeListe(zug).get(e.id)).toBe(1);
     expect(anzahlJeListe(zug, new Set([buch.id])).get(l.id)).toBeUndefined();
   });
@@ -118,7 +130,7 @@ async function details(buch: Buch, listen = new InMemoryListenRepository(), repo
 describe('Buchdetails: Abschnitt, Blatt und Listenübersicht', () => {
   it('Pille → Blatt → neue Saga über „+“ mit Band → Zeile „In Saga“ und „Band 2 · …“ unter dem Autor (REQ-095, REQ-096, REQ-099)', async () => {
     const buch = b('Iron Flame', { autor: 'Rebecca Yarros', bandnummer: 2 });
-    const { listen } = await details(buch);
+    const { listen, repo } = await details(buch);
     expect(q('[data-abschnitt-ueberschrift]') && alle('[data-abschnitt-ueberschrift]').map((h) => h.textContent)).toContain('Sagas, Sammlungen und Bibliotheken');
     await tippe(q('[data-listen-pille="saga"]'));
     const blatt = q('[data-blatt-liste="saga"]')!;
@@ -142,12 +154,13 @@ describe('Buchdetails: Abschnitt, Blatt und Listenübersicht', () => {
     expect(q('[data-blatt-liste]')).toBeNull();
     const [s] = await listen.listen();
     expect(s).toMatchObject({ art: 'saga', name: 'The Empyrean' });
-    expect(await listen.zugehoerigkeiten()).toEqual([{ listeId: s.id, buchId: buch.id, band: 2 }]);
+    expect(await listen.zugehoerigkeiten()).toEqual([{ listeId: s.id, buchId: buch.id }]);
     expect(q('[data-listen-zeile="saga"]')).toHaveTextContent('In Saga');
     expect(q('[data-listen-zeile="saga"] [data-zeile-wert]')).toHaveTextContent('The Empyrean');
     expect(q('[data-listen-pille="saga"]')).toBeNull();
     expect(alle('[data-listen-pille]').map((p) => p.getAttribute('data-listen-pille'))).toEqual(['sammlung', 'bibliothek']);
     expect(q(`[data-saga-zeile="${s.id}"]`)).toHaveTextContent('Band 2 · The Empyrean');
+    expect((await repo.get(buch.id))?.bandnummer).toBe(2);
   });
 
   it('Schließen ohne Sichern verwirft Häkchen und neue Listen (REQ-096, AK-5)', async () => {
@@ -203,19 +216,20 @@ describe('Buchdetails: Abschnitt, Blatt und Listenübersicht', () => {
     gib(q('[data-band-feld]'), ' 3 ');
     expect(q('[data-band-feld]')).not.toHaveAttribute('data-fehler');
     await tippe(q('[data-blatt-sichern="liste"]'));
-    expect(await listen.zugehoerigkeiten()).toEqual([{ listeId: s.id, buchId: expect.any(String), band: 3 }]);
+    expect(await listen.zugehoerigkeiten()).toEqual([{ listeId: s.id, buchId: expect.any(String) }]);
+    expect(q(`[data-saga-zeile="${s.id}"]`)).toHaveTextContent('Band 3 · The Empyrean');
   });
 
   it('Saga-Zeile öffnet die Liste; Buch darin öffnen und zurück zur Liste; zurück zu den Buchdetails (REQ-098 AK-5, REQ-099 AK-4)', async () => {
     const listen = new InMemoryListenRepository();
     const s = liste('saga', 'The Empyrean');
     await listen.listeSpeichern(s);
-    const buch = b('Fourth Wing', { autor: 'Rebecca Yarros' });
-    const zweites = b('Iron Flame');
+    const buch = b('Fourth Wing', { autor: 'Rebecca Yarros', bandnummer: 1 });
+    const zweites = b('Iron Flame', { bandnummer: 2 });
     const repo = new InMemoryBookRepository();
     await repo.save(zweites);
-    await listen.zuordnen({ listeId: s.id, buchId: buch.id, band: 1 });
-    await listen.zuordnen({ listeId: s.id, buchId: zweites.id, band: 2 });
+    await listen.zuordnen({ listeId: s.id, buchId: buch.id });
+    await listen.zuordnen({ listeId: s.id, buchId: zweites.id });
     await details(buch, listen, repo);
     await tippe(q(`[data-saga-zeile="${s.id}"]`));
     await act(async () => {
@@ -270,11 +284,16 @@ describe('Geöffnete Liste, Seite „Bücher“ und Menüpunkt „Bibliothek“ 
     const andere = liste('saga', 'Alpha');
     await listen.listeSpeichern(s);
     await listen.listeSpeichern(andere);
-    const buecher = [b('House of Sky and Breath'), b('House of Earth and Blood'), b('House of Flame and Shadow'), b('Fremd')];
+    const buecher = [
+      b('House of Sky and Breath', { bandnummer: 2 }),
+      b('House of Earth and Blood', { bandnummer: 1 }),
+      b('House of Flame and Shadow', { bandnummer: 3 }),
+      b('Fremd'),
+    ];
     for (const x of buecher) await repo.save(x);
-    await listen.zuordnen({ listeId: s.id, buchId: buecher[0].id, band: 2 });
-    await listen.zuordnen({ listeId: s.id, buchId: buecher[1].id, band: 1 });
-    await listen.zuordnen({ listeId: s.id, buchId: buecher[2].id, band: 3 });
+    await listen.zuordnen({ listeId: s.id, buchId: buecher[0].id });
+    await listen.zuordnen({ listeId: s.id, buchId: buecher[1].id });
+    await listen.zuordnen({ listeId: s.id, buchId: buecher[2].id });
     render(<BuecherAnsicht repository={repo} listenRepository={listen} bildspeicher={new InMemoryImageStore()} ansichtRepository={new InMemoryAnsichtRepository()} />);
     await act(async () => {
       await new Promise((r) => setTimeout(r, 10));

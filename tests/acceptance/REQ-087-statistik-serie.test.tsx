@@ -108,9 +108,9 @@ describe('REQ-087 Serie', () => {
         expect(e).not.toBeNull();
         return e!;
       }, W);
-      // je Buch nur ein Lesetag (A: gestern, B: heute) → Rekord „Längster Streak für dieses Buch“ 1, nicht 2 (REQ-109)
+      // je Buch nur ein Lesetag (A: gestern, B: heute) → Rekord „Längste Serie“ 1, nicht 2 (REQ-109)
       expect(norm(streak.querySelector('[data-streak-zahl]')?.textContent)).toBe('1');
-      expect(norm(streak.textContent)).toContain('Längster Streak für dieses Buch');
+      expect(norm(streak.textContent)).toContain('Längste Serie');
       cleanup();
     }
   });

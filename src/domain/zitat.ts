@@ -109,6 +109,16 @@ export function zitatMitWerten(basis: Pick<Zitat, 'id' | 'buchId' | 'angelegtAm'
 /** Fortlaufende Nummer des lokalen Kalendertags (Tage seit 1970-01-01, sommerzeitfest). */
 export const tagesnummer = (d: Date): number => Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000);
 
+/**
+ * Standard-Zitat der Kachel „Zitat des Tages“ (REQ-106, AK-1/AK-6/AK-7): erscheint nur, solange kein eigenes Zitat
+ * gespeichert ist. Kein gespeichertes Zitat, in keinem Notizbuch, ohne Seite; Antippen öffnet nichts.
+ */
+export const STANDARD_ZITAT = {
+  text: 'Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot.',
+  sprecher: 'Kodex des Drachenreiters',
+  buchtitel: 'Fourth Wing',
+} as const;
+
 /** Gemerkte Wahl des Zitats des Tages (über das EinstellungRepository, Schlüssel „zitatDesTages“). */
 export interface ZitatDesTagesWahl {
   /** Tagesnummer (siehe `tagesnummer`) des Tages, für den gewählt wurde. */

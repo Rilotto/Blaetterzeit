@@ -25,7 +25,7 @@ import {
   uhrzeitText,
 } from '@/domain/startseite';
 import { kalender, serie, serieZustand, zeitraumartSpeichern, zeitraumFuer } from '@/domain/statistik';
-import { tagesnummer, wahlAlsText, wahlAusText, zitatAnzeige, zitatDesTagesWaehlen, type Zitat } from '@/domain/zitat';
+import { STANDARD_ZITAT, tagesnummer, wahlAlsText, wahlAusText, zitatAnzeige, zitatDesTagesWaehlen, type Zitat } from '@/domain/zitat';
 import type { MenuePunktId } from '@/navigation/menu';
 import { useMinutentakt, useUhr } from '@/plattform/uhr';
 import { KalenderKarte } from '@/statistik/Kalender';
@@ -196,7 +196,8 @@ export default function StartAnsicht({
   const [buecher, setBuecher] = useState<Buch[] | undefined>(undefined);
   const [frontcover, setFrontcover] = useState<Record<string, string>>({});
   const [zitate, setZitate] = useState<Zitat[] | undefined>(undefined);
-  const [zitatHeute, setZitatHeute] = useState<Zitat | undefined>(undefined);
+  // undefined = noch nicht bestimmt, null = kein eigenes Zitat → Standard-Zitat (REQ-106, AK-1).
+  const [zitatHeute, setZitatHeute] = useState<Zitat | null | undefined>(undefined);
   // Name aus dem Profil; `null` = keiner hinterlegt, `undefined` = noch nicht gelesen (kein kurzes „Hallo“ ohne Namen).
   const [name, setName] = useState<string | null | undefined>(undefined);
   const [ziel, setZiel] = useState<number | undefined>(undefined);
@@ -261,7 +262,7 @@ export default function StartAnsicht({
       const gemerkt = wahlAusText(await einstellungen.lesen('zitatDesTages').catch(() => undefined));
       const { zitat, merken } = zitatDesTagesWaehlen(vorhanden, uhr(), gemerkt);
       if (!aktiv) return;
-      setZitatHeute(zitat);
+      setZitatHeute(zitat ?? null);
       if (merken) await einstellungen.speichern('zitatDesTages', wahlAlsText(merken)).catch((f: unknown) => console.warn('Zitat des Tages nicht gemerkt:', f));
     })();
     return () => {
@@ -422,6 +423,20 @@ export default function StartAnsicht({
             </span>
             <ZitatQuelle zitat={zitatHeute} buchtitel={alle.find((b) => b.id === zitatHeute.buchId)?.titel} />
           </button>
+        </section>
+      ) : zitatHeute === null ? (
+        // Standard-Zitat ohne eigene Zitate (REQ-106, AK-1/AK-6): keine Schaltfläche, Antippen öffnet nichts.
+        <section aria-label="Zitat des Tages" data-start-abschnitt="zitat" style={abschnittStil}>
+          <div data-start-zitat="standard" data-standard-zitat="true" {...stilRolle('karte')} style={{ ...kachelStil, cursor: 'default' }}>
+            <span style={{ ...ueberschriftStil, display: 'block' }}>Zitat des Tages</span>
+            <span data-zitat-text="" style={zitatTextStil}>
+              {zitatAnzeige(STANDARD_ZITAT.text)}
+            </span>
+            <ZitatQuelle
+              zitat={{ id: 'standard', buchId: '', angelegtAm: '', text: STANDARD_ZITAT.text, sprecher: STANDARD_ZITAT.sprecher }}
+              buchtitel={STANDARD_ZITAT.buchtitel}
+            />
+          </div>
         </section>
       ) : null}
 

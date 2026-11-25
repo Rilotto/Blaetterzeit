@@ -84,9 +84,9 @@ async function blatt(zeile: string, kennung: string, eingabe: string) {
 }
 
 describe('Buchdetails: Erschienen, Leeren und Pfeile (REQ-091 bis REQ-093)', () => {
-  it('alle zwölf Zeilen mit Pfeil, auch ohne Werte', async () => {
+  it('alle dreizehn Zeilen (mit „Band“, REQ-112) mit Pfeil, auch ohne Werte', async () => {
     await details(b());
-    expect(document.querySelectorAll('[data-ausgabe-zeile] [data-zeile-pfeil]')).toHaveLength(12);
+    expect(document.querySelectorAll('[data-ausgabe-zeile] [data-zeile-pfeil]')).toHaveLength(13);
   });
 
   it('Erschienen: Datum, Jahr, ungültig, leeren', async () => {

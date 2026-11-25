@@ -108,7 +108,7 @@ const fehlerStil: CSSProperties = {
   borderRadius: '10px',
   ...textstufe('meta'),
   lineHeight: 1.35,
-  wordBreak: 'break-word',
+  overflowWrap: 'break-word',
   color: barcodeFarbe('scanText'),
   backgroundColor: barcodeFarbe('scanFlaeche'),
   border: `1px solid ${barcodeFarbe('scanText')}`,

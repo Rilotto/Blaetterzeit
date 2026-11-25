@@ -252,12 +252,13 @@ describe("Kleinkorrekturen", () => {
       format: "print",
       unterformat: "hardcover",
     });
+    // REQ-062 AK-10: nur Taschenbuch und Hardcover werden zugeordnet, Rest bleibt leer.
     expect(formatAus("Mass Market Paperback")).toEqual({
       format: "print",
-      unterformat: "kleinformat",
+      unterformat: "taschenbuch",
     });
-    expect(formatAus("Audio CD")).toEqual({ format: "hoerbuch" });
-    expect(formatAus("Online-Ressource")).toEqual({ format: "ebook" });
+    expect(formatAus("Audio CD")).toEqual({});
+    expect(formatAus("Online-Ressource")).toEqual({});
     expect(formatAus(undefined)).toEqual({});
   });
 

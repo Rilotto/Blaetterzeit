@@ -358,3 +358,79 @@ describe('REQ-062 AK-9 Preis und Format', () => {
     expect(neue(repo)[0].format).toBeUndefined();
   });
 });
+
+// Sprint 11 (Fassung 2026-11-25): REQ-062 AK-10 – Formatangabe der Quelle wird Taschenbuch bzw. Hardcover zugeordnet.
+describe('REQ-062 AK-10 Formatangabe der Quelle wird zugeordnet', () => {
+  /** Antwort von Open Library mit Formatangabe (Felder flach und unter „details“, je nach Abfrageart). */
+  function olAntwort(physicalFormat?: string) {
+    const satz: Record<string, unknown> = { title: 'Formatbuch', number_of_pages: 400, isbn_13: [ISBN], ...(physicalFormat === undefined ? {} : { physical_format: physicalFormat }) };
+    return JSON.stringify({ [`ISBN:${ISBN}`]: { ...satz, details: satz } });
+  }
+  const httpOl = (physicalFormat?: string) => ({
+    text: vi.fn(async (url: string) => (/openlibrary\.org/.test(url) ? { status: 200, text: olAntwort(physicalFormat) } : { status: 404, text: '' })),
+    bild: vi.fn(async () => null),
+  });
+  const formatWert = () => norm(zeile('format')?.querySelector('[data-zeile-wert]')?.textContent ?? '');
+  /** Scan über die echte Suche (Open Library liefert „physical_format“), Treffer antippen; liefert Repo. */
+  async function scanMitFormat(physicalFormat?: string) {
+    const { scanner, repo } = await zeige(isbnSucheMit(httpOl(physicalFormat)));
+    await scanne(scanner);
+    const a = await screen.findByRole('dialog', { name: 'Gefundene Bücher' }, W);
+    await tippe(a.querySelector('[data-treffer]')!);
+    await vi.waitFor(() => expect(blatt()).not.toBeNull(), W);
+    return repo;
+  }
+
+  it.each([
+    ['Paperback', 'Print · Taschenbuch'],
+    ['Hardcover', 'Print · Hardcover'],
+    ['hardcover', 'Print · Hardcover'],
+  ])('[REQ-062/AK-10] Formatangabe „%s“ → Zeile „Format“ im Manuellen Eintrag „%s“', async (angabe, erwartet) => {
+    await scanMitFormat(angabe);
+    await vi.waitFor(() => expect(formatWert()).toBe(erwartet), W);
+  });
+
+  it('[REQ-062/AK-10] Formatangabe „Audio CD“ ist nicht zuordenbar → Zeile „Format“ bleibt leer', async () => {
+    await scanMitFormat('Audio CD');
+    await vi.waitFor(() => expect(feld('Titel').value).toBe('Formatbuch'), W);
+    expect(formatWert()).toBe('');
+  });
+
+  it.each([
+    ['Mass Market Paperback', 'Print · Taschenbuch'],
+    ['Taschenbuch', 'Print · Taschenbuch'],
+    ['kartoniert', 'Print · Taschenbuch'],
+    ['Broschur', 'Print · Taschenbuch'],
+    ['PAPERBACK', 'Print · Taschenbuch'],
+    ['Hardback', 'Print · Hardcover'],
+    ['gebunden', 'Print · Hardcover'],
+    ['HARDCOVER', 'Print · Hardcover'],
+  ])('[REQ-062/AK-10] Variante aus der Anforderung: „%s“ → „%s“ (Groß-/Kleinschreibung egal)', async (angabe, erwartet) => {
+    await scanMitFormat(angabe);
+    await vi.waitFor(() => expect(formatWert()).toBe(erwartet), W);
+  });
+
+  it.each([['Spiralbindung'], ['Unbekannt'], ['']])('[REQ-062/AK-10] Negativfall: nicht zuordenbare Angabe „%s“ → Format leer', async (angabe) => {
+    await scanMitFormat(angabe);
+    await vi.waitFor(() => expect(feld('Titel').value).toBe('Formatbuch'), W);
+    expect(formatWert()).toBe('');
+  });
+
+  it('[REQ-062/AK-10] zugeordnetes Format wird mit „Hinzufügen“ gespeichert (Hardcover)', async () => {
+    const repo = await scanMitFormat('Hardcover');
+    await vi.waitFor(() => expect(formatWert()).toBe('Print · Hardcover'), W);
+    await tippe(within(blatt()!).getByRole('button', { name: 'Hinzufügen' }));
+    await screen.findByRole('region', { name: 'Buchdetails' }, W);
+    expect(neue(repo)).toHaveLength(1);
+    expect(neue(repo)[0]).toMatchObject({ format: 'print', unterformat: 'hardcover' });
+  });
+
+  it('[REQ-062/AK-10] „Audio CD“ angelegt: Buch ohne Format gespeichert', async () => {
+    const repo = await scanMitFormat('Audio CD');
+    await vi.waitFor(() => expect(feld('Titel').value).toBe('Formatbuch'), W);
+    await tippe(within(blatt()!).getByRole('button', { name: 'Hinzufügen' }));
+    await screen.findByRole('region', { name: 'Buchdetails' }, W);
+    expect(neue(repo)[0].format).toBeUndefined();
+    expect(neue(repo)[0].unterformat).toBeUndefined();
+  });
+});

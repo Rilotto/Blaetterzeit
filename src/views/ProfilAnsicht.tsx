@@ -4,6 +4,7 @@ import { KartenZeile, karteDetails } from '@/buchdetails/reiter/DetailsBereich';
 import { useDesign } from '@/design/designwahl';
 import { standardProfilRepository } from '@/buecher/buchQuelle';
 import { nameBereinigt } from '@/domain/startseite';
+import { APP_VERSION, versionAnzeige } from '@/plattform/version';
 import FensterDesign from '@/profil/FensterDesign';
 import type { ProfilRepository } from '@/storage';
 import { abstand, bildschirmrand, farbdesigns, rezensionFarbe, schriften, stile, stilRolle, textstufe } from '@/theme';
@@ -23,13 +24,15 @@ const abschnittAbstand: CSSProperties = { marginTop: abstand('xl') };
 interface Props {
   /** Speicher des Namens (REQ-107); ohne Angabe der der App. In Tests ersetzbar. */
   profilRepository?: ProfilRepository;
+  /** Version der App (REQ-113); ohne Angabe die aus package.json (Build). Nur für Tests ersetzbar. */
+  appVersion?: string;
 }
 
 /**
  * Zielansicht des Menüpunkts „Profil“: Abschnitt „Du“ mit Zeile „Name“ (REQ-107) über dem Abschnitt „App“ mit
- * Zeile „Design“ (REQ-066).
+ * Zeilen „Design“ (REQ-066) und „Versionsinfo“ (REQ-113).
  */
-export default function ProfilAnsicht({ profilRepository }: Props = {}) {
+export default function ProfilAnsicht({ profilRepository, appVersion = APP_VERSION }: Props = {}) {
   const { farbdesign, schrift, stil } = useDesign();
   const profil = useMemo(() => profilRepository ?? standardProfilRepository(), [profilRepository]);
   const [offen, setOffen] = useState(false);
@@ -82,8 +85,16 @@ export default function ProfilAnsicht({ profilRepository }: Props = {}) {
             beschriftung="Design"
             wert={`${farbdesigns[farbdesign].name} · ${schriften[schrift].name} · ${stile[stil].name} `}
             pfeil
-            letzte
             onAntippen={() => setOffen(true)}
+          />
+          {/* Versionsinfo (REQ-113): nur Anzeige, ohne Pfeil und ohne Funktion beim Antippen. */}
+          <KartenZeile
+            zeilenAttribute={{ 'data-profil-zeile': 'versionsinfo' }}
+            anzeigeAttribute={{ 'data-versionsinfo': '' }}
+            beschriftung="Versionsinfo"
+            wert={versionAnzeige(appVersion)}
+            letzte
+            nurAnzeige
           />
         </div>
       </section>

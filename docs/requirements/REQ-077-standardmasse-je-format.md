@@ -87,7 +87,8 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 ### AK-10 Online gefundene Maße haben Vorrang
 - **Gegeben** ein Scan-Treffer mit Formatangabe „Hardcover“, 400 Seiten und der gelieferten Höhe 24,0 cm
 - **Wenn** der Nutzer den Treffer antippt und das Buch anlegt
-- **Dann** ist die Höhe 24,0 gespeichert, und für Breite und Dicke gelten die Hardcover-Standardwerte 14,8 und 2,8
+- **Dann** ist nur die Höhe 24,0 gespeichert, und für Breite und Dicke gelten die Hardcover-Standardwerte 14,8 und 2,8 (nicht gespeichert)
+- **Und** die Zeile „Maße“ der Buchdetails zeigt abgeschwächt bzw. kursiv „ca. 14,8 × 24,0 × 2,8 cm“ (REQ-072 AK-2; **Auslegung**)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
@@ -113,3 +114,4 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 | 2026-11-21 | Erstellt aus vom CEO angenommenem Vorschlag des Scrum Masters. Status „Entwurf“, weil drei Lücken offen sind (siehe Offene Fragen) | Anforderungsmanager |
 | 2026-11-21 | CEO-Antworten (wörtlich): 1. „Wie ein Taschenbuch, guter Vorschlag!“ (kein Format / Print ohne Unterformat → Taschenbuch); 2. „ja, lass uns auch ein Taschenbuchformat nehmen“ (Hörbuch → Taschenbuch für 2D und Vorschlag); 3. „dein Vorschlag klingt gut, machen wir so“ (Hardcover-Maße = Außenmaße der Deckel). Neu AK-6, AK-7. Offene Fragen leer. Status „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-25 | Fehler: Nach dem Barcode-Scan griffen die Standardmaße nicht. Standardmaße des übernommenen Formats (ohne Format Taschenbuch) schon im Manuellen Eintrag und danach, online gefundene Maße mit Vorrang, nicht gespeichert (Auslegung). CEO (wörtlich): „wenn die Maße eines Buches nicht online verfügbar sind, sollen bitte die Standardmaße eines Taschenbuches verwendet werden. Wenn online abrufbar ist, ob der gescannte Code ein Taschenbuch oder Hardcover ist, sollen jeweils dafür entsprechende Standardwerte hergenommen werden.“ Anforderung ergänzt, AK-8 bis AK-10 neu. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Konflikt mit REQ-072 AK-2 („– × 24,0 × – cm“) zugunsten dieses neueren Wunsches gelöst. **Auslegung:** Ergänzung fehlender Einzelwerte gilt überall, wo Maße verwendet werden (Zeile, Buchdarstellung, 3D), aber nie gespeichert; in der Zeile mit „ca.“ und abgeschwächt bzw. kursiv wie der bisherige Vorschlag. AK-10 präzisiert (Anzeige ergänzt). Status unverändert | Anforderungsmanager |

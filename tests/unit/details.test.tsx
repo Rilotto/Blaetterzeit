@@ -103,10 +103,10 @@ describe('Reiter „Details“', () => {
     expect(q('[data-pillen="inhaltswarnungen"] [data-pille-gestrichelt]')).toHaveTextContent('+ Warnungen markieren');
     const zeilen = [...document.querySelectorAll('[data-ausgabe-zeile]')];
     expect(zeilen.map((z) => z.querySelector('[data-zeile-bezeichnung]')!.textContent)).toEqual([
-      'Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt', 'Beendet am',
+      'Seiten', 'Format', 'Maße', 'Exemplar', 'Band', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt', 'Beendet am',
     ]);
-    // Alle zwölf Zeilen mit Pfeil (REQ-091).
-    expect(zeilen.filter((z) => z.querySelector('[data-zeile-pfeil]'))).toHaveLength(12);
+    // Alle dreizehn (mit „Band“, REQ-112) Zeilen mit Pfeil (REQ-091).
+    expect(zeilen.filter((z) => z.querySelector('[data-zeile-pfeil]'))).toHaveLength(13);
     expect(wert('seiten')).toBe('608');
     expect(wert('erschienen')).toBe('2025');
     expect(wert('sonderausgabe')).toBe('Keins');

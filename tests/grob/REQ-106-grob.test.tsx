@@ -1,5 +1,5 @@
 /**
- * Grober Test REQ-106 – Startseite „Zitat des Tages“: Kachel mit Text, Buchtitel und Seite; Antippen öffnet den Reiter „Notizbuch“.
+ * Grober Test REQ-106 – Startseite „Zitat des Tages“: ohne Zitate Standard-Zitat; Kachel mit Text, Buchtitel und Seite; Antippen öffnet den Reiter „Notizbuch“.
  * Aufbau aus dem feinen Test tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx.
  */
 import '@testing-library/jest-dom/vitest';
@@ -38,18 +38,19 @@ async function zeige(zitate: InMemoryZitatRepository, repo: InMemoryBookReposito
   });
 }
 
-it('[REQ-106/GROB] ohne Zitate keine Kachel; mit Zitat Kachel mit Text, „Fourth Wing“, „S. 312“; Antippen öffnet Reiter „Notizbuch“', async () => {
+it('[REQ-106/GROB] ohne Zitate Standard-Zitat (Fassung 2026-11-25); mit Zitat Kachel mit Text, „Fourth Wing“, „S. 312“; Antippen öffnet Reiter „Notizbuch“', async () => {
   const repo = new InMemoryBookRepository();
   await repo.save({ id: 'fw', titel: 'Fourth Wing', status: 'gelesen', seitenanzahl: 500 });
   const zitate = new InMemoryZitatRepository();
   await zeige(zitate, repo);
-  expect(textEls('Zitat des Tages')).toHaveLength(0);
+  await waitFor(() => expect(norm(document.body.textContent)).toContain('„Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot.“'), W);
   cleanup();
   await zitate.speichern({ id: 'z1', buchId: 'fw', text: 'Ich bin nicht das Feuer.', seite: 312, angelegtAm: new Date(2026, 10, 1).toISOString() });
   await zeige(zitate, repo);
   await waitFor(() => expect(textEls('Zitat des Tages').length).toBeGreaterThan(0), W);
   const t = norm(document.body.textContent);
   expect(t).toContain('„Ich bin nicht das Feuer.“');
+  expect(t).not.toContain('Ein Drache ohne seinen Reiter');
   expect(t).toContain('Fourth Wing');
   expect(t).toContain('S. 312');
   await act(async () => {

@@ -56,10 +56,13 @@ const zahlStil: CSSProperties = {
   color: fortschrittFarbe('statistikText'),
 };
 
+// REQ-111 AK-4: Beschriftung darf umbrechen (globale Silbentrennung aus index.css), bleibt in ihrer Box.
 const beschriftungStil: CSSProperties = {
   ...textstufe('meta'),
   lineHeight: 1.2,
-  whiteSpace: 'nowrap',
+  maxWidth: '100%',
+  textAlign: 'center',
+  overflowWrap: 'break-word',
   color: fortschrittFarbe('statistikText'),
 };
 
@@ -74,13 +77,13 @@ function Teil({ merkmal, oben, text }: { merkmal: string; oben: ReactNode; text:
   );
 }
 
-/** Statistik-Pille: längster Streak des Buches (REQ-109), Fortschritt in % und Sitzungen (REQ-026, REQ-027). Ohne Zitat darunter. */
+/** Statistik-Pille: „Längste Serie“ des Buches (REQ-109), Fortschritt in % und Sitzungen (REQ-026, REQ-027). Ohne Zitat darunter. */
 export default function Statistik({ buch }: Props) {
   // Rekord je Buch (REQ-109): unabhängig von heute, daher nie ausgegraut.
   const tage = laengsterStreak(buch.sitzungen);
   return (
     <div data-statistik="" {...stilRolle('eintrag')} style={pilleStil}>
-      <Teil merkmal="data-streak" oben={<Flamme zahl={tage} />} text="Längster Streak für dieses Buch" />
+      <Teil merkmal="data-streak" oben={<Flamme zahl={tage} />} text="Längste Serie" />
       <div data-trennlinie="" aria-hidden="true" style={trennlinieStil} />
       <Teil
         merkmal="data-prozent"

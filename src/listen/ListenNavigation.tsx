@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Bildquelle } from '@/bild/bildquelle';
-import { ladeBuecher, standardAnsichtRepository, standardBildspeicher, standardListenRepository } from '@/buecher/buchQuelle';
-import type { Buch } from '@/domain/buch';
+import { ladeBuecher, standardAnsichtRepository, standardBildspeicher, standardListenRepository, standardRepository } from '@/buecher/buchQuelle';
+import { bandnummerSetzen, type Buch } from '@/domain/buch';
 import type { ListenArt } from '@/domain/listen';
 import type { AnsichtRepository, BookRepository, ImageStore, ListenRepository } from '@/storage';
 import BuchDetails from '@/views/BuchDetails';
@@ -141,6 +141,14 @@ export default function ListenNavigation({
 
   const buch = ziel.buchId ? buecher?.find((b) => b.id === ziel.buchId) : undefined;
   if (ziel.buchId && !buch && buecher === undefined) return null;
+  /** Bandnummer des Buches im Kontext speichern (REQ-112), danach die Bücher neu laden. */
+  const bandnummerSpeichern = async (band: number | undefined) => {
+    if (!buch) return;
+    const repo = repository ?? (await standardRepository());
+    const aktuell = (await repo.get(buch.id)) ?? buch;
+    await repo.save(bandnummerSetzen(aktuell, band));
+    setStand((n) => n + 1);
+  };
   return (
     <Listenuebersicht
       art={ziel.listenArt}
@@ -150,6 +158,7 @@ export default function ListenNavigation({
       buecher={buecher}
       listenbilder={listenbilder}
       repository={listenRepo}
+      onBandnummer={buch ? bandnummerSpeichern : undefined}
       onGeaendert={neuLaden}
       onListeOeffnen={(l) => oeffnen({ art: 'liste', listeId: l.id })}
       onZurueck={zurueckMoeglich ? zurueck : undefined}

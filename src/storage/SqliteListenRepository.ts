@@ -30,9 +30,10 @@ export class SqliteListenRepository implements ListenRepository {
   }
 
   async zugehoerigkeiten(): Promise<Zugehoerigkeit[]> {
-    const zeilen = await this.db.abfragen<Record<string, unknown>>('SELECT liste_id, buch_id, band FROM liste_buch ORDER BY rowid');
+    // Spalte `band` ist seit Migration 12 abgelöst (Bandnummer gehört zum Buch, REQ-112) und wird nicht mehr gelesen.
+    const zeilen = await this.db.abfragen<Record<string, unknown>>('SELECT liste_id, buch_id FROM liste_buch ORDER BY rowid');
     return zeilen
-      .map((z) => zugehoerigkeitAusDaten({ listeId: z.liste_id, buchId: z.buch_id, band: z.band }))
+      .map((z) => zugehoerigkeitAusDaten({ listeId: z.liste_id, buchId: z.buch_id }))
       .filter((z): z is Zugehoerigkeit => z !== undefined);
   }
 
@@ -42,9 +43,9 @@ export class SqliteListenRepository implements ListenRepository {
     const jetzt = new Date().toISOString();
     const vorhanden = await this.db.abfragen('SELECT liste_id FROM liste_buch WHERE liste_id = ? AND buch_id = ?', [s.listeId, s.buchId]);
     if (vorhanden.length > 0) {
-      await this.db.ausfuehren('UPDATE liste_buch SET band = ?, geaendert = ? WHERE liste_id = ? AND buch_id = ?', [s.band ?? null, jetzt, s.listeId, s.buchId]);
+      await this.db.ausfuehren('UPDATE liste_buch SET geaendert = ? WHERE liste_id = ? AND buch_id = ?', [jetzt, s.listeId, s.buchId]);
     } else {
-      await this.db.ausfuehren('INSERT INTO liste_buch (liste_id, buch_id, band, geaendert) VALUES (?, ?, ?, ?)', [s.listeId, s.buchId, s.band ?? null, jetzt]);
+      await this.db.ausfuehren('INSERT INTO liste_buch (liste_id, buch_id, geaendert) VALUES (?, ?, ?)', [s.listeId, s.buchId, jetzt]);
     }
   }
 

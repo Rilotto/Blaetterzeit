@@ -24,13 +24,13 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 **Zeile „Maße“**
 - Das System muss in der Karte „Ausgabe“ (REQ-056) direkt unter der Zeile „Format“ die Zeile „Maße“ darstellen.
 - Das System muss die Zeile „Maße“ rechts mit einem Pfeil „›“ darstellen, wie die Zeile „Preis“ (REQ-056).
-- Sind Werte hinterlegt, muss die Zeile sie als „Breite × Höhe × Dicke cm“ mit genau einer Nachkommastelle und Komma zeigen, z. B. „13,5 × 21,0 × 3,2 cm“. Ein fehlender Einzelwert erscheint als „–“, z. B. „– × 21,0 × – cm“.
+- Sind Werte hinterlegt, muss die Zeile sie als „Breite × Höhe × Dicke cm“ mit genau einer Nachkommastelle und Komma zeigen, z. B. „13,5 × 21,0 × 3,2 cm“. Fehlt ein Einzelwert, muss die Zeile dafür den Standardwert nach REQ-077 einsetzen (nicht gespeichert) und dann wie beim Vorschlag ein vorangestelltes „ca.“ zeigen, abgeschwächt bzw. kursiv, z. B. „ca. 14,8 × 24,0 × 2,8 cm“ bei einem Hardcover mit 400 Seiten und nur hinterlegter Höhe (**Auslegung** aus REQ-077 „Fehlt nur ein Einzelwert, gilt dafür der Standardwert“, CEO 2026-11-25). Ohne „ca.“ und nicht abgeschwächt erscheint die Zeile nur, wenn alle drei Werte hinterlegt sind.
 - Ist kein Wert hinterlegt, muss die Zeile die geschätzten Standardmaße (REQ-077) als Vorschlag zeigen, mit vorangestelltem „ca.“ und abgeschwächt bzw. kursiv, z. B. „ca. 12,0 × 19,0 × 2,4 cm“. Ändert sich das Format oder die Seitenzahl, passen sich die Schätzwerte an.
 - Das System darf Schätzwerte nie selbsttätig speichern; sie werden erst durch „Sichern“ im Blatt „Maße“ zu hinterlegten Werten.
 
 **Blatt „Maße“**
 - Wenn der Nutzer die Zeile „Maße“ antippt, muss das System das Blatt „Maße“ von unten einblenden, mit Ziehgriff, Titel „Maße“ und X-Schaltfläche.
-- Das Blatt muss drei Eingabefelder nebeneinander in der Reihenfolge Breite × Höhe × Dicke enthalten, je mit Label in Großbuchstaben, dazu den Hinweis „in Zentimetern“ und die Pille „Sichern“. Vorhandene Werte sind vorbefüllt; ist kein Wert hinterlegt, sind die drei Felder mit den geschätzten Standardmaßen (REQ-077) vorbefüllt.
+- Das Blatt muss drei Eingabefelder nebeneinander in der Reihenfolge Breite × Höhe × Dicke enthalten, je mit Label in Großbuchstaben, dazu den Hinweis „in Zentimetern“ und die Pille „Sichern“. Vorhandene Werte sind vorbefüllt; ist kein Wert hinterlegt, sind die drei Felder mit den geschätzten Standardmaßen (REQ-077) vorbefüllt. Sind nur einzelne Werte hinterlegt, sind nur diese vorbefüllt und die übrigen Felder leer, damit „Sichern“ keine Schätzwerte unbemerkt speichert (**Auslegung**, unverändertes Verhalten).
 - Das System muss eine Zahlentastatur mit Komma anbieten. Als Dezimaltrennzeichen sind Komma und Punkt erlaubt.
 - Ein Feld ist gültig, wenn es leer ist oder eine Zahl größer 0 mit höchstens einer Nachkommastelle enthält. Ungültig sind 0, negative Werte, Buchstaben und mehr als eine Nachkommastelle.
 - Wenn der Nutzer „Sichern“ antippt und alle Felder gültig sind, muss das System die Werte dauerhaft speichern (leeres Feld = kein Wert) und das Blatt schließen.
@@ -55,8 +55,9 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 - **Und** es sind weiterhin keine Maße gespeichert
 - **Gegeben** ein Buch mit Breite 13,5, Höhe 21, Dicke 3,2
 - **Dann** zeigt die Zeile „13,5 × 21,0 × 3,2 cm“
-- **Gegeben** ein Buch nur mit Höhe 21
-- **Dann** zeigt die Zeile „– × 21,0 × – cm“
+- **Gegeben** ein Hardcover mit 400 Seiten, nur mit Höhe 24
+- **Dann** zeigt die Zeile abgeschwächt bzw. kursiv „ca. 14,8 × 24,0 × 2,8 cm“ (fehlende Werte aus den Standardwerten nach REQ-077; **Auslegung**)
+- **Und** gespeichert ist weiterhin nur die Höhe 24,0
 
 ### AK-3 Aufbau des Blatts
 - **Gegeben** die Karte „Ausgabe“
@@ -68,10 +69,10 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 - **Dann** sind die Felder mit 12,0, 19,0 und 2,4 vorbefüllt
 
 ### AK-4 Gültig sichern, auch teilweise
-- **Gegeben** das Blatt „Maße“ ist offen
+- **Gegeben** das Blatt „Maße“ eines Taschenbuchs mit 400 Seiten ist offen
 - **Wenn** der Nutzer „13.5“ bei Breite einträgt, Höhe und Dicke leert und „Sichern“ antippt
-- **Dann** schließt das Blatt und die Zeile zeigt „13,5 × – × – cm“
-- **Und** nach Neuladen der App ist der Wert weiterhin hinterlegt
+- **Dann** schließt das Blatt und die Zeile zeigt abgeschwächt bzw. kursiv „ca. 13,5 × 19,0 × 2,4 cm“ (**Auslegung**, siehe AK-2)
+- **Und** nach Neuladen der App ist nur die Breite 13,5 hinterlegt
 
 ### AK-5 Ungültige Werte
 - **Gegeben** das Blatt „Maße“ ist offen
@@ -132,3 +133,4 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 | 2026-11-21 | CEO (wörtlich): „ja ergänze bitte den Pfeil bei "Maße".“ Pfeil „›“ rechts an der Zeile „Maße“ ergänzt (Anforderung, AK-1). Status unverändert | Anforderungsmanager |
 | 2026-11-21 | CEO („a klingt gut“): ohne Maße zeigt die Zeile die geschätzten Standardmaße (REQ-077) als Vorschlag „ca. …“ statt „Trag die Maße ein“; Blatt damit vorbefüllt; gespeichert erst mit „Sichern“; Anpassung bei Formatwechsel. AK-2, AK-3 geändert, AK-9 neu. Status unverändert | Anforderungsmanager |
 | 2026-11-21 | Widerspruch zu AK-3 behoben (Hinweis des Scrum Masters, im Sinne der CEO-Entscheidung „a“): AK-8 ohne Maße aus der Quelle → nichts gespeichert, Zeile und Blatt zeigen den Schätz-Vorschlag. Status unverändert | Anforderungsmanager |
+| 2026-11-25 | Konflikt mit REQ-077 AK-10 behoben (Auftrag des Scrum Masters, neuerer CEO-Wunsch vom 2026-11-25 hat Vorrang). **Auslegung:** Fehlende Einzelwerte zeigt die Zeile mit dem Standardwert nach REQ-077 statt „–“, dann mit „ca.“ und abgeschwächt bzw. kursiv; gespeichert wird nur Hinterlegtes; Blatt bei Teilwerten nur mit hinterlegten Werten vorbefüllt. Anforderung (Zeile, Blatt), AK-2 (dritter Fall) und AK-4 geändert. Status unverändert, CEO sieht die Auslegung bei der Bestätigung | Anforderungsmanager |

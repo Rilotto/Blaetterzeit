@@ -1,5 +1,5 @@
 /**
- * Akzeptanztests REQ-109 – Buch-Streak in den Buchdetails als Rekord „Längster Streak für dieses Buch“.
+ * Akzeptanztests REQ-109 – Buch-Streak in den Buchdetails als Rekord „Längste Serie“.
  * Abgeleitet aus dem REQ-Text (Sprint 10, Teil D). Buchdetails mit InMemoryBookRepository, Uhr über Fake-Timer.
  * Statistik-Pille wie REQ-026: linker Teil [data-streak] mit Flamme [data-flamme] und Zahl [data-streak-zahl].
  * Zustand der Flamme an der Darstellung erkannt: Verlauf (url(#…)) = angezündet, ohne Füllung = Umriss.
@@ -66,18 +66,20 @@ function zustand(): 'angezuendet' | 'ausgegraut' | 'erloschen' {
 const FUENF = [um(11, 1), um(11, 2), um(11, 3), um(11, 4), um(11, 5)];
 
 describe('REQ-109 Beschriftung', () => {
-  it('[REQ-109/AK-1] unter der Flamme „Längster Streak für dieses Buch“, nicht „Tage in Folge“', async () => {
+  // Fassung 2026-11-25 (Mini-Änderung): Beschriftung „Längste Serie“.
+  it('[REQ-109/AK-1] unter der Flamme genau „Längste Serie“, weder „Längste Serie“ noch „Tage in Folge“', async () => {
     await zeige(buch({ sitzungen: s(um(11, 24)) }));
     const text = norm(teil().textContent);
-    expect(text).toContain('Längster Streak für dieses Buch');
+    expect(text).toContain('Längste Serie');
+    expect(text).not.toContain('Längster Streak');
     expect(text).not.toContain('Tage in Folge');
-    const label = within(teil()).getByText('Längster Streak für dieses Buch');
+    const label = within(teil()).getByText('Längste Serie');
     expect(flamme().compareDocumentPosition(label) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('[REQ-109/AK-1] Beschriftung auch ohne Sitzungen (Zahl 0)', async () => {
     await zeige(buch());
-    expect(norm(teil().textContent)).toMatch(/^0 ?Längster Streak für dieses Buch$/);
+    expect(norm(teil().textContent)).toMatch(/^0 ?Längste Serie$/);
   });
 });
 

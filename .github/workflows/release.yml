@@ -24,6 +24,8 @@ jobs:
           java-version: 21
       - run: npm ci
 
+      # REQ-113: Einzige Versionsquelle ist package.json „version“; daraus folgen App-Anzeige und versionName
+      # (android/app/build.gradle). Das Tag muss genau v<package.json-Version> sein.
       - name: Tag passt zur package.json-Version
         run: |
           TAG="${GITHUB_REF_NAME#v}"
@@ -49,7 +51,6 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          VERSION_NAME: ${{ github.ref_name }}
           VERSION_CODE: ${{ github.run_number }}
         run: |
           chmod +x gradlew

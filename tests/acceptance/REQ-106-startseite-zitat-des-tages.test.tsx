@@ -132,8 +132,14 @@ async function neustart(d: Date = HEUTE) {
   return App;
 }
 const kachelDa = () => textEls('Zitat des Tages', main()).length > 0;
+/** Standard-Zitat (CEO 2026-11-25), Anzeige in deutschen Anführungszeichen. */
+const STANDARD = 'Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot.';
+const STANDARD_ANZEIGE = `„${STANDARD}“`;
+const standardDa = () => norm(main().textContent).includes(STANDARD);
 function gezeigt(z: Z[]): string {
   const t = norm(main().textContent);
+  // AK-7: Sobald eigene Zitate existieren, nimmt das Standard-Zitat nicht an der Auswahl teil.
+  expect(t, 'Standard-Zitat neben eigenen Zitaten').not.toContain(STANDARD);
   const da = z.filter((q) => t.includes(norm(q.text)));
   expect(da.map((q) => q.text), 'genau ein Zitat auf der Startseite').toHaveLength(1);
   expect(kachelDa()).toBe(true);
@@ -145,18 +151,132 @@ const DREI: Z[] = [
   { b: IF, text: 'Mut ist eine Entscheidung.', wer: 'Xaden' },
 ];
 
-describe('REQ-106 Ohne Zitate', () => {
-  it('[REQ-106/AK-1] kein Buch hat Zitate: keine Kachel „Zitat des Tages“', async () => {
+// Fassung 2026-11-25: Ohne eigene Zitate zeigt die Kachel das Standard-Zitat (bisher entfiel sie).
+/** Kachel „Zitat des Tages“: kleinster Vorfahr der Überschrift, der auch den Zitattext enthält. */
+function kachel(text: string): HTMLElement {
+  const ueber = textEls('Zitat des Tages', main())[0];
+  expect(ueber, 'Überschrift „Zitat des Tages“').toBeDefined();
+  let k: HTMLElement | null = ueber;
+  while (k && !norm(k.textContent).includes(text)) k = k.parentElement;
+  expect(k, 'Kachel mit Zitattext').not.toBeNull();
+  return k!;
+}
+describe('REQ-106 Ohne eigene Zitate das Standard-Zitat', () => {
+  it('[REQ-106/AK-1] kein Buch hat Zitate: Kachel zeigt genau „„Ein Drache …““, „Kodex des Drachenreiters“ und „Fourth Wing“, ohne Seitenangabe', async () => {
     const App = await welt([]);
     await startseite(App);
-    expect(kachelDa()).toBe(false);
-    expect(main().textContent).not.toContain('Zitat des Tages');
+    expect(kachelDa()).toBe(true);
+    expect(textEls(STANDARD_ANZEIGE, main())).toHaveLength(1);
+    const k = kachel(STANDARD);
+    const t = norm(k.textContent);
+    expect(t).toContain('Kodex des Drachenreiters');
+    expect(t).toContain('Fourth Wing');
+    expect(t).not.toMatch(/S\.\s?\d/);
+    // Text genau einmal, in „…“ (nicht doppelt gequotet, nicht in "…")
+    expect(t.split(STANDARD)).toHaveLength(2);
+    expect(t).not.toContain(`"${STANDARD}"`);
+    expect(t).not.toContain(`„„${STANDARD}`);
   });
 
-  it('[REQ-106/AK-1] keine Bücher überhaupt: keine Kachel', async () => {
+  it('[REQ-106/AK-1] keine Bücher überhaupt: Kachel mit dem Standard-Zitat', async () => {
     const App = await welt([], []);
     await startseite(App);
-    expect(main().textContent).not.toContain('Zitat des Tages');
+    expect(textEls(STANDARD_ANZEIGE, main())).toHaveLength(1);
+    expect(norm(kachel(STANDARD).textContent)).toContain('Kodex des Drachenreiters');
+  });
+
+  it('[REQ-106/AK-1] Kachel bleibt über Tage und nach Neustart beim Standard-Zitat, solange keine Zitate existieren', async () => {
+    const App = await welt([]);
+    for (let i = 0; i < 3; i++) {
+      await startseite(App, um(2026, 11, 24 + i, 9));
+      expect(textEls(STANDARD_ANZEIGE, main())).toHaveLength(1);
+    }
+    await neustart(um(2026, 11, 30, 9));
+    expect(textEls(STANDARD_ANZEIGE, main())).toHaveLength(1);
+  });
+
+  it('[REQ-106/AK-1] das Standard-Zitat erscheint in keinem Notizbuch (auch nicht bei „Fourth Wing“) und ist nicht gespeichert', async () => {
+    const App = await welt([]);
+    await startseite(App);
+    expect(standardDa()).toBe(true);
+    cleanup();
+    for (const b of [FW, IF]) {
+      vi.resetModules();
+      const BD = (await import('@/views/BuchDetails')).default as unknown as Komp;
+      await notizbuchOeffnen(BD, b);
+      await warte(60);
+      expect(notizbuch().textContent).not.toContain('Ein Drache ohne seinen Reiter');
+      expect(notizbuch().textContent).not.toContain('Kodex des Drachenreiters');
+      cleanup();
+    }
+    const st = (await import('@/storage')) as typeof import('@/storage');
+    expect(await st.createZitatRepository().alle()).toEqual([]);
+  });
+});
+
+describe('REQ-106 Standard-Zitat antippen', () => {
+  it('[REQ-106/AK-6] Kachel mit Standard-Zitat antippen, „Fourth Wing“ gespeichert: nichts öffnet sich, Startseite bleibt', async () => {
+    const App = await welt([], [FW, IF]);
+    await startseite(App);
+    const vorher = main().innerHTML;
+    await tippe(textEls(STANDARD_ANZEIGE, main())[0]);
+    await tippe(textEls('Zitat des Tages', main())[0]);
+    await tippe(kachel(STANDARD));
+    await warte(80);
+    expect(screen.queryByRole('region', { name: 'Buchdetails' })).toBeNull();
+    expect(screen.queryAllByRole('dialog')).toHaveLength(0);
+    expect(textEls('Diese Woche', main()).length).toBeGreaterThan(0);
+    expect(main().innerHTML).toBe(vorher);
+  });
+
+  it('[REQ-106/AK-6] die Kachel mit Standard-Zitat ist kein Bedienelement (kein Button/Link)', async () => {
+    const App = await welt([]);
+    await startseite(App);
+    const k = kachel(STANDARD);
+    for (let n: HTMLElement | null = textEls(STANDARD_ANZEIGE, main())[0]; n && n !== k.parentElement; n = n.parentElement) {
+      expect(n.tagName).not.toMatch(/^(BUTTON|A)$/);
+      expect(n.getAttribute('role')).not.toBe('button');
+    }
+  });
+});
+
+describe('REQ-106 Eigene Zitate verdrängen das Standard-Zitat', () => {
+  it('[REQ-106/AK-7] Standard-Zitat → Zitat „Ich bin nicht das Feuer.“ im Notizbuch speichern → Kachel zeigt `„Ich bin nicht das Feuer.“`, nicht das Standard-Zitat', async () => {
+    const App = await welt([]);
+    await startseite(App);
+    expect(standardDa()).toBe(true);
+    cleanup();
+    const BD = (await import('@/views/BuchDetails')).default as unknown as Komp;
+    await notizbuchOeffnen(BD, FW);
+    await zitatAnlegenImNotizbuch('Ich bin nicht das Feuer.');
+    await startseite(App);
+    expect(textEls('„Ich bin nicht das Feuer.“', main())).toHaveLength(1);
+    expect(standardDa()).toBe(false);
+  });
+
+  it('[REQ-106/AK-7] dieses einzige Zitat wieder löschen → Kachel zeigt wieder das Standard-Zitat', async () => {
+    const eins: Z[] = [{ b: FW, text: 'Ich bin nicht das Feuer.' }];
+    const App = await welt(eins);
+    await startseite(App);
+    gezeigt(eins);
+    await tippe(textEls('Zitat des Tages', main())[0]);
+    await screen.findByRole('region', { name: 'Buchdetails' }, W);
+    await vi.waitFor(() => expect(notizbuch()).not.toBeNull(), W);
+    await zitatLoeschenImNotizbuch('Ich bin nicht das Feuer.');
+    await menue('Start');
+    await warte(120);
+    expect(textEls(STANDARD_ANZEIGE, main())).toHaveLength(1);
+    expect(main().textContent).not.toContain('Ich bin nicht das Feuer.');
+  });
+
+  it('[REQ-106/AK-7] mit eigenen Zitaten erscheint das Standard-Zitat an keinem von 10 Tagen', async () => {
+    const zwei = DREI.slice(0, 2);
+    const App = await welt(zwei);
+    for (let i = 0; i < 10; i++) {
+      await startseite(App, um(2026, 11, 24 + i, 10));
+      gezeigt(zwei);
+      expect(standardDa()).toBe(false);
+    }
   });
 });
 
@@ -323,7 +443,8 @@ describe('REQ-106 Gelöschtes Zitat des Tages', () => {
     expect(gezeigt(DREI.filter((q) => q !== anderes))).toBe(heute);
   });
 
-  it('[REQ-106/AK-5] letztes Zitat gelöscht: Kachel entfällt', async () => {
+  // Fassung 2026-11-25: ohne Zitate zeigt die Kachel das Standard-Zitat.
+  it('[REQ-106/AK-5] letztes Zitat gelöscht: Kachel zeigt das Standard-Zitat', async () => {
     const eins: Z[] = [{ b: FW, text: 'Ich bin nicht das Feuer.' }];
     const App = await welt(eins);
     await startseite(App);
@@ -334,7 +455,8 @@ describe('REQ-106 Gelöschtes Zitat des Tages', () => {
     await zitatLoeschenImNotizbuch('Ich bin nicht das Feuer.');
     await menue('Start');
     await warte(120);
-    expect(kachelDa()).toBe(false);
+    expect(kachelDa()).toBe(true);
+    expect(textEls(STANDARD_ANZEIGE, main())).toHaveLength(1);
     expect(main().textContent).not.toContain('Ich bin nicht das Feuer.');
   });
 });

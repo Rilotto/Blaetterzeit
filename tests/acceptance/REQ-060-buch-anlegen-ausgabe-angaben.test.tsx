@@ -21,9 +21,9 @@ vi.mock('@/buecher/demodaten', () => ({ demoBuecher: [] }));
 
 type Welt = { repo: BookRepository; bilder: ImageStore; BA: ComponentType<Record<string, unknown>> };
 const W = { timeout: 4000 };
-// REQ-072: Zeile „Maße“ auch im Manuellen Eintrag direkt unter „Format“ (Anpassung Sprint 07)
-const ZEILEN = ['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt'];
-const NAMEN = ['Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'];
+// REQ-072: Zeile „Maße“ auch im Manuellen Eintrag direkt unter „Format“ (Anpassung Sprint 07); REQ-112: „Band“ unter „Exemplar“ (Sprint 11)
+const ZEILEN = ['seiten', 'format', 'masse', 'exemplar', 'band', 'sonderausgabe', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt'];
+const NAMEN = ['Seiten', 'Format', 'Maße', 'Exemplar', 'Band', 'Sonderausgabe', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt'];
 
 async function starte(): Promise<Welt> {
   vi.resetModules();
@@ -141,9 +141,11 @@ describe('REQ-060 Manueller Eintrag mit Angaben der Karte „Ausgabe“', () => 
   it('[REQ-060/AK-1] das Blatt enthält zusätzlich die Zeilen Seiten bis Hinzugefügt in dieser Reihenfolge, ohne „Fotos“', async () => {
     await zeige(await starte());
     await oeffneBlatt();
-    const ids = Array.from(d().querySelectorAll('[data-ausgabe-zeile]')).map((e) => e.getAttribute('data-ausgabe-zeile'));
+    const els = Array.from(d().querySelectorAll('[data-ausgabe-zeile]'));
+    // Zeile „Band“ (REQ-112) wird an ihrer Bezeichnung erkannt (Kennung legt der Entwickler fest).
+    const ids = els.map((e) => (/^Band\b/.test(norm(e.textContent)) ? 'band' : e.getAttribute('data-ausgabe-zeile')));
     expect(ids).toEqual(ZEILEN);
-    ZEILEN.forEach((id, i) => expect(norm(zeile(id)!.textContent), id).toContain(NAMEN[i]));
+    els.forEach((e, i) => expect(norm(e.textContent), ZEILEN[i]).toContain(NAMEN[i]));
     expect(d().querySelector('[data-ausgabe-zeile="fotos"]')).toBeNull();
     expect(d().textContent).not.toMatch(/Fotos/);
     // bisheriger Inhalt bleibt

@@ -20,7 +20,7 @@ const nameStil: CSSProperties = {
   ...textstufe('text'),
   fontWeight: 700,
   lineHeight: 1.2,
-  overflowWrap: 'anywhere',
+  overflowWrap: 'break-word',
   color: rezensionFarbe('kriteriumName'),
 };
 

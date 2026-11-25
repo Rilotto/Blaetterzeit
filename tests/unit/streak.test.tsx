@@ -11,7 +11,7 @@ afterEach(() => cleanup());
 const s = (t: number, h = 12, m = 10) => ({ zeitpunkt: new Date(2026, m, t, h).toISOString() });
 const heute = new Date(2026, 10, 25, 15);
 
-describe('Längster Streak je Buch (REQ-109)', () => {
+describe('Längste Serie je Buch (REQ-109)', () => {
   it('längste Folge über die Historie, unabhängig von heute', () => {
     expect(laengsterStreak([s(1), s(2), s(3), s(10), s(11)])).toBe(3);
     expect(laengsterStreak(undefined)).toBe(0);
@@ -70,6 +70,6 @@ describe('Zustand der Gesamt-Flamme (REQ-108)', () => {
     const { container } = render(<Statistik buch={{ id: 'x', titel: 'X', status: 'gelesen', sitzungen: [s(1), s(2), s(3), s(10), s(11)] }} jetzt={heute} />);
     expect(container.querySelector('[data-streak] [data-streak-zahl]')!.textContent).toBe('3');
     expect(container.querySelector('[data-streak] [data-flamme]')!.getAttribute('data-flamme')).toBe('aktiv');
-    expect(container.querySelector('[data-streak]')!.textContent).toContain('Längster Streak für dieses Buch');
+    expect(container.querySelector('[data-streak]')!.textContent).toContain('Längste Serie');
   });
 });

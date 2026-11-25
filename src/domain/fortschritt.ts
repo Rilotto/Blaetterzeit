@@ -145,7 +145,7 @@ export function flammenZustand(sitzungen: readonly Sitzung[] | undefined, jetzt:
 }
 
 /**
- * „Längster Streak für dieses Buch“ (REQ-109): längste lückenlose Folge von Lesetagen über die gesamte Historie,
+ * „Längste Serie“ (REQ-109): längste lückenlose Folge von Lesetagen über die gesamte Historie,
  * unabhängig von heute. Mehrere Sitzungen am selben Kalendertag zählen als ein Tag.
  */
 export function laengsterStreak(sitzungen: readonly Sitzung[] | undefined): number {

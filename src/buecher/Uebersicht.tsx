@@ -131,15 +131,21 @@ const sortierStil: CSSProperties = {
 
 const listeBasis: CSSProperties = { margin: `${abstand('l')} 0 0`, padding: `0 ${seitenRand}px`, listStyle: 'none' };
 
-// Raster: drei Cover nebeneinander (Referenzbild), Covergröße wie in den Abschnitten (REQ-009/REQ-010).
+/** Spalten der Rasteransicht (REQ-037 AK-10, REQ-098 AK-10): immer drei, unabhängig von der Bildschirmbreite. */
+export const RASTER_SPALTEN = 3;
+
+// Raster: immer drei gleich breite Spalten, die sich die verfügbare Breite teilen. Cover (2:3) und Abstände
+// skalieren mit der Bildschirmbreite; kein waagerechtes Scrollen.
 const rasterStil: CSSProperties = {
   ...listeBasis,
   display: 'grid',
-  gridTemplateColumns: `repeat(auto-fill, ${coverBreite}px)`,
-  justifyContent: 'space-between',
+  gridTemplateColumns: `repeat(${RASTER_SPALTEN}, minmax(0, 1fr))`,
   rowGap: abstand('l'),
-  columnGap: abstand('m'),
+  columnGap: `clamp(8px, 3.5vw, ${abstand('m')})`,
 };
+
+/** Cover im Raster: volle Spaltenbreite, Höhe aus dem Seitenverhältnis 2:3. */
+const rasterCoverStil: CSSProperties = { width: '100%', height: 'auto', aspectRatio: '2 / 3' };
 
 const kartenListeStil: CSSProperties = { ...listeBasis, display: 'flex', flexDirection: 'column', gap: abstand('m') };
 
@@ -267,8 +273,8 @@ function Autorzeile({ autor }: { autor?: string }) {
 
 function Rastereintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: string; onAntippen: (b: Buch) => void }) {
   return (
-    <li data-rastereintrag={buch.id} style={{ width: `${coverBreite}px`, minWidth: 0, cursor: 'pointer' }} onClick={() => onAntippen(buch)}>
-      {cover ? <img src={cover} alt={buch.titel} style={coverBildStil} /> : <CoverPlatzhalter />}
+    <li data-rastereintrag={buch.id} style={{ minWidth: 0, cursor: 'pointer' }} onClick={() => onAntippen(buch)}>
+      {cover ? <img src={cover} alt={buch.titel} style={{ ...coverBildStil, ...rasterCoverStil }} /> : <CoverPlatzhalter fuellend />}
       <p data-buchtitel="" {...stilRolle('buchtitel')} style={{ ...titelStil, marginTop: abstand('s') }}>
         {buch.titel}
       </p>
@@ -435,7 +441,7 @@ export default function Uebersicht({
         </button>
       </div>
       {liste === undefined || ansicht === undefined || liste.length === 0 ? null : ansicht === 'raster' ? (
-        <ul data-buecher="" aria-label={listenname} style={rasterStil}>
+        <ul data-buecher="" data-raster-spalten={RASTER_SPALTEN} aria-label={listenname} style={rasterStil}>
           {liste.map((b) => (
             <Rastereintrag key={b.id} buch={b} cover={frontcover?.[b.id] ?? b.cover} onAntippen={onBuchAntippen} />
           ))}

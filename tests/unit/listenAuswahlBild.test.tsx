@@ -32,16 +32,16 @@ describe('auswahlAenderungen (REQ-098)', () => {
   const fw = b('Fourth Wing');
   const iron = b('Iron Flame', { bandnummer: 2 });
   const onyx = b('Onyx Storm');
-  const zug: Zugehoerigkeit[] = [{ listeId: saga.id, buchId: fw.id, band: 1 }];
+  const zug: Zugehoerigkeit[] = [{ listeId: saga.id, buchId: fw.id }];
 
   it('vormarkiert sind die enthaltenen Bücher', () => {
     expect([...buecherInListe(zug, saga.id)]).toEqual([fw.id]);
   });
 
-  it('neu markierte Bücher werden aufgenommen, bei Sagas mit Band aus dem Scan; entmarkierte herausgenommen', () => {
+  it('neu markierte Bücher werden aufgenommen (Band bleibt beim Buch, REQ-112); entmarkierte herausgenommen', () => {
     const r = auswahlAenderungen(saga, zug, new Set([iron.id, onyx.id]), [fw, iron, onyx]);
     expect(r.aufnehmen).toEqual([
-      { listeId: saga.id, buchId: iron.id, band: 2 },
+      { listeId: saga.id, buchId: iron.id },
       { listeId: saga.id, buchId: onyx.id },
     ]);
     expect(r.herausnehmen).toEqual([fw.id]);
@@ -114,7 +114,7 @@ describe('Blatt „Bücher auswählen“ (REQ-098, AK-6 bis AK-9)', () => {
     expect((await listen.listen()).length).toBe(1);
   });
 
-  it('Markieren/Entmarkieren und „Sichern“ übernimmt; Band aus dem Scan', async () => {
+  it('Markieren/Entmarkieren und „Sichern“ übernimmt; Band bleibt beim Buch (REQ-112)', async () => {
     const { fw, iron, onyx, listen, l } = await aufbau();
     await tippe(q('[data-liste-neu]'));
     await tippe(auswahl(iron.id));
@@ -125,7 +125,7 @@ describe('Blatt „Bücher auswählen“ (REQ-098, AK-6 bis AK-9)', () => {
     expect(auswahl(onyx.id)).toHaveAttribute('data-markiert', 'false');
     await tippe(q('[data-blatt-sichern="buecher-waehlen"]'));
     const zug = (await listen.zugehoerigkeiten()).filter((z) => z.listeId === l.id);
-    expect(zug).toEqual([{ listeId: l.id, buchId: iron.id, band: 2 }]);
+    expect(zug).toEqual([{ listeId: l.id, buchId: iron.id }]);
     expect(q('[data-blatt-buecher-waehlen]')).toBeNull();
     expect(screen.getByText('1 Buch')).toBeInTheDocument();
   });

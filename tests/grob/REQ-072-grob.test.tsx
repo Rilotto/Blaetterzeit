@@ -58,7 +58,8 @@ it('[REQ-072/GROB] Zeile „Maße“ unter „Format“ mit Vorschlag „ca.“;
   await gib('dicke', '');
   await tippe(blatt()!.querySelector('[data-masse-sichern]'));
   await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-  await vi.waitFor(() => expect(norm(wert().textContent)).toBe('13,5 × – × – cm'), W);
+  // Fassung 2026-11-25: fehlende Werte aus den Standardwerten mit „ca.“ (REQ-072 AK-4)
+  await vi.waitFor(() => expect(norm(wert().textContent)).toBe('ca. 13,5 × 19,0 × 2,4 cm'), W);
   const g = await repo.get(id);
   expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([135, undefined, undefined]);
 });
