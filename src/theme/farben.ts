@@ -377,7 +377,9 @@ export type FortschrittFarbrolle =
   | 'sichernFlaeche'
   | 'sichernSchrift'
   | 'hinweis'
-  | 'eingabeFehler';
+  | 'eingabeFehler'
+  | 'flammeAusgegraut'
+  | 'flammeZahlAusgegraut';
 
 /** Aus welcher Farbrubrik jede Farbrolle „Lesestatus und Fortschritt“ ihre Farbe bezieht (Farbangaben der REQs 021–028). */
 export const fortschrittFarbrollen: Record<FortschrittFarbrolle, FarbrubrikId> = {
@@ -402,6 +404,9 @@ export const fortschrittFarbrollen: Record<FortschrittFarbrolle, FarbrubrikId> =
   flammeUnten: 'flammerot',
   flammeOben: 'flammeorange',
   flammeZahlAktiv: 'hintergrund',
+  // Ausgegraute Gesamt-Streak-Flamme (REQ-108): gestern gelesen, heute noch nicht. Fläche GhostFrame, Zahl Dunkelbraun.
+  flammeAusgegraut: 'ghostframe',
+  flammeZahlAusgegraut: 'dunkelbraun',
   // „gedeckt“ (REQ-027): abgeschwächt dargestellt, siehe flammeZahlInaktiv unten.
   flammeZahlInaktiv: 'tertiaer',
   blattFlaeche: 'hintergrund',

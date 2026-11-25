@@ -120,16 +120,55 @@ const tagSchluessel = (d: Date): string => `${d.getFullYear()}-${d.getMonth() + 
 /** Derselbe lokale Kalendertag um `tage` verschoben (sommerzeitfest über das Kalenderdatum). */
 const tagVerschieben = (d: Date, tage: number): Date => new Date(d.getFullYear(), d.getMonth(), d.getDate() + tage, 12);
 
-/**
- * Streak eines Buches: Anzahl lückenlos aufeinanderfolgender Lesetage (lokale Kalendertage mit mindestens
- * einer Sitzung), die heute oder gestern enden; sonst 0 (REQ-027).
- */
-export function streak(sitzungen: readonly Sitzung[] | undefined, jetzt: Date): number {
+/** Lesetage (Schlüssel „JJJJ-M-T“) aus Sitzungen; mehrere Sitzungen am Tag zählen einmal. */
+function lesetagSchluessel(sitzungen: readonly Sitzung[] | undefined): Set<string> {
   const tage = new Set<string>();
   for (const s of sitzungen ?? []) {
     const d = new Date(s.zeitpunkt);
     if (!Number.isNaN(d.getTime())) tage.add(tagSchluessel(d));
   }
+  return tage;
+}
+
+/** Zustand der Flamme des Gesamt-Streaks (REQ-108). */
+export type FlammenZustand = 'aktiv' | 'ausgegraut' | 'inaktiv';
+
+/**
+ * Zustand der Gesamt-Streak-Flamme (REQ-108): „aktiv“ (angezündet), wenn heute ein Lesetag ist; „ausgegraut“, wenn
+ * gestern, aber heute noch nicht gelesen wurde; sonst „inaktiv“ (erloschen, 0).
+ */
+export function flammenZustand(sitzungen: readonly Sitzung[] | undefined, jetzt: Date): FlammenZustand {
+  const tage = lesetagSchluessel(sitzungen);
+  if (tage.has(tagSchluessel(tagVerschieben(jetzt, 0)))) return 'aktiv';
+  if (tage.has(tagSchluessel(tagVerschieben(jetzt, -1)))) return 'ausgegraut';
+  return 'inaktiv';
+}
+
+/**
+ * „Längster Streak für dieses Buch“ (REQ-109): längste lückenlose Folge von Lesetagen über die gesamte Historie,
+ * unabhängig von heute. Mehrere Sitzungen am selben Kalendertag zählen als ein Tag.
+ */
+export function laengsterStreak(sitzungen: readonly Sitzung[] | undefined): number {
+  const tage = lesetagSchluessel(sitzungen);
+  let rekord = 0;
+  for (const schluessel of tage) {
+    const [j, m, t] = schluessel.split('-').map(Number);
+    const tag = new Date(j, m - 1, t, 12);
+    // Nur am Beginn einer Folge zählen (Vortag ist kein Lesetag).
+    if (tage.has(tagSchluessel(tagVerschieben(tag, -1)))) continue;
+    let laenge = 0;
+    for (let d = tag; tage.has(tagSchluessel(d)); d = tagVerschieben(d, 1)) laenge += 1;
+    rekord = Math.max(rekord, laenge);
+  }
+  return rekord;
+}
+
+/**
+ * Streak eines Buches: Anzahl lückenlos aufeinanderfolgender Lesetage (lokale Kalendertage mit mindestens
+ * einer Sitzung), die heute oder gestern enden; sonst 0 (REQ-027).
+ */
+export function streak(sitzungen: readonly Sitzung[] | undefined, jetzt: Date): number {
+  const tage = lesetagSchluessel(sitzungen);
   let tag = tagVerschieben(jetzt, 0);
   if (!tage.has(tagSchluessel(tag))) {
     tag = tagVerschieben(tag, -1);

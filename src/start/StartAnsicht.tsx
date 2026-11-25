@@ -24,7 +24,7 @@ import {
   tageszeit,
   uhrzeitText,
 } from '@/domain/startseite';
-import { kalender, serie, zeitraumartSpeichern, zeitraumFuer } from '@/domain/statistik';
+import { kalender, serie, serieZustand, zeitraumartSpeichern, zeitraumFuer } from '@/domain/statistik';
 import { tagesnummer, wahlAlsText, wahlAusText, zitatDesTagesWaehlen, type Zitat } from '@/domain/zitat';
 import type { MenuePunktId } from '@/navigation/menu';
 import { useMinutentakt, useUhr } from '@/plattform/uhr';
@@ -386,7 +386,7 @@ export default function StartAnsicht({
             <span data-start-straehne={serie(alle, heute)} style={straehneStil}>
               <span style={{ display: 'block', width: '20px', height: '27px' }}>
                 <span style={{ display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left' }}>
-                  <Flamme zahl={serie(alle, heute)} />
+                  <Flamme zahl={serie(alle, heute)} zustand={serieZustand(alle, heute)} />
                 </span>
               </span>
             </span>

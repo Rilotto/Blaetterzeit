@@ -5,7 +5,7 @@
  */
 import type { EinstellungRepository } from '../storage';
 import { kalendertag, type Buch } from './buch';
-import { hatSeitenanzahl, streak } from './fortschritt';
+import { flammenZustand, hatSeitenanzahl, streak, type FlammenZustand } from './fortschritt';
 
 // ---------------------------------------------------------------------------------------------------------------
 // Zeiträume (REQ-079, REQ-080)
@@ -303,6 +303,14 @@ export function lesetage(buecher: readonly Buch[], z: Zeitraum): { gelesen: numb
 }
 
 /** „Serie X Tage“ (REQ-087): Streak-Regel aus REQ-027, buchübergreifend, immer bezogen auf heute. */
+/** Zustand der Serien-Flamme (REQ-108): angezündet, ausgegraut oder erloschen, buchübergreifend. */
+export function serieZustand(buecher: readonly Buch[], jetzt: Date): FlammenZustand {
+  return flammenZustand(
+    buecher.flatMap((b) => b.sitzungen ?? []),
+    jetzt,
+  );
+}
+
 export function serie(buecher: readonly Buch[], jetzt: Date): number {
   return streak(
     buecher.flatMap((b) => b.sitzungen ?? []),

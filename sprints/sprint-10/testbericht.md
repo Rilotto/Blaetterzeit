@@ -67,3 +67,10 @@ Stand 2026-11-23: nicht freigabefähig wegen F1. F1 ist inzwischen behoben, aktu
 - Risiken: Linienstil der Icons, Lage der Bereiche und Umrandung von „heute“ sind nur über Kennzeichen bzw. Reihenfolge prüfbar, Sichtprüfung im Prototyp. Die Uhr wird laut Entwickler alle 5 s abgefragt, getestet ist der Wechsel innerhalb von 61 s.
 - Empfehlung: freigabefähig, sobald die CI (`npm run verify`) für den Branch grün ist.
 - Nachtrag CI (Commit 68ed60a): Dieselbe Simulation „Start = Platzhalter“ (`vi.mock('@/views')`) ist jetzt auch in `REQ-003`, `REQ-005` und `REQ-079` (fein) eingebaut. REQ-066, REQ-097 und die groben Tests zu REQ-003, REQ-005, REQ-066, REQ-079 und REQ-097 waren auch ohne Änderung grün. Lokal 102/102 grün. Offen ist REQ-007/AK-7, das behebt der Entwickler.
+
+## Nachtrag 2026-11-25: Teil D – REQ-108, REQ-109; angepasst REQ-026 AK-1/2, REQ-027 AK-5/7, REQ-087 AK-4, REQ-103 AK-3
+- Tests: Neu sind `REQ-108-gesamt-streak-zustaende` (Startseite und Statistik, drei Zustände, Anzünden durch Lesen, Sichern ohne Erhöhung, GhostFrame je Design) und `REQ-109-buch-streak-rekord` (Rekord über die Historie, Monats-/Jahresgrenze, lokaler Tageswechsel, Status und Pause, nur dieses Buch). Angepasst sind die feinen Tests zu REQ-026/027/087/103 und der grobe Test zu REQ-026 (neue Beschriftung). Die groben Tests zu REQ-027/087 bleiben gültig und unverändert. Den Zustand erkennen die Tests an der Füllung der Flamme, nicht am Kennzeichen.
+- Lokal: `tsc -b` grün, Lint mit Exit 0, die genannten REQs mit 115/115 grün. Volle Suite nur in der CI.
+- Ergebnis: REQ-108 AK-1–6 und REQ-109 AK-1–5 bestanden, ebenso die geänderten AKs von REQ-026, 027, 087 und 103.
+- Gegenprobe: 2/2 erkannt. „Gestern gelesen“ wird angezündet statt ausgegraut (10 rot), Rekord nimmt die letzte statt der längsten Folge (2 rot).
+- Empfehlung: freigabefähig, sobald die CI (`npm run verify`) für den Branch grün ist.

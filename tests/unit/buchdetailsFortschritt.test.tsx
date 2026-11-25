@@ -178,10 +178,14 @@ describe('Fortschritt, Buchlänge und Aktuelle Seite', () => {
     expect(within(screen.getByRole('dialog', { name: 'Aktuelle Seite' })).getByRole('textbox', { name: 'Prozent' })).toHaveValue('');
   });
 
-  it('Streak 0: Flamme inaktiv, 0 % ohne Fortschritt', async () => {
-    await zeige(buch({ seitenanzahl: 400, sitzungen: [{ zeitpunkt: new Date(2026, 10, 10, 9).toISOString() }] }));
+  it('Rekord-Streak (REQ-109): ohne Sitzung 0 inaktiv; alte Sitzung bleibt 1 angezündet; 0 % ohne Fortschritt', async () => {
+    await zeige(buch({ seitenanzahl: 400 }));
     expect(document.querySelector('[data-flamme]')).toHaveAttribute('data-flamme', 'inaktiv');
-    expect(document.querySelector('[data-streak]')).toHaveTextContent('0');
+    expect(document.querySelector('[data-streak-zahl]')).toHaveTextContent('0');
+    cleanup();
+    await zeige(buch({ seitenanzahl: 400, sitzungen: [{ zeitpunkt: new Date(2026, 10, 10, 9).toISOString() }] }));
+    expect(document.querySelector('[data-flamme]')).toHaveAttribute('data-flamme', 'aktiv');
+    expect(document.querySelector('[data-streak-zahl]')).toHaveTextContent('1');
     expect(document.querySelector('[data-prozent]')).toHaveTextContent('0 %');
   });
 });
