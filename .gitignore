@@ -29,3 +29,5 @@ test-results.json
 # Signaturschlüssel NIEMALS committen
 *.jks
 *.keystore
+# Ausnahme: fester, öffentlicher Debug-TESTschlüssel (kein Geheimnis, nie für Release)
+!android/app/debug.keystore

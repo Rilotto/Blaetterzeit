@@ -63,8 +63,9 @@ jobs:
       - name: Debug-APK bauen
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon --stacktrace
-      # Download für Gerätetests (z. B. S23 Ultra). Debug-Signatur: vor dem Wechsel auf eine
-      # Release-APK muss die App deinstalliert werden (Datenverlust).
+      # Download für Gerätetests (z. B. S23 Ultra). Signiert mit dem festen Debug-Testschlüssel
+      # (android/app/debug.keystore), Debug-APKs sind daher übereinander installierbar. Vor dem
+      # Wechsel auf eine Release-APK muss die App deinstalliert werden (Datenverlust).
       - uses: actions/upload-artifact@v5
         with:
           name: blaetterzeit-debug-apk
@@ -74,7 +75,7 @@ jobs:
 
   # Update-Test (Sprint 11): Ein Update über die Vorversion darf keine Daten verlieren.
   # Baut die Basisversion (Stand von main bzw. bei Push auf main der vorige Stand) und die aktuelle Version,
-  # beide als Debug-APK mit DEMSELBEN, hier erzeugten Debug-Testschlüssel (keine Secrets; der Release-Schlüssel
+  # beide als Debug-APK mit DEMSELBEN festen Debug-Testschlüssel aus dem Repo (keine Secrets; der Release-Schlüssel
   # bleibt allein in release.yml). Im Emulator: Basis installieren, Daten anlegen, neue Version mit
   # `adb install -r` darüber, Daten prüfen. Ablauf: scripts/update-test/ablauf.sh.
   update-test:
@@ -109,11 +110,12 @@ jobs:
           git worktree add --detach "$RUNNER_TEMP/basis" "$BASIS"
 
       - name: Gemeinsamer Debug-Testschlüssel
+        # Fester Testschlüssel aus dem Repo (android/app/debug.keystore). Zusätzlich als
+        # ~/.android/debug.keystore, damit auch eine Basisversion ohne diese Konfiguration gleich signiert.
         run: |
           mkdir -p ~/.android
-          rm -f ~/.android/debug.keystore
-          keytool -genkeypair -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey \
-            -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          cp android/app/debug.keystore ~/.android/debug.keystore
+          cp android/app/debug.keystore "$RUNNER_TEMP/basis/android/app/debug.keystore"
 
       - name: APK der Basisversion bauen
         working-directory: ${{ runner.temp }}/basis

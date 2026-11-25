@@ -24,6 +24,15 @@ android {
     // WICHTIG: Immer derselbe Keystore! Ein anderer Schlüssel = kein Update möglich
     // = Deinstallation = Verlust aller lokalen Daten. Siehe docs/release-prozess.md
     signingConfigs {
+        // Fester, öffentlicher Debug-TESTschlüssel (Android-Standardwerte, kein Geheimnis),
+        // damit lokale und CI-Debug-APKs gleich signiert sind und übereinander installierbar bleiben.
+        // NIE für Release verwenden – der Release-Schlüssel kommt allein aus den Secrets.
+        debug {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
         release {
             if (System.getenv("ANDROID_KEYSTORE_PATH")) {
                 storeFile = file(System.getenv("ANDROID_KEYSTORE_PATH"))
@@ -34,6 +43,9 @@ android {
         }
     }
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.debug
+        }
         release {
             if (System.getenv("ANDROID_KEYSTORE_PATH")) {
                 signingConfig = signingConfigs.release
