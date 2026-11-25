@@ -14,3 +14,6 @@ Branch: sprint-11/streak-und-feinschliff, abgezweigt von sprint-10/abschluss. De
 
 ## Ablauf
 Start erst, wenn der CEO es sagt. Danach CI und Prototyp.
+
+## Technische Aufgabe: Update-Test in der CI (CEO 2026-11-25: „ja bitte“)
+Die CI baut die vorherige und die neue Version, signiert beide mit demselben Testschlüssel und installiert sie nacheinander im Android-Emulator. Dabei werden Daten angelegt, und es wird geprüft, dass Bücher, Sitzungen, Listen und Zitate nach dem Update erhalten sind. Ziel: Updates ohne Neuinstallation und ohne Datenverlust absichern (To-do vom 2026-11-10).
