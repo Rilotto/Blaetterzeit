@@ -1,8 +1,9 @@
 /**
  * Schlüssel der App-Einstellungen (REQ-068: Farbdesign, REQ-069: Schrift, REQ-071: Stil,
- * REQ-079: gemerkte Zeitraum-Pille der Statistik, REQ-106: gemerkte Wahl des Zitats des Tages als JSON).
+ * REQ-079: gemerkte Zeitraum-Pille der Statistik, REQ-106: gemerkte Wahl des Zitats des Tages als JSON,
+ * REQ-108: in „Für dich“ ausgeblendete Abschnitte der Seite „Bücher“ als JSON-Liste der Abschnitts-IDs).
  */
-export type EinstellungSchluessel = 'farbdesign' | 'schrift' | 'stil' | 'statistikZeitraum' | 'zitatDesTages';
+export type EinstellungSchluessel = 'farbdesign' | 'schrift' | 'stil' | 'statistikZeitraum' | 'zitatDesTages' | 'fuerDichAusgeblendet';
 
 /**
  * Speicher-Schnittstelle für App-Einstellungen (ADR-0002). Werte sind Zeichenketten (z. B. die ID des

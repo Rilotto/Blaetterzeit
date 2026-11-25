@@ -80,19 +80,22 @@ interface Props {
   onVonHand?: () => void;
   /** Tippen außerhalb des Menüs. */
   onMenueSchliessen?: () => void;
+  /** Filter-/Einstellungen-Schaltfläche angetippt: Blatt „„Für dich“ anpassen“ (REQ-108, REQ-005 AK-10). */
+  onFilter?: () => void;
 }
 
 /**
  * Überschrift „Deine Bücher“ mit Filter-/Einstellungen- und Plus-Schaltfläche (REQ-005).
- * Die Filter-/Einstellungen-Schaltfläche bewirkt noch nichts; die Plus-Schaltfläche öffnet das
+ * Die Filter-/Einstellungen-Schaltfläche öffnet das Blatt „„Für dich“ anpassen“ (REQ-108), ohne aktiven
+ * Zustand (REQ-005 AK-10); die Plus-Schaltfläche öffnet das
  * Menü „Buch hinzufügen“ und zeigt „ד, solange es offen ist (REQ-029).
  */
-export default function Kopfbereich({ menueOffen = false, onPlus, onBarcode, onVonHand, onMenueSchliessen }: Props) {
+export default function Kopfbereich({ menueOffen = false, onPlus, onBarcode, onVonHand, onMenueSchliessen, onFilter }: Props) {
   return (
     <header style={kopfStil}>
       <h1 {...stilRolle('seitentitel')} style={ueberschriftStil}>Deine Bücher</h1>
       <div style={schaltflaechenStil}>
-        <button type="button" aria-label="Filter und Einstellungen" style={filterStil}>
+        <button type="button" aria-label="Filter und Einstellungen" onClick={onFilter} style={filterStil}>
           <Icon
             datei="icon-regler.png"
             url={iconRegler}

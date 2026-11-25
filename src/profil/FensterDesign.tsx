@@ -4,17 +4,15 @@ import { LESESTATUS } from '@/domain/buch';
 import { SCHREIBFENSTER_ZUG_SCHWELLE } from '@/buchdetails/reiter/rezension';
 import { useDesign } from '@/design/designwahl';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
+import { fensterStil, griffBereichStil, griffStil, hintergrundStil, knopf, kopfStil, listeStil, schliessenStil, titelStil, zeileNameStil, zeileStil } from './blattStil';
 import {
-  abdunklung,
   abstand,
-  bildschirmrand,
   designVorschauRubriken,
   detailsFarbe,
   farbdesignReihenfolge,
   farbdesigns,
   farbVariablen,
   kartenSchatten,
-  pillenhoehe,
   reiterPilleSchatten,
   rezensionFarbe,
   rubrikFarbe,
@@ -43,66 +41,6 @@ const REITER: readonly { id: DesignReiter; name: string }[] = [
 
 const UEBERGANG = '320ms cubic-bezier(0.4, 0, 0.2, 1)';
 
-const hintergrundStil: CSSProperties = {
-  position: 'fixed',
-  inset: 0,
-  zIndex: 30,
-  backgroundColor: abdunklung,
-  animation: 'bz-abdunklung-ein 200ms ease-out',
-};
-
-const fensterStil = (versatz: number): CSSProperties => ({
-  position: 'fixed',
-  left: 0,
-  right: 0,
-  bottom: 0,
-  zIndex: 31,
-  boxSizing: 'border-box',
-  maxHeight: 'calc(100% - 40px)',
-  overflowY: 'auto',
-  padding: `0 ${bildschirmrand} calc(${abstand('l')} + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)))`,
-  borderTopLeftRadius: '28px',
-  borderTopRightRadius: '28px',
-  backgroundColor: rezensionFarbe('fensterFlaeche'),
-  animation: 'bz-blatt-ein 220ms ease-out',
-  transform: versatz > 0 ? `translateY(${versatz}px)` : undefined,
-  transition: versatz > 0 ? undefined : 'transform 160ms ease-out',
-});
-
-const griffBereichStil: CSSProperties = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '28px',
-  touchAction: 'none',
-  cursor: 'grab',
-};
-
-const griffStil: CSSProperties = { width: '40px', height: '5px', borderRadius: '3px', backgroundColor: rezensionFarbe('ziehgriff') };
-
-const kopfStil: CSSProperties = { position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '44px' };
-
-const titelStil: CSSProperties = { margin: 0, ...textstufe('abschnitt'), fontWeight: 700, color: rezensionFarbe('fensterTitel') };
-
-const knopf: CSSProperties = { margin: 0, fontFamily: 'inherit', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' };
-
-const schliessenStil: CSSProperties = {
-  ...knopf,
-  position: 'absolute',
-  right: 0,
-  top: '50%',
-  transform: 'translateY(-50%)',
-  boxSizing: 'border-box',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: pillenhoehe,
-  height: pillenhoehe,
-  padding: 0,
-  borderRadius: '50%',
-  border: `2px solid ${rezensionFarbe('schliessenRahmen')}`,
-  backgroundColor: rezensionFarbe('schliessenFlaeche'),
-};
 
 // Live-Vorschau: Mini-Buchkarte mit eigenen Variablen des gewählten Designs bzw. der gewählten Schrift.
 const vorschauStil = (farbdesign: FarbdesignId, schriftId: SchriftId): CSSProperties => ({
@@ -187,25 +125,6 @@ const umschalterKnopfStil = (aktiv: boolean): CSSProperties => ({
   color: rezensionFarbe(aktiv ? 'reiterAktivSchrift' : 'reiterInaktivIcon'),
   transition: `color ${UEBERGANG}`,
 });
-
-const listeStil: CSSProperties = { display: 'flex', flexDirection: 'column', gap: abstand('s'), marginTop: abstand('m') };
-
-const zeileStil = (aktiv: boolean): CSSProperties => ({
-  ...knopf,
-  display: 'flex',
-  alignItems: 'center',
-  gap: abstand('m'),
-  boxSizing: 'border-box',
-  width: '100%',
-  minHeight: '44px',
-  padding: `${abstand('s')} ${abstand('m')}`,
-  borderRadius: '16px',
-  border: `2px solid ${detailsFarbe(aktiv ? 'kachelGewaehltRahmen' : 'kachelRahmen')}`,
-  backgroundColor: detailsFarbe(aktiv ? 'kachelGewaehltFlaeche' : 'kachelFlaeche'),
-  textAlign: 'left',
-});
-
-const zeileNameStil: CSSProperties = { flex: '1 1 auto', minWidth: 0, ...textstufe('text'), fontWeight: 600, color: detailsFarbe('zeileBezeichnung') };
 
 const kreiseStil: CSSProperties = { display: 'flex', gap: abstand('xs'), flex: '0 0 auto' };
 const farbkreisStil = (farbe: string): CSSProperties => ({
@@ -314,7 +233,8 @@ const markeStil: CSSProperties = {
   borderRadius: '50%',
 };
 
-function Marke({ aktiv }: { aktiv: boolean }) {
+/** Haken (gewählt) bzw. leerer Kreis am Zeilenende; auch im Blatt „„Für dich“ anpassen“ (REQ-108). */
+export function Marke({ aktiv }: { aktiv: boolean }) {
   return aktiv ? (
     <span data-haken="" style={{ ...markeStil, backgroundColor: detailsFarbe('hakenFlaeche') }}>
       <Symbolbild name="haken" farbe={detailsFarbe('hakenIcon')} groesse={14} />
