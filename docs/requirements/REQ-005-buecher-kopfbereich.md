@@ -1,7 +1,7 @@
 ---
 id: REQ-005
 titel: Seite „Bücher“ – Kopfbereich mit Überschrift und zwei runden Schaltflächen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Must
 art: funktional
 quelle: CEO

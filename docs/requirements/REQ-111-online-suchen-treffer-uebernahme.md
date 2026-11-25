@@ -1,7 +1,7 @@
 ---
 id: REQ-111
 titel: „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

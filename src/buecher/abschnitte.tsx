@@ -75,8 +75,6 @@ export const buecherAbschnitte: readonly AbschnittDefinition[] = [
   },
 ];
 
-/** ID des Filters, für den die Auswahl gilt (REQ-108: nur „Für dich“). */
-export const FUER_DICH_FILTER_ID = 'fuer_dich';
 
 /**
  * Sichtbare Abschnitte in unveränderter Reihenfolge. Abschnitte ohne gespeicherte Auswahl sind sichtbar.

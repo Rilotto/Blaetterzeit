@@ -1,7 +1,7 @@
 ---
 id: REQ-073
 titel: Buchdarstellung – Proportionen von Cover, Rücken und Schnitt aus den Maßen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

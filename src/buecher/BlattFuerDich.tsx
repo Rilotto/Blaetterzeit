@@ -7,9 +7,10 @@ import { fensterStil, griffBereichStil, griffStil, hintergrundStil, kopfStil, li
 import { Marke } from '@/profil/FensterDesign';
 import { rezensionFarbe, stilRolle } from '@/theme';
 import { sichtbareAbschnitte, type AbschnittDefinition } from './abschnitte';
+import { personalisierbarerFilterName } from './filterKonfiguration';
 
 /** Titel des Blatts (REQ-108). */
-export const FUER_DICH_TITEL = '„Für dich“ anpassen';
+export const FUER_DICH_TITEL = `„${personalisierbarerFilterName}“ anpassen`;
 /** Hinweis, wenn der letzte Haken entfernt werden soll (REQ-108 AK-5). */
 export const MINDESTENS_EINER_HINWEIS = 'Mindestens ein Abschnitt muss sichtbar sein';
 /** So lange bleibt der Hinweis sichtbar. */
@@ -126,7 +127,7 @@ export default function BlattFuerDich({ abschnitte, ausgeblendet, geladen = true
           </button>
         </div>
 
-        <div role="group" aria-label="Abschnitte in „Für dich“" data-fuer-dich-liste="" style={listeStil}>
+        <div role="group" aria-label={`Abschnitte in „${personalisierbarerFilterName}“`} data-fuer-dich-liste="" style={listeStil}>
           {abschnitte.map((a) => {
             const an = entwurf.has(a.id);
             return (

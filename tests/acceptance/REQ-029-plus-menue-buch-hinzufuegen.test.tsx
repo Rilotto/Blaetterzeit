@@ -172,26 +172,28 @@ describe('REQ-029 Menü „Buch hinzufügen“', () => {
   });
 
   // REQ-029/AK-2 („genau eine Option“) ist laut Hinweis in REQ-029 mit REQ-061 hinfällig.
-  // Die Tests prüfen deshalb das neue Verhalten: zwei Optionen, „Von Hand eintragen“ unverändert mit Untertitel.
+  // Die Tests prüfen deshalb das neue Verhalten: seit REQ-110 drei Optionen, „Von Hand eintragen“ unverändert mit Untertitel.
   describe('AK-2 (überführt in REQ-061/AK-1) Optionen mit Titel und Untertitel', () => {
     it('[REQ-029/AK-2] „Von Hand eintragen“ mit Untertitel „Wenn deine Ausgabe fehlt“ ist weiterhin ein Menüpunkt', async () => {
       await zeige();
       const m = await oeffne();
       const items = within(m).getAllByRole('menuitem');
-      expect(items).toHaveLength(2);
+      expect(items).toHaveLength(3);
       const vonHand = within(m).getByRole('menuitem', { name: /Von Hand eintragen/ });
       const t = textElement(vonHand, 'Von Hand eintragen');
       const u = textElement(vonHand, 'Wenn deine Ausgabe fehlt');
       expect(t.compareDocumentPosition(u) & Node.DOCUMENT_POSITION_FOLLOWING, 'Untertitel unter dem Titel').toBeTruthy();
     });
 
-    it('[REQ-029/AK-2] genau die Optionen „Von Hand eintragen“ und „Barcode scannen“; übrige Optionen des Referenzbilds und eine Überschrift fehlen', async () => {
+    it('[REQ-029/AK-2] genau die Optionen „Online suchen“ (REQ-110), „Barcode scannen“ und „Von Hand eintragen“; „Deine Bücher importieren“ und eine Überschrift fehlen', async () => {
       await zeige();
       const m = await oeffne();
       const items = within(m).getAllByRole('menuitem');
       expect(items.map((i) => i.textContent ?? '').some((t) => t.includes('Barcode scannen'))).toBe(true);
       expect(items.map((i) => i.textContent ?? '').some((t) => t.includes('Von Hand eintragen'))).toBe(true);
-      for (const t of ['Online suchen', 'Deine Bücher importieren']) {
+      expect(items.map((i) => i.textContent ?? '').some((t) => t.includes('Online suchen'))).toBe(true);
+      expect(items).toHaveLength(3);
+      for (const t of ['Deine Bücher importieren']) {
         expect(screen.queryByText(t), t).toBeNull();
       }
       expect(within(m).queryByRole('heading')).toBeNull();

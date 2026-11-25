@@ -1,7 +1,7 @@
 ---
 id: REQ-077
 titel: Standardmaße je Format und geschätzte Dicke aus der Seitenzahl
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

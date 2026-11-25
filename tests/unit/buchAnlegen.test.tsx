@@ -13,6 +13,7 @@ import BuecherAnsicht from '@/views/BuecherAnsicht';
 vi.mock('@/bild/bildverarbeitung', () => ({
   zuschneiden: async (bild: string) => bild,
   bildBegrenzen: async (bild: string) => bild,
+  mittigZuschneiden: async (bild: string) => bild,
 }));
 
 const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC';
@@ -112,7 +113,7 @@ describe('Buch anlegen über das Plus-Menü', () => {
     starte();
     fireEvent.click(plus());
     const menue = screen.getByRole('menu', { name: 'Buch hinzufügen' });
-    expect(within(menue).getAllByRole('menuitem')).toHaveLength(2);
+    expect(within(menue).getAllByRole('menuitem')).toHaveLength(3);
     expect(menue.querySelector('[data-icon="icon-hand-eintragen.png"]')).not.toBeNull();
     const x = screen.getByRole('button', { name: 'Menü schließen' });
     expect(x.querySelector('[data-icon="icon-x.png"]')).not.toBeNull();

@@ -1,7 +1,7 @@
 ---
 id: REQ-110
 titel: Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

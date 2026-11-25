@@ -162,7 +162,7 @@ const unterfeld = (f: Feld | undefined, code: string): string | undefined => f?.
  * Liest alle Titeldatensätze einer DNB-SRU-Antwort (MARC21-xml). Gesuchte ISBN als Rückfall für das Feld ISBN.
  * Unlesbare Antworten ergeben keine Treffer.
  */
-export function dnbTrefferLesen(xml: string, gesuchteIsbn: string): Treffer[] {
+export function dnbTrefferLesen(xml: string, gesuchteIsbn?: string): Treffer[] {
   let doc: Document;
   try {
     doc = new DOMParser().parseFromString(xml, 'application/xml');
@@ -186,6 +186,8 @@ export function dnbTrefferLesen(xml: string, gesuchteIsbn: string): Treffer[] {
     const seiten = seitenAus(unterfeld(erstes('300'), 'a'));
     const isbns = f.filter((x) => x.tag === '020').flatMap((x) => x.unterfelder.filter(([c]) => c === 'a' || c === '9').map(([, w]) => w));
     const isbn = isbns.map((w) => isbnNormalisieren(w.split(/\s/)[0] ?? '')).find((w) => w !== null) ?? gesuchteIsbn;
+    // Cover über die gesuchte ISBN (Barcode, REQ-062), bei der Freitextsuche (REQ-110) über die ISBN des Datensatzes.
+    const coverIsbn = gesuchteIsbn ?? isbn;
     // Preis und Einbandart (REQ-062 AK-9): 020 $c (Bezugsbedingungen) bzw. 020 $q; Medientyp aus 337/338.
     const bezug = f.filter((x) => x.tag === '020').flatMap((x) => x.unterfelder.filter(([c]) => c === 'c' || c === 'q').map(([, w]) => w)).join(' ');
     const medium = f.filter((x) => x.tag === '337' || x.tag === '338' || x.tag === '250').map((x) => unterfeld(x, 'a') ?? '').join(' ');
@@ -199,7 +201,7 @@ export function dnbTrefferLesen(xml: string, gesuchteIsbn: string): Treffer[] {
       quelle: 'dnb',
       // Maße (REQ-072, AK-8): Höhe aus 300 $c.
       angaben: ohneLeere({ titel, autor, verlag, erscheinungsjahr: jahr, seitenanzahl: seiten, isbn, ...fmt, preisCent, ...dnbMasseAus(unterfeld(erstes('300'), 'c')), reihe, bandnummer }),
-      coverUrl: dnbCoverUrl(gesuchteIsbn),
+      ...(coverIsbn ? { coverUrl: dnbCoverUrl(coverIsbn) } : {}),
     };
     if (brauchbar(t)) ergebnis.push(t);
   }
@@ -295,6 +297,113 @@ export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Tre
       ...(cover && /^https:\/\/covers\.openlibrary\.org\//.test(cover) ? { coverUrl: cover } : {}),
     };
     if (brauchbar(t)) ergebnis.push(t);
+  }
+  return ergebnis;
+}
+
+// ---------------------------------------------------------------------------
+// Freitextsuche „Online suchen“ (REQ-110, REQ-111): Titel, Autor oder ISBN, auch kombiniert
+// ---------------------------------------------------------------------------
+
+/** Höchstzahl der Treffer insgesamt und je Quelle (REQ-111, AK-1). */
+export const ONLINE_SUCHE_MAX = 9;
+
+/** Wörter des Suchtexts für die CQL-Abfrage der DNB; Anführungszeichen und Backslash werden entfernt. */
+export const suchwoerter = (text: string): string[] =>
+  text
+    .split(/\s+/)
+    .map((w) => w.replace(/["\\]/g, ''))
+    .filter((w) => w !== '');
+
+/**
+ * SRU-Abfrage der DNB zum Suchtext. Ist der Suchtext eine ISBN, wird nach der ISBN gesucht (Index „num“),
+ * sonst müssen alle Wörter vorkommen (Index „woe“, verknüpft mit „and“). Übertragen wird nur der Suchtext.
+ */
+export function dnbSucheUrl(text: string, max = ONLINE_SUCHE_MAX): string {
+  const isbn = isbnNormalisieren(text);
+  const query = isbn ? `num=${isbn}` : suchwoerter(text).map((w) => `woe="${w}"`).join(' and ');
+  return `https://services.dnb.de/sru/dnb?version=1.1&operation=searchRetrieve&query=${encodeURIComponent(query)}&recordSchema=MARC21-xml&maximumRecords=${max}`;
+}
+
+const OL_FELDER = 'title,author_name,publisher,first_publish_year,number_of_pages_median,isbn,cover_i';
+
+/** Such-API von Open Library zum Suchtext (ISBN normalisiert). Übertragen wird nur der Suchtext. */
+export function openLibrarySucheUrl(text: string, max = ONLINE_SUCHE_MAX): string {
+  const q = isbnNormalisieren(text) ?? text.trim().replace(/\s+/g, ' ');
+  return `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=${max}&fields=${OL_FELDER}`;
+}
+
+/** Cover-Adresse von Open Library zu einer Cover-ID. */
+export const openLibraryCoverIdUrl = (id: number): string => `https://covers.openlibrary.org/b/id/${id}-L.jpg`;
+
+interface OlSuchDokument {
+  title?: unknown;
+  author_name?: unknown;
+  publisher?: unknown;
+  first_publish_year?: unknown;
+  number_of_pages_median?: unknown;
+  isbn?: unknown;
+  cover_i?: unknown;
+}
+
+const ganzeZahl = (w: unknown): number | undefined => (typeof w === 'number' && Number.isInteger(w) && w > 0 ? w : undefined);
+
+/**
+ * Liest die Antwort der Open-Library-Such-API (search.json). Ein Werk umfasst mehrere Ausgaben: Die ISBN wird nur
+ * übernommen, wenn sie eindeutig ist (gesuchte ISBN enthalten oder genau eine ISBN). Unlesbare Antworten ergeben
+ * keine Treffer.
+ */
+export function openLibrarySucheLesen(json: string, gesuchteIsbn?: string | null): Treffer[] {
+  let daten: unknown;
+  try {
+    daten = JSON.parse(json);
+  } catch {
+    return [];
+  }
+  const docs = (daten as { docs?: unknown } | null)?.docs;
+  if (!Array.isArray(docs)) return [];
+  const ergebnis: Treffer[] = [];
+  for (const d of docs as OlSuchDokument[]) {
+    if (!d || typeof d !== 'object') continue;
+    const autoren = namen(d.author_name);
+    const isbns = [
+      ...new Set(
+        (Array.isArray(d.isbn) ? d.isbn : [])
+          .filter((x): x is string => typeof x === 'string')
+          .map(isbnNormalisieren)
+          .filter((x): x is string => x !== null),
+      ),
+    ];
+    const isbn = gesuchteIsbn && isbns.includes(gesuchteIsbn) ? gesuchteIsbn : isbns.length === 1 ? isbns[0] : undefined;
+    const coverId = ganzeZahl(d.cover_i);
+    const t: Treffer = {
+      quelle: 'openlibrary',
+      angaben: ohneLeere({
+        titel: textBereinigen(zeichen(d.title)),
+        autor: autoren.length ? autoren.join('; ') : undefined,
+        verlag: namen(d.publisher)[0],
+        erscheinungsjahr: ganzeZahl(d.first_publish_year),
+        seitenanzahl: ganzeZahl(d.number_of_pages_median),
+        isbn,
+      }),
+      ...(coverId !== undefined ? { coverUrl: openLibraryCoverIdUrl(coverId) } : {}),
+    };
+    if (brauchbar(t)) ergebnis.push(t);
+  }
+  return ergebnis;
+}
+
+/**
+ * Ordnet die Treffer abwechselnd an (DNB, Open Library, DNB, …), je in der Reihenfolge der Quelle; liefert eine
+ * Quelle weniger, füllt die andere auf. Höchstens `max` Treffer (REQ-111, AK-1 bis AK-3). Keine Zusammenführung.
+ */
+export function trefferMischen(dnb: readonly Treffer[], ol: readonly Treffer[], max = ONLINE_SUCHE_MAX): Treffer[] {
+  const ergebnis: Treffer[] = [];
+  let i = 0;
+  let j = 0;
+  while (ergebnis.length < max && (i < dnb.length || j < ol.length)) {
+    if (i < dnb.length) ergebnis.push(dnb[i++]);
+    if (ergebnis.length < max && j < ol.length) ergebnis.push(ol[j++]);
   }
   return ergebnis;
 }

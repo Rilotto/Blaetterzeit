@@ -53,7 +53,8 @@ it('[REQ-029/GROB] Plus öffnet das Menü mit „Von Hand eintragen“ (und „B
   await zeige();
   await tippe(screen.getByRole('button', { name: 'Buch hinzufügen' }));
   const m = screen.getByRole('menu', { name: 'Buch hinzufügen' });
-  expect(within(m).getAllByRole('menuitem')).toHaveLength(2);
+  // Seit REQ-110 zusätzlich „Online suchen“.
+  expect(within(m).getAllByRole('menuitem')).toHaveLength(3);
   const opt = within(m).getByRole('menuitem', { name: /Von Hand eintragen/ });
   expect(opt.textContent).toContain('Wenn deine Ausgabe fehlt');
   expect(screen.getByRole('button', { name: 'Menü schließen' })).toBeInTheDocument();

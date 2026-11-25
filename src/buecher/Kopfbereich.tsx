@@ -74,6 +74,8 @@ interface Props {
   menueOffen?: boolean;
   /** Plus-Schaltfläche bzw. „ד angetippt. */
   onPlus?: () => void;
+  /** Option „Online suchen“ gewählt (REQ-110). */
+  onOnlineSuche?: () => void;
   /** Option „Barcode scannen“ gewählt (REQ-061). */
   onBarcode?: () => void;
   /** Option „Von Hand eintragen“ gewählt. */
@@ -90,7 +92,7 @@ interface Props {
  * Zustand (REQ-005 AK-10); die Plus-Schaltfläche öffnet das
  * Menü „Buch hinzufügen“ und zeigt „ד, solange es offen ist (REQ-029).
  */
-export default function Kopfbereich({ menueOffen = false, onPlus, onBarcode, onVonHand, onMenueSchliessen, onFilter }: Props) {
+export default function Kopfbereich({ menueOffen = false, onPlus, onOnlineSuche, onBarcode, onVonHand, onMenueSchliessen, onFilter }: Props) {
   return (
     <header style={kopfStil}>
       <h1 {...stilRolle('seitentitel')} style={ueberschriftStil}>Deine Bücher</h1>
@@ -120,6 +122,7 @@ export default function Kopfbereich({ menueOffen = false, onPlus, onBarcode, onV
         <PlusMenue
           oben={MENUE_OBEN}
           rechts={seitenRand}
+          onOnline={() => onOnlineSuche?.()}
           onBarcode={() => onBarcode?.()}
           onVonHand={() => onVonHand?.()}
           onSchliessen={() => onMenueSchliessen?.()}

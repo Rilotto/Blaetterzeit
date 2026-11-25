@@ -1,7 +1,7 @@
 ---
 id: REQ-109
 titel: Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO
