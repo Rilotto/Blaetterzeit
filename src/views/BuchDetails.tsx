@@ -18,6 +18,7 @@ import Kopfzeile from '@/buchdetails/Kopfzeile';
 import Statistik from '@/buchdetails/Statistik';
 import Statuspille from '@/buchdetails/Statuspille';
 import { kopfSchaltflaecheStil } from '@/buchdetails/stile';
+import { bilderNeuZuschneiden, geaenderteBereiche } from '@/buchdetails/automatischerZuschnitt';
 import { KOPF_ICON, KOPF_SCHALTFLAECHE, RAND, darstellungsMasse, seitenverhaeltnis } from '@/buchdetails/masse';
 import BlattMasse from '@/buchdetails/BlattMasse';
 import Notizbuch from '@/buchdetails/reiter/Notizbuch';
@@ -272,11 +273,26 @@ export default function BuchDetails({
 
   /** Speichert das geänderte Buch über die Repository-Schnittstelle (ADR-0002); Speichervorgänge laufen nacheinander. */
   const speichern = (neu: Buch) => {
+    const alt = buch;
     setGeaendert(neu);
     const vorher = ausstehend.current ?? Promise.resolve();
     const lauf = vorher
       .then(async () => (repository ?? (await standardRepository())).save(neu))
-      .catch((fehler: unknown) => console.warn('Buch konnte nicht gespeichert werden:', fehler));
+      .then(
+        () => true,
+        (fehler: unknown) => {
+          console.warn('Buch konnte nicht gespeichert werden:', fehler);
+          return false;
+        },
+      )
+      // Format, Maße oder Seitenzahl geändert: gespeicherte Bilder neu zuschneiden (REQ-109, AK-4 bis AK-6),
+      // nur nach erfolgreichem Speichern.
+      .then(async (gespeichert) => {
+        if (!gespeichert || !alt || geaenderteBereiche(alt, neu).length === 0) return;
+        const neueBilder = await bilderNeuZuschneiden(speicher, buchId, alt, neu);
+        if (aktiv.current && Object.keys(neueBilder).length > 0) setBilder((b) => ({ ...b, ...neueBilder }));
+      })
+      .catch((fehler: unknown) => console.warn('Bilder konnten nicht neu zugeschnitten werden:', fehler));
     ausstehend.current = lauf;
     void lauf.then(() => {
       if (ausstehend.current === lauf) ausstehend.current = null;
