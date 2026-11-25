@@ -18,7 +18,8 @@ const navStil: CSSProperties = {
   // (bisher Rasterabstand m + sicherer Bereich), aber nie kleiner als der untere sichere Bildschirmbereich
   // (Gestenleiste/Systemnavigation, REQ-002 AK-10). --safe-area-inset-bottom setzt Capacitor auf Android
   // (SystemBars, insetsHandling "css"), im Browser greift env().
-  paddingBottom: `max(calc((${abstand('m')} + ${SICHERER_BEREICH_UNTEN}) / 2), ${SICHERER_BEREICH_UNTEN})`,
+  // Nur Rasterwert m und sicherer Bereich (REQ-065 AK-8); max() steht als Rechenausdruck in calc().
+  paddingBottom: `calc(max((${abstand('m')} + ${SICHERER_BEREICH_UNTEN}) / 2, ${SICHERER_BEREICH_UNTEN}))`,
 };
 
 const punktStil: CSSProperties = {
