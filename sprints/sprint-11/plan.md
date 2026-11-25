@@ -17,3 +17,8 @@ Start erst, wenn der CEO es sagt. Danach CI und Prototyp.
 
 ## Technische Aufgabe: Update-Test in der CI (CEO 2026-11-25: „ja bitte“)
 Die CI baut die vorherige und die neue Version, signiert beide mit demselben Testschlüssel und installiert sie nacheinander im Android-Emulator. Dabei werden Daten angelegt, und es wird geprüft, dass Bücher, Sitzungen, Listen und Zitate nach dem Update erhalten sind. Ziel: Updates ohne Neuinstallation und ohne Datenverlust absichern (To-do vom 2026-11-10).
+
+## Nachtrag 2026-11-25: Paletten und Hell/Dunkel (Wünsche vom 2026-11-23, waren nicht übergeben)
+- REQ-068 erweitert: neue Designs „Minztraube“ (hell) und „Traubennacht“ (dunkel)
+- REQ-110 neu: Pillen „Hell“ und „Dunkel“ in der Farbauswahl
+- Gegenprobe höchstens 1 Fehler: Auswahl des Designs bleibt gespeichert
