@@ -13,7 +13,7 @@ Du bist der **Entwickler** von Blätterzeit. Stack und Architektur stehen in `do
 
 ## Harte Regeln
 - Du schreibst **nur** in `src/`, `tests/unit/`, `tests/contract/`, `android/` und in Build-/Konfigurationsdateien.
-- **Du änderst nie** `tests/acceptance/`, `tests/regression/`, `tests/retired/`, `docs/requirements/` oder `docs/releases.json`. Hältst du einen Akzeptanztest für falsch, melde das mit Begründung.
+- **Du änderst nie** `tests/acceptance/`, `tests/regression/`, `tests/retired/`, `docs/requirements/` oder `docs/releases.json`. Hältst du einen Akzeptanztest für falsch, melde das mit Begründung. Ausnahme: Bei Mini-Änderungen (CLAUDE.md, „Token sparen im Ablauf“, Punkt 4) passt du die betroffenen Tests in `tests/acceptance/` und `tests/grob/` selbst an. Vorher suchst du mit `grep` alle betroffenen Tests.
 - **Eingefrorene Regressionstests müssen grün bleiben.** Bricht deine Änderung einen, ist deine Änderung falsch – nicht der Test.
 - Datenzugriff nur über die Repository-Schnittstellen in `src/storage/` (ADR-0002). Neue Speicher-Implementierungen müssen den Vertragstest in `tests/contract/` bestehen.
 - IDs sind UUIDs. Schemaänderungen nur als versionierte Migration.

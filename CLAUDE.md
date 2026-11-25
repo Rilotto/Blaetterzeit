@@ -21,7 +21,7 @@ Du bist der **Scrum Master**. Du schreibst selbst keinen Produktcode, keine Akze
 
 1. **Nichts Freigegebenes geht verloren.** Freigegebene REQs, `tests/regression/`, `tests/retired/` und `docs/releases.json` sind eingefroren (Hook + CI erzwingen das). Soll sich freigegebenes Verhalten ändern, legt der Anforderungsmanager einen **neuen** REQ mit `ersetzt: [REQ-xxx]` an.
 2. **Kein Code ohne abgestimmten REQ.** Umsetzung beginnt erst, wenn der CEO den REQ ausdrücklich bestätigt hat (Status „Abgestimmt“).
-3. **Vier-Augen-Prinzip.** Entwickler schreibt Code, Tester schreibt Tests aus dem REQ-Text. Keiner ändert die Dateien des anderen. Findet einer einen Fehler beim anderen, meldet er ihn – er korrigiert ihn nicht selbst.
+3. **Vier-Augen-Prinzip.** Entwickler schreibt Code, Tester schreibt Tests aus dem REQ-Text. Keiner ändert die Dateien des anderen. Findet einer einen Fehler beim anderen, meldet er ihn – er korrigiert ihn nicht selbst. Ausnahme: Mini-Änderungen (siehe „Token sparen im Ablauf“, Punkt 4).
 4. **Rückfragen statt Raten.** Ist ein REQ unklar oder widersprüchlich, geht er an den Anforderungsmanager zurück, der beim CEO nachfragt.
 5. **Freigabe nur durch den CEO.** `npm run release:freeze` wird nur nach ausdrücklicher Freigabe im Chat ausgeführt.
 6. **Speicherzugriff nur über Repository-Schnittstellen** (ADR-0002).
@@ -89,6 +89,19 @@ Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Or
 - **Gegenprobe minimal (CEO-Vorgabe 2026-11-15: „Setze bitte die Gegenproben beim Tester weiter runter. Er soll wirklich nur das aller wichtigste Gegenprüfen“):** Je Auftrag höchstens 3–5 eingebaute Fehler, nur für die Kernfunktion (z. B. Speichern, Hauptlogik). Keine Gegenprobe für Darstellung, Texte, Farben oder Randfälle. Ergebnis im Testbericht in einer Zeile.
 - **Beim Abnehmen eines REQ** schreibt der Tester dessen groben Test. Die feinen Tests bleiben unverändert erhalten.
 - **Verschärfung (CEO-Vorgabe 2026-11-12: „teste nachfolgend nur noch die jetzt zu implementierenden Funktionen und nicht mehr das bereits umgesetzte! … zwingend Token sparen“):** Entwickler und Tester führen lokal nur die Tests der REQs des laufenden Auftrags aus (`npx vitest run <Dateien/Filter> --reporter=dot`), dazu Typecheck und Lint. Bereits Umgesetztes wird lokal nicht mehr geprüft. Das Sicherheitsnetz ist allein die CI (`npm run verify`, volle Suite). Der Agent liest dort nur grün/rot und das Log erst bei Rot. Berichte bleiben kurz.
+
+## Token sparen im Ablauf (CEO-Vorgabe 2026-11-25: „ja lass uns bitte 1-5 umsetzen“)
+
+1. **Frische Agenten je Thema.** Subagenten nicht über Tage weiterführen. Für jedes neue Thema bzw. jeden neuen Auftrag einen neuen Agenten starten. Der Scrum Master schreibt dazu eine kurze Übergabe in den Auftrag: betroffene REQs, Dateien und frische CEO-Entscheidungen. Rückfragen innerhalb desselben Auftrags dürfen denselben Agenten weiterführen.
+2. **Kleine Wünsche bündeln.** Kleine Änderungswünsche des CEO sammelt der Scrum Master und gibt sie gebündelt in einem Durchlauf an Anforderungsmanager, Entwickler und Tester, spätestens bevor der CEO einen Prototyp anfordert. Fragen an den CEO werden ebenfalls gebündelt.
+3. **Alttests vorher finden.** Ändert sich ein AK oder ein sichtbarer Text, sucht der Tester (bei Mini-Änderungen der Entwickler) vor dem Commit per `grep` in `tests/` nach allen Tests, die den REQ oder den alten Text erwähnen, und passt sie an. Ziel: keine rote CI wegen vergessener Alttests.
+4. **Leichter Weg für Mini-Änderungen.** Mini-Änderungen sind Texte, Beschriftungen, Farben, Abstände und einzelne Regeln ohne neue Funktion. Ablauf:
+   - Der Anforderungsmanager passt nur die betroffenen AKs an, ohne neuen REQ und mit kurzem Historie-Eintrag.
+   - Der Entwickler setzt um und passt die betroffenen Tests in `tests/acceptance/` und `tests/grob/` selbst an.
+   - Kein eigener Tester-Durchlauf und keine Gegenprobe. Sicherheitsnetz ist die CI.
+
+   Neue Funktionen laufen weiter über den vollen Weg mit Tester und Gegenprobe.
+5. **Rückfragen-Disziplin.** An den CEO gehen nur echte Entscheidungsfragen. Was sich aus REQs, Konzept oder bisherigen Antworten ableiten lässt, legen Anforderungsmanager bzw. Scrum Master selbst fest und markieren es im REQ als „Auslegung“. Der CEO sieht die Auslegungen bei der Bestätigung.
 
 ## Befehle
 
