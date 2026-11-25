@@ -30,3 +30,12 @@ Die CI baut die vorherige und die neue Version, signiert beide mit demselben Tes
 - BUG (High), 2026-11-25: Geöffnete Liste (REQ-098), Rasteransicht: Es stehen nur 2 Bücher nebeneinander, dazwischen eine große Lücke.
   - Wortlaut CEO: „Es sollen immer drei Bücher nebeneinander passen in den Listen. Hier muss das aber dynamisch an das Handy anpassbar sein, falls jemand ein schmaleres Handy haben sollte.“
   - Auslegung: immer 3 Spalten. Cover, Abstände und Schrift skalieren mit der Bildschirmbreite (Cover-Seitenverhältnis 2:3 bleibt). Gilt für die Rasteransicht aller Listen (Sagas, Sammlungen, Bibliotheken) und für die Rasteransicht auf der Seite „Bücher“ (CEO: „auch für die Rasteransicht auf der Seite Bücher“).
+- BUG (High), 2026-11-25: App-weite Silbentrennung und Textumbrüche. Wortlaut CEO: „Allgemein muss bitte eine Prüfung Appweit eingebaut werden, bezüglich der Silbentrennung und Textumbrüchen, wenn der Platz ausgeht.“
+  - Beispiel: Rezension, Kriterium „Hauptfiguren“ bricht als „Hauptfigur / en“ um, ohne Trennstrich und an falscher Stelle. Richtig wäre „Haupt- / figuren“.
+  - Auslegung:
+    - Dokumentsprache Deutsch, also lang="de".
+    - App-weit `hyphens: auto` für Fließtext und Beschriftungen.
+    - Kein Umbruch mitten im Wort ohne Trennstrich (kein `word-break: break-all` und kein `overflow-wrap: anywhere` ohne Silbentrennung).
+    - Text läuft nie über seine Box hinaus.
+    - Zusätzlich eine automatische Prüfung (Test), die diese Regeln app-weit absichert, z. B. lang="de", eine globale Trennregel und keine verbotenen Umbruchregeln.
+  - Schließt den Punkt „Längste Serie“ (Kennzahlen-Box) mit ein.
