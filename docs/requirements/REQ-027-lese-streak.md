@@ -27,7 +27,8 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 
 **Berechnung**
 - Das System muss als Lesetag eines Buches jeden Kalendertag nach lokaler Gerätezeit (Tageswechsel um Mitternacht) werten, an dem für dieses Buch mindestens eine Sitzung (REQ-024) gespeichert wurde; mehrere Sitzungen am selben Kalendertag zählen als ein Lesetag.
-- ~~Streak als lückenlose Lesetage, die heute oder gestern enden; verpasster Tag = 0.~~ Abgelöst durch REQ-109: Das System muss als Zahl in der Flamme die längste lückenlose Folge von Lesetagen des Buches über die gesamte Historie anzeigen (Rekord, sinkt nicht).
+- Das System muss den Streak eines Buches als Anzahl der lückenlos aufeinanderfolgenden Lesetage ermitteln, die mit dem heutigen oder dem gestrigen Kalendertag enden.
+- Wenn weder heute noch gestern ein Lesetag des Buches ist (mindestens ein Kalendertag verpasst), muss das System den Streak 0 anzeigen.
 - Das System muss den Streak je Buch führen.
 
 **Darstellung**
@@ -57,10 +58,10 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 - **Wenn** die Buchdetails angezeigt werden
 - **Dann** zeigt die Flamme 2
 
-### AK-5 Verpasster Tag setzt nicht zurück (Rekord, REQ-109)
+### AK-5 Verpasster Tag setzt auf 0
 - **Gegeben** für das Buch gibt es eine Sitzung vorgestern, gestern und heute keine
 - **Wenn** die Buchdetails angezeigt werden
-- **Dann** zeigt die Flamme 1
+- **Dann** zeigt die Flamme 0
 
 ### AK-6 Tageswechsel nach lokaler Gerätezeit
 - **Gegeben** für das Buch gibt es Sitzungen um 23:59 und um 00:01 lokaler Gerätezeit am folgenden Kalendertag
@@ -70,7 +71,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 ### AK-7 Sichern ohne Erhöhung zählt nicht
 - **Gegeben** für das Buch gibt es eine Sitzung gestern, heute wurde nur ohne Erhöhung gesichert
 - **Wenn** die Buchdetails morgen angezeigt werden
-- **Dann** zeigt die Flamme 1 (heute zählt nicht als Lesetag, der Rekord bleibt 1, REQ-109)
+- **Dann** zeigt die Flamme 0
 
 ### AK-8 Streak gilt je Buch
 - **Gegeben** es gibt gestern und heute nur Sitzungen für Buch A
@@ -97,7 +98,6 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 ## Abhängigkeiten
 
 - **REQ-024:** Sitzungen mit Zeitpunkt. **REQ-026:** Statistik-Pille. **REQ-006:** Farbrubrik GhostFrame.
-- **REQ-109 (Entwurf):** Mit dessen Abstimmung wird die Berechnung in den Buchdetails durch den Rekord „Längster Streak für dieses Buch“ abgelöst (betrifft AK-4, AK-5, AK-7). Lesetag-Definition und Flammendarstellung bleiben. **REQ-108 (Entwurf):** Der Gesamt-Streak bekommt den Zustand „ausgegraut“.
 
 ## Offene Fragen
 
@@ -111,5 +111,3 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 |---|---|---|
 | 2026-11-10 | Erstellt (Entwurf aus CEO-Beschreibung, Erweiterung 3) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet: F6 Lesetag = Kalendertag lokaler Gerätezeit mit mindestens einer Sitzung, mehrere Sitzungen = ein Tag, Aussehen der Flamme bei 0 und ≥ 1, neue Farbrubriken „Flamme Rot“/„Flamme Orange“ (neu AK-3, AK-4, AK-6, AK-7, AK-9). Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
-| 2026-11-25 | Verweise auf REQ-108 und REQ-109 (Entwurf) unter Abhängigkeiten ergänzt. AKs bleiben bis zur Abstimmung unverändert. Status unverändert | Anforderungsmanager |
-| 2026-11-25 | An REQ-109 angepasst (Abgestimmt, CEO: „beide punkte passen für mich.“): Berechnung als Rekord über die Historie (Anforderung, AK-5, AK-7). AK-1 bis AK-4, AK-6, AK-8 und AK-9 gelten unverändert. Status unverändert | Anforderungsmanager |

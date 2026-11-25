@@ -43,12 +43,11 @@ CEO (2026-11-22): Zeile „Serie X Tage“ = dieselbe Lesesträhne wie in den Bu
 - **Gegeben** Sitzung gestern nur für Buch A, heute nur für Buch B
 - **Wenn** die Seite betrachtet wird
 - **Dann** steht „Serie 2 Tage“
-- **Und** die Flammen in den Buchdetails von Buch A und Buch B zeigen weiterhin nur ihren eigenen Rekord „Längster Streak für dieses Buch“ (je 1, REQ-109)
-- **Und** da heute gelesen wurde, ist die Flamme der Statistik angezündet (REQ-108)
+- **Und** die Flammen in den Buchdetails von Buch A und Buch B zeigen weiterhin den Streak je Buch (REQ-027)
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Flamme und Streak in den Buchdetails (REQ-027, REQ-109). Zustände der Flamme (angezündet, ausgegraut, erloschen): REQ-108.
+- Flamme und Streak in den Buchdetails (REQ-027) bleiben unverändert.
 
 ## Qualitätsanforderungen
 
@@ -57,7 +56,6 @@ CEO (2026-11-22): Zeile „Serie X Tage“ = dieselbe Lesesträhne wie in den Bu
 ## Abhängigkeiten
 
 - **REQ-027, REQ-024.**
-- **REQ-108 (Entwurf):** Die Flamme ist ausgegraut, wenn gestern, aber heute noch nicht gelesen wurde. **REQ-109 (Entwurf):** Der „Streak je Buch“ in AK-4 und in der Abgrenzung wird zum Rekord „Längster Streak für dieses Buch“.
 
 ## Offene Fragen
 
@@ -67,5 +65,3 @@ CEO (2026-11-22): Zeile „Serie X Tage“ = dieselbe Lesesträhne wie in den Bu
 |---|---|---|
 | 2026-11-22 | Erstellt aus CEO-Festlegungen; bleibt „Entwurf“ wegen F3 (Konflikt mit REQ-027: Streak je Buch) | Anforderungsmanager |
 | 2026-11-22 | F3 beantwortet: CEO nimmt den Vorschlag des Scrum Masters an („alright“): Serie auf der Statistikseite buchübergreifend, REQ-027 unverändert. Neu AK-4. Status „Abgestimmt“ | Anforderungsmanager |
-| 2026-11-25 | Verweise auf REQ-108 und REQ-109 (Entwurf) unter Abhängigkeiten ergänzt. AKs bleiben bis zur Abstimmung unverändert. Status unverändert | Anforderungsmanager |
-| 2026-11-25 | An REQ-108 und REQ-109 angepasst (Abgestimmt, CEO: „beide punkte passen für mich.“): AK-4 nennt den Rekord je Buch und die angezündete Flamme. Abgrenzung angepasst. Status unverändert | Anforderungsmanager |
