@@ -62,3 +62,4 @@ Branch: sprint-10/listen-und-felder, abgezweigt von main (nach dem Merge von Spr
 
 ## Gesammelte Mini-Änderungen (gebündelt, vor dem nächsten Prototyp umsetzen)
 - 2026-11-25: Hauptleiste unten (Start, Bücher …) tiefer setzen, den Abstand von der Schriftunterkante zum Bildschirmrand halbieren. Wortlaut CEO: „Der Abstand zwischen der unteren Kante der Schrift und dem Ende des Bildschirmes müsste bitte halbiert werden.“
+- 2026-11-25: Zitate in Anführungszeichen anzeigen. Wortlaut CEO: „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“. Gilt im Notizbuch und beim Zitat des Tages, im deutschen Stil „…“ wie in der Konzeptskizze.
