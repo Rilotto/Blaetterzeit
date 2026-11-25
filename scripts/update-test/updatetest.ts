@@ -74,7 +74,9 @@ it(`Update-Test: ${modus ?? '(kein Modus)'}`, async () => {
         sitzungen: [{ zeitpunkt: SITZUNG, seite: 42 }],
       });
       await listen.listeSpeichern({ id: LISTE_ID, art: 'saga', name: 'Updatetest Empyrean' });
-      await listen.zuordnen({ listeId: LISTE_ID, buchId: BUCH_ID, band: 1 });
+      // Basisversion: Band 1 an der Zugehörigkeit (vor REQ-112). Das Buch selbst hat keine Bandnummer.
+      // Cast, weil die aktuelle Zugehoerigkeit kein „band“ mehr kennt; die Basisversion speichert es.
+      await listen.zuordnen({ listeId: LISTE_ID, buchId: BUCH_ID, band: 1 } as Parameters<typeof listen.zuordnen>[0]);
       await zitate.speichern({ id: ZITAT_ID, buchId: BUCH_ID, text: 'Ich bin nicht das Feuer.', sprecher: 'Violet', seite: 312, angelegtAm: SITZUNG });
       console.log(`Basis: Schemaversion ${await schemaVersion(v)}, Testdaten angelegt`);
     } else {
@@ -90,12 +92,14 @@ it(`Update-Test: ${modus ?? '(kein Modus)'}`, async () => {
       expect(buch!.sitzungen?.map((s) => s.zeitpunkt), 'Sitzung nach dem Update vorhanden').toEqual([SITZUNG]);
 
       expect(await listen.listen()).toContainEqual(expect.objectContaining({ id: LISTE_ID, art: 'saga', name: 'Updatetest Empyrean' }));
-      expect(await listen.zugehoerigkeiten()).toContainEqual(expect.objectContaining({ listeId: LISTE_ID, buchId: BUCH_ID, band: 1 }));
+      // REQ-112 AK-10: Band 1 der Zugehörigkeit ist zur Bandnummer des Buches geworden, die Zugehörigkeit besteht weiter.
+      expect(buch!.bandnummer, 'Bandnummer aus der Saga-Zugehörigkeit übernommen (REQ-112, AK-10)').toBe(1);
+      expect(await listen.zugehoerigkeiten()).toContainEqual(expect.objectContaining({ listeId: LISTE_ID, buchId: BUCH_ID }));
 
       expect(await zitate.alle()).toContainEqual(
         expect.objectContaining({ id: ZITAT_ID, buchId: BUCH_ID, text: 'Ich bin nicht das Feuer.', sprecher: 'Violet', seite: 312 }),
       );
-      console.log(`Neu: Schemaversion ${ziel}, Buch, Sitzung, Liste und Zitat erhalten`);
+      console.log(`Neu: Schemaversion ${ziel}, Buch, Sitzung, Liste, Bandnummer und Zitat erhalten`);
     }
   } finally {
     // WAL in die Hauptdatei schreiben, damit nur diese eine Datei zurück aufs Gerät muss.
