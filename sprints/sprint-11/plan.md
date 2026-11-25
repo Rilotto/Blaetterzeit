@@ -39,3 +39,6 @@ Die CI baut die vorherige und die neue Version, signiert beide mit demselben Tes
     - Text läuft nie über seine Box hinaus.
     - Zusätzlich eine automatische Prüfung (Test), die diese Regeln app-weit absichert, z. B. lang="de", eine globale Trennregel und keine verbotenen Umbruchregeln.
   - Schließt den Punkt „Längste Serie“ (Kennzahlen-Box) mit ein.
+- NEU (Funktion, voller Weg mit Tester), 2026-11-25: Karte „Ausgabe“ in den Buchdetails bekommt eine neue Zeile „Band“ direkt unter „Exemplar“. Wortlaut CEO: „Der Band soll aus dem ISBN Code auch ausgelesen werden, sofern er hinterlegt ist“.
+  - Entscheidung CEO: „a“, also eine Bandnummer pro Buch. Zeile „Band“ und Saga zeigen immer denselben Wert; eine Änderung an einer Stelle ändert ihn auch an der anderen. Betrifft REQ-096, 097 und 099; die bisherige Zugehörigkeit.band je Saga wird damit abgelöst.
+  - Auslegung, vom CEO ohne Gegenrede: Pfeil, Ändern und Leeren über ein Blatt wie bei „Verlag“; die Zeile erscheint auch im Manuellen Eintrag; Barcode-Scan füllt sie wie bisher Buch.bandnummer; ganze Zahl ab 1. Ein Buch in mehreren Sagas hat dort überall denselben Band.
