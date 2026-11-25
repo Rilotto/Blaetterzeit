@@ -25,7 +25,7 @@ import {
   uhrzeitText,
 } from '@/domain/startseite';
 import { kalender, serie, serieZustand, zeitraumartSpeichern, zeitraumFuer } from '@/domain/statistik';
-import { tagesnummer, wahlAlsText, wahlAusText, zitatDesTagesWaehlen, type Zitat } from '@/domain/zitat';
+import { tagesnummer, wahlAlsText, wahlAusText, zitatAnzeige, zitatDesTagesWaehlen, type Zitat } from '@/domain/zitat';
 import type { MenuePunktId } from '@/navigation/menu';
 import { useMinutentakt, useUhr } from '@/plattform/uhr';
 import { KalenderKarte } from '@/statistik/Kalender';
@@ -90,12 +90,15 @@ const karteStil: CSSProperties = {
   backgroundColor: startFarbe('karteFlaeche'),
 };
 
+// REQ-102 (Mini-Änderung 2026-11-25): Cover 1,5-fach in Breite und Höhe (vorher 68 × 102), Seitenverhältnis gleich.
+const COVER_BREITE = 102;
+const COVER_HOEHE = 153;
 const lesekartenStil: CSSProperties = { display: 'flex', flexDirection: 'column', gap: abstand('m'), margin: 0, padding: 0, listStyle: 'none' };
 // Raster: Cover links über alle Zeilen, rechts Titel, Autor, Fortschritt (alle direkt in der Karte).
 const lesekarteStil: CSSProperties = {
   ...karteStil,
   display: 'grid',
-  gridTemplateColumns: `${68}px minmax(0, 1fr)`,
+  gridTemplateColumns: `${COVER_BREITE}px minmax(0, 1fr)`,
   gridTemplateRows: 'auto auto 1fr',
   columnGap: abstand('m'),
   alignItems: 'start',
@@ -104,8 +107,6 @@ const lesekarteStil: CSSProperties = {
 };
 const rechts: CSSProperties = { gridColumn: 2, minWidth: 0 };
 
-const COVER_BREITE = 68;
-const COVER_HOEHE = 102;
 const coverStil: CSSProperties = { ...coverFlaecheStil, width: `${COVER_BREITE}px`, height: `${COVER_HOEHE}px`, display: 'block', objectFit: 'cover' };
 
 const buchtitelStil: CSSProperties = {
@@ -360,7 +361,7 @@ export default function StartAnsicht({
                 ) : null}
                 {/* Fortschritt antippen öffnet das Menü hier auf der Startseite, nicht die Buchdetails (REQ-102). */}
                 <div onClick={(e) => e.stopPropagation()} style={{ ...rechts, gridRow: 3 }}>
-                  <Fortschritt buch={b} onAktuelleSeite={() => fortschrittOeffnen(b)} onBuchlaenge={() => fortschrittOeffnen(b)} />
+                  <Fortschritt buch={b} anordnung="zeile" onAktuelleSeite={() => fortschrittOeffnen(b)} onBuchlaenge={() => fortschrittOeffnen(b)} />
                 </div>
               </li>
             ))}
@@ -417,7 +418,7 @@ export default function StartAnsicht({
           >
             <span style={{ ...ueberschriftStil, display: 'block' }}>Zitat des Tages</span>
             <span data-zitat-text="" style={zitatTextStil}>
-              {zitatHeute.text}
+              {zitatAnzeige(zitatHeute.text)}
             </span>
             <ZitatQuelle zitat={zitatHeute} buchtitel={alle.find((b) => b.id === zitatHeute.buchId)?.titel} />
           </button>

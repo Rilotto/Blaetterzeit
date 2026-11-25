@@ -71,3 +71,92 @@ jobs:
           path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 30
+
+  # Update-Test (Sprint 11): Ein Update über die Vorversion darf keine Daten verlieren.
+  # Baut die Basisversion (Stand von main bzw. bei Push auf main der vorige Stand) und die aktuelle Version,
+  # beide als Debug-APK mit DEMSELBEN, hier erzeugten Debug-Testschlüssel (keine Secrets; der Release-Schlüssel
+  # bleibt allein in release.yml). Im Emulator: Basis installieren, Daten anlegen, neue Version mit
+  # `adb install -r` darüber, Daten prüfen. Ablauf: scripts/update-test/ablauf.sh.
+  update-test:
+    name: update-test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Basisversion aus der Historie
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Basisversion bestimmen
+        id: basis
+        run: |
+          git fetch --no-tags origin main
+          if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]; then
+            BASIS="$(git rev-parse HEAD^1)"   # Push auf main: Stand vor diesem Merge
+          else
+            BASIS="$(git rev-parse origin/main)"
+          fi
+          echo "sha=$BASIS" >> "$GITHUB_OUTPUT"
+          echo "Basisversion: $BASIS ($(git log -1 --format=%s "$BASIS"))"
+          git worktree add --detach "$RUNNER_TEMP/basis" "$BASIS"
+
+      - name: Gemeinsamer Debug-Testschlüssel
+        run: |
+          mkdir -p ~/.android
+          rm -f ~/.android/debug.keystore
+          keytool -genkeypair -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey \
+            -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+
+      - name: APK der Basisversion bauen
+        working-directory: ${{ runner.temp }}/basis
+        env:
+          VITE_DEMODATEN: aus
+          VERSION_CODE: '1'
+        run: |
+          npm ci
+          npm run android:sync
+          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk "$RUNNER_TEMP/basis.apk"
+
+      - name: APK der aktuellen Version bauen
+        env:
+          VITE_DEMODATEN: aus
+          VERSION_CODE: '2'
+        run: |
+          npm ci
+          npm run android:sync
+          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk "$RUNNER_TEMP/neu.apk"
+
+      - name: Beide APKs tragen dieselbe Signatur
+        run: |
+          APKSIGNER="$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -n 1)apksigner"
+          A="$("$APKSIGNER" verify --print-certs "$RUNNER_TEMP/basis.apk" | grep 'SHA-256')"
+          B="$("$APKSIGNER" verify --print-certs "$RUNNER_TEMP/neu.apk" | grep 'SHA-256')"
+          echo "Basis: $A"; echo "Neu:   $B"
+          [ -n "$A" ] && [ "$A" = "$B" ]
+
+      - name: KVM für den Emulator freigeben
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Update im Emulator (API 34, x86_64)
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-boot-timeout: 600
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
+          script: bash scripts/update-test/ablauf.sh "$RUNNER_TEMP/basis.apk" "$RUNNER_TEMP/neu.apk" "$RUNNER_TEMP/basis/src"

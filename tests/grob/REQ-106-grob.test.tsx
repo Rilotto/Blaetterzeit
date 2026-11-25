@@ -49,7 +49,7 @@ it('[REQ-106/GROB] ohne Zitate keine Kachel; mit Zitat Kachel mit Text, „Fourt
   await zeige(zitate, repo);
   await waitFor(() => expect(textEls('Zitat des Tages').length).toBeGreaterThan(0), W);
   const t = norm(document.body.textContent);
-  expect(t).toContain('Ich bin nicht das Feuer.');
+  expect(t).toContain('„Ich bin nicht das Feuer.“');
   expect(t).toContain('Fourth Wing');
   expect(t).toContain('S. 312');
   await act(async () => {

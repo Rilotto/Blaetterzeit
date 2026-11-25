@@ -1,0 +1,105 @@
+/**
+ * Update-Test (Sprint 11, technische Aufgabe): Daten anlegen bzw. nach dem Update prüfen.
+ *
+ * Läuft NICHT in der normalen Testsuite, sondern nur über scripts/update-test/vitest.config.mts, gesteuert über
+ * Umgebungsvariablen:
+ *  - UPDATE_TEST_MODUS = "anlegen" | "pruefen"
+ *  - UPDATE_TEST_DB    = Pfad der vom Gerät geholten SQLite-Datei (blaetterzeitSQLite.db)
+ *  - UPDATE_TEST_SRC   = src-Ordner, aus dem '@/…' aufgelöst wird
+ *      anlegen: src der BASISVERSION (Daten so schreiben, wie die alte Version sie schreibt)
+ *      pruefen: src der AKTUELLEN Version (Daten so lesen, wie die neue Version sie liest)
+ *
+ * Datenzugriff ausschließlich über die Repository-Schnittstellen (ADR-0002) auf einer SqlVerbindung über node:sqlite.
+ * Beim Prüfen wird bewusst NICHT migriert: Die Schemaversion muss die neue App selbst hochgezogen haben.
+ */
+import { expect, it } from 'vitest';
+import type { SqlVerbindung, SqlWert } from '@/storage/sqlite/SqlVerbindung';
+import { MIGRATIONEN, migrieren, schemaVersion } from '@/storage/sqlite/migrationen';
+import { SqliteBookRepository } from '@/storage/SqliteBookRepository';
+import { SqliteListenRepository } from '@/storage/SqliteListenRepository';
+import { SqliteZitatRepository } from '@/storage/SqliteZitatRepository';
+
+const BUCH_ID = '7d3c2a1e-5b4f-4c6d-8e9f-0a1b2c3d4e5f';
+const LISTE_ID = '1f2e3d4c-5b6a-4978-8877-665544332211';
+const ZITAT_ID = 'a0b1c2d3-e4f5-4a6b-9c8d-7e6f5a4b3c2d';
+const SITZUNG = '2026-11-20T18:00:00.000Z';
+
+interface Anweisung {
+  run(...p: SqlWert[]): unknown;
+  all(...p: SqlWert[]): Record<string, unknown>[];
+}
+interface DatabaseSync {
+  prepare(sql: string): Anweisung;
+  exec(sql: string): void;
+  close(): void;
+}
+
+async function oeffnen(pfad: string): Promise<{ db: DatabaseSync; v: SqlVerbindung }> {
+  const modul = 'node:sqlite';
+  const { DatabaseSync } = (await import(/* @vite-ignore */ modul)) as { DatabaseSync: new (pfad: string) => DatabaseSync };
+  const db = new DatabaseSync(pfad);
+  const v: SqlVerbindung = {
+    async ausfuehren(sql, parameter = []) {
+      db.prepare(sql).run(...parameter);
+    },
+    async abfragen<T extends Record<string, unknown>>(sql: string, parameter: SqlWert[] = []) {
+      return db.prepare(sql).all(...parameter).map((z) => ({ ...z }) as T);
+    },
+  };
+  return { db, v };
+}
+
+const modus = process.env.UPDATE_TEST_MODUS;
+const pfad = process.env.UPDATE_TEST_DB ?? '';
+
+it(`Update-Test: ${modus ?? '(kein Modus)'}`, async () => {
+  expect(['anlegen', 'pruefen']).toContain(modus);
+  expect(pfad, 'UPDATE_TEST_DB fehlt').not.toBe('');
+  const { db, v } = await oeffnen(pfad);
+  try {
+    const buecher = new SqliteBookRepository(v);
+    const listen = new SqliteListenRepository(v);
+    const zitate = new SqliteZitatRepository(v);
+
+    if (modus === 'anlegen') {
+      // Die Basis-App hat die Datei beim ersten Start angelegt; Migrieren ist hier nur eine Absicherung (idempotent).
+      await migrieren(v);
+      await buecher.save({
+        id: BUCH_ID,
+        titel: 'Updatetest Fourth Wing',
+        autor: 'Rebecca Yarros',
+        status: 'am_lesen',
+        seitenanzahl: 400,
+        aktuelleSeite: 42,
+        sitzungen: [{ zeitpunkt: SITZUNG, seite: 42 }],
+      });
+      await listen.listeSpeichern({ id: LISTE_ID, art: 'saga', name: 'Updatetest Empyrean' });
+      await listen.zuordnen({ listeId: LISTE_ID, buchId: BUCH_ID, band: 1 });
+      await zitate.speichern({ id: ZITAT_ID, buchId: BUCH_ID, text: 'Ich bin nicht das Feuer.', sprecher: 'Violet', seite: 312, angelegtAm: SITZUNG });
+      console.log(`Basis: Schemaversion ${await schemaVersion(v)}, Testdaten angelegt`);
+    } else {
+      // Beweis, dass die neue App die Datei tatsächlich geöffnet und migriert hat (sonst liefe sie ggf. im
+      // Arbeitsspeicher-Rückfall und die Datei bliebe unberührt).
+      const ziel = Math.max(...MIGRATIONEN.map((m) => m.version));
+      const zeilen = await v.abfragen<{ version: number | null }>('SELECT MAX(version) AS version FROM schema_version');
+      expect(zeilen[0]?.version, 'Schemaversion nach dem Update (von der neuen App migriert)').toBe(ziel);
+
+      const buch = await buecher.get(BUCH_ID);
+      expect(buch, 'Buch nach dem Update vorhanden').toBeDefined();
+      expect(buch).toMatchObject({ titel: 'Updatetest Fourth Wing', autor: 'Rebecca Yarros', status: 'am_lesen', seitenanzahl: 400, aktuelleSeite: 42 });
+      expect(buch!.sitzungen?.map((s) => s.zeitpunkt), 'Sitzung nach dem Update vorhanden').toEqual([SITZUNG]);
+
+      expect(await listen.listen()).toContainEqual(expect.objectContaining({ id: LISTE_ID, art: 'saga', name: 'Updatetest Empyrean' }));
+      expect(await listen.zugehoerigkeiten()).toContainEqual(expect.objectContaining({ listeId: LISTE_ID, buchId: BUCH_ID, band: 1 }));
+
+      expect(await zitate.alle()).toContainEqual(
+        expect.objectContaining({ id: ZITAT_ID, buchId: BUCH_ID, text: 'Ich bin nicht das Feuer.', sprecher: 'Violet', seite: 312 }),
+      );
+      console.log(`Neu: Schemaversion ${ziel}, Buch, Sitzung, Liste und Zitat erhalten`);
+    }
+  } finally {
+    // WAL in die Hauptdatei schreiben, damit nur diese eine Datei zurück aufs Gerät muss.
+    db.exec('PRAGMA wal_checkpoint(TRUNCATE)');
+    db.close();
+  }
+});

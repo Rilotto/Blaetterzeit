@@ -20,6 +20,8 @@ CEO (2026-11-24, über den Scrum Master): „Gerade am Lesen“: alle Bücher mi
 
 - Das System muss auf der Startseite unter dem Kopf (REQ-101) den Bereich „Gerade am Lesen“ mit allen Büchern im Lesestatus *am lesen* (REQ-008) untereinander anzeigen. Die Reihenfolge ist A–Z nach Titel (**Auslegung**, wie die Übersichten REQ-036).
 - Jede Karte zeigt Buchcover (ohne Cover den Cover-Platzhalter, REQ-010), Titel, Autor (ohne Autor keine Autorzeile, wie in Buchlisten) und den Lesefortschritt wie in den Buchdetails (REQ-023): Balken und „Seite / Gesamt“ bzw. „x %“. Ohne Seitenanzahl steht an Stelle des Balkens das Herz-Icon wie in REQ-023.
+- Anordnung der Karte (CEO, 2026-11-25, Konzeptskizze bestätigt mit „passt, danke“): Das Cover ist etwa 1,5-mal so groß wie bis Sprint 10. Der Fortschrittsbalken beginnt linksbündig unter Titel und Autor und nimmt die restliche Breite der Karte ein. „Seite / Gesamt“ bzw. „x %“ steht rechts neben dem Balken, nicht darunter.
+  - **Auslegung:** „1,5-mal so groß“ gilt für Breite und Höhe des Covers bei gleichem Seitenverhältnis. Die genaue Größe prüft der CEO im Prototyp, sie ist kein Akzeptanzkriterium. Die Änderung betrifft nur die Karten auf der Startseite, nicht die Buchdetails (REQ-023) und nicht andere Übersichten.
 - Wenn der Nutzer die Karte außerhalb des Fortschritts antippt, muss das System die Buchdetails dieses Buches öffnen (REQ-013). Deren Zurück-Pfeil führt zur Startseite (**Auslegung**).
 - Wenn der Nutzer den Fortschritt (Balken bzw. Herz-Icon) einer Karte antippt, muss das System auf der Startseite das Menü „Aktuelle Seite“ (REQ-024) für dieses Buch öffnen. Ohne Seitenanzahl erscheint zuerst das Menü „Buchlänge“ (REQ-025), wie in den Buchdetails (**Festlegung des Anforderungsmanagers**, vom CEO übertragen).
 - Sichern, Sitzungen, Leeren und Schließen verhalten sich genau wie in REQ-024 und REQ-093. Danach zeigt die Karte den neuen Fortschritt.
@@ -36,7 +38,8 @@ CEO (2026-11-24, über den Scrum Master): „Gerade am Lesen“: alle Bücher mi
 ### AK-2 Fortschritt wie in den Buchdetails
 - **Gegeben** ein Buch *am lesen* mit 400 Seiten und aktueller Seite 42 bzw. (zweiter Durchlauf) Modus „%“ mit 5 %
 - **Wenn** die Karte betrachtet wird
-- **Dann** zeigt sie den Balken und „42 / 400“ bzw. „5 %“
+- **Dann** zeigt sie den Balken und rechts neben dem Balken „42 / 400“ bzw. „5 %“
+- **Und** der Balken steht unter Titel und Autor, beginnt linksbündig mit ihnen und nimmt die restliche Breite neben der Wertangabe ein
 
 ### AK-3 Karte öffnet Buchdetails
 - **Gegeben** die Karte „Fourth Wing“
@@ -87,3 +90,4 @@ CEO (2026-11-24, über den Scrum Master): „Gerade am Lesen“: alle Bücher mi
 | 2026-11-24 | Erstellt aus CEO-Vision und abgenommener Konzeptskizze, Entwurf | Anforderungsmanager |
 | 2026-11-24 | CEO-Antwort „Ein kurzer Hinweis“: ohne Buch *am lesen* der Hinweis „Gerade kein Buch offen“ (AK-7 neu). Keine offenen Fragen. Status Entwurf | Anforderungsmanager |
 | 2026-11-24 | Vom CEO bestätigt (wörtlich): „sieht alles super aus! Danke!“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Mini-Änderung (leichter Weg): Cover etwa 1,5-mal so groß, Wertangabe rechts neben dem Balken statt darunter, Balken linksbündig unter Titel/Autor mit Restbreite. Konzeptskizze vom CEO bestätigt (wörtlich): „passt, danke“. AK-2 angepasst, Auslegung zur Covergröße ergänzt. Status unverändert | Anforderungsmanager |

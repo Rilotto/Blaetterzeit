@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import iconPlus from '@/assets/icons/icon-plus.png';
 import Icon from '@/components/Icon';
-import { anlegeZeitpunkt, seitenText, zitatMitWerten, zitatPruefen, zitateSortiert, type Zitat, type ZitatEingabe } from '@/domain/zitat';
+import { anlegeZeitpunkt, seitenText, zitatAnzeige, zitatMitWerten, zitatPruefen, zitateSortiert, type Zitat, type ZitatEingabe } from '@/domain/zitat';
 import type { ZitatRepository } from '@/storage';
 import { abstand, fortschrittFarbe, notizbuchFarbe, pillenhoehePx, stilRolle, textstufe } from '@/theme';
 import BlattUnten, { blattEingabeStil, sichernStil } from '../BlattUnten';
@@ -306,7 +306,7 @@ export default function Notizbuch({ buchId, repository, jetzt, onGeaendert, vora
             <li key={z.id} data-zitat={z.id}>
               <button type="button" onClick={() => setBlatt({ art: 'aendern', zitat: z })} {...stilRolle('eintrag')} style={eintragStil(i === liste.length - 1)}>
                 <span data-zitat-text="" style={{ ...zitatTextStil, display: 'block' }}>
-                  {z.text}
+                  {zitatAnzeige(z.text)}
                 </span>
                 <ZitatQuelle zitat={z} />
               </button>

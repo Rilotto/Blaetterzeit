@@ -19,6 +19,7 @@ CEO (2026-11-24, über den Scrum Master): „Zitat des Tages“: jeden Tag ein a
 ## Anforderung (Satzschablone)
 
 - Wenn mindestens ein Zitat gespeichert ist (REQ-105), muss das System auf der Startseite die Kachel „Zitat des Tages“ mit Zitattext, Buchtitel und Seite anzeigen (ohne Seite entfällt die Seitenangabe, mit „Wer sagt es?“ zusätzlich der Sprecher, **Auslegung**).
+- Das System muss den Zitattext in der Kachel in deutschen Anführungszeichen „…“ anzeigen (CEO, 2026-11-25: „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“). **Auslegung:** wie REQ-105, nur Anzeige, gespeichert bleibt der Text ohne Anführungszeichen.
 - Das System muss je Kalendertag (lokale Gerätezeit) genau ein Zitat aus allen Zitaten aller Bücher wählen. Es bleibt für den ganzen Tag gleich, auch nach Neustart (**Auslegung**).
 - Am Folgetag muss das System ein anderes Zitat als am Vortag wählen, sofern es mehr als ein Zitat gibt. Bei genau einem Zitat erscheint dieses jeden Tag.
 - Wird das Zitat des Tages gelöscht, wählt das System für diesen Tag ein anderes. Gibt es dann keines mehr, entfällt die Kachel.
@@ -35,7 +36,7 @@ CEO (2026-11-24, über den Scrum Master): „Zitat des Tages“: jeden Tag ein a
 ### AK-2 Kachel mit Titel und Seite
 - **Gegeben** genau ein Zitat „Ich bin nicht das Feuer.“ aus „Fourth Wing“, S. 312
 - **Wenn** die Startseite angezeigt wird
-- **Dann** zeigt die Kachel den Zitattext, „Fourth Wing“ und „S. 312“
+- **Dann** zeigt die Kachel den Zitattext in deutschen Anführungszeichen, also genau `„Ich bin nicht das Feuer.“`, dazu „Fourth Wing“ und „S. 312“
 
 ### AK-3 Gleich über den Tag, anders am Folgetag
 - **Gegeben** drei Zitate aus zwei Büchern
@@ -76,3 +77,4 @@ CEO (2026-11-24, über den Scrum Master): „Zitat des Tages“: jeden Tag ein a
 |---|---|---|
 | 2026-11-24 | Erstellt aus CEO-Vision und abgenommener Konzeptskizze, Entwurf | Anforderungsmanager |
 | 2026-11-24 | Vom CEO bestätigt (wörtlich): „sieht alles super aus! Danke!“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Mini-Änderung (leichter Weg): Zitattext in der Kachel in deutschen Anführungszeichen „…“. CEO (wörtlich): „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“, per Konzeptskizze geklärt. Anforderung und AK-2 ergänzt. Status unverändert | Anforderungsmanager |

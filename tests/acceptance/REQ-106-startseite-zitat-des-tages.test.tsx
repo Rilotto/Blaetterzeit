@@ -161,7 +161,7 @@ describe('REQ-106 Ohne Zitate', () => {
 });
 
 describe('REQ-106 Kachel mit Titel und Seite', () => {
-  it('[REQ-106/AK-2] genau ein Zitat aus „Fourth Wing“, S. 312: Zitattext, „Fourth Wing“, „S. 312“', async () => {
+  it('[REQ-106/AK-2] genau ein Zitat aus „Fourth Wing“, S. 312: Zitattext in „…“, „Fourth Wing“, „S. 312“', async () => {
     const z: Z[] = [{ b: FW, text: 'Ich bin nicht das Feuer.', seite: '312' }];
     const App = await welt(z);
     await startseite(App);
@@ -169,6 +169,8 @@ describe('REQ-106 Kachel mit Titel und Seite', () => {
     const t = norm(main().textContent);
     expect(t).toContain('Fourth Wing');
     expect(t).toContain('S. 312');
+    // Mini-Änderung 2026-11-25: Zitattext genau in deutschen Anführungszeichen (nur Anzeige).
+    expect(textEls('„Ich bin nicht das Feuer.“', main())).toHaveLength(1);
     const ueber = textEls('Zitat des Tages', main())[0];
     expect(ueber.compareDocumentPosition(textEls(/Ich bin nicht das Feuer\./, main())[0]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });

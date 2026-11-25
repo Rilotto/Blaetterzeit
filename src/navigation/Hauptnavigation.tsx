@@ -7,15 +7,18 @@ interface Props {
   onAuswahl: (id: MenuePunktId) => void;
 }
 
+const SICHERER_BEREICH_UNTEN = 'var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))';
+
 const navStil: CSSProperties = {
   flex: '0 0 auto',
   display: 'grid',
   gridTemplateColumns: `repeat(${menuePunkte.length}, minmax(0, 1fr))`,
   backgroundColor: navFarbe('navigationshintergrund'),
-  // Unterer sicherer Bildschirmbereich (Gestenleiste/Systemnavigation).
-  // --safe-area-inset-bottom setzt Capacitor auf Android (SystemBars, insetsHandling "css"),
-  // im Browser greift env().
-  paddingBottom: 'var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))',
+  // Abstand Schriftunterkante–Bildschirmrand (Mini-Änderung 2026-11-25): halb so groß wie bisher
+  // (bisher Rasterabstand m + sicherer Bereich), aber nie kleiner als der untere sichere Bildschirmbereich
+  // (Gestenleiste/Systemnavigation, REQ-002 AK-10). --safe-area-inset-bottom setzt Capacitor auf Android
+  // (SystemBars, insetsHandling "css"), im Browser greift env().
+  paddingBottom: `max(calc((${abstand('m')} + ${SICHERER_BEREICH_UNTEN}) / 2), ${SICHERER_BEREICH_UNTEN})`,
 };
 
 const punktStil: CSSProperties = {
@@ -26,7 +29,8 @@ const punktStil: CSSProperties = {
   gap: abstand('xs'),
   minWidth: 0,
   margin: 0,
-  padding: `${abstand('s')} 0 ${abstand('m')}`,
+  // Unterer Abstand steckt in navStil (paddingBottom), damit er zusammen mit dem sicheren Bereich halbiert wird.
+  padding: `${abstand('s')} 0 0`,
   border: 'none',
   background: 'none',
   font: 'inherit',

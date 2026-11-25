@@ -16,6 +16,12 @@ export interface Zitat {
   angelegtAm: string;
 }
 
+/**
+ * Anzeigetext eines Zitats in deutschen Anführungszeichen „…“ (REQ-105 AK-2, REQ-106 AK-2). Nur für die Anzeige:
+ * Gespeichert und im Feld „Zitat“ bleibt der Text ohne diese Zeichen. Eigene Anführungszeichen bleiben unverändert.
+ */
+export const zitatAnzeige = (text: string): string => `\u201E${text}\u201C`;
+
 const istText = (w: unknown): w is string => typeof w === 'string';
 export const istSeite = (w: unknown): w is number => typeof w === 'number' && Number.isInteger(w) && w >= 1;
 

@@ -164,7 +164,7 @@ describe('Startseite (REQ-101 bis REQ-104, REQ-106)', () => {
     const z: Zitat = { id: crypto.randomUUID(), buchId: fw.id, text: 'Ich bin nicht das Feuer.', seite: 312, angelegtAm: '2026-11-01T10:00:00.000Z' };
     await zeige({ buecher: [fw], zitate: [z] });
     const kachel = q(`[data-start-zitat="${z.id}"]`)!;
-    expect(kachel.querySelector('[data-zitat-text]')!.textContent).toBe('Ich bin nicht das Feuer.');
+    expect(kachel.querySelector('[data-zitat-text]')!.textContent).toBe('„Ich bin nicht das Feuer.“');
     expect(kachel.querySelector('[data-zitat-buch]')!.textContent).toBe('Fourth Wing');
     expect(kachel.querySelector('[data-zitat-seite]')!.textContent).toBe('S. 312');
     await tippe(kachel);

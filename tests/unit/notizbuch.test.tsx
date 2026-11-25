@@ -78,7 +78,8 @@ describe('Reiter „Notizbuch“ (REQ-105)', () => {
     await anlegen('Zweihundert', '', '200');
     await anlegen('Ohne Seite', 'Xaden');
     await anlegen('Fünfzehn', 'Violet', '15');
-    expect(texte()).toEqual(['Fünfzehn', 'Zweihundert', 'Ohne Seite']);
+    expect(texte()).toEqual(['„Fünfzehn“', '„Zweihundert“', '„Ohne Seite“']);
+    expect((await zitate.alle()).map((z) => z.text).sort()).toEqual(['Fünfzehn', 'Ohne Seite', 'Zweihundert']);
     const ohne = [...document.querySelectorAll('[data-zitat]')][2];
     expect(ohne.querySelector('[data-zitat-sprecher]')!.textContent).toBe('Xaden');
     expect(ohne.querySelector('[data-zitat-seite]')).toBeNull();
