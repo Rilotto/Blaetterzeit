@@ -54,13 +54,13 @@ Branch: sprint-10/listen-und-felder, abgezweigt von main (nach dem Merge von Spr
 - Gegenprobe minimal, höchstens 4 Fehler: Zitat speichern/löschen, Zitat des Tages stabil je Tag, Jahresziel-Zählung, Tageszeit-Grenzen
 - Prototyp danach für den gesamten Sprint 10 (beauftragt)
 
-## Erweiterung 2026-11-25, Teil D – auf CEO-Wunsch nach Sprint 11 verschoben (wieder herausgenommen) (CEO: „das soll in den nächsten Prototyp mit rein“)
+## Erweiterung 2026-11-25, Teil D (CEO: „das soll in den nächsten Prototyp mit rein“)
 - REQ-108 Gesamt-Streak: Flamme angezündet, ausgegraut oder 0 (Startseite und Statistik)
 - REQ-109 Buch-Streak: „Längster Streak für dieses Buch“, gezählt als Rekord
 - Angepasste Alt-REQs: REQ-026, 027, 087, 103
 - Gegenprobe höchstens 2 Fehler: Zustand ausgegraut/angezündet, Rekordberechnung
 
-## Gesammelte Mini-Änderungen – nach Sprint 11 verschoben (CEO 2026-11-25)
+## Gesammelte Mini-Änderungen (gebündelt, vor dem nächsten Prototyp umsetzen)
 - 2026-11-25: Hauptleiste unten (Start, Bücher …) tiefer setzen, den Abstand von der Schriftunterkante zum Bildschirmrand halbieren. Wortlaut CEO: „Der Abstand zwischen der unteren Kante der Schrift und dem Ende des Bildschirmes müsste bitte halbiert werden.“
 - 2026-11-25: Zitate in Anführungszeichen anzeigen. Wortlaut CEO: „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“. Gilt im Notizbuch und beim Zitat des Tages, im deutschen Stil „…“ wie in der Konzeptskizze.
 - 2026-11-25: Karte „Gerade am Lesen“ (Startseite, REQ-102): Cover etwa 1,5-mal so groß. Seitenzahl bzw. Prozent rechts neben dem Fortschrittsbalken statt darunter. Der Balken nimmt die restliche Breite ein, linksbündig unter Titel und Autor. Konzeptskizze vom CEO bestätigt: „passt, danke“.
