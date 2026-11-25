@@ -185,7 +185,7 @@ void [afterAll, act, fireEvent, render, screen, within, describe, it, buchB, ste
 
 const teil = (n: 'streak' | 'prozent' | 'sitzungen') => statistik()!.querySelector<HTMLElement>(`[data-${n}]`)!;
 
-it('[REQ-026/GROB] unter dem Lesefortschritt: links Flamme/„Tage in Folge“, Mitte %/„gelesen“, rechts Zahl/„Sitzungen“', async () => {
+it('[REQ-026/GROB] unter dem Lesefortschritt: links Flamme/„Längster Streak für dieses Buch“, Mitte %/„gelesen“, rechts Zahl/„Sitzungen“', async () => {
   const f = { seitenanzahl: 400, aktuelleSeite: 42 };
   await details(await starte(), buchB(f));
   expect(statistik()).not.toBeNull();
@@ -193,7 +193,9 @@ it('[REQ-026/GROB] unter dem Lesefortschritt: links Flamme/„Tage in Folge“, 
   expect(vor(teil('streak'), teil('prozent'))).toBe(true);
   expect(vor(teil('prozent'), teil('sitzungen'))).toBe(true);
   expect(teil('streak').querySelector('[data-flamme]')).not.toBeNull();
-  expect(norm(teil('streak').textContent)).toMatch(/^\d+ ?Tage in Folge$/);
+  // Angepasst Sprint 10 Teil D (REQ-109): Beschriftung „Längster Streak für dieses Buch“ statt „Tage in Folge“.
+  expect(norm(teil('streak').textContent)).toMatch(/^\d+ ?Längster Streak für dieses Buch$/);
+  expect(teil('streak').textContent).not.toContain('Tage in Folge');
   expect(norm(teil('prozent').textContent)).toMatch(/^\d+ ?% ?gelesen$/);
   expect(norm(teil('sitzungen').textContent)).toMatch(/^\d+ ?Sitzungen$/);
   expect(vor(textElement(teil('prozent'), /^\d+ ?%$/), textElement(teil('prozent'), 'gelesen'))).toBe(true);

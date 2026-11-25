@@ -86,11 +86,15 @@ describe('REQ-087 Serie', () => {
     expect(serie()).toBe('Serie 1 Tage');
   });
 
-  it('[REQ-087/AK-4] Sitzung gestern nur Buch A, heute nur Buch B: „Serie 2 Tage“; Flammen in den Buchdetails je Buch', async () => {
+  it('[REQ-087/AK-4] Sitzung gestern nur Buch A, heute nur Buch B: „Serie 2 Tage“, Flamme angezündet; Buchdetails je Buch Rekord 1', async () => {
     const a = buch({ titel: 'A', sitzungen: [s(2026, 11, 21)] });
     const b = buch({ titel: 'B', sitzungen: [s(2026, 11, 22)] });
     await zeige([a, b]);
     expect(serie()).toBe('Serie 2 Tage');
+    // heute gelesen → Flamme der Statistik angezündet (REQ-108): gefüllt über den Rot-Orange-Verlauf
+    const f = $('[data-seite="statistik"] [data-flamme]')!;
+    expect(f.querySelector<SVGPathElement>('path')!.style.fill).toMatch(/url\(/);
+    expect(f.querySelectorAll('[data-verlauf]')).toHaveLength(2);
     cleanup();
     const repo = new InMemoryBookRepository();
     await repo.save(a);
@@ -104,9 +108,9 @@ describe('REQ-087 Serie', () => {
         expect(e).not.toBeNull();
         return e!;
       }, W);
-      // je Buch nur ein Lesetag (A: gestern, B: heute) → Streak 1, nicht 2
-      expect(norm(streak.textContent)).toMatch(/(^|\D)1(\D|$)/);
-      expect(norm(streak.textContent)).not.toMatch(/(^|\D)2(\D|$)/);
+      // je Buch nur ein Lesetag (A: gestern, B: heute) → Rekord „Längster Streak für dieses Buch“ 1, nicht 2 (REQ-109)
+      expect(norm(streak.querySelector('[data-streak-zahl]')?.textContent)).toBe('1');
+      expect(norm(streak.textContent)).toContain('Längster Streak für dieses Buch');
       cleanup();
     }
   });
