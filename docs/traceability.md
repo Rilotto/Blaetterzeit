@@ -711,14 +711,3 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
-| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
-| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
-| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-3 | 1 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
-| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
-| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
-| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-6 | 3 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
-| REQ-109 | Buchdetails – „Längster Streak für dieses Buch“ als Rekord statt laufender Streak | In Umsetzung | AK-1 | 2 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
-| REQ-109 | Buchdetails – „Längster Streak für dieses Buch“ als Rekord statt laufender Streak | In Umsetzung | AK-2 | 7 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
-| REQ-109 | Buchdetails – „Längster Streak für dieses Buch“ als Rekord statt laufender Streak | In Umsetzung | AK-3 | 3 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
-| REQ-109 | Buchdetails – „Längster Streak für dieses Buch“ als Rekord statt laufender Streak | In Umsetzung | AK-4 | 3 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
-| REQ-109 | Buchdetails – „Längster Streak für dieses Buch“ als Rekord statt laufender Streak | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |

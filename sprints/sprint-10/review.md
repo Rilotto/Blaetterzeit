@@ -8,8 +8,8 @@ Implementiert:
 
 Angepasste Alt-REQs: 012, 024, 028, 030, 031, 033, 034, 041, 043, 049, 051, 055, 056, 060, 062, 063, 064, 085.
 
-Noch nicht abgenommen, da nicht im Prototyp:
-- REQ-108 und 109 (Streak-Aufteilung). Umgesetzt, CI grün.
+Nach Sprint 11 verschoben (CEO 2026-11-25: „die Streak änderung soll erst für den nächsten Prototypen im Sprint 11 erfolgen“):
+- REQ-108 und 109 (Streak-Aufteilung). Auf diesem Branch wieder herausgenommen, der Code bleibt in der Git-Historie.
 - Drei gesammelte Mini-Änderungen (siehe plan.md).
 
-Nachweis: CI grün (verify, android-build). Die groben Tests zu REQ-091 bis 107 werden ergänzt.
+Nachweis: CI grün (verify, android-build). Grobe Tests zu REQ-091 bis 107 sind vorhanden.
