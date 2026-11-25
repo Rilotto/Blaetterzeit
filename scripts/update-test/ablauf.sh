@@ -27,8 +27,25 @@ diagnose() {
 }
 trap 'diagnose' ERR
 
+# Zählt Absturzmeldungen für $PKG im logcat: FATAL EXCEPTION (AndroidRuntime, Folgezeile „Process: $PKG, PID …“)
+# und „Process $PKG (pid …) has died“ (ActivityManager).
+absturz_zahl() {
+  local n
+  n="$(adb logcat -d 2>/dev/null | tr -d '\r' \
+    | grep -A3 "FATAL EXCEPTION" | grep -c -F "Process: $PKG," || true)"
+  local m
+  m="$(adb logcat -d 2>/dev/null | tr -d '\r' \
+    | grep -c -E "Process ${PKG//./\\.} \(pid [0-9]+\) has died" || true)"
+  echo $(( ${n:-0} + ${m:-0} ))
+}
+
+ABSTURZ_BASIS=0
+
 starten() {
   adb shell am force-stop "$PKG" || true
+  sleep 1
+  # Stand vor dem Start merken, damit Meldungen früherer Phasen nicht mitzählen.
+  ABSTURZ_BASIS="$(absturz_zahl)"
   adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 }
 
@@ -50,9 +67,27 @@ warte_auf_datei() {
   return 1
 }
 
-# Läuft die App noch (kein Absturz beim Start)?
+# Läuft die App (kein Absturz beim Start)? Prüft wiederholt bis zum Zeitlimit ($1 Sekunden, Standard 60).
+# Fehler nur, wenn logcat seit dem letzten Start einen Absturz von $PKG zeigt oder die App im Zeitlimit nie lief.
 laeuft() {
-  [ -n "$(adb shell pidof "$PKG" | tr -d '\r')" ] || { echo "App $PKG läuft nicht (Absturz?)"; return 1; }
+  local limit="${1:-60}" ende pid aktuell
+  ende=$(( SECONDS + limit ))
+  while :; do
+    aktuell="$(absturz_zahl)"
+    if [ "$aktuell" -gt "$ABSTURZ_BASIS" ]; then
+      echo "App $PKG ist abgestürzt (logcat: FATAL EXCEPTION bzw. has died)"
+      return 1
+    fi
+    pid="$(adb shell pidof "$PKG" 2>/dev/null | tr -d '\r' || true)"
+    if [ -n "$pid" ]; then
+      return 0
+    fi
+    if [ "$SECONDS" -ge "$ende" ]; then
+      echo "App $PKG lief innerhalb von ${limit} s nie (Absturz?)"
+      return 1
+    fi
+    sleep 2
+  done
 }
 
 holen() {
