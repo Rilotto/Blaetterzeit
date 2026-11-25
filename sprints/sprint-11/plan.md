@@ -29,4 +29,4 @@ Die CI baut die vorherige und die neue Version, signiert beide mit demselben Tes
   - Auslegung: Der Umbruch mit Silbentrennung (lang="de", hyphens:auto) gilt für alle Beschriftungen in Kennzahlen-Boxen der App (Buchdetails, Statistik-Kacheln, Startseite). Text läuft nie über die Box hinaus.
 - BUG (High), 2026-11-25: Geöffnete Liste (REQ-098), Rasteransicht: Es stehen nur 2 Bücher nebeneinander, dazwischen eine große Lücke.
   - Wortlaut CEO: „Es sollen immer drei Bücher nebeneinander passen in den Listen. Hier muss das aber dynamisch an das Handy anpassbar sein, falls jemand ein schmaleres Handy haben sollte.“
-  - Auslegung: immer 3 Spalten. Cover, Abstände und Schrift skalieren mit der Bildschirmbreite (Cover-Seitenverhältnis 2:3 bleibt). Gilt für die Rasteransicht aller Listen (Sagas, Sammlungen, Bibliotheken).
+  - Auslegung: immer 3 Spalten. Cover, Abstände und Schrift skalieren mit der Bildschirmbreite (Cover-Seitenverhältnis 2:3 bleibt). Gilt für die Rasteransicht aller Listen (Sagas, Sammlungen, Bibliotheken) und für die Rasteransicht auf der Seite „Bücher“ (CEO: „auch für die Rasteransicht auf der Seite Bücher“).
