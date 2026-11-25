@@ -1,7 +1,7 @@
 ---
 id: REQ-099
 titel: Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

@@ -1,7 +1,7 @@
 ---
 id: REQ-091
 titel: Karte „Ausgabe“ – Pfeil „›“ auch bei Verlag, Erschienen, ISBN, Hinzugefügt und Beendet am
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

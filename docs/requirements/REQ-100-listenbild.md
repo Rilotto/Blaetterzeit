@@ -1,7 +1,7 @@
 ---
 id: REQ-100
 titel: Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

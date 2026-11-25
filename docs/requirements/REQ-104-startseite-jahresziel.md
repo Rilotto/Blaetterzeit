@@ -1,7 +1,7 @@
 ---
 id: REQ-104
 titel: Startseite – Jahresziel „X von Y Büchern“ mit Blatt zum Festlegen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

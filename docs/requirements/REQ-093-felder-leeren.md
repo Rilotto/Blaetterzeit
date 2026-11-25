@@ -1,7 +1,7 @@
 ---
 id: REQ-093
 titel: Gespeicherte Angaben durch Leeren des Feldes entfernen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

@@ -1,7 +1,7 @@
 ---
 id: REQ-102
 titel: Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

@@ -1,7 +1,7 @@
 ---
 id: REQ-107
 titel: Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

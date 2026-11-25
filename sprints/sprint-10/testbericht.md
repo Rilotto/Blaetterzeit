@@ -74,3 +74,4 @@ Stand 2026-11-23: nicht freigabefähig wegen F1. F1 ist inzwischen behoben, aktu
 - Ergebnis: REQ-108 AK-1–6 und REQ-109 AK-1–5 bestanden, ebenso die geänderten AKs von REQ-026, 027, 087 und 103.
 - Gegenprobe: 2/2 erkannt. „Gestern gelesen“ wird angezündet statt ausgegraut (10 rot), Rekord nimmt die letzte statt der längsten Folge (2 rot).
 - Empfehlung: freigabefähig, sobald die CI (`npm run verify`) für den Branch grün ist.
+- Grobe Tests (Abnahme 2026-11-25): `tests/grob/REQ-091…107-grob.test.tsx` neu (17 Stück, je `[REQ-xxx/GROB]`, aus dem REQ-Text). Lokal 17/17 grün, `tsc -b` grün, Lint Exit 0 ohne Befunde in den neuen Dateien; feine Tests unverändert, keine Gegenprobe.

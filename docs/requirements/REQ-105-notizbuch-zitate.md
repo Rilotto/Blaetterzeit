@@ -1,7 +1,7 @@
 ---
 id: REQ-105
 titel: Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

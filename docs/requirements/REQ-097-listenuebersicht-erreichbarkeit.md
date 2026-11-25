@@ -1,7 +1,7 @@
 ---
 id: REQ-097
 titel: Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

@@ -1,7 +1,7 @@
 ---
 id: REQ-094
 titel: Buchdetails – Titel und Autor unter dem Cover über ein Blatt ändern, Autor leeren, Platzhalter „unbekannter Autor“
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

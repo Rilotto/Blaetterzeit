@@ -1,7 +1,7 @@
 ---
 id: REQ-103
 titel: Startseite – „Diese Woche“ mit Covern je Tag und Lesesträhne
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

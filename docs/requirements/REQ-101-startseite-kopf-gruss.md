@@ -1,7 +1,7 @@
 ---
 id: REQ-101
 titel: Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

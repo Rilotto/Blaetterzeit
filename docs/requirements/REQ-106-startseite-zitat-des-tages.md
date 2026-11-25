@@ -1,7 +1,7 @@
 ---
 id: REQ-106
 titel: Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

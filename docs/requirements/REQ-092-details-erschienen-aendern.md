@@ -1,7 +1,7 @@
 ---
 id: REQ-092
 titel: „Erschienen“ – im Reiter „Details“ über ein Datumsblatt ändern und leeren, Feld „Jahr“ entfällt
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

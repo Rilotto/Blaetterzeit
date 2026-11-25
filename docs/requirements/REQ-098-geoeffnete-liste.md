@@ -1,7 +1,7 @@
 ---
 id: REQ-098
 titel: Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

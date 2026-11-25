@@ -1,7 +1,7 @@
 ---
 id: REQ-095
 titel: Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

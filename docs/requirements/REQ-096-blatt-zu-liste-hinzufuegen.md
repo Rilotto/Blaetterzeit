@@ -1,7 +1,7 @@
 ---
 id: REQ-096
 titel: Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO
