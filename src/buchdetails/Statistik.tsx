@@ -1,13 +1,13 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Buch } from '@/domain/buch';
-import { fortschrittGerundet, laengsterStreak } from '@/domain/fortschritt';
+import { fortschrittGerundet, streak } from '@/domain/fortschritt';
 import { fortschrittFarbe, textstufe, kartenSchatten, abstand, stilRolle } from '@/theme';
 import Flamme from './Flamme';
 import { RAND } from './masse';
 
 interface Props {
   buch: Buch;
-  /** Aktuelle Zeit; seit REQ-109 (Rekord je Buch) für die Pille ohne Bedeutung, bleibt für Aufrufer erhalten. */
+  /** Aktuelle Zeit (Systemzeit des Geräts, REQ-027). */
   jetzt: Date;
 }
 
@@ -74,13 +74,12 @@ function Teil({ merkmal, oben, text }: { merkmal: string; oben: ReactNode; text:
   );
 }
 
-/** Statistik-Pille: längster Streak des Buches (REQ-109), Fortschritt in % und Sitzungen (REQ-026, REQ-027). Ohne Zitat darunter. */
-export default function Statistik({ buch }: Props) {
-  // Rekord je Buch (REQ-109): unabhängig von heute, daher nie ausgegraut.
-  const tage = laengsterStreak(buch.sitzungen);
+/** Statistik-Pille: Streak, Fortschritt in % und Sitzungen (REQ-026, REQ-027). Ohne Zitat darunter. */
+export default function Statistik({ buch, jetzt }: Props) {
+  const tage = streak(buch.sitzungen, jetzt);
   return (
     <div data-statistik="" {...stilRolle('eintrag')} style={pilleStil}>
-      <Teil merkmal="data-streak" oben={<Flamme zahl={tage} />} text="Längster Streak für dieses Buch" />
+      <Teil merkmal="data-streak" oben={<Flamme zahl={tage} />} text="Tage in Folge" />
       <div data-trennlinie="" aria-hidden="true" style={trennlinieStil} />
       <Teil
         merkmal="data-prozent"

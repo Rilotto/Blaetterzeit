@@ -81,14 +81,10 @@ async function starte(buecher: Buch[], heute: Date, vorher?: (st: typeof import(
 const tage = () => Array.from(main().querySelectorAll<HTMLElement>('[data-kalender-tag]'));
 const tagzahlen = () => tage().map((t) => Number(t.getAttribute('data-tag')));
 const flammen = () => Array.from(main().querySelectorAll<HTMLElement>('[data-flamme]'));
-/** Angepasst Sprint 10 Teil D (REQ-108): drei Zustände, erkannt an der Füllung der Flamme. */
 function straehne() {
   const f = flammen();
   expect(f, 'genau eine Flamme auf der Startseite').toHaveLength(1);
-  const p = f[0].querySelector<SVGPathElement>('path')!;
-  const fill = (p.style.fill || p.getAttribute('fill') || '').trim();
-  const art = /url\(/.test(fill) ? 'angezuendet' : fill === '' || fill === 'none' || fill === 'transparent' ? 'erloschen' : 'ausgegraut';
-  return { zahl: norm(f[0].querySelector('[data-streak-zahl]')?.textContent), art };
+  return { zahl: norm(f[0].querySelector('[data-streak-zahl]')?.textContent), art: f[0].getAttribute('data-flamme') };
 }
 
 describe('REQ-103 Diese Woche', () => {
@@ -160,7 +156,7 @@ describe('REQ-103 Antippen öffnet die Statistik', () => {
 });
 
 describe('REQ-103 Lesesträhne', () => {
-  it('[REQ-103/AK-3] Sitzungen vorgestern, gestern, heute an verschiedenen Büchern: Flamme 3 angezündet, Statistik „Serie 3 Tage“', async () => {
+  it('[REQ-103/AK-3] Sitzungen vorgestern, gestern, heute an verschiedenen Büchern: Flamme 3 (gefüllt), Statistik „Serie 3 Tage“', async () => {
     await starte(
       [
         buch('A', { sitzungen: [sitzung(um(2026, 11, 23, 9))] }),
@@ -169,19 +165,19 @@ describe('REQ-103 Lesesträhne', () => {
       ],
       um(2026, 11, 25, 15),
     );
-    expect(straehne()).toEqual({ zahl: '3', art: 'angezuendet' });
+    expect(straehne()).toEqual({ zahl: '3', art: 'aktiv' });
     await menue('Statistik');
     await vi.waitFor(() => expect(norm(main().querySelector('[data-serie-text]')?.textContent)).toBe('Serie 3 Tage'), W);
   });
 
   it('[REQ-103/AK-3] letzte Sitzung vorgestern: Flamme 0 als Umriss', async () => {
     await starte([buch('A', { sitzungen: [sitzung(um(2026, 11, 21)), sitzung(um(2026, 11, 22)), sitzung(um(2026, 11, 23, 23, 59))] })], um(2026, 11, 25, 15));
-    expect(straehne()).toEqual({ zahl: '0', art: 'erloschen' });
+    expect(straehne()).toEqual({ zahl: '0', art: 'inaktiv' });
   });
 
-  it('[REQ-103/AK-3] Sitzungen nur bis gestern: Zahl sichtbar, Flamme ausgegraut (REQ-108)', async () => {
+  it('[REQ-103/AK-3] Strähne endet gestern (heute noch nicht gelesen): zählt bis gestern', async () => {
     await starte([buch('A', { sitzungen: [sitzung(um(2026, 11, 23)), sitzung(um(2026, 11, 24, 23, 59))] })], um(2026, 11, 25, 0, 1));
-    expect(straehne()).toEqual({ zahl: '2', art: 'ausgegraut' });
+    expect(straehne()).toEqual({ zahl: '2', art: 'aktiv' });
   });
 
   it('[REQ-103/AK-3] mehrere Sitzungen am selben Tag zählen einmal; Lücke beendet die Strähne; ohne Sitzungen 0', async () => {
@@ -192,17 +188,17 @@ describe('REQ-103 Lesesträhne', () => {
       ],
       um(2026, 11, 25, 15),
     );
-    expect(straehne()).toEqual({ zahl: '2', art: 'angezuendet' });
+    expect(straehne()).toEqual({ zahl: '2', art: 'aktiv' });
     cleanup();
     vi.stubGlobal('indexedDB', new IDBFactory());
     await starte([], um(2026, 11, 25, 15));
-    expect(straehne()).toEqual({ zahl: '0', art: 'erloschen' });
+    expect(straehne()).toEqual({ zahl: '0', art: 'inaktiv' });
   });
 
   it('[REQ-103/AK-3] Strähne über Wochen- und Monatsgrenze (10 Tage) wie in der Statistik', async () => {
     const tageListe = Array.from({ length: 10 }, (_, i) => sitzung(um(2026, 12, 2 - i, 10), 100 - i));
     await starte([buch('Lang', { sitzungen: tageListe })], um(2026, 12, 2, 18));
-    expect(straehne()).toEqual({ zahl: '10', art: 'angezuendet' });
+    expect(straehne()).toEqual({ zahl: '10', art: 'aktiv' });
     await menue('Statistik');
     await vi.waitFor(() => expect(norm(main().querySelector('[data-serie-text]')?.textContent)).toBe('Serie 10 Tage'), W);
   });

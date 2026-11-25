@@ -187,16 +187,14 @@ const teil = (n: 'streak' | 'prozent' | 'sitzungen') => statistik()!.querySelect
 
 describe('REQ-026 Statistik-Pille', () => {
   describe('AK-1 Drei Teile in der Pille', () => {
-    it.each([{}, { seitenanzahl: 400, aktuelleSeite: 42 }])('[REQ-026/AK-1] unter dem Lesefortschritt: links Flamme/„Längster Streak für dieses Buch“, Mitte %/„gelesen“, rechts Zahl/„Sitzungen“ (%o)', async (f) => {
+    it.each([{}, { seitenanzahl: 400, aktuelleSeite: 42 }])('[REQ-026/AK-1] unter dem Lesefortschritt: links Flamme/„Tage in Folge“, Mitte %/„gelesen“, rechts Zahl/„Sitzungen“ (%o)', async (f) => {
       await details(await starte(), buchB(f));
       expect(statistik()).not.toBeNull();
       expect(vor(fortschritt()!, statistik()!)).toBe(true);
       expect(vor(teil('streak'), teil('prozent'))).toBe(true);
       expect(vor(teil('prozent'), teil('sitzungen'))).toBe(true);
       expect(teil('streak').querySelector('[data-flamme]')).not.toBeNull();
-      // Angepasst Sprint 10 Teil D (REQ-109): Beschriftung „Längster Streak für dieses Buch“ statt „Tage in Folge“.
-  expect(norm(teil('streak').textContent)).toMatch(/^\d+ ?Längster Streak für dieses Buch$/);
-  expect(teil('streak').textContent).not.toContain('Tage in Folge');
+      expect(norm(teil('streak').textContent)).toMatch(/^\d+ ?Tage in Folge$/);
       expect(norm(teil('prozent').textContent)).toMatch(/^\d+ ?% ?gelesen$/);
       expect(norm(teil('sitzungen').textContent)).toMatch(/^\d+ ?Sitzungen$/);
       expect(vor(textElement(teil('prozent'), /^\d+ ?%$/), textElement(teil('prozent'), 'gelesen'))).toBe(true);
@@ -210,7 +208,7 @@ describe('REQ-026 Statistik-Pille', () => {
       // Seit REQ-065 AK-11 ist die Karte durch einen weichen Schatten statt eines Rahmens abgesetzt (Test unten).
       ['dunkelbraun', 'Prozentzahl', 'text', () => textElement(teil('prozent'), /^\d+ ?%$/)],
       ['dunkelbraun', 'Sitzungszahl', 'text', () => textElement(teil('sitzungen'), /^\d+$/)],
-      ['dunkelbraun', '„Längster Streak für dieses Buch“', 'text', () => textElement(teil('streak'), 'Längster Streak für dieses Buch')],
+      ['dunkelbraun', '„Tage in Folge“', 'text', () => textElement(teil('streak'), 'Tage in Folge')],
       ['dunkelbraun', '„gelesen“', 'text', () => textElement(teil('prozent'), 'gelesen')],
       ['dunkelbraun', '„Sitzungen“', 'text', () => textElement(teil('sitzungen'), 'Sitzungen')],
     ];

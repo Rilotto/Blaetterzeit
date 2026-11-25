@@ -11,7 +11,6 @@ import {
   kennzahlen,
   lesetage,
   serie,
-  serieZustand,
   vergleichText,
   ZEITRAUM_PILLEN,
   zeitraumartLesen,
@@ -363,7 +362,7 @@ export default function StatistikAnsicht({ buecher, repository, bildspeicher, ei
         <span data-serie={serieTage} style={serieStil}>
           <span style={flammeStil}>
             <span style={{ display: 'block', ...flammeInnenStil }}>
-              <Flamme zahl={serieTage} zustand={serieZustand(alle, heute)} />
+              <Flamme zahl={serieTage} />
             </span>
           </span>
           <span data-serie-text="">

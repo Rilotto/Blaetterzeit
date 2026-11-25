@@ -1,15 +1,9 @@
 import { useId, type CSSProperties } from 'react';
-import type { FlammenZustand } from '@/domain/fortschritt';
 import { flammeZahlGedeckt, fortschrittFarbe, textstufe } from '@/theme';
 
 interface Props {
   /** Streak-Zahl (REQ-027). */
   zahl: number;
-  /**
-   * Zustand (REQ-108): ohne Angabe ab 1 „aktiv“, bei 0 „inaktiv“. „ausgegraut“ füllt die Flamme in der Farbrolle
-   * „Flamme ausgegraut“ (statt des Verlaufs) und zeigt die Zahl weiter.
-   */
-  zustand?: FlammenZustand;
 }
 
 // Form nach REF-buchdetails-01.png: tropfenförmige Flamme mit nach rechts geneigter Spitze und kleiner
@@ -30,7 +24,7 @@ const rahmenStil: CSSProperties = {
 
 const svgStil: CSSProperties = { display: 'block', width: '100%', height: '100%', overflow: 'visible' };
 
-const zahlStil = (zustand: FlammenZustand): CSSProperties => ({
+const zahlStil = (aktiv: boolean): CSSProperties => ({
   position: 'absolute',
   left: 0,
   right: 0,
@@ -40,22 +34,20 @@ const zahlStil = (zustand: FlammenZustand): CSSProperties => ({
   ...textstufe('meta'),
   fontWeight: 700,
   lineHeight: 1,
-  color: zustand === 'aktiv' ? fortschrittFarbe('flammeZahlAktiv') : zustand === 'ausgegraut' ? fortschrittFarbe('flammeZahlAusgegraut') : flammeZahlGedeckt,
+  color: aktiv ? fortschrittFarbe('flammeZahlAktiv') : flammeZahlGedeckt,
 });
 
 /**
- * Streak-Flamme (REQ-027, REQ-108): bei 0 nur Umriss in GhostFrame mit gedeckter Zahl („inaktiv“), angezündet gefüllt
- * mit Verlauf von unten „Flamme Rot“ nach oben „Flamme Orange“ und Zahl in „Hintergrund“ („aktiv“), ausgegraut gefüllt
- * in „Flamme ausgegraut“ mit Zahl in „Dunkelbraun“ („ausgegraut“).
+ * Streak-Flamme (REQ-027): bei 0 nur Umriss in GhostFrame mit gedeckter Zahl,
+ * ab 1 gefüllt mit Verlauf von unten „Flamme Rot“ nach oben „Flamme Orange“ und Zahl in „Hintergrund“.
  */
-export default function Flamme({ zahl, zustand: vorgabe }: Props) {
+export default function Flamme({ zahl }: Props) {
   const verlauf = `bz-flamme-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
-  const zustand: FlammenZustand = zahl <= 0 ? 'inaktiv' : (vorgabe ?? 'aktiv');
-  const aktiv = zustand === 'aktiv';
-  const fuellung = aktiv ? `url(#${verlauf})` : zustand === 'ausgegraut' ? fortschrittFarbe('flammeAusgegraut') : 'none';
-  const umriss = zustand === 'inaktiv' ? fortschrittFarbe('flammeUmriss') : 'none';
+  const aktiv = zahl > 0;
+  const fuellung = aktiv ? `url(#${verlauf})` : 'none';
+  const umriss = aktiv ? 'none' : fortschrittFarbe('flammeUmriss');
   return (
-    <div data-flamme={zustand} style={rahmenStil}>
+    <div data-flamme={aktiv ? 'aktiv' : 'inaktiv'} style={rahmenStil}>
       <svg viewBox="0 0 27 37" aria-hidden="true" style={svgStil}>
         {aktiv ? (
           <defs>
@@ -68,7 +60,7 @@ export default function Flamme({ zahl, zustand: vorgabe }: Props) {
         <path d={FLAMME} style={{ fill: fuellung, stroke: umriss, strokeWidth: 2, strokeLinejoin: 'round' }} />
         <path d={ZUNGE} style={{ fill: fuellung, stroke: umriss, strokeWidth: 1.6, strokeLinejoin: 'round' }} />
       </svg>
-      <span data-streak-zahl="" style={zahlStil(zustand)}>
+      <span data-streak-zahl="" style={zahlStil(aktiv)}>
         {zahl}
       </span>
     </div>
