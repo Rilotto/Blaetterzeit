@@ -111,11 +111,11 @@ describe('Proportionen (REQ-073)', () => {
     expect(d.schmal / d.cover).toBeCloseTo(4 / 12, 6);
     const s = darstellungsMasse({});
     // Standardmaße ohne Format = Taschenbuch, ohne Seitenzahl 2,5 cm (REQ-077)
-    expect(s.cover / s.hoehe).toBeCloseTo(12 / 19, 6);
-    expect(s.schmal / s.hoehe).toBeCloseTo(2.5 / 19, 6);
+    expect(s.cover / s.hoehe).toBeCloseTo(138 / 218, 6);
+    expect(s.schmal / s.hoehe).toBeCloseTo(2.5 / 21.8, 6);
     const n = darstellungsMasse({ dickeMm: 50 });
-    expect(n.schmal / n.cover).toBeCloseTo(5 / 12, 6);
-    expect(seitenverhaeltnis('ruecken', { dickeMm: 50 })).toBeCloseTo(5 / 19, 6);
+    expect(n.schmal / n.cover).toBeCloseTo(5 / 13.8, 6);
+    expect(seitenverhaeltnis('ruecken', { dickeMm: 50 })).toBeCloseTo(5 / 21.8, 6);
   });
 
   it('sehr breite Bücher werden kleiner dargestellt, Verhältnisse bleiben', () => {

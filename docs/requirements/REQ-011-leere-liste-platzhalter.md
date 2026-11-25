@@ -28,7 +28,7 @@ Referenzbild: Feld „Neue Sammlung“ in [referenzen/REQ-002-referenz-hauptnavi
 - Das System muss die Fläche mit einem gestrichelten Rahmen darstellen.
 - Das System muss in der Fläche das Herz-Icon des CEO darstellen und es selbst in der Farbe seiner Farbrolle einfärben.
 - Das System muss an der Titelstelle genau den Text „Wie wäre es mit einem neuen Buch?“ darstellen.
-- Wenn der Nutzer den Leere-Liste-Platzhalter antippt, darf sich in der App nichts ändern (CEO: „aktuell noch nichts.“). Die spätere Aktion „neues Buch anlegen“ steht in der To-do-Liste (`docs/todo.md`) und wird gesondert mit dem CEO abgestimmt.
+- Wenn der Nutzer den Leere-Liste-Platzhalter antippt, muss das System das Menü „Buch hinzufügen“ (REQ-029) genau so öffnen wie beim Antippen der Plus-Schaltfläche, einschließlich „+“ wird zu „×“, Abdunklung, Optionen und aller Schließwege; danach läuft der Ablauf unverändert wie dort weiter (CEO 2026-11-25).
 - Das System darf für den Leere-Liste-Platzhalter kein anderes Icon als das Herz-Icon des CEO verwenden.
 - Das System muss alle Farben des Platzhalters über Farbrollen aus zentralen Farbrubriken beziehen. Konkrete Farbwerte sind kein Akzeptanzkriterium.
 
@@ -54,10 +54,12 @@ Referenzbild: Feld „Neue Sammlung“ in [referenzen/REQ-002-referenz-hauptnavi
 - **Dann** wird der Leere-Liste-Platzhalter nicht angezeigt
 - **Und** stattdessen der Bucheintrag mit Cover-Platzhalter und Titel (REQ-010)
 
-### AK-3 Antippen bewirkt vorerst nichts
+### AK-3 Antippen öffnet das Menü „Buch hinzufügen“
 - **Gegeben** der Leere-Liste-Platzhalter wird angezeigt
 - **Wenn** der Nutzer ihn antippt
-- **Dann** ändert sich in der App nichts (kein neues Fenster, keine neue Ansicht, kein Wechsel des Menüpunkts, keine Änderung der Seite „Bücher“)
+- **Dann** ist das Menü „Buch hinzufügen“ geöffnet wie nach Antippen der Plus-Schaltfläche (REQ-029, AK-1) mit denselben Optionen
+- **Und** die Plus-Schaltfläche zeigt „×“
+- **Und** das Menü schließt sich auf dieselben Wege wie in REQ-029 (Option, Tippen außerhalb, „×“), und jede Option führt zur selben Folgeansicht wie dort
 
 ### AK-4 Farben aus zentralen Farbrubriken
 - **Gegeben** der Wert einer Farbrubrik einer Farbrolle dieses REQ wird an der zentralen Stelle geändert
@@ -84,7 +86,7 @@ Referenzbild: Feld „Neue Sammlung“ in [referenzen/REQ-002-referenz-hauptnavi
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Die Rubrik „Sammlungen“ als Funktion (nur ihre Optik dient als Vorbild; Abschnittsüberschrift mit Platzhalter: REQ-012).
-- Die spätere Aktion „neues Buch anlegen“ (To-do, `docs/todo.md`).
+- Inhalt und Verhalten des Menüs „Buch hinzufügen“ (REQ-029, REQ-061, REQ-110).
 - Cover-Platzhalter für Bücher ohne Cover (REQ-010).
 - Konkrete Maße und Farbwerte als Akzeptanzkriterium.
 
@@ -97,7 +99,7 @@ Referenzbild: Feld „Neue Sammlung“ in [referenzen/REQ-002-referenz-hauptnavi
 - **REQ-009:** Abschnitt „Noch zu lesen“, Aufbau und Covergröße des Bucheintrags.
 - **REQ-010:** abzugrenzender Zustand „Buch ohne Cover“; dasselbe Herz-Icon.
 - **REQ-006:** Farbrubriken „Ghost“, „GhostFrame“.
-- **REQ-005:** Plus-Schaltfläche soll ebenfalls später ein Buch anlegen; beide Wege werden bei der Abstimmung der Aktion gemeinsam betrachtet.
+- **REQ-029:** Menü „Buch hinzufügen“, das auch der Platzhalter öffnet.
 
 ## Offene Fragen
 
@@ -111,3 +113,4 @@ Referenzbild: Feld „Neue Sammlung“ in [referenzen/REQ-002-referenz-hauptnavi
 |---|---|---|
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Vorgabe „Noch zu lesen“, Abschnitt 6) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten eingearbeitet: F2 Herz-Icon statt Pluszeichen, Aufbau wie Bucheintrag in Covergröße, Text „Wie wäre es mit einem neuen Buch?“ an der Titelstelle (neu AK-5, AK-7). F3 Antippen bewirkt vorerst nichts (AK-3), spätere Aktion in To-do. F6 Fläche Ghost, Rahmen GhostFrame, Herz und Text Primär (neu AK-6). Entfallen: „großzügige Innenabstände“, „abgerundete rechteckige Fläche“ als eigenständige Form. F7 Must. Vom CEO bestätigt 2026-11-09, Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Mini-Änderung: Antippen öffnet das Menü „Buch hinzufügen“ wie die Plus-Schaltfläche (REQ-029), komplett identisch. Anforderung und AK-3 ersetzt, Abgrenzung/Abhängigkeiten angepasst. Inhalte vom CEO am 2026-11-25 im Chat festgelegt, Umsetzung beauftragt. Status „Abgestimmt“ | Anforderungsmanager |

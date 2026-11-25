@@ -47,7 +47,7 @@ Referenzbild: [referenzen/REQ-002-referenz-hauptnavigation.png](referenzen/REQ-0
 
 *Antippen der Schaltflächen (Grundgerüst)*
 - Das System darf für keine der beiden Schaltflächen einen aktiven Zustand darstellen (CEO: „diese beiden Buttons haben keinen aktiven Status. Das entfällt bei beiden, da diese beide ein eigenes Fenster später öffnen werden.“). Einzige Ausnahme: Solange das Menü „Buch hinzufügen“ geöffnet ist, zeigt die Plus-Schaltfläche „×“ statt des Plus-Icons (REQ-029, vom CEO am 2026-11-10 bestätigt). Dies ist der einzige Zustandswechsel der Plus-Schaltfläche.
-- Wenn der Nutzer die Filter-/Einstellungen-Schaltfläche antippt, darf sich in der App nichts ändern, auch nicht die Darstellung der Schaltfläche (CEO: „auf der Seite ändert sich erstmal noch nichts“). Für die Plus-Schaltfläche gilt ab 2026-11-10 REQ-029.
+- Wenn der Nutzer die Filter-/Einstellungen-Schaltfläche antippt, muss das System das Blatt „„Für dich“ anpassen“ öffnen (REQ-108, CEO 2026-11-25); die Darstellung der Schaltfläche ändert sich dabei nicht. Für die Plus-Schaltfläche gilt ab 2026-11-10 REQ-029.
 
 **Bereich unterhalb der Filterleiste**
 - Der Inhalt des Bereichs unterhalb der Filterleiste (REQ-006) wird durch REQ-009 bis REQ-012 festgelegt (CEO, 2026-11-09: „Ich möchte eine weitere Funktion einbinden …“). Die frühere Vorgabe „bleibt leer“ entfällt.
@@ -141,11 +141,11 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 - **Dann** stammen beide nicht aus einer Icon-Bibliothek
 - **Und** beide sind einfarbige Linien-Icons auf transparentem Hintergrund, die von der App in der Farbe ihrer Farbrolle eingefärbt werden
 
-### AK-10 Antippen der Filter-/Einstellungen-Schaltfläche bewirkt nichts, kein aktiver Zustand
+### AK-10 Antippen der Filter-/Einstellungen-Schaltfläche öffnet „„Für dich“ anpassen“, kein aktiver Zustand
 - **Gegeben** die Seite „Bücher“ wird angezeigt
 - **Wenn** der Nutzer die Filter-/Einstellungen-Schaltfläche antippt
-- **Dann** sieht die angetippte Schaltfläche danach genauso aus wie vorher (kein aktiver Zustand)
-- **Und** in der App ändert sich nichts (kein neues Fenster, keine neue Ansicht, kein Wechsel des Menüpunkts, keine Änderung der Filterleiste)
+- **Dann** ist das Blatt „„Für dich“ anpassen“ (REQ-108) geöffnet
+- **Und** die angetippte Schaltfläche sieht genauso aus wie vorher (kein aktiver Zustand)
 
 ### AK-11 Kein Platzhaltertext „under construction :)“
 - **Gegeben** die Seite „Bücher“ wird angezeigt
@@ -155,7 +155,7 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Die Filterleiste unterhalb der Überschrift (REQ-006, REQ-007).
-- Das eigene Fenster der Filter-/Einstellungen-Schaltfläche (CEO: wird später definiert).
+- Inhalt und Verhalten des Blatts „„Für dich“ anpassen“ (REQ-108).
 - Wirkung der Plus-Schaltfläche beim Antippen (REQ-029 bis REQ-032).
 - Inhalte im Bereich unterhalb der Filterleiste (REQ-009 bis REQ-012).
 - Konkrete Farbwerte, Maße und Schriftgrößen als Akzeptanzkriterium.
@@ -188,3 +188,4 @@ Vom Scrum Master gemessen (Bildbreite 1080 px ≈ 412 dp, Faktor ≈ 2,6). Sie d
 | 2026-11-09 | F7 vom CEO bestätigt („alles unter Must, ja bestätige ich“). Verweis auf REQ-012 (Abschnitte „Sagas“/„Sammlungen“) ergänzt. Status „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-10 | CEO-Vorgabe „Buch anlegen“: Wirkung der Plus-Schaltfläche geht an REQ-029 über. Anforderung „Antippen bewirkt nichts“ und AK-10 gelten nur noch für die Filter-/Einstellungen-Schaltfläche; Abgrenzung angepasst. AK-1 bis AK-9 und AK-11 unverändert. Status von „Implementiert“ auf „Entwurf“ bis zur Bestätigung durch den CEO. Anpassung statt `ersetzt`-REQ, da REQ-005 nicht freigegeben ist (wie 2026-11-09) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antwort F5 (REQ-029): Plus-Schaltfläche öffnet das Menü „Buch hinzufügen“ und zeigt bei geöffnetem Menü „×“; als einziger Zustandswechsel der Plus-Schaltfläche vermerkt. Offene Frage entfernt. AK-1 bis AK-11 unverändert. Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
+| 2026-11-25 | Filter-/Einstellungen-Schaltfläche öffnet das Blatt „„Für dich“ anpassen“ (REQ-108). Anforderung, AK-10 und Abgrenzung angepasst; übrige AKs unverändert. Inhalte vom CEO am 2026-11-25 im Chat festgelegt, Umsetzung beauftragt. Status „Abgestimmt“ | Anforderungsmanager |

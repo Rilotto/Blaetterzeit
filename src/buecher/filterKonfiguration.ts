@@ -55,5 +55,10 @@ export const uebersichtKonfiguration: Record<string, UebersichtDefinition> = {
   noch_zu_lesen: { listenname: 'Noch zu lesen', vonSeiteOeffnen: false },
 };
 
+/** Filter, dessen Abschnitte der Nutzer im Blatt „… anpassen“ wählt (REQ-108). */
+export const PERSONALISIERBARER_FILTER_ID = 'fuer_dich';
+/** Name dieses Filters (Titel des Blatts, REQ-108). */
+export const personalisierbarerFilterName: string = filterKonfiguration.find((f) => f.id === PERSONALISIERBARER_FILTER_ID)?.name ?? '';
+
 /** Überschrift des Bereichs der Startseite mit den Büchern *am lesen* (REQ-102): Name des passenden Filters. */
 export const geradeAmLesenTitel: string = filterKonfiguration.find((f) => f.id === 'gerade_am_lesen')?.name ?? '';

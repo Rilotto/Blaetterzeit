@@ -88,7 +88,7 @@ Die optische Übereinstimmung prüft der CEO im Prototyp; sie ist kein Akzeptanz
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Suche, Auswahl und Übernahme der Angaben (REQ-062).
-- Optionen „Online suchen“, „Deine Bücher importieren“ (To-do-Liste).
+- Option „Online suchen“ (REQ-110), Option „Deine Bücher importieren“ (To-do-Liste).
 
 ## Qualitätsanforderungen
 

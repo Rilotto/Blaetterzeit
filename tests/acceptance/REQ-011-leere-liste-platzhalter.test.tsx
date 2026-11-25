@@ -10,8 +10,7 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import type { CSSProperties } from 'react';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
-import App from '@/App';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import BuecherAnsicht from '@/views/BuecherAnsicht';
 import type { Buch } from '@/domain/buch';
 import { farbrubriken, farbVariablen } from '@/theme';
@@ -242,33 +241,62 @@ describe('REQ-011 Platzhalter bei leerer Liste', () => {
   });
 
   // ---------------------------------------------------------------- AK-3
-  describe('AK-3 Antippen bewirkt vorerst nichts', () => {
-    it('[REQ-011/AK-3] Antippen von Platzhalter, Fläche, Herz und Text ändert die Seite nicht', () => {
+  describe('AK-3 Antippen öffnet das Menü „Buch hinzufügen“', () => {
+    // Mini-Änderung 2026-11-25: Antippen öffnet dasselbe Menü wie die Plus-Schaltfläche (REQ-029), komplett identisch.
+    const menue = () => screen.queryByRole('menu', { name: 'Buch hinzufügen' });
+    const optionen = () => within(menue()!).getAllByRole('menuitem').map((o) => o.getAttribute('data-option'));
+    const xBtn = () => screen.queryByRole('button', { name: 'Menü schließen' });
+
+    it.each([
+      ['Platzhalter', (l: HTMLElement) => l],
+      ['Fläche', (l: HTMLElement) => flaeche(l)],
+      ['Herz', (l: HTMLElement) => herz(flaeche(l))],
+      ['Text', (l: HTMLElement) => textEl(l)],
+    ] as [string, (l: HTMLElement) => HTMLElement][])('[REQ-011/AK-3] Antippen (%s) öffnet das Menü mit denselben Optionen wie Plus; Plus zeigt „ד', (_n, ziel) => {
       zeige([]);
-      const vorher = document.body.innerHTML;
-      const l = leer();
-      for (const el of [l, flaeche(l), herz(flaeche(l)), textEl(l)]) {
-        fireEvent.pointerDown(el);
-        fireEvent.click(el);
-        fireEvent.doubleClick(el);
-      }
-      expect(document.body.innerHTML).toBe(vorher);
+      fireEvent.click(screen.getByRole('button', { name: 'Buch hinzufügen' }));
+      const viaPlus = optionen();
+      fireEvent.click(xBtn()!);
+      expect(menue()).toBeNull();
+      fireEvent.click(ziel(leer()));
+      expect(menue()).not.toBeNull();
+      expect(optionen()).toEqual(viaPlus);
+      expect(xBtn()!.querySelector('[data-icon]')).toHaveAttribute('data-icon', 'icon-x.png');
+      expect(screen.queryByRole('button', { name: 'Buch hinzufügen' })).toBeNull();
     });
 
-    it('[REQ-011/AK-3] der Platzhalter ist kein Link, keine Schaltfläche und liegt in keiner (kann nichts auslösen)', () => {
+    it.each([
+      ['„ד', () => fireEvent.click(xBtn()!)],
+      ['Tippen außerhalb', () => fireEvent.click(document.querySelector('[data-menue-hintergrund]')!)],
+    ] as [string, () => void][])('[REQ-011/AK-3] Schließen per %s: Menü zu, Plus-Icon zurück', (_n, schliessen) => {
       zeige([]);
-      const l = leer();
-      expect(l.querySelectorAll('a[href], form, button, [role="button"], [role="link"]')).toHaveLength(0);
-      expect(l.closest('a[href], button')).toBeNull();
+      fireEvent.click(leer());
+      expect(menue()).not.toBeNull();
+      schliessen();
+      expect(menue()).toBeNull();
+      expect(screen.getByRole('button', { name: 'Buch hinzufügen' }).querySelector('[data-icon]')).toHaveAttribute('data-icon', 'icon-plus.png');
     });
 
-    it('[REQ-011/AK-3] Gegenprobe App: Antippen im Abschnitt ändert den aktiven Menüpunkt nicht', async () => {
-      render(<App />);
-      fireEvent.click(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
-      await within(abschnitt()).findByRole('list');
-      const vorher = document.body.innerHTML;
-      fireEvent.click(abschnitt());
-      expect(document.body.innerHTML).toBe(vorher);
+    it('[REQ-011/AK-3] Option „Von Hand eintragen“ schließt das Menü und zeigt das Blatt „Manueller Eintrag“', async () => {
+      zeige([]);
+      fireEvent.click(leer());
+      fireEvent.click(menue()!.querySelector('[data-option="von-hand"]')!);
+      expect(await screen.findByRole('dialog', { name: 'Manueller Eintrag' })).toBeInTheDocument();
+      expect(menue()).toBeNull();
+    });
+
+    it('[REQ-011/AK-3] Option „Barcode scannen“ schließt das Menü und zeigt den Scan-Bildschirm', async () => {
+      zeige([]);
+      fireEvent.click(leer());
+      fireEvent.click(menue()!.querySelector('[data-option="barcode"]')!);
+      await vi.waitFor(() => expect(document.querySelector('[data-scan-bildschirm]')).not.toBeNull());
+      expect(menue()).toBeNull();
+    });
+
+    it('[REQ-011/AK-3] Gegenprobe: Antippen eines Buches im Abschnitt öffnet das Menü nicht', async () => {
+      zeige([buch('Momo')]);
+      fireEvent.click(within(abschnitt()).getByText('Momo'));
+      expect(menue()).toBeNull();
     });
   });
 

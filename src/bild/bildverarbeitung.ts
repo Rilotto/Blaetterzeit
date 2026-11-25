@@ -1,5 +1,6 @@
 // Verbindung der reinen Bildfunktionen (entzerren.ts) mit Canvas/Browser.
 import { begrenzungsfaktor, entzerren, zielgroesse, type Ecken } from './entzerren';
+import { ausschnittNoetig, mittigerAusschnitt } from './mittigerAusschnitt';
 
 /** Längste Bildseite in Pixeln, auf die Bilder vor der Verarbeitung begrenzt werden. */
 export const MAX_KANTE = 2000;
@@ -71,4 +72,20 @@ export async function zuschneiden(dataUrl: string, eckenNormiert: Ecken, seitenv
   bild.data.set(ergebnis.daten);
   aus.ctx.putImageData(bild, 0, 0);
   return aus.c.toDataURL('image/jpeg', JPEG_QUALITAET);
+}
+
+/**
+ * Mittiger Zuschnitt auf ein Seitenverhältnis (REQ-109): größtmöglicher mittiger Ausschnitt, unverzerrt,
+ * ohne Ränder. Passt das Bild bereits, kommt es unverändert zurück (AK-2). Ohne Canvas (Testumgebung)
+ * bleibt das Bild unverändert.
+ */
+export async function mittigZuschneiden(dataUrl: string, seitenverhaeltnis: number): Promise<string> {
+  if (!canvasVerfuegbar()) return dataUrl;
+  const img = await bildLaden(dataUrl);
+  const a = mittigerAusschnitt(img.naturalWidth, img.naturalHeight, seitenverhaeltnis);
+  if (!ausschnittNoetig(a, img.naturalWidth, img.naturalHeight)) return dataUrl;
+  const f = begrenzungsfaktor(a.breite, a.hoehe, MAX_KANTE);
+  const { c, ctx } = leinwand(Math.max(1, Math.round(a.breite * f)), Math.max(1, Math.round(a.hoehe * f)));
+  ctx.drawImage(img, a.x, a.y, a.breite, a.hoehe, 0, 0, c.width, c.height);
+  return c.toDataURL('image/jpeg', JPEG_QUALITAET);
 }

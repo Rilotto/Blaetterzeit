@@ -44,5 +44,5 @@ it('[REQ-073/GROB] Proportionen aus hinterlegten Maßen; ohne Maße bzw. mit Ein
   erwarte(14.8, 21, 2.8);
   cleanup();
   await zeige({ format: 'print', unterformat: 'taschenbuch', dickeMm: 50 });
-  erwarte(12, 19, 5);
+  erwarte(13.8, 21.8, 5);
 });

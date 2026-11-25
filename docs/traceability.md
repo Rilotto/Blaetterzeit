@@ -88,7 +88,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-010 | Cover-Platzhalter für Bücher ohne Buchcover | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-010-cover-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-1 | 5 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
-| REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
+| REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-3 | 9 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
 | REQ-011 | Leere-Liste-Platzhalter im Abschnitt „Noch zu lesen“ | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-011-leere-liste-platzhalter.test.tsx |
@@ -711,3 +711,34 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
+| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
+| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
+| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
+| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
+| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
+| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
+| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
+| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
+| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-1 | 11 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-5 | 7 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
+| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
+| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
+| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
+| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
+| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
+| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
+| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-8 | 5 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
+| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-7 | 4 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |

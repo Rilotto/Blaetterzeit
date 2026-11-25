@@ -25,7 +25,7 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 - Das System muss in der Karte „Ausgabe“ (REQ-056) direkt unter der Zeile „Format“ die Zeile „Maße“ darstellen.
 - Das System muss die Zeile „Maße“ rechts mit einem Pfeil „›“ darstellen, wie die Zeile „Preis“ (REQ-056).
 - Sind Werte hinterlegt, muss die Zeile sie als „Breite × Höhe × Dicke cm“ mit genau einer Nachkommastelle und Komma zeigen, z. B. „13,5 × 21,0 × 3,2 cm“. Ein fehlender Einzelwert erscheint als „–“, z. B. „– × 21,0 × – cm“.
-- Ist kein Wert hinterlegt, muss die Zeile die geschätzten Standardmaße (REQ-077) als Vorschlag zeigen, mit vorangestelltem „ca.“ und abgeschwächt bzw. kursiv, z. B. „ca. 12,0 × 19,0 × 2,4 cm“. Ändert sich das Format oder die Seitenzahl, passen sich die Schätzwerte an.
+- Ist kein Wert hinterlegt, muss die Zeile die geschätzten Standardmaße (REQ-077) als Vorschlag zeigen, mit vorangestelltem „ca.“ und abgeschwächt bzw. kursiv, z. B. „ca. 13,8 × 21,8 × 2,4 cm“. Ändert sich das Format oder die Seitenzahl, passen sich die Schätzwerte an.
 - Das System darf Schätzwerte nie selbsttätig speichern; sie werden erst durch „Sichern“ im Blatt „Maße“ zu hinterlegten Werten.
 
 **Blatt „Maße“**
@@ -51,7 +51,7 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 
 ### AK-2 Anzeige mit und ohne Werte
 - **Gegeben** ein Taschenbuch mit 400 Seiten ohne Maße
-- **Dann** zeigt die Zeile abgeschwächt bzw. kursiv „ca. 12,0 × 19,0 × 2,4 cm“ (mit den aktuellen Standardwerten nach REQ-077)
+- **Dann** zeigt die Zeile abgeschwächt bzw. kursiv „ca. 13,8 × 21,8 × 2,4 cm“ (mit den aktuellen Standardwerten nach REQ-077)
 - **Und** es sind weiterhin keine Maße gespeichert
 - **Gegeben** ein Buch mit Breite 13,5, Höhe 21, Dicke 3,2
 - **Dann** zeigt die Zeile „13,5 × 21,0 × 3,2 cm“
@@ -132,3 +132,4 @@ CEO (2026-11-18, wörtlich): „Ich möchte eine neue Zeile im Menü "Ausgabe" b
 | 2026-11-21 | CEO (wörtlich): „ja ergänze bitte den Pfeil bei "Maße".“ Pfeil „›“ rechts an der Zeile „Maße“ ergänzt (Anforderung, AK-1). Status unverändert | Anforderungsmanager |
 | 2026-11-21 | CEO („a klingt gut“): ohne Maße zeigt die Zeile die geschätzten Standardmaße (REQ-077) als Vorschlag „ca. …“ statt „Trag die Maße ein“; Blatt damit vorbefüllt; gespeichert erst mit „Sichern“; Anpassung bei Formatwechsel. AK-2, AK-3 geändert, AK-9 neu. Status unverändert | Anforderungsmanager |
 | 2026-11-21 | Widerspruch zu AK-3 behoben (Hinweis des Scrum Masters, im Sinne der CEO-Entscheidung „a“): AK-8 ohne Maße aus der Quelle → nichts gespeichert, Zeile und Blatt zeigen den Schätz-Vorschlag. Status unverändert | Anforderungsmanager |
+| 2026-11-25 | Beispielwert „ca. …“ an neue Taschenbuch-Standardmaße 13,8 × 21,8 (REQ-077) angepasst; Verhalten unverändert. CEO-Vorgabe 2026-11-25 | Anforderungsmanager |

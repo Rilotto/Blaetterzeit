@@ -580,7 +580,8 @@ describe('REQ-005 Seite „Bücher“ – Kopfbereich', () => {
   // Anpassung Sprint 04 (REQ-005 vom 2026-11-10): AK-10 gilt nur noch für die Filter-/Einstellungen-
   // Schaltfläche. Die Wirkung der Plus-Schaltfläche legt REQ-029 fest (Menü „Buch hinzufügen“, „+“↔„×“),
   // deshalb prüfen diese Tests die Plus-Schaltfläche nicht mehr auf „bewirkt nichts“.
-  describe('AK-10 Antippen der Filter-/Einstellungen-Schaltfläche bewirkt nichts, kein aktiver Zustand', () => {
+  // Anpassung Sprint 12 (REQ-005 vom 2026-11-25): Die Schaltfläche öffnet das Blatt „„Für dich“ anpassen“ (REQ-108).
+  describe('AK-10 Antippen der Filter-/Einstellungen-Schaltfläche öffnet „„Für dich“ anpassen“, kein aktiver Zustand', () => {
     it('[REQ-005/AK-10] die Filter-/Einstellungen-Schaltfläche hat keinen Umschaltzustand (kein aria-pressed/aria-expanded/aria-current)', () => {
       zeige();
       const b = filterBtn();
@@ -593,31 +594,33 @@ describe('REQ-005 Seite „Bücher“ – Kopfbereich', () => {
       expect(plusBtn()).not.toHaveAttribute('data-aktiv');
     });
 
-    it('[REQ-005/AK-10] Antippen von „Filter und Einstellungen“ ändert in der App nichts (DOM vorher = nachher)', () => {
+    it('[REQ-005/AK-10] Antippen von „Filter und Einstellungen“ öffnet das Blatt „„Für dich“ anpassen“ (REQ-108)', () => {
       render(<App />);
       tapMenue('Bücher');
-      const vorher = document.body.innerHTML;
+      expect(screen.queryByRole('dialog', { name: '„Für dich“ anpassen' })).toBeNull();
+      fireEvent.click(filterBtn());
+      expect(screen.getByRole('dialog', { name: '„Für dich“ anpassen' })).toBeInTheDocument();
+      // sonst keine Wirkung: Menüpunkt bleibt „Bücher“, kein Menü „Buch hinzufügen“
+      const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
+      expect(within(nav).getByRole('button', { name: 'Bücher' })).toHaveAttribute('aria-current', 'page');
+      expect(screen.queryByRole('menu')).toBeNull();
+    });
+
+    it('[REQ-005/AK-10] die angetippte Schaltfläche sieht genauso aus wie vorher (kein aktiver Zustand), auch bei offenem Blatt', () => {
+      render(<App />);
+      tapMenue('Bücher');
+      const vorher = filterBtn().outerHTML;
       const btn = filterBtn();
       fireEvent.pointerDown(btn);
       fireEvent.mouseDown(btn);
       fireEvent.pointerUp(btn);
       fireEvent.mouseUp(btn);
       fireEvent.click(btn);
-      expect(document.body.innerHTML).toBe(vorher);
-    });
-
-    it('[REQ-005/AK-10] mehrfaches Antippen ändert nichts: kein Fenster, Menüpunkt bleibt „Bücher“, Filterleiste unverändert', () => {
-      render(<App />);
-      tapMenue('Bücher');
-      const leiste = screen.getByRole('group', { name: 'Filter' }).innerHTML;
-      const vorher = document.body.innerHTML;
-      for (let i = 0; i < 3; i++) fireEvent.click(filterBtn());
-      expect(document.body.innerHTML).toBe(vorher);
-      expect(screen.getByRole('group', { name: 'Filter' }).innerHTML).toBe(leiste);
-      const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
-      expect(within(nav).getByRole('button', { name: 'Bücher' })).toHaveAttribute('aria-current', 'page');
-      expect(screen.queryAllByRole('dialog', { hidden: true })).toHaveLength(0);
-      expect(screen.queryByRole('menu')).toBeNull();
+      expect(screen.getByRole('dialog', { name: '„Für dich“ anpassen' })).toBeInTheDocument();
+      expect(filterBtn().outerHTML).toBe(vorher);
+      expect(filterBtn()).not.toHaveAttribute('aria-pressed');
+      expect(filterBtn()).not.toHaveAttribute('aria-expanded');
+      expect(filterBtn()).not.toHaveAttribute('data-aktiv');
     });
   });
 

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import iconKamera from '@/assets/icons/icon-kamera.png';
 import iconX from '@/assets/icons/icon-x.png';
-import { zuschneiden } from '@/bild/bildverarbeitung';
+import { mittigZuschneiden, zuschneiden } from '@/bild/bildverarbeitung';
+import { verhaeltnisGleich } from '@/bild/mittigerAusschnitt';
 import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
 import type { Ecken } from '@/bild/entzerren';
 import { standardRepository } from '@/buecher/buchQuelle';
@@ -326,6 +327,8 @@ export default function ManuellerEintrag({
   const [seitenFehler, setSeitenFehler] = useState(false);
   const [unterblatt, setUnterblatt] = useState<Unterblatt>(null);
   const [cover, setCover] = useState<string | null>(vorbelegung?.cover ?? null);
+  // Seitenverhältnis, auf das das Cover zugeschnitten ist; null = noch nicht (übernommenes Online-Cover, REQ-109).
+  const [coverVerhaeltnis, setCoverVerhaeltnis] = useState<number | null>(null);
   const [menue, setMenue] = useState(false);
   const [schritt, setSchritt] = useState<Schritt>({ art: 'blatt' });
   const [versatz, setVersatz] = useState(0);
@@ -397,6 +400,26 @@ export default function ManuellerEintrag({
 
   /** Maße samt Format und Seitenzahl für Schätzwerte (REQ-077); ungültige Seitenzahl = keine. */
   const massQuelle = { ...eingaben, seitenanzahl: seitenFehlen(eingaben) ? undefined : Number(eingaben.seiten) };
+  /** Cover-Seitenverhältnis aus Format und Maßen (REQ-073, REQ-077). */
+  const zielVerhaeltnis = seitenverhaeltnis('cover', massQuelle);
+  const coverPasst = coverVerhaeltnis !== null && verhaeltnisGleich(coverVerhaeltnis, zielVerhaeltnis);
+
+  // Online-Cover einmal zuschneiden und nach Änderung von Format oder Maßen neu zuschneiden (REQ-109, AK-1/AK-7).
+  useEffect(() => {
+    if (!cover || coverPasst) return;
+    let laeuft = true;
+    void mittigZuschneiden(cover, zielVerhaeltnis)
+      .catch(() => cover)
+      .then((neu) => {
+        if (!laeuft || !aktiv.current) return;
+        setCover(neu);
+        setCoverVerhaeltnis(zielVerhaeltnis);
+      });
+    return () => {
+      laeuft = false;
+    };
+  }, [cover, coverPasst, zielVerhaeltnis]);
+
   const masseSetzen = (m: Masse) => ausgabeSetzen(m, ['breiteMm', 'hoeheMm', 'dickeMm']);
 
   const formatSetzen = (a: Formatangaben) => ausgabeSetzen(a, ['format', 'unterformat', 'sonderausgabe', 'exemplar']);
@@ -419,8 +442,10 @@ export default function ManuellerEintrag({
       const buch = buchAusEingaben(eingaben, zeit());
       const repo = repository ?? (await standardRepository());
       await repo.save(buch);
-      if (cover) {
-        await bildspeicher.put(buch.id, 'cover', cover).catch((fehler: unknown) => {
+      // Noch nicht passend zugeschnittenes Cover vor dem Speichern zuschneiden (REQ-109, AK-7).
+      const coverBild = cover && !coverPasst ? await mittigZuschneiden(cover, zielVerhaeltnis).catch(() => cover) : cover;
+      if (coverBild) {
+        await bildspeicher.put(buch.id, 'cover', coverBild).catch((fehler: unknown) => {
           console.warn('Cover konnte nicht gespeichert werden:', fehler);
         });
       }
@@ -473,7 +498,8 @@ export default function ManuellerEintrag({
   };
 
   const zuschnittBestaetigen = async (bild: string, ecken: Ecken) => {
-    const ergebnis = await zuschneiden(bild, ecken, seitenverhaeltnis('cover', massQuelle)).catch(() => bild);
+    const ergebnis = await zuschneiden(bild, ecken, zielVerhaeltnis).catch(() => bild);
+    setCoverVerhaeltnis(zielVerhaeltnis);
     if (!aktiv.current) return;
     setCover(ergebnis);
     setSchritt({ art: 'blatt' });

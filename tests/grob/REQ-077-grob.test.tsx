@@ -7,7 +7,7 @@ import { wirksameMasse } from '@/buchdetails/masse';
 
 it('[REQ-077/GROB] Standardmaße je Format, Dicke aus Seitenzahl, hinterlegte Werte haben Vorrang', () => {
   const tb = wirksameMasse({ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 });
-  expect([tb.breiteMm, tb.hoeheMm, tb.dickeMm]).toEqual([120, 190, 24]);
+  expect([tb.breiteMm, tb.hoeheMm, tb.dickeMm]).toEqual([138, 218, 24]);
   const hc = wirksameMasse({ format: 'print', unterformat: 'hardcover', seitenanzahl: 400 });
   expect([hc.breiteMm, hc.hoeheMm, hc.dickeMm, hc.deckelUeberstandMm]).toEqual([148, 210, 28, 3]);
   const kf = wirksameMasse({ format: 'print', unterformat: 'kleinformat' });

@@ -5,7 +5,7 @@ import App from '@/App';
 
 afterEach(() => cleanup());
 
-it('[REQ-005/GROB] Seite „Bücher“ zeigt Überschrift und zwei Schaltflächen in fester Reihenfolge, Filter ohne Wirkung, Plus öffnet ein Menü', () => {
+it('[REQ-005/GROB] Seite „Bücher“ zeigt Überschrift und zwei Schaltflächen in fester Reihenfolge, Filter öffnet „„Für dich“ anpassen“, Plus öffnet ein Menü', () => {
   render(<App />);
   fireEvent.click(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
   const main = screen.getByRole('main');
@@ -15,9 +15,12 @@ it('[REQ-005/GROB] Seite „Bücher“ zeigt Überschrift und zwei Schaltfläche
   expect(h.compareDocumentPosition(filter) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(filter.compareDocumentPosition(plus) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(within(main).queryByText('under construction :)')).toBeNull();
-  const vorher = main.innerHTML;
+  // Filter: öffnet das Blatt „„Für dich“ anpassen“ (REQ-005 AK-10 vom 2026-11-25, REQ-108), Schaltfläche ohne aktiven Zustand
+  const vorher = filter.outerHTML;
   fireEvent.click(filter);
-  expect(main.innerHTML).toBe(vorher);
+  expect(screen.getByRole('dialog', { name: '„Für dich“ anpassen' })).toBeInTheDocument();
+  expect(within(main).getByRole('button', { name: 'Filter und Einstellungen' }).outerHTML).toBe(vorher);
+  fireEvent.click(within(screen.getByRole('dialog', { name: '„Für dich“ anpassen' })).getByRole('button', { name: 'Schließen' }));
   // Plus: Wirkung laut REQ-029 (Menü „Buch hinzufügen“), nicht mehr „ohne Wirkung“
   fireEvent.click(plus);
   expect(screen.getByRole('menu', { name: 'Buch hinzufügen' })).toBeInTheDocument();

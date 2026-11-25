@@ -20,7 +20,7 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 
 - Das System muss die Standardmaße je Format an einer zentralen Stelle führen. Die Werte sind auf Zuruf des CEO änderbar; konkrete Zahlen sind kein eingefrorenes Akzeptanzkriterium, eingefroren wird nur die Zuordnung Format → Standardwert.
 - Startwerte (Breite × Höhe):
-  - „Print · Taschenbuch“, „E-Book“, „Hörbuch“, „Print · Weiß ich nicht“, „Print“ ohne Unterformat und kein Format: 12,0 × 19,0 cm
+  - „Print · Taschenbuch“, „E-Book“, „Hörbuch“, „Print · Weiß ich nicht“, „Print“ ohne Unterformat und kein Format: 13,8 × 21,8 cm
   - „Print · Hardcover“: 14,8 × 21,0 cm, Deckelüberstand oben, unten und vorne je 3 mm
 - Bei Hardcover sind Breite und Höhe (Standard wie hinterlegt) die Außenmaße der Deckel; der Buchblock ist oben, unten und vorne um den Deckelüberstand kleiner.
 - Für Hörbücher gelten die Standardmaße nur für die Buchdarstellung (REQ-073) und den Maße-Vorschlag (REQ-072); eine 3D-Ansicht gibt es für Hörbücher nicht (REQ-078).
@@ -37,11 +37,11 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 ### AK-1 Breite und Höhe je Format
 - **Gegeben** Bücher ohne Maße mit „Print · Taschenbuch“, „E-Book“, „Print · Weiß ich nicht“, „Print · Hardcover“ bzw. „Print · Kleinformat“
 - **Wenn** ihre Standardmaße bestimmt werden
-- **Dann** sind Breite × Höhe 12,0 × 19,0 / 12,0 × 19,0 / 12,0 × 19,0 / 14,8 × 21,0 / 10,5 × 14,8 cm (mit den jeweils aktuellen Standardwerten)
+- **Dann** sind Breite × Höhe 13,8 × 21,8 / 13,8 × 21,8 / 13,8 × 21,8 / 14,8 × 21,0 / 10,5 × 14,8 cm (mit den jeweils aktuellen Standardwerten)
 
 ### AK-6 Ohne Format, Print ohne Unterformat, Hörbuch
 - **Gegeben** Bücher ohne Maße und mit 400 Seiten: ohne Format, mit „Print“ ohne Unterformat bzw. mit „Hörbuch“
-- **Dann** gelten jeweils die Taschenbuch-Standardmaße 12,0 × 19,0 × 2,4 cm
+- **Dann** gelten jeweils die Taschenbuch-Standardmaße 13,8 × 21,8 × 2,4 cm
 
 ### AK-7 Hardcover-Maße sind Außenmaße
 - **Gegeben** ein Hardcover ohne Maße
@@ -89,3 +89,4 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 |---|---|---|
 | 2026-11-21 | Erstellt aus vom CEO angenommenem Vorschlag des Scrum Masters. Status „Entwurf“, weil drei Lücken offen sind (siehe Offene Fragen) | Anforderungsmanager |
 | 2026-11-21 | CEO-Antworten (wörtlich): 1. „Wie ein Taschenbuch, guter Vorschlag!“ (kein Format / Print ohne Unterformat → Taschenbuch); 2. „ja, lass uns auch ein Taschenbuchformat nehmen“ (Hörbuch → Taschenbuch für 2D und Vorschlag); 3. „dein Vorschlag klingt gut, machen wir so“ (Hardcover-Maße = Außenmaße der Deckel). Neu AK-6, AK-7. Offene Fragen leer. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Standardmaße Taschenbuch (gilt auch für E-Book, Hörbuch, Print · Weiß ich nicht, Print ohne Unterformat, kein Format) von 12,0 × 19,0 auf 13,8 × 21,8 cm. Dicke weiterhin aus der Seitenzahl; Hardcover und Kleinformat unverändert. Startwerte, AK-1 und AK-6 angepasst. Inhalte vom CEO am 2026-11-25 im Chat festgelegt, Umsetzung beauftragt. Status „Abgestimmt“ | Anforderungsmanager |

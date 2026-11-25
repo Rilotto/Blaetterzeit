@@ -24,10 +24,10 @@ describe('Standardmaße je Format (REQ-077)', () => {
   ] as const)('%o → %s', (q, typ) => expect(standardtyp(q)).toBe(typ));
 
   it('Breite × Höhe und Dicke aus der Seitenzahl', () => {
-    expect(wirksameMasse({ ...tb, seitenanzahl: 400 })).toMatchObject({ breiteMm: 120, hoeheMm: 190, dickeMm: 24 });
+    expect(wirksameMasse({ ...tb, seitenanzahl: 400 })).toMatchObject({ breiteMm: 138, hoeheMm: 218, dickeMm: 24 });
     expect(wirksameMasse({ ...hc, seitenanzahl: 400 })).toMatchObject({ breiteMm: 148, hoeheMm: 210, dickeMm: 28 });
     expect(wirksameMasse({ format: 'print', unterformat: 'kleinformat' })).toMatchObject({ breiteMm: 105, hoeheMm: 148, dickeMm: 25 });
-    expect(wirksameMasse({ format: 'hoerbuch', seitenanzahl: 400 })).toMatchObject({ breiteMm: 120, hoeheMm: 190, dickeMm: 24 });
+    expect(wirksameMasse({ format: 'hoerbuch', seitenanzahl: 400 })).toMatchObject({ breiteMm: 138, hoeheMm: 218, dickeMm: 24 });
     expect(wirksameMasse({}).dickeMm).toBe(25);
     // kaufmännisch: 0,5 mm wird aufgerundet (Seitenzahl 175 → 175 × 0,0572 + 1,5 = 11,51 → 12)
     expect(wirksameMasse({ ...tb, seitenanzahl: 175 }).dickeMm).toBe(12);
@@ -42,22 +42,22 @@ describe('Standardmaße je Format (REQ-077)', () => {
     const w = wirksameMasse(hc);
     expect(w.deckelUeberstandMm).toBe(3);
     expect(w.buchblock).toEqual({ breiteMm: 145, hoeheMm: 204 });
-    expect(wirksameMasse(tb).buchblock).toEqual({ breiteMm: 120, hoeheMm: 190 });
+    expect(wirksameMasse(tb).buchblock).toEqual({ breiteMm: 138, hoeheMm: 218 });
   });
 });
 
 describe('Vorschlag „ca. …“ und Vorbefüllung (REQ-072)', () => {
   it('Text und Vorbefüllung', () => {
-    expect(masseVorschlagText({ ...tb, seitenanzahl: 400 })).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+    expect(masseVorschlagText({ ...tb, seitenanzahl: 400 })).toBe('ca. 13,8 × 21,8 × 2,4 cm');
     expect(masseVorschlagText({ ...hc, seitenanzahl: 400 })).toBe('ca. 14,8 × 21,0 × 2,8 cm');
-    expect(masseVorbefuellung({ ...tb, seitenanzahl: 400 })).toEqual({ breiteMm: 120, hoeheMm: 190, dickeMm: 24 });
+    expect(masseVorbefuellung({ ...tb, seitenanzahl: 400 })).toEqual({ breiteMm: 138, hoeheMm: 218, dickeMm: 24 });
     expect(masseVorbefuellung({ ...tb, hoeheMm: 210 })).toEqual({ breiteMm: undefined, hoeheMm: 210, dickeMm: undefined });
   });
 
   it('Zeile zeigt Vorschlag kursiv; nach Formatwechsel Hardcover-Werte; hinterlegt ohne „ca.“', () => {
     const { rerender } = render(<AusgabeKarte angaben={{ ...tb, seitenanzahl: 400 }} werte={{}} />);
     const wert = () => document.querySelector('[data-ausgabe-zeile="masse"] [data-zeile-wert]') as HTMLElement;
-    expect(wert()).toHaveTextContent('ca. 12,0 × 19,0 × 2,4 cm');
+    expect(wert()).toHaveTextContent('ca. 13,8 × 21,8 × 2,4 cm');
     expect(wert()).toHaveAttribute('data-zeile-vorschlag', 'true');
     expect(wert().style.fontStyle).toBe('italic');
     rerender(<AusgabeKarte angaben={{ ...hc, seitenanzahl: 400 }} werte={{}} />);
@@ -73,21 +73,21 @@ describe('Vorschlag „ca. …“ und Vorbefüllung (REQ-072)', () => {
     const onSichern = vi.fn();
     const onSchliessen = vi.fn();
     render(<BlattMasse masse={{ ...tb, seitenanzahl: 400 }} onSichern={onSichern} onSchliessen={onSchliessen} />);
-    expect(screen.getByLabelText('Breite')).toHaveValue('12,0');
-    expect(screen.getByLabelText('Höhe')).toHaveValue('19,0');
+    expect(screen.getByLabelText('Breite')).toHaveValue('13,8');
+    expect(screen.getByLabelText('Höhe')).toHaveValue('21,8');
     expect(screen.getByLabelText('Dicke')).toHaveValue('2,4');
     expect(onSichern).not.toHaveBeenCalled();
     fireEvent.click(document.querySelector('[data-masse-sichern]') as HTMLElement);
-    expect(onSichern).toHaveBeenCalledWith({ breiteMm: 120, hoeheMm: 190, dickeMm: 24 });
+    expect(onSichern).toHaveBeenCalledWith({ breiteMm: 138, hoeheMm: 218, dickeMm: 24 });
   });
 });
 
 describe('Proportionen aus formatabhängigen Standards (REQ-073)', () => {
   it('Taschenbuch, Hardcover, fehlender Einzelwert', () => {
-    expect(seitenverhaeltnis('cover', { ...tb, seitenanzahl: 400 })).toBeCloseTo(120 / 190);
+    expect(seitenverhaeltnis('cover', { ...tb, seitenanzahl: 400 })).toBeCloseTo(138 / 218);
     expect(seitenverhaeltnis('ruecken', { ...hc, seitenanzahl: 400 })).toBeCloseTo(28 / 210);
-    expect(seitenverhaeltnis('schnitt', { ...tb, dickeMm: 50 })).toBeCloseTo(50 / 190);
+    expect(seitenverhaeltnis('schnitt', { ...tb, dickeMm: 50 })).toBeCloseTo(50 / 218);
     const d = darstellungsMasse({ ...tb, seitenanzahl: 400 });
-    expect(d.schmal / d.cover).toBeCloseTo(24 / 120);
+    expect(d.schmal / d.cover).toBeCloseTo(24 / 138);
   });
 });

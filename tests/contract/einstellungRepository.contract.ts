@@ -40,6 +40,15 @@ export function runEinstellungRepositoryContract(name: string, factory: () => Ei
       if (umgebung.neustart) expect(await umgebung.neustart().lesen('statistikZeitraum')).toBe('jahr');
     });
 
+    it('merkt die in „Für dich“ ausgeblendeten Abschnitte getrennt (REQ-108)', async () => {
+      const { repo } = umgebung;
+      expect(await repo.lesen('fuerDichAusgeblendet')).toBeUndefined();
+      await repo.speichern('fuerDichAusgeblendet', '["sagas"]');
+      await repo.speichern('stil', 'klassisch');
+      expect(await repo.lesen('fuerDichAusgeblendet')).toBe('["sagas"]');
+      if (umgebung.neustart) expect(await umgebung.neustart().lesen('fuerDichAusgeblendet')).toBe('["sagas"]');
+    });
+
     it('nach einem Neustart bleiben die Werte erhalten (falls dauerhaft)', async () => {
       if (!umgebung.neustart) return;
       await umgebung.repo.speichern('farbdesign', 'salbei');

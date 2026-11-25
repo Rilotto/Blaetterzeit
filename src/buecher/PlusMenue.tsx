@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import iconBarcode from '@/assets/icons/icon-barcode.png';
 import iconHandEintragen from '@/assets/icons/icon-hand-eintragen.png';
+import iconLupe from '@/assets/icons/icon-lupe.png';
 import Icon from '@/components/Icon';
 import { abdunklung, buchAnlegenFarbe, plusMenueSchatten, textformatAlleAnsehen, textstufe, abstand, stilRolle } from '@/theme';
 
@@ -9,6 +10,8 @@ interface Props {
   oben: number;
   /** Abstand des Menüs zum rechten Rand des Kopfbereichs in px. */
   rechts: number;
+  /** Option „Online suchen“ gewählt (REQ-110). */
+  onOnline: () => void;
   /** Option „Barcode scannen“ gewählt (REQ-061). */
   onBarcode: () => void;
   /** Option „Von Hand eintragen“ gewählt. */
@@ -89,12 +92,25 @@ const untertitelStil: CSSProperties = {
   color: buchAnlegenFarbe('menueOptionUntertitel'),
 };
 
-/** Menü „Buch hinzufügen“ (REQ-029, REQ-061) mit Abdunklung der Seite. Schließt nur über die Option oder Tippen außerhalb. */
-export default function PlusMenue({ oben, rechts, onBarcode, onVonHand, onSchliessen }: Props) {
+/** Menü „Buch hinzufügen“ (REQ-029, REQ-061, REQ-110) mit Abdunklung der Seite. Schließt nur über die Option oder Tippen außerhalb. */
+export default function PlusMenue({ oben, rechts, onOnline, onBarcode, onVonHand, onSchliessen }: Props) {
   return (
     <>
       <div data-menue-hintergrund="" onClick={onSchliessen} style={hintergrundStil} />
       <div role="menu" aria-label="Buch hinzufügen" {...stilRolle('blatt')} style={menueStil(oben, rechts)}>
+        <button type="button" role="menuitem" data-option="online" onClick={onOnline} style={optionStil}>
+          <span style={kachelStil}>
+            <Icon datei="icon-lupe.png" url={iconLupe} farbe={buchAnlegenFarbe('menueIcon')} groesse={22} />
+          </span>
+          <span style={texteStil}>
+            <span data-option-titel="" style={titelStil}>
+              Online suchen
+            </span>
+            <span data-option-untertitel="" style={untertitelStil}>
+              Finde fast jedes Buch
+            </span>
+          </span>
+        </button>
         <button type="button" role="menuitem" data-option="barcode" onClick={onBarcode} style={optionStil}>
           <span style={kachelStil}>
             <Icon datei="icon-barcode.png" url={iconBarcode} farbe={buchAnlegenFarbe('menueIcon')} groesse={22} />

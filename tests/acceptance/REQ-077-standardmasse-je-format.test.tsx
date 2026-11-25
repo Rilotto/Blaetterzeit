@@ -58,9 +58,9 @@ function darstellung() {
 describe('REQ-077 Standardmaße je Format', () => {
   describe('AK-1 Breite und Höhe je Format', () => {
     it.each([
-      ['Print · Taschenbuch', TB, [120, 190]],
-      ['E-Book', { format: 'ebook' }, [120, 190]],
-      ['Print · Weiß ich nicht', { format: 'print', unterformat: 'weissNicht' }, [120, 190]],
+      ['Print · Taschenbuch', TB, [138, 218]],
+      ['E-Book', { format: 'ebook' }, [138, 218]],
+      ['Print · Weiß ich nicht', { format: 'print', unterformat: 'weissNicht' }, [138, 218]],
       ['Print · Hardcover', HC, [148, 210]],
       ['Print · Kleinformat', { format: 'print', unterformat: 'kleinformat' }, [105, 148]],
     ] as [string, Partial<Buch>, number[]][])('[REQ-077/AK-1] %s ohne Maße → Breite × Höhe %j mm (aktuelle Standardwerte)', (_n, m, soll) => {
@@ -85,15 +85,15 @@ describe('REQ-077 Standardmaße je Format', () => {
       ['ohne Format', {}],
       ['Print ohne Unterformat', { format: 'print' }],
       ['Hörbuch', { format: 'hoerbuch' }],
-    ] as [string, Partial<Buch>][])('[REQ-077/AK-6] %s, 400 Seiten → 12,0 × 19,0 × 2,4 cm', (_n, m) => {
+    ] as [string, Partial<Buch>][])('[REQ-077/AK-6] %s, 400 Seiten → 13,8 × 21,8 × 2,4 cm', (_n, m) => {
       const w = wirksameMasse({ ...m, seitenanzahl: 400 });
-      expect([w.breiteMm, w.hoeheMm, w.dickeMm]).toEqual([120, 190, 24]);
+      expect([w.breiteMm, w.hoeheMm, w.dickeMm]).toEqual([138, 218, 24]);
       expect(w.deckelUeberstandMm).toBe(0);
     });
 
     it('[REQ-077/AK-6] Hörbuch: Zeile „Maße“ zeigt den Taschenbuch-Vorschlag', async () => {
       const { d } = await zeige({ format: 'hoerbuch', seitenanzahl: 400 });
-      expect(masseWert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      expect(masseWert(d)).toBe('ca. 13,8 × 21,8 × 2,4 cm');
     });
   });
 
@@ -112,7 +112,7 @@ describe('REQ-077 Standardmaße je Format', () => {
 
     it('[REQ-077/AK-7] Taschenbuch: Buchblock = Außenmaße (kein Überstand)', () => {
       const w = wirksameMasse({ ...TB });
-      expect(w.buchblock).toEqual({ breiteMm: 120, hoeheMm: 190 });
+      expect(w.buchblock).toEqual({ breiteMm: 138, hoeheMm: 218 });
     });
   });
 
@@ -138,9 +138,9 @@ describe('REQ-077 Standardmaße je Format', () => {
     ] as [string, Partial<Buch>, number, number][])('[REQ-077/AK-2] kaufmännisch runden: %s %i Seiten → %i mm (Grenze ,5)', (_n, m, s, mm) => {
       expect(wirksameMasse({ ...m, seitenanzahl: s }).dickeMm).toBe(mm);
     });
-    it('[REQ-077/AK-2] Anzeige: Taschenbuch 400 Seiten → „ca. 12,0 × 19,0 × 2,4 cm“, Hardcover → „ca. 14,8 × 21,0 × 2,8 cm“', async () => {
+    it('[REQ-077/AK-2] Anzeige: Taschenbuch 400 Seiten → „ca. 13,8 × 21,8 × 2,4 cm“, Hardcover → „ca. 14,8 × 21,0 × 2,8 cm“', async () => {
       const { d } = await zeige({ ...TB, seitenanzahl: 400 });
-      expect(masseWert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
+      expect(masseWert(d)).toBe('ca. 13,8 × 21,8 × 2,4 cm');
       cleanup();
       const { d: d2 } = await zeige({ ...HC, seitenanzahl: 400 });
       expect(masseWert(d2)).toBe('ca. 14,8 × 21,0 × 2,8 cm');
@@ -178,8 +178,8 @@ describe('REQ-077 Standardmaße je Format', () => {
   describe('AK-5 Formatwechsel', () => {
     it('[REQ-077/AK-5] Taschenbuch ohne Maße → Format auf Hardcover ändern und sichern → ab sofort Hardcover-Standardmaße', async () => {
       const { d, repo, id } = await zeige({ ...TB, seitenanzahl: 400 });
-      expect(masseWert(d)).toBe('ca. 12,0 × 19,0 × 2,4 cm');
-      expect(darstellung().cover).toBeCloseTo(120 / 190, 2);
+      expect(masseWert(d)).toBe('ca. 13,8 × 21,8 × 2,4 cm');
+      expect(darstellung().cover).toBeCloseTo(138 / 218, 2);
       await tippe(d.querySelector('[data-ausgabe-zeile="format"]')!);
       const f = await vi.waitFor(() => {
         const e = document.querySelector<HTMLElement>('[data-fenster-format]');

@@ -32,7 +32,7 @@ export const STANDARD_MASSE_MM: Record<
   Standardtyp,
   { breite: number; hoehe: number; dickeJeSeiteMm: number; dickeGrundMm: number; deckelUeberstandMm: number }
 > = {
-  taschenbuch: { breite: 120, hoehe: 190, dickeJeSeiteMm: 0.0572, dickeGrundMm: 1.5, deckelUeberstandMm: 0 },
+  taschenbuch: { breite: 138, hoehe: 218, dickeJeSeiteMm: 0.0572, dickeGrundMm: 1.5, deckelUeberstandMm: 0 },
   hardcover: { breite: 148, hoehe: 210, dickeJeSeiteMm: 0.0574, dickeGrundMm: 4.75, deckelUeberstandMm: 3 },
   kleinformat: { breite: 105, hoehe: 148, dickeJeSeiteMm: 0.0572, dickeGrundMm: 1.5, deckelUeberstandMm: 0 },
 };
@@ -100,7 +100,7 @@ export function vollstaendigeMasse(q: MassQuelle = {}): { breite: number; hoehe:
   return { breite: w.breiteMm, hoehe: w.hoeheMm, dicke: w.dickeMm };
 }
 
-/** Vorschlag der Zeile „Maße“ ohne hinterlegte Werte (REQ-072, AK-2): „ca. 12,0 × 19,0 × 2,4 cm“. */
+/** Vorschlag der Zeile „Maße“ ohne hinterlegte Werte (REQ-072, AK-2): „ca. 13,8 × 21,8 × 2,4 cm“. */
 export function masseVorschlagText(q: MassQuelle): string {
   const w = wirksameMasse({ format: q.format, unterformat: q.unterformat, seitenanzahl: q.seitenanzahl });
   return `ca. ${masseText({ breiteMm: w.breiteMm, hoeheMm: w.hoeheMm, dickeMm: w.dickeMm })}`;

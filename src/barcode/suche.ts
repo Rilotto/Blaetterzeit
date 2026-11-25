@@ -1,7 +1,19 @@
 // ISBN-Suche (REQ-062): DNB und Open Library gleichzeitig, Cover als Data-URL. Hinter einer Schnittstelle,
 // damit Tests sie durch einen Fake ersetzen können. An die Dienste geht ausschließlich die ISBN (ADR-0003).
 import { standardHttpClient, type HttpClient } from './http';
-import { dnbTrefferLesen, dnbUrl, openLibraryTrefferLesen, openLibraryUrl, type Treffer } from './treffer';
+import { isbnNormalisieren } from './isbn';
+import {
+  dnbSucheUrl,
+  dnbTrefferLesen,
+  dnbUrl,
+  openLibrarySucheLesen,
+  openLibrarySucheUrl,
+  openLibraryTrefferLesen,
+  openLibraryUrl,
+  suchwoerter,
+  trefferMischen,
+  type Treffer,
+} from './treffer';
 
 export interface IsbnSuche {
   /**
@@ -73,3 +85,34 @@ export function isbnSucheMit(http: HttpClient, frist = SUCHE_FRIST_MS): IsbnSuch
 }
 
 export const standardIsbnSuche = (): IsbnSuche => isbnSucheMit(standardHttpClient());
+
+// ---------------------------------------------------------------------------
+// „Online suchen“ (REQ-110, REQ-111): Freitext (Titel, Autor, ISBN) bei DNB und Open Library gleichzeitig
+// ---------------------------------------------------------------------------
+
+export interface OnlineSuche {
+  /**
+   * Höchstens 9 Treffer, abwechselnd DNB/Open Library (REQ-111), Cover als Data-URL. Leere Liste = nichts gefunden.
+   * Schlägt fehl, wenn keine Quelle erreichbar war (z. B. keine Internetverbindung).
+   */
+  suchen(text: string): Promise<Treffer[]>;
+}
+
+/** Freitextsuche über DNB (SRU) und Open Library (search.json). An die Dienste geht nur der Suchtext. */
+export function onlineSucheMit(http: HttpClient, frist = SUCHE_FRIST_MS): OnlineSuche {
+  return {
+    async suchen(text) {
+      if (suchwoerter(text).length === 0) return [];
+      const isbn = isbnNormalisieren(text);
+      const [dnb, ol] = await Promise.allSettled([
+        mitFrist(abfragen(http, dnbSucheUrl(text), (t) => dnbTrefferLesen(t, isbn ?? undefined)), frist),
+        mitFrist(abfragen(http, openLibrarySucheUrl(text), (t) => openLibrarySucheLesen(t, isbn)), frist),
+      ]);
+      if (dnb.status === 'rejected' && ol.status === 'rejected') throw new Error('Keine Quelle erreichbar');
+      const gemischt = trefferMischen(dnb.status === 'fulfilled' ? dnb.value : [], ol.status === 'fulfilled' ? ol.value : []);
+      return coverLaden(http, gemischt, frist);
+    },
+  };
+}
+
+export const standardOnlineSuche = (): OnlineSuche => onlineSucheMit(standardHttpClient());

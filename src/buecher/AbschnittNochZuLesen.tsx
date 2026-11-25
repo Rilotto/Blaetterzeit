@@ -25,6 +25,8 @@ interface Props {
   onBuchAntippen?: (buch: Buch) => void;
   /** „Alle ansehen ›“ angetippt: Übersicht „Noch zu lesen“ (REQ-009 AK-14, REQ-040). */
   onAlleAnsehen?: () => void;
+  /** Leere-Liste-Platzhalter angetippt: öffnet das Menü „Buch hinzufügen“ wie die Plus-Schaltfläche (REQ-011 AK-3, REQ-029). */
+  onLeereListeAntippen?: () => void;
 }
 
 export const alleAnsehenStil: CSSProperties = {
@@ -103,11 +105,15 @@ export function Bucheintrag({ buch, cover, onAntippen }: { buch: Buch; cover?: s
   );
 }
 
-/** Leere-Liste-Platzhalter (REQ-011) mit Text an der Titelstelle (REQ-035: eigener Text). Antippen bewirkt nichts. */
-export function LeereListePlatzhalter({ text = 'Wie wäre es mit einem neuen Buch?' }: { text?: string }) {
+/**
+ * Leere-Liste-Platzhalter (REQ-011) mit Text an der Titelstelle (REQ-035: eigener Text).
+ * Mit `onAntippen` löst Antippen die Aktion aus („Noch zu lesen“: Menü „Buch hinzufügen“, REQ-011 AK-3);
+ * ohne bewirkt Antippen nichts (REQ-035 AK-9). Gestaltung in beiden Fällen identisch (REQ-035 AK-9).
+ */
+export function LeereListePlatzhalter({ text = 'Wie wäre es mit einem neuen Buch?', onAntippen }: { text?: string; onAntippen?: () => void }) {
   return (
     <div style={leerBereichStil}>
-      <div data-leere-liste="" style={{ width: `${coverBreite}px` }}>
+      <div data-leere-liste="" onClick={onAntippen} style={{ width: `${coverBreite}px` }}>
         <div style={leerFlaecheStil}>
           <Icon datei="icon-herz.png" url={iconHerz} farbe={buecherFarbe('leerplatzhalterIcon')} groesse={40} />
         </div>
@@ -118,7 +124,7 @@ export function LeereListePlatzhalter({ text = 'Wie wäre es mit einem neuen Buc
 }
 
 /** Abschnitt „Noch zu lesen“ mit horizontal wischbarer Buchliste (REQ-009). */
-export default function AbschnittNochZuLesen({ buecher, frontcover, onBuchAntippen, onAlleAnsehen }: Props) {
+export default function AbschnittNochZuLesen({ buecher, frontcover, onBuchAntippen, onAlleAnsehen, onLeereListeAntippen }: Props) {
   const { titel } = abschnittKonfiguration.nochZuLesen;
   const auswahl = buecher === undefined ? undefined : buecherNochZuLesen(buecher);
 
@@ -131,7 +137,7 @@ export default function AbschnittNochZuLesen({ buecher, frontcover, onBuchAntipp
         </button>
       </div>
       {auswahl === undefined ? null : auswahl.length === 0 ? (
-        <LeereListePlatzhalter />
+        <LeereListePlatzhalter onAntippen={onLeereListeAntippen} />
       ) : (
         <ul aria-label={titel} style={listeStil}>
           {auswahl.map((b) => (

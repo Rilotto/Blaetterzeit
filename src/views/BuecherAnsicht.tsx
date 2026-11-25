@@ -1,23 +1,36 @@
-import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { Fragment, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import BarcodeAblauf from '@/barcode/BarcodeAblauf';
 import { standardBarcodeScanner, type BarcodeScanner } from '@/barcode/scanner';
-import { standardIsbnSuche, type IsbnSuche } from '@/barcode/suche';
+import { standardIsbnSuche, standardOnlineSuche, type IsbnSuche, type OnlineSuche } from '@/barcode/suche';
 import type { Bildquelle } from '@/bild/bildquelle';
 import type { Vorbelegung } from '@/buchanlegen/eingabe';
 import ManuellerEintrag from '@/buchanlegen/ManuellerEintrag';
-import AbschnittAlleBuecher from '@/buecher/AbschnittAlleBuecher';
-import AbschnittListen from '@/buecher/AbschnittListen';
-import AbschnittNochZuLesen from '@/buecher/AbschnittNochZuLesen';
+import Suchfenster from '@/onlinesuche/Suchfenster';
+import {
+  ausgeblendeteLesen,
+  ausgeblendeteSpeichern,
+  buecherAbschnitte,
+  sichtbareAbschnitte,
+  type AbschnittDefinition,
+  type AbschnittKontext,
+} from '@/buecher/abschnitte';
+import BlattFuerDich from '@/buecher/BlattFuerDich';
 import { ladeBuecher, standardAnsichtRepository, standardBildspeicher, standardListenRepository } from '@/buecher/buchQuelle';
 import Filterleiste from '@/buecher/Filterleiste';
-import { filterKonfiguration, uebersichtKonfiguration, type FilterDefinition } from '@/buecher/filterKonfiguration';
+import {
+  filterKonfiguration,
+  PERSONALISIERBARER_FILTER_ID,
+  uebersichtKonfiguration,
+  type FilterDefinition,
+} from '@/buecher/filterKonfiguration';
 import Kopfbereich from '@/buecher/Kopfbereich';
 import Uebersicht from '@/buecher/Uebersicht';
 import type { Buch } from '@/domain/buch';
 import { useListen } from '@/listen/gemeinsam';
 import ListenNavigation, { type ListenZiel } from '@/listen/ListenNavigation';
 import { useListenbilder } from '@/listen/listenbild';
-import type { AnsichtRepository, BookRepository, ImageStore, ListenRepository } from '@/storage';
+import { useDesign } from '@/design/designwahl';
+import type { AnsichtRepository, BookRepository, EinstellungRepository, ImageStore, ListenRepository } from '@/storage';
 import BuchDetails from './BuchDetails';
 import { abstand } from '@/theme';
 
@@ -40,8 +53,41 @@ interface Props {
   barcodeScanner?: BarcodeScanner;
   /** ISBN-Suche (REQ-062); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
   isbnSuche?: IsbnSuche;
+  /** Freitextsuche „Online suchen“ (REQ-110, REQ-111); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
+  onlineSuche?: OnlineSuche;
   /** Listenspeicher (Sagas, Sammlungen, Bibliotheken, REQ-095); ohne Angabe der der App. In Tests ersetzbar. */
   listenRepository?: ListenRepository;
+  /** Einstellungsspeicher (Auswahl „Für dich“, REQ-108); ohne Angabe der des DesignAnbieters bzw. flüchtig. In Tests ersetzbar. */
+  einstellungRepository?: EinstellungRepository;
+  /** Abschnitte der Seite „Bücher“; ohne Angabe die zentrale Liste (REQ-108). In Tests ersetzbar. */
+  abschnitte?: readonly AbschnittDefinition[];
+}
+
+/** Fallback ohne DesignAnbieter: Auswahl nur für die Sitzung. */
+const fluechtig = (): EinstellungRepository => {
+  const m = new Map<string, string>();
+  return { lesen: (s) => Promise.resolve(m.get(s)), speichern: (s, w) => Promise.resolve(void m.set(s, w)) };
+};
+
+/** In „Für dich“ ausgeblendete Abschnitte (REQ-108), geladen über das EinstellungRepository. */
+function useAusgeblendet(repo: EinstellungRepository): [string[], boolean, (neu: string[]) => void] {
+  // Geladen ist die Auswahl erst, wenn sie aus genau diesem Repository stammt.
+  const [stand, setStand] = useState<{ repo: EinstellungRepository; ausgeblendet: string[] } | undefined>(undefined);
+  useEffect(() => {
+    let aktiv = true;
+    void ausgeblendeteLesen(repo).then((a) => {
+      if (aktiv) setStand({ repo, ausgeblendet: a });
+    });
+    return () => {
+      aktiv = false;
+    };
+  }, [repo]);
+  const geladen = stand?.repo === repo;
+  const speichern = (neu: string[]) => {
+    setStand({ repo, ausgeblendet: neu });
+    void ausgeblendeteSpeichern(repo, neu).catch((fehler: unknown) => console.warn('Abschnittsauswahl nicht gespeichert:', fehler));
+  };
+  return [geladen ? stand.ausgeblendet : [], geladen, speichern];
 }
 
 const seiteStil: CSSProperties = {
@@ -129,8 +175,16 @@ export default function BuecherAnsicht({
   ansichtRepository,
   barcodeScanner,
   isbnSuche,
+  onlineSuche,
   listenRepository,
+  einstellungRepository,
+  abschnitte = buecherAbschnitte,
 }: Props) {
+  const design = useDesign();
+  const [ersatz] = useState(fluechtig);
+  const einstellungen = einstellungRepository ?? design.einstellungRepository ?? ersatz;
+  const [ausgeblendet, auswahlGeladen, ausgeblendetSpeichern] = useAusgeblendet(einstellungen);
+  const [blattOffen, setBlattOffen] = useState(false);
   const listenRepo = useMemo(() => listenRepository ?? standardListenRepository(), [listenRepository]);
   const { listen, neuLaden: listenNeuLaden } = useListen(listenRepo);
   const filterliste = filter ?? filterKonfiguration;
@@ -140,6 +194,9 @@ export default function BuecherAnsicht({
   const listenbilder = useListenbilder(speicher, listen);
   const scanner = useMemo(() => barcodeScanner ?? standardBarcodeScanner(), [barcodeScanner]);
   const isbnSucheAktiv = useMemo(() => isbnSuche ?? standardIsbnSuche(), [isbnSuche]);
+  const onlineSucheAktiv = useMemo(() => onlineSuche ?? standardOnlineSuche(), [onlineSuche]);
+  // Suchfenster „Online suchen“ (REQ-110) als Blatt über der Seite.
+  const [sucheOffen, setSucheOffen] = useState(false);
   const ansichtSpeicher = useMemo(() => ansichtRepository ?? standardAnsichtRepository(), [ansichtRepository]);
   const [ansicht, setAnsicht] = useState<Ansicht>({ art: 'liste' });
   const [ort, setOrt] = useState<Ort>({ art: 'seite' });
@@ -251,10 +308,14 @@ export default function BuecherAnsicht({
     );
   }
 
-  const kopf = (
+  const kopfbereich = (
     <Kopfbereich
       menueOffen={menueOffen}
       onPlus={() => setMenueOffen((offen) => !offen)}
+      onOnlineSuche={() => {
+        setMenueOffen(false);
+        setSucheOffen(true);
+      }}
       onBarcode={() => {
         setMenueOffen(false);
         setAnsicht({ art: 'scan' });
@@ -264,7 +325,43 @@ export default function BuecherAnsicht({
         setAnsicht({ art: 'eintrag' });
       }}
       onMenueSchliessen={() => setMenueOffen(false)}
+      onFilter={() => {
+        setMenueOffen(false);
+        setBlattOffen(true);
+      }}
     />
+  );
+  const kopf = (
+    <>
+      {kopfbereich}
+      {sucheOffen ? (
+        <Suchfenster
+          suche={onlineSucheAktiv}
+          // Zurück: eine Stufe zurück ins Menü „Buch hinzufügen“ (REQ-110, AK-8).
+          onZurueck={() => {
+            setSucheOffen(false);
+            setMenueOffen(true);
+          }}
+          // Treffer: weiter wie nach Auswahl eines Barcode-Treffers (REQ-111, AK-7; REQ-062).
+          onWahl={(vorbelegung) => {
+            setSucheOffen(false);
+            setAnsicht({ art: 'eintrag', vorbelegung });
+          }}
+        />
+      ) : null}
+      {blattOffen ? (
+        <BlattFuerDich
+          abschnitte={abschnitte}
+          ausgeblendet={ausgeblendet}
+          geladen={auswahlGeladen}
+          onSchliessen={() => setBlattOffen(false)}
+          onSpeichern={(neu) => {
+            ausgeblendetSpeichern(neu);
+            setBlattOffen(false);
+          }}
+        />
+      ) : null}
+    </>
   );
 
   if (ort.art === 'uebersicht') {
@@ -286,39 +383,34 @@ export default function BuecherAnsicht({
     );
   }
 
+  const abschnittKontext: AbschnittKontext = {
+    buecher: alle,
+    frontcover,
+    listen,
+    listenbilder,
+    onBuchAntippen: oeffnen,
+    onUebersicht: uebersichtOeffnen,
+    // Platzhalter öffnet dasselbe Menü wie die Plus-Schaltfläche (REQ-011 AK-3, REQ-029).
+    onLeereListe: () => setMenueOffen(true),
+    // Sagas und Sammlungen (REQ-012, REQ-097): „Alle ansehen ›“ öffnet die Listenübersicht, eine Liste direkt die Liste.
+    onListenUebersicht: (art) => {
+      setMenueOffen(false);
+      setAnsicht({ art: 'listen', ziel: { art: 'uebersicht', listenArt: art } });
+    },
+    onListeAntippen: (l) => {
+      setMenueOffen(false);
+      setAnsicht({ art: 'listen', ziel: { art: 'liste', listeId: l.id } });
+    },
+  };
+
   return (
     <div data-seite="buecher" style={seiteStil}>
       {kopf}
       <Filterleiste filter={filterliste} buecher={alle ?? []} aktivId={seitenFilterId} onAntippen={seitenFilterAntippen} />
-      <AbschnittNochZuLesen
-        buecher={alle}
-        frontcover={frontcover}
-        onBuchAntippen={oeffnen}
-        onAlleAnsehen={() => uebersichtOeffnen('noch_zu_lesen')}
-      />
-      {/* Sagas und Sammlungen (REQ-012, REQ-097): „Alle ansehen ›“ öffnet die Listenübersicht, eine Liste direkt die Liste. */}
-      {(['saga', 'sammlung'] as const).map((art) => (
-        <AbschnittListen
-          key={art}
-          art={art}
-          listen={listen}
-          listenbilder={listenbilder}
-          onAlleAnsehen={() => {
-            setMenueOffen(false);
-            setAnsicht({ art: 'listen', ziel: { art: 'uebersicht', listenArt: art } });
-          }}
-          onListeAntippen={(l) => {
-            setMenueOffen(false);
-            setAnsicht({ art: 'listen', ziel: { art: 'liste', listeId: l.id } });
-          }}
-        />
+      {/* Abschnitte aus der zentralen Liste; bei „Für dich“ nur die angehakten (REQ-108), Reihenfolge unverändert. */}
+      {(seitenFilterId === PERSONALISIERBARER_FILTER_ID ? sichtbareAbschnitte(abschnitte, ausgeblendet) : abschnitte).map((a) => (
+        <Fragment key={a.id}>{a.darstellen(abschnittKontext)}</Fragment>
       ))}
-      <AbschnittAlleBuecher
-        buecher={alle}
-        frontcover={frontcover}
-        onBuchAntippen={oeffnen}
-        onAlleAnsehen={() => uebersichtOeffnen('alle')}
-      />
     </div>
   );
 }
