@@ -1,7 +1,7 @@
 ---
 id: REQ-037
 titel: Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt
-status: Implementiert
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -36,6 +36,9 @@ Referenzbilder: [referenzen/REF-alle-buecher-02-raster.png](referenzen/REF-alle-
 
 **Rasteransicht**
 - Das System muss jedes Buch mit Frontcover (bzw. Cover-Platzhalter REQ-010), darunter Buchtitel und Autorzeile darstellen.
+- Das System muss in der Rasteransicht immer genau drei Bücher nebeneinander darstellen, unabhängig von der Bildschirmbreite. CEO (wörtlich, 2026-11-25): „Es sollen immer drei Bücher nebeneinander passen in den Listen. Hier muss das aber dynamisch an das Handy anpassbar sein, falls jemand ein schmaleres Handy haben sollte.“ Und: „auch für die Rasteransicht auf der Seite Bücher“.
+  - **Auslegung:** Cover, Abstände und Schrift skalieren mit der Bildschirmbreite. Das Cover-Seitenverhältnis 2:3 bleibt. Die drei Spalten füllen die verfügbare Breite gleichmäßig, ohne große Lücke zwischen den Büchern und ohne waagerechtes Scrollen.
+  - Gilt für die Rasteransicht aller Übersichten (REQ-036, REQ-040, REQ-042) und der geöffneten Listen (REQ-098).
 
 **Listenansicht**
 - Das System muss jedes Buch als Karte mit Frontcover (bzw. Cover-Platzhalter), Buchtitel und Autorzeile darstellen.
@@ -67,6 +70,13 @@ Referenzbilder: [referenzen/REF-alle-buecher-02-raster.png](referenzen/REF-alle-
 - **Gegeben** die Rasteransicht und ein Buch mit Frontcover, Titel und Autor
 - **Wenn** dessen Eintrag betrachtet wird
 - **Dann** zeigt er Frontcover, Buchtitel, Icon und Autor
+
+### AK-10 Immer drei Bücher nebeneinander
+- **Gegeben** die Rasteransicht der Übersicht „Alle Bücher“ mit sieben Büchern
+- **Wenn** sie bei einer Bildschirmbreite von 320 px, 360 px bzw. 412 px angezeigt wird
+- **Dann** stehen in jeder vollen Reihe genau drei Bücher nebeneinander (Reihen 3, 3, 1)
+- **Und** die drei Spalten sind gleich breit und teilen sich die verfügbare Breite, es gibt kein waagerechtes Scrollen
+- **Und** jedes Cover hat das Seitenverhältnis 2:3
 
 ### AK-5 Ohne Cover, ohne Autor
 - **Gegeben** ein Buch ohne Frontcover und ohne Autor
@@ -119,3 +129,4 @@ Referenzbilder: [referenzen/REF-alle-buecher-02-raster.png](referenzen/REF-alle-
 | 2026-11-12 | CEO-Antworten F3, F5, F8 eingearbeitet. Status bleibt Entwurf | Anforderungsmanager |
 | 2026-11-12 | CEO-Antworten Runde 2: Ansicht je Liste (AK-3), Modus „%“ und ohne Seitenanzahl (neu AK-8, AK-9), konkreter Statusname (AK-7). Rundung aus REQ-026 abgeleitet. Status bleibt Entwurf | Anforderungsmanager |
 | 2026-11-12 | CEO-Antwort Runde 3, F2: Modus „%“ ohne Seitenzahlen (AK-9). Status bleibt Entwurf | Anforderungsmanager |
+| 2026-11-25 | Fehler (High): Im Raster standen nur 2 Bücher mit großer Lücke. Rasteransicht immer mit drei Spalten, skaliert mit der Bildschirmbreite (Auslegung: Cover 2:3, gleichmäßige Spalten). CEO (wörtlich): „Es sollen immer drei Bücher nebeneinander passen in den Listen. Hier muss das aber dynamisch an das Handy anpassbar sein, falls jemand ein schmaleres Handy haben sollte.“ und „auch für die Rasteransicht auf der Seite Bücher“. Anforderung ergänzt, AK-10 neu. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |

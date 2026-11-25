@@ -1,7 +1,7 @@
 ---
 id: REQ-098
 titel: Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift
-status: Implementiert
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -36,19 +36,20 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkt 5: Filter, Suche, Sortierung u
   - Antippen eines Buches markiert es sichtbar hervorgehoben. Erneutes Antippen hebt die Markierung auf. Mehrere Bücher können markiert sein.
   - Mit „Sichern“ (CEO, 2026-11-24: „b“) muss das System die Zugehörigkeit dauerhaft übernehmen: Markierte Bücher sind danach in der Liste, entmarkierte vorher enthaltene Bücher sind herausgenommen. Danach schließt das Blatt, und die geöffnete Liste zeigt den neuen Stand mit angepasster Anzahl.
   - Schließt der Nutzer das Blatt ohne „Sichern“, muss das System die Auswahl verwerfen.
-  - Bandnummer bei Sagas: Ein neu hinzugefügtes Buch erhält die beim Barcode-Scan gespeicherte Bandnummer, falls vorhanden (REQ-099), sonst keine. Ein bereits enthaltenes Buch behält seine Bandnummer. Ändern lässt sie sich über die Listenübersicht (REQ-097).
+  - Bandnummer bei Sagas: Die Bandnummer gehört zum Buch, nicht zur Zugehörigkeit (REQ-112). Hinzufügen zu einer Saga oder Herausnehmen ändert sie nicht. Ein hinzugefügtes Buch erscheint in der Saga mit seiner Bandnummer, falls es eine hat. Ändern lässt sie sich über die Zeile „Band“ (REQ-112) oder das Feld „Band“ der Listenübersicht (REQ-097).
 - An Stelle der Überschrift „Deine Bücher“ steht der Name der Liste und rechts daneben ein Stift-Symbol (**Auslegung**: Listenname als Überschrift, weil der Stift „rechts nebendran“ den Titel ändert).
 - Die Buchtitel stehen ohne Bandnummer.
 - Antippen eines Buches öffnet dessen Buchdetails. Deren Zurück-Pfeil führt zurück zur Liste (wie REQ-036 F7).
+- In der Rasteransicht muss das System immer genau drei Bücher nebeneinander darstellen, skaliert mit der Bildschirmbreite, nach derselben Regel wie REQ-037 (gilt für Sagas, Sammlungen und Bibliotheken). CEO (wörtlich, 2026-11-25): „Es sollen immer drei Bücher nebeneinander passen in den Listen. Hier muss das aber dynamisch an das Handy anpassbar sein, falls jemand ein schmaleres Handy haben sollte.“
 
 **Sortierung**
 - In Sammlungen und Bibliotheken muss das System die Bücher A–Z nach Titel anordnen.
-- In Sagas muss der Sortierknopf zwischen „A–Z“ und „nach Bänden“ umschalten. „Nach Bänden“ ordnet aufsteigend nach Bandnummer, der erste Band zuerst. Bücher ohne Bandnummer stehen danach A–Z (**Auslegung**). Die Voreinstellung ist „nach Bänden“ (**Auslegung**).
+- In Sagas muss der Sortierknopf zwischen „A–Z“ und „nach Bänden“ umschalten. „Nach Bänden“ ordnet aufsteigend nach der Bandnummer des Buches (REQ-112), der erste Band zuerst. Bücher ohne Bandnummer stehen danach A–Z (**Auslegung**). Die Voreinstellung ist „nach Bänden“ (**Auslegung**).
 
 **Umbenennen und Löschen**
 - Wenn der Nutzer den Stift antippt, muss das System ein Blatt nach dem Muster „Verlag“ (REQ-063) mit dem Namen im Feld, der Pille „Sichern“ und darunter „Liste löschen“ anzeigen.
 - „Sichern“ speichert den neuen Namen dauerhaft. Er gilt überall, auch in den Buchdetails (REQ-095, REQ-099). Ein leerer Name wird nicht gesichert, das Feld wird hervorgehoben wie in REQ-063.
-- Wenn der Nutzer „Liste löschen“ antippt, muss das System eine Rückfrage anzeigen. Bestätigt er, löscht das System die Liste samt Zugehörigkeiten und Bandnummern, die Bücher bleiben erhalten. Danach zeigt es die Listenübersicht dieser Art (**Auslegung**). Verneint er, bleibt alles unverändert.
+- Wenn der Nutzer „Liste löschen“ antippt, muss das System eine Rückfrage anzeigen. Bestätigt er, löscht das System die Liste samt Zugehörigkeiten, die Bücher bleiben erhalten und behalten ihre Bandnummer (REQ-112). Danach zeigt es die Listenübersicht dieser Art (**Auslegung**). Verneint er, bleibt alles unverändert.
 
 ## Akzeptanzkriterien
 
@@ -103,6 +104,18 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkt 5: Filter, Suche, Sortierung u
 - **Wenn** der Nutzer ein Buch antippt und in dessen Buchdetails den Zurück-Pfeil antippt
 - **Dann** wird wieder die Liste angezeigt
 
+### AK-10 Raster mit drei Spalten
+- **Gegeben** die Saga „Crescent City“ mit vier Büchern ist in der Rasteransicht geöffnet
+- **Wenn** sie bei einer Bildschirmbreite von 320 px bzw. 412 px angezeigt wird
+- **Dann** stehen in der ersten Reihe genau drei Bücher nebeneinander, in der zweiten eins
+- **Und** die Spalten sind gleich breit, es gibt kein waagerechtes Scrollen, die Cover haben das Seitenverhältnis 2:3
+- **Und** in einer Sammlung bzw. Bibliothek gilt dasselbe
+
+### AK-11 Saga löschen, Bandnummer bleibt
+- **Gegeben** „House of Earth and Blood“ hat Band 1 und ist nur in der Saga „Crescent City“
+- **Wenn** der Nutzer die Saga löscht und die Rückfrage bestätigt
+- **Dann** ist das Buch weiterhin vorhanden, und seine Zeile „Band“ (REQ-112) zeigt 1
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Bandnummer in der Bücherliste (CEO: ohne „Band X“).
@@ -133,3 +146,5 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkt 5: Filter, Suche, Sortierung u
 | 2026-11-23 | Änderungswunsch des CEO eingearbeitet („soll das "+" nicht zum anlegen einer neuen Saga sein. Stattdessen sollen mir alle Bücher von A-Z als Scrollbare Liste angezeigt werden …“): Plus in einer Saga zeigt alle Bücher zur Mehrfachauswahl, die markierten werden der Saga hinzugefügt. AK-6 neu gefasst, AK-7 und AK-8 neu. Auslegungen: Blatt von unten, Cover und Titel je Buch, Bandnummer aus dem Scan, Sammlungen und Bibliotheken vorerst unverändert. Drei offene Fragen. Status unverändert („In Umsetzung“), die geänderten Teile sind noch nicht vom CEO bestätigt | Anforderungsmanager |
 | 2026-11-24 | CEO-Antworten eingearbeitet: 1 „ja“ (gilt auch für Sammlungen und Bibliotheken, Plus legt keine Liste mehr an), 2 „b“ (Übernahme erst mit „Sichern“, Schließen verwirft), 3 „ja zu allem“ (enthaltene Bücher vormarkiert, Entmarkieren nimmt sie nach „Sichern“ heraus). Eigene Auslegungen vom CEO nicht beanstandet. AK-6 bis AK-8 neu gefasst, AK-9 neu. Keine offenen Fragen. Status unverändert | Anforderungsmanager |
 | 2026-11-24 | Änderung (Plus wählt Bücher aus, AK-6 bis AK-9) vom CEO bestätigt (wörtlich): „passt für mich :)“. Status bleibt „In Umsetzung“ | Anforderungsmanager |
+| 2026-11-25 | Fehler (High): Raster zeigte nur 2 Bücher mit großer Lücke. Raster immer dreispaltig wie REQ-037 (AK-10 neu). CEO (wörtlich): „Es sollen immer drei Bücher nebeneinander passen in den Listen. Hier muss das aber dynamisch an das Handy anpassbar sein, falls jemand ein schmaleres Handy haben sollte.“ | Anforderungsmanager |
+| 2026-11-25 | An REQ-112 angepasst (eine Bandnummer je Buch, CEO-Entscheidung „a“): Hinzufügen/Herausnehmen ändert die Bandnummer nicht, Sortierung nach der Bandnummer des Buches, Löschen der Saga behält die Bandnummer (Anforderung, AK-11 neu). CEO (wörtlich): „Der Band soll aus dem ISBN Code auch ausgelesen werden, sofern er hinterlegt ist“. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |

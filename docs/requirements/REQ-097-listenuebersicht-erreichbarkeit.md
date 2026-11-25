@@ -1,7 +1,7 @@
 ---
 id: REQ-097
 titel: Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“
-status: Implementiert
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -34,7 +34,8 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkte 4 und 7: Je Liste werden Name
 **Aus den Buchdetails geöffnet (mit Buchbezug)**
 - Wenn der Nutzer in den Buchdetails die Zeile „In Saga“, „In Sammlung“ bzw. „In Bibliotheken“ (REQ-095) antippt, muss das System die Listenübersicht dieser Art öffnen und je Liste ein Häkchen zeigen, ob das Buch darin ist.
 - Antippen eines Häkchens nimmt das Buch sofort in die Liste auf bzw. aus ihr heraus und wird dauerhaft gespeichert (**Auslegung**: sofort wirksam, ohne „Sichern“). Mehrere Häkchen sind möglich.
-- Bei Sagas zeigt die Übersicht je angehakter Saga das optionale Feld „Band“ mit denselben Regeln wie REQ-096 (**Auslegung**: sonst wäre ein Band nach der ersten Zuordnung nicht mehr änderbar).
+- Bei Sagas zeigt die Übersicht, sobald mindestens eine Saga angehakt ist, genau ein optionales Feld „Band“ mit der Bandnummer des Buches (REQ-112) und denselben Regeln wie REQ-096. Eine dort übernommene Änderung ändert die Bandnummer des Buches und damit die Zeile „Band“ und alle Saga-Zeilen der Buchdetails (CEO-Entscheidung „a“, 2026-11-25; **Auslegung**: ein Feld statt eines je Saga, Übernahme wie bisher beim Feld „Band“ dieser Übersicht).
+- Das Entfernen eines Häkchens ändert die Bandnummer des Buches nicht (REQ-112).
 - Eine hier über „+“ angelegte Liste ist sofort angehakt (**Auslegung**, wie REQ-096).
 - Ist das Buch danach in keiner Liste dieser Art mehr, zeigt der Abschnitt in den Buchdetails wieder die Pille (REQ-095).
 
@@ -79,6 +80,13 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkte 4 und 7: Je Liste werden Name
 - **Wenn** der Nutzer „+“ antippt und „Crescent City“ anlegt
 - **Dann** erscheint „Crescent City“ in der Übersicht und ist angehakt
 
+### AK-11 Ein Feld „Band“ mit der Bandnummer des Buches
+- **Gegeben** ein Buch mit Bandnummer 2 in den Sagas „The Empyrean“ und „Crescent City“
+- **Wenn** der Nutzer in den Buchdetails „In Saga“ antippt
+- **Dann** zeigt die Listenübersicht „Sagas“ genau ein Feld „Band“ mit 2
+- **Und** nach Ändern auf 4 zeigen die Buchdetails „Band 4 · Crescent City“, „Band 4 · The Empyrean“ und in der Zeile „Band“ „4“
+- **Und** nach Entfernen des Häkchens bei „Crescent City“ hat das Buch weiterhin die Bandnummer 4
+
 ### AK-6 Name öffnet die Liste
 - **Gegeben** die Listenübersicht „Sagas“
 - **Wenn** der Nutzer auf „The Empyrean“ tippt
@@ -120,6 +128,7 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkte 4 und 7: Je Liste werden Name
 - **REQ-009, REQ-010** (Muster für Reihe, Platzhalter und Titelstelle).
 - **REQ-002:** Die Zielansicht des Menüpunkts „Bibliothek“ ist dort nicht definiert („under construction :)“). Sie wird hier festgelegt.
 - **REQ-095, REQ-096, REQ-098, REQ-013, REQ-036, ADR-0002.**
+- **REQ-112:** Bandnummer gehört zum Buch.
 - **REQ-100 (Entwurf):** Listenbild links neben dem Namen in der Listenübersicht (ohne Bild ein Platzhalter) und an Stelle des Cover-Platzhalters auf der Seite „Bücher“.
 
 ## Offene Fragen
@@ -134,3 +143,4 @@ Vom CEO am 2026-11-23 bestätigtes Konzept, Punkte 4 und 7: Je Liste werden Name
 | 2026-11-23 | CEO-Antwort 1 eingearbeitet: Seite „Bücher“ zeigt je Liste einen Platzhalter mit Namen, Antippen öffnet direkt die Liste, ohne Listen bleibt REQ-012 (AK-8 neu gefasst, AK-9 neu). Status Entwurf | Anforderungsmanager |
 | 2026-11-23 | CEO-Ergänzung: „Alle ansehen ›“ neben „Sagas“ und „Sammlungen“ öffnet die Listenübersicht. Abgeleitet: erscheint auch ohne Listen, Übersicht dort ohne Häkchen (kein Buch im Kontext). AK-9 ergänzt, AK-10 neu. Status Entwurf | Anforderungsmanager |
 | 2026-11-23 | Vom CEO bestätigt (wörtlich): „okay, freigegeben. Starte mit dem nächsten Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | An REQ-112 angepasst: eine Bandnummer je Buch (CEO-Entscheidung „a“). Genau ein Feld „Band“ mit der Bandnummer des Buches, Häkchen entfernen behält sie. Anforderung geändert, AK-11 neu. CEO (wörtlich): „Der Band soll aus dem ISBN Code auch ausgelesen werden, sofern er hinterlegt ist“. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |

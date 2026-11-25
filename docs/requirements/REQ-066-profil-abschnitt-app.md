@@ -1,7 +1,7 @@
 ---
 id: REQ-066
 titel: Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“
-status: Implementiert
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -20,7 +20,7 @@ Abstimmung des Mockups des Scrum Masters (CEO, wörtlich): „Deine Ideen gefall
 ## Anforderung (Satzschablone)
 
 - Das System muss in der Zielansicht des Menüpunkts „Profil“ einen Abschnitt mit der Überschrift „App“ in der Schriftgrößenstufe „Label“ (REQ-065) darstellen.
-- Das System muss unter dieser Überschrift eine Karte darstellen, die derzeit genau eine Zeile „Design“ enthält und genauso aussieht wie die Karte „Ausgabe“ in den Buchdetails (REQ-056): dieselbe Kartenfläche (heller als der Hintergrund) sowie dieselbe Zeilengestaltung, Trennlinien und Pfeile.
+- Das System muss unter dieser Überschrift eine Karte darstellen, die die Zeilen „Design“ und darunter „Versionsinfo“ (REQ-113) enthält und genauso aussieht wie die Karte „Ausgabe“ in den Buchdetails (REQ-056): dieselbe Kartenfläche (heller als der Hintergrund) sowie dieselbe Zeilengestaltung, Trennlinien und Pfeile.
 - Das System muss in der Zeile „Design“ rechts die aktuelle Wahl als „<Farbdesign> · <Schrift> ›“ anzeigen (z. B. „Klassisch · Fraunces ›“).
 - Wenn der Nutzer die Zeile „Design“ antippt, muss das System das Fenster „Design“ (REQ-067) öffnen.
 - Die Zielansicht „Profil“ zeigt nicht mehr „under construction :)“.
@@ -30,9 +30,9 @@ Abstimmung des Mockups des Scrum Masters (CEO, wörtlich): „Deine Ideen gefall
 ### AK-1 Abschnitt „App“ mit Karte und Zeile „Design“
 - **Gegeben** die App ist geöffnet
 - **Wenn** der Nutzer den Menüpunkt „Profil“ antippt
-- **Dann** erscheint die Überschrift „App“ in der Stufe „Label“ und darunter eine Karte mit genau einer Zeile „Design“
+- **Dann** erscheint die Überschrift „App“ in der Stufe „Label“ und darunter eine Karte mit genau den Zeilen „Design“ und „Versionsinfo“ (REQ-113), in dieser Reihenfolge
 - **Und** „under construction :)“ wird nicht angezeigt
-- **Und** die Karte verwendet für Fläche, Zeilen, Trennlinien und Pfeil dieselben Farbrollen und dieselbe Gestaltung wie die Karte „Ausgabe“ (REQ-056); ihre Fläche hebt sich hell vom Hintergrund ab
+- **Und** die Karte verwendet für Fläche, Zeilen, Trennlinien und Pfeil (nur bei „Design“) dieselben Farbrollen und dieselbe Gestaltung wie die Karte „Ausgabe“ (REQ-056); ihre Fläche hebt sich hell vom Hintergrund ab
 
 ### AK-2 Aktuelle Wahl in der Zeile
 - **Gegeben** das Farbdesign „Salbei“ und die Schrift „Systemschrift“ sind gewählt
@@ -47,7 +47,7 @@ Abstimmung des Mockups des Scrum Masters (CEO, wörtlich): „Deine Ideen gefall
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Weitere Abschnitte oder Zeilen der Seite „Profil“.
+- Weitere Abschnitte oder Zeilen der Seite „Profil“. Die Zeile „Versionsinfo“ regelt REQ-113.
 - Inhalt des Fensters „Design“ (REQ-067 bis REQ-069).
 
 ## Qualitätsanforderungen
@@ -69,3 +69,4 @@ Abstimmung des Mockups des Scrum Masters (CEO, wörtlich): „Deine Ideen gefall
 |---|---|---|
 | 2026-11-18 | Erstellt aus der CEO-Anforderung und dem angenommenen Mockup. Status „Abgestimmt“ (CEO, wörtlich: „Deine Ideen gefallen mir alle. Setzen wir so um.“) | Anforderungsmanager |
 | 2026-11-18 | Karte wie „Ausgabe“ präzisiert (gleiche helle Fläche, Zeilen, Trennlinien, Pfeil), AK-1 ergänzt. CEO zum Prototyp: „Schau mal bitte das Menü bei App an... da ist der Menühintergrund nicht in einem helleren / weißeren Ton wie bei den Buchdetails -> Ausgabe.... da gefällt mir das Menüdesign total gut. Können wir das bitte hier auch übernehmen?“ Status unverändert | Anforderungsmanager |
+| 2026-11-25 | An REQ-113 angepasst: Karte „App“ mit zweiter Zeile „Versionsinfo“ unter „Design“. CEO (wörtlich): „in dieser ist immer die jeweilige Appversion fest hinterlegt und kann auch nicht geändert werden manuell. Die App hat aktuell 0.11“. Anforderung und AK-1 geändert. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |

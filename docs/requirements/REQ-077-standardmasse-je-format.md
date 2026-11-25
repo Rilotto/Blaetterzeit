@@ -1,7 +1,7 @@
 ---
 id: REQ-077
 titel: Standardmaße je Format und geschätzte Dicke aus der Seitenzahl
-status: Implementiert
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -31,6 +31,12 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
   - ohne Seitenzahl: 2,5 cm
 - Das System muss geschätzte Werte für die Anzeige auf eine Nachkommastelle in cm kaufmännisch runden.
 - Das System muss diese Standardmaße verwenden in: Vorschlag der Zeile „Maße“ (REQ-072), Proportionen der Buchdarstellung (REQ-073), 3D-Modell (REQ-076). Hinterlegte Einzelwerte haben stets Vorrang.
+
+**Nach dem Barcode-Scan**
+- CEO (wörtlich, 2026-11-25): „wenn die Maße eines Buches nicht online verfügbar sind, sollen bitte die Standardmaße eines Taschenbuches verwendet werden. Wenn online abrufbar ist, ob der gescannte Code ein Taschenbuch oder Hardcover ist, sollen jeweils dafür entsprechende Standardwerte hergenommen werden.“
+- Liefert die Online-Abfrage keine Maße, muss das System für das über den Scan angelegte Buch die Standardmaße des übernommenen Formats verwenden (REQ-062: Taschenbuch bzw. Hardcover), ohne Format die des Taschenbuchs. Das gilt schon im vorbefüllten Manuellen Eintrag und danach in den Buchdetails.
+- Online gefundene Maße haben Vorrang (REQ-072). Fehlt nur ein Einzelwert, gilt dafür der Standardwert.
+- Die Standardmaße werden wie bisher verwendet, aber nicht als hinterlegte Maße gespeichert (REQ-072: Schätzwerte nie selbsttätig speichern; **Auslegung**). Ändert der Nutzer später das Format, gelten die Standardmaße des neuen Formats (AK-5).
 
 ## Akzeptanzkriterien
 
@@ -67,6 +73,22 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 - **Wenn** der Nutzer das Format auf „Print · Hardcover“ ändert und sichert (REQ-058)
 - **Dann** gelten ab sofort die Standardmaße für Hardcover
 
+### AK-8 Scan ohne Maße, mit Format Hardcover
+- **Gegeben** ein Scan-Treffer mit Formatangabe „Hardcover“, 400 Seiten und ohne Maße
+- **Wenn** der Nutzer den Treffer antippt
+- **Dann** zeigt der Manuelle Eintrag bei „Format“ „Print · Hardcover“ und bei „Maße“ den Vorschlag „ca. 14,8 × 21,0 × 2,8 cm“
+- **Und** nach „Hinzufügen“ zeigt die Zeile „Maße“ der Buchdetails denselben Vorschlag, die Buchdarstellung verwendet diese Maße, und es sind keine Maße gespeichert
+
+### AK-9 Scan ohne Maße, mit Format Taschenbuch bzw. ohne Format
+- **Gegeben** ein Scan-Treffer mit Formatangabe „Paperback“ bzw. ohne Formatangabe, jeweils mit 400 Seiten und ohne Maße
+- **Wenn** der Nutzer den Treffer antippt
+- **Dann** zeigt der Manuelle Eintrag bei „Maße“ jeweils den Vorschlag „ca. 12,0 × 19,0 × 2,4 cm“
+
+### AK-10 Online gefundene Maße haben Vorrang
+- **Gegeben** ein Scan-Treffer mit Formatangabe „Hardcover“, 400 Seiten und der gelieferten Höhe 24,0 cm
+- **Wenn** der Nutzer den Treffer antippt und das Buch anlegt
+- **Dann** ist die Höhe 24,0 gespeichert, und für Breite und Dicke gelten die Hardcover-Standardwerte 14,8 und 2,8
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - 3D-Modell für Hörbücher (REQ-078, To-do-Liste).
@@ -78,6 +100,7 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 ## Abhängigkeiten
 
 - REQ-025 (Seitenzahl), REQ-058 (Format), REQ-072, REQ-073, REQ-076.
+- REQ-062 (Barcode-Scan, Zuordnung der Formatangabe, AK-10 dort).
 
 ## Offene Fragen
 
@@ -89,3 +112,4 @@ CEO (2026-11-21, wörtlich): „Sind keine hinterlegt, wird für das ausgewählt
 |---|---|---|
 | 2026-11-21 | Erstellt aus vom CEO angenommenem Vorschlag des Scrum Masters. Status „Entwurf“, weil drei Lücken offen sind (siehe Offene Fragen) | Anforderungsmanager |
 | 2026-11-21 | CEO-Antworten (wörtlich): 1. „Wie ein Taschenbuch, guter Vorschlag!“ (kein Format / Print ohne Unterformat → Taschenbuch); 2. „ja, lass uns auch ein Taschenbuchformat nehmen“ (Hörbuch → Taschenbuch für 2D und Vorschlag); 3. „dein Vorschlag klingt gut, machen wir so“ (Hardcover-Maße = Außenmaße der Deckel). Neu AK-6, AK-7. Offene Fragen leer. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Fehler: Nach dem Barcode-Scan griffen die Standardmaße nicht. Standardmaße des übernommenen Formats (ohne Format Taschenbuch) schon im Manuellen Eintrag und danach, online gefundene Maße mit Vorrang, nicht gespeichert (Auslegung). CEO (wörtlich): „wenn die Maße eines Buches nicht online verfügbar sind, sollen bitte die Standardmaße eines Taschenbuches verwendet werden. Wenn online abrufbar ist, ob der gescannte Code ein Taschenbuch oder Hardcover ist, sollen jeweils dafür entsprechende Standardwerte hergenommen werden.“ Anforderung ergänzt, AK-8 bis AK-10 neu. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |

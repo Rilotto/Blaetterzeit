@@ -1,6 +1,6 @@
 ---
 id: REQ-109
-titel: Buchdetails – „Längster Streak für dieses Buch“ als Rekord statt laufender Streak
+titel: Buchdetails – „Längste Serie“ für dieses Buch als Rekord statt laufender Streak
 status: In Umsetzung
 prioritaet: Should
 art: funktional
@@ -20,7 +20,8 @@ Zusammenfassung des Scrum Masters, vom CEO ohne Widerspruch stehen gelassen (202
 
 ## Anforderung (Satzschablone)
 
-- Das System muss in der Statistik-Pille der Buchdetails (REQ-026) unter der Flamme statt „Tage in Folge“ die Beschriftung „Längster Streak für dieses Buch“ anzeigen.
+- Das System muss in der Statistik-Pille der Buchdetails (REQ-026) unter der Flamme statt „Tage in Folge“ die Beschriftung „Längste Serie“ anzeigen. CEO (wörtlich, 2026-11-25): „Ändern wir den Text bitte unter der Flamme zu Längste Serie. Wenn der Text nicht in die Boxen passt, sollen sinnvolle Zeilenumbrüche mit Silbentrennung entstehen.“ Die frühere Beschriftung „Längster Streak für dieses Buch“ entfällt.
+- Passt die Beschriftung nicht in ihre Box, bricht sie mit Silbentrennung um und läuft nie über die Box hinaus (REQ-111).
 - Das System muss als Zahl in der Flamme die längste lückenlose Folge von Lesetagen dieses Buches über die gesamte Historie anzeigen. Lesetag wie bisher (REQ-027): Kalendertag nach lokaler Gerätezeit mit mindestens einer Sitzung dieses Buches, mehrere Sitzungen am Tag zählen als ein Tag.
 - Der Wert hängt nicht davon ab, ob heute oder gestern gelesen wurde. Er sinkt nicht durch Pausen, durch das Beenden des Buches oder durch einen Statuswechsel.
 - Der Wert kann höchstens so groß sein wie die Zahl der Lesetage des Buches.
@@ -32,7 +33,8 @@ Zusammenfassung des Scrum Masters, vom CEO ohne Widerspruch stehen gelassen (202
 ### AK-1 Beschriftung
 - **Gegeben** die Buchdetails werden angezeigt
 - **Wenn** der linke Teil der Statistik-Pille betrachtet wird
-- **Dann** steht unter der Flamme „Längster Streak für dieses Buch“ und nicht „Tage in Folge“
+- **Dann** steht unter der Flamme genau „Längste Serie“, weder „Längster Streak für dieses Buch“ noch „Tage in Folge“
+- **Und** die Beschriftung unterliegt den Umbruchregeln aus REQ-111 (AK-4)
 
 ### AK-2 Längste Folge über die Historie
 - **Gegeben** Sitzungen des Buches an 1., 2., 3. und 10., 11. November, heute ist der 25. November
@@ -80,3 +82,4 @@ Zusammenfassung des Scrum Masters, vom CEO ohne Widerspruch stehen gelassen (202
 |---|---|---|
 | 2026-11-25 | Erstellt aus CEO-Vorgabe vom 2026-11-25, Entwurf | Anforderungsmanager |
 | 2026-11-25 | Vom CEO bestätigt (wörtlich): „beide punkte passen für mich.“ Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Fehler (High): Beschriftung lief über die Box und überlappte „gelesen“. Beschriftung „Längster Streak für dieses Buch“ → „Längste Serie“. CEO (wörtlich): „Ändern wir den Text bitte unter der Flamme zu Längste Serie. Wenn der Text nicht in die Boxen passt, sollen sinnvolle Zeilenumbrüche mit Silbentrennung entstehen.“ Umbruch über REQ-111. Titel, Anforderung, AK-1 geändert. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |
