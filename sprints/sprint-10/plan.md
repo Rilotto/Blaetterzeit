@@ -59,3 +59,6 @@ Branch: sprint-10/listen-und-felder, abgezweigt von main (nach dem Merge von Spr
 - REQ-109 Buch-Streak: „Längster Streak für dieses Buch“, gezählt als Rekord
 - Angepasste Alt-REQs: REQ-026, 027, 087, 103
 - Gegenprobe höchstens 2 Fehler: Zustand ausgegraut/angezündet, Rekordberechnung
+
+## Gesammelte Mini-Änderungen (gebündelt, vor dem nächsten Prototyp umsetzen)
+- 2026-11-25: Hauptleiste unten (Start, Bücher …) tiefer setzen, den Abstand von der Schriftunterkante zum Bildschirmrand halbieren. Wortlaut CEO: „Der Abstand zwischen der unteren Kante der Schrift und dem Ende des Bildschirmes müsste bitte halbiert werden.“
