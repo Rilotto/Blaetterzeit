@@ -60,9 +60,21 @@ jobs:
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           java -version
           ./gradlew --version --no-daemon
+      # versionCode-Schema (android/app/build.gradle liest VERSION_CODE, Standard 1):
+      #   Debug-APKs (dieser Job):  1000 + github.run_number des CI-Workflows  -> streng steigend je CI-Lauf,
+      #                             jede neue Debug-APK ist höher als alle früheren (kein „App nicht installiert“
+      #                             durch Downgrade). Ein Re-Run desselben Laufs ergibt denselben Code (Neuinstallation ok).
+      #   Release-APKs (release.yml): 1000000000 + github.run_number des Release-Workflows -> immer über allen Debug-Codes.
+      #   update-test: fest basis=1, neu=2 (nur neu > basis zählt, eigener Emulator).
+      #   Obergrenze von Android: 2100000000.
       - name: Debug-APK bauen
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        env:
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          export VERSION_CODE=$((1000 + RUN_NUMBER))
+          echo "versionCode=$VERSION_CODE"
+          ./gradlew assembleDebug --no-daemon --stacktrace
       # Download für Gerätetests (z. B. S23 Ultra). Signiert mit dem festen Debug-Testschlüssel
       # (android/app/debug.keystore), Debug-APKs sind daher übereinander installierbar. Vor dem
       # Wechsel auf eine Release-APK muss die App deinstalliert werden (Datenverlust).
