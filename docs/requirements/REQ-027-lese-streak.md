@@ -97,7 +97,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 ## Abhängigkeiten
 
 - **REQ-024:** Sitzungen mit Zeitpunkt. **REQ-026:** Statistik-Pille. **REQ-006:** Farbrubrik GhostFrame.
-- **REQ-109 (Entwurf):** Mit dessen Abstimmung wird die Berechnung in den Buchdetails durch den Rekord „Längster Streak für dieses Buch“ abgelöst (betrifft AK-4, AK-5, AK-7). Lesetag-Definition und Flammendarstellung bleiben. **REQ-108 (Entwurf):** Der Gesamt-Streak bekommt den Zustand „ausgegraut“.
+- **REQ-109:** Beschriftung und Rekord der Flamme in den Buchdetails: abgelöst durch REQ-109 (Rekord „Längste Serie“, Fix, CEO 2026-11-26; betrifft AK-4, AK-5, AK-7). Lesetag-Definition und Flammendarstellung bleiben. **REQ-108:** Der Gesamt-Streak bekommt den Zustand „ausgegraut“.
 
 ## Offene Fragen
 
@@ -113,3 +113,4 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 | 2026-11-10 | CEO-Antworten eingearbeitet: F6 Lesetag = Kalendertag lokaler Gerätezeit mit mindestens einer Sitzung, mehrere Sitzungen = ein Tag, Aussehen der Flamme bei 0 und ≥ 1, neue Farbrubriken „Flamme Rot“/„Flamme Orange“ (neu AK-3, AK-4, AK-6, AK-7, AK-9). Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
 | 2026-11-25 | Verweise auf REQ-108 und REQ-109 (Entwurf) unter Abhängigkeiten ergänzt. AKs bleiben bis zur Abstimmung unverändert. Status unverändert | Anforderungsmanager |
 | 2026-11-25 | An REQ-109 angepasst (Abgestimmt, CEO: „beide punkte passen für mich.“): Berechnung als Rekord über die Historie (Anforderung, AK-5, AK-7). AK-1 bis AK-4, AK-6, AK-8 und AK-9 gelten unverändert. Status unverändert | Anforderungsmanager |
+| 2026-11-26 | Abhängigkeits-Hinweise auf gültigen Stand gebracht (CEO: „Req-109 löst 026 und 087 entsprechend als fix ab.“): „Längste Serie“ statt „Längster Streak für dieses Buch“, REQ-108/REQ-109 nicht mehr als Entwurf geführt. AKs und Status unverändert | Anforderungsmanager |
