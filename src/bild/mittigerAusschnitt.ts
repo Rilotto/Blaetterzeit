@@ -1,4 +1,4 @@
-// Mittiger Zuschnitt auf ein Seitenverhältnis (REQ-109), reine Funktionen ohne Canvas oder DOM.
+// Mittiger Zuschnitt auf ein Seitenverhältnis (REQ-115), reine Funktionen ohne Canvas oder DOM.
 
 /** Rechteck in Pixeln des Quellbildes. */
 export interface Ausschnitt {
@@ -15,7 +15,7 @@ export function verhaeltnisGleich(a: number, b: number): boolean {
 
 /**
  * Größtmöglicher mittiger Ausschnitt eines Bildes von `breite` × `hoehe` Pixeln im Seitenverhältnis
- * `verhaeltnis` (Breite/Höhe, REQ-109 AK-1): Überstehendes wird auf beiden Seiten gleichmäßig entfernt,
+ * `verhaeltnis` (Breite/Höhe, REQ-115 AK-1): Überstehendes wird auf beiden Seiten gleichmäßig entfernt,
  * nichts verzerrt, nichts hinzugefügt. Ganze Pixel; passt das Bild bereits, ist es der volle Rahmen (AK-2).
  */
 export function mittigerAusschnitt(breite: number, hoehe: number, verhaeltnis: number): Ausschnitt {

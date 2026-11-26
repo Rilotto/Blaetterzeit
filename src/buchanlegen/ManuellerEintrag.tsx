@@ -327,7 +327,7 @@ export default function ManuellerEintrag({
   const [seitenFehler, setSeitenFehler] = useState(false);
   const [unterblatt, setUnterblatt] = useState<Unterblatt>(null);
   const [cover, setCover] = useState<string | null>(vorbelegung?.cover ?? null);
-  // Seitenverhältnis, auf das das Cover zugeschnitten ist; null = noch nicht (übernommenes Online-Cover, REQ-109).
+  // Seitenverhältnis, auf das das Cover zugeschnitten ist; null = noch nicht (übernommenes Online-Cover, REQ-115).
   const [coverVerhaeltnis, setCoverVerhaeltnis] = useState<number | null>(null);
   const [menue, setMenue] = useState(false);
   const [schritt, setSchritt] = useState<Schritt>({ art: 'blatt' });
@@ -404,7 +404,7 @@ export default function ManuellerEintrag({
   const zielVerhaeltnis = seitenverhaeltnis('cover', massQuelle);
   const coverPasst = coverVerhaeltnis !== null && verhaeltnisGleich(coverVerhaeltnis, zielVerhaeltnis);
 
-  // Online-Cover einmal zuschneiden und nach Änderung von Format oder Maßen neu zuschneiden (REQ-109, AK-1/AK-7).
+  // Online-Cover einmal zuschneiden und nach Änderung von Format oder Maßen neu zuschneiden (REQ-115, AK-1/AK-7).
   useEffect(() => {
     if (!cover || coverPasst) return;
     let laeuft = true;
@@ -442,7 +442,7 @@ export default function ManuellerEintrag({
       const buch = buchAusEingaben(eingaben, zeit());
       const repo = repository ?? (await standardRepository());
       await repo.save(buch);
-      // Noch nicht passend zugeschnittenes Cover vor dem Speichern zuschneiden (REQ-109, AK-7).
+      // Noch nicht passend zugeschnittenes Cover vor dem Speichern zuschneiden (REQ-115, AK-7).
       const coverBild = cover && !coverPasst ? await mittigZuschneiden(cover, zielVerhaeltnis).catch(() => cover) : cover;
       if (coverBild) {
         await bildspeicher.put(buch.id, 'cover', coverBild).catch((fehler: unknown) => {

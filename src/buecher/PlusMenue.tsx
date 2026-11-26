@@ -10,7 +10,7 @@ interface Props {
   oben: number;
   /** Abstand des Menüs zum rechten Rand des Kopfbereichs in px. */
   rechts: number;
-  /** Option „Online suchen“ gewählt (REQ-110). */
+  /** Option „Online suchen“ gewählt (REQ-116). */
   onOnline: () => void;
   /** Option „Barcode scannen“ gewählt (REQ-061). */
   onBarcode: () => void;
@@ -92,7 +92,7 @@ const untertitelStil: CSSProperties = {
   color: buchAnlegenFarbe('menueOptionUntertitel'),
 };
 
-/** Menü „Buch hinzufügen“ (REQ-029, REQ-061, REQ-110) mit Abdunklung der Seite. Schließt nur über die Option oder Tippen außerhalb. */
+/** Menü „Buch hinzufügen“ (REQ-029, REQ-061, REQ-116) mit Abdunklung der Seite. Schließt nur über die Option oder Tippen außerhalb. */
 export default function PlusMenue({ oben, rechts, onOnline, onBarcode, onVonHand, onSchliessen }: Props) {
   return (
     <>

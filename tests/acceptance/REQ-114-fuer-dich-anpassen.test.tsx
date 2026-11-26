@@ -1,5 +1,5 @@
 /**
- * Akzeptanztests REQ-108 – Blatt „„Für dich“ anpassen“: Abschnitte der Filterpille „Für dich“ ein- und ausblenden.
+ * Akzeptanztests REQ-114 – Blatt „„Für dich“ anpassen“: Abschnitte der Filterpille „Für dich“ ein- und ausblenden.
  * Abgeleitet aus dem REQ-Text. Schnittstellen laut Entwickler (Sprint 12):
  *  - Blatt role=dialog „„Für dich“ anpassen“ [data-blatt-fuer-dich], Titel h2[data-fuer-dich-titel],
  *    X „Schließen“ [data-fuer-dich-schliessen], [data-ziehgriff], [data-fuer-dich-hintergrund]
@@ -83,10 +83,10 @@ async function ziehe(strecke: number) {
   });
 }
 
-describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
+describe('REQ-114 Blatt „„Für dich“ anpassen“', () => {
   // ---------------------------------------------------------------- AK-1
   describe('AK-1 Blatt öffnet sich mit Titel und allen Abschnitten', () => {
-    it('[REQ-108/AK-1] ohne gespeicherte Auswahl: Blatt von unten, Titel genau „„Für dich“ anpassen“, Ziehgriff und X', async () => {
+    it('[REQ-114/AK-1] ohne gespeicherte Auswahl: Blatt von unten, Titel genau „„Für dich“ anpassen“, Ziehgriff und X', async () => {
       await zeige();
       expect(blatt()).toBeNull();
       await oeffne();
@@ -99,7 +99,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       expect(within(b).getByRole('button', { name: 'Schließen' })).toBeInTheDocument();
     });
 
-    it('[REQ-108/AK-1] Zeilen „Noch zu lesen“, „Sagas“, „Sammlungen“, „Alle Bücher“ in dieser Reihenfolge, alle Haken gesetzt, dazu „Speichern“', async () => {
+    it('[REQ-114/AK-1] Zeilen „Noch zu lesen“, „Sagas“, „Sammlungen“, „Alle Bücher“ in dieser Reihenfolge, alle Haken gesetzt, dazu „Speichern“', async () => {
       await zeige();
       await oeffne();
       expect(zeilen().map((z) => z.querySelector('[data-fuer-dich-name]')?.textContent)).toEqual(ALLE_VIER);
@@ -109,7 +109,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       expect(abschnitte()).toEqual(ALLE_VIER);
     });
 
-    it('[REQ-108/AK-1] über die App: Seite „Bücher“ → Filter-/Einstellungen-Schaltfläche öffnet das Blatt', async () => {
+    it('[REQ-114/AK-1] über die App: Seite „Bücher“ → Filter-/Einstellungen-Schaltfläche öffnet das Blatt', async () => {
       render(<App einstellungRepository={new InMemoryEinstellungRepository()} />);
       await tippe(within(screen.getByRole('navigation', { name: 'Hauptnavigation' })).getByRole('button', { name: 'Bücher' }));
       await oeffne();
@@ -119,7 +119,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
 
   // ---------------------------------------------------------------- AK-2
   describe('AK-2 Speichern blendet Abschnitte aus', () => {
-    it('[REQ-108/AK-2] Sagas und Sammlungen abwählen, Speichern: Blatt zu, „Für dich“ zeigt nur „Noch zu lesen“ und „Alle Bücher“', async () => {
+    it('[REQ-114/AK-2] Sagas und Sammlungen abwählen, Speichern: Blatt zu, „Für dich“ zeigt nur „Noch zu lesen“ und „Alle Bücher“', async () => {
       const repo = await zeige();
       fuerDichAktiv();
       await oeffne();
@@ -133,7 +133,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       await waitFor(async () => expect(JSON.parse((await repo.lesen(SCHLUESSEL)) ?? '[]')).toEqual(expect.arrayContaining(['sagas', 'sammlungen'])));
     });
 
-    it('[REQ-108/AK-2] Reihenfolge bleibt unverändert: nur „Noch zu lesen“ abgewählt → Sagas, Sammlungen, Alle Bücher', async () => {
+    it('[REQ-114/AK-2] Reihenfolge bleibt unverändert: nur „Noch zu lesen“ abgewählt → Sagas, Sammlungen, Alle Bücher', async () => {
       await zeige();
       await oeffne();
       await tippe(zeile('Noch zu lesen'));
@@ -141,7 +141,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       expect(abschnitte()).toEqual(['Sagas', 'Sammlungen', 'Alle Bücher']);
     });
 
-    it('[REQ-108/AK-2] wieder anhaken und speichern blendet den Abschnitt wieder ein', async () => {
+    it('[REQ-114/AK-2] wieder anhaken und speichern blendet den Abschnitt wieder ein', async () => {
       await zeige();
       await oeffne();
       await tippe(zeile('Sagas'));
@@ -157,7 +157,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
 
   // ---------------------------------------------------------------- AK-3
   describe('AK-3 Erst „Speichern“ wirkt', () => {
-    it('[REQ-108/AK-3] Haken entfernt, nicht gespeichert: Haken im Blatt umgeschaltet, Abschnitt auf der Seite weiter vorhanden, nichts gespeichert', async () => {
+    it('[REQ-114/AK-3] Haken entfernt, nicht gespeichert: Haken im Blatt umgeschaltet, Abschnitt auf der Seite weiter vorhanden, nichts gespeichert', async () => {
       const repo = await zeige();
       await oeffne();
       await tippe(zeile('Sagas'));
@@ -177,7 +177,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       ['Android-Zurück-Taste', androidZurueck],
       ['Herunterziehen am Ziehgriff', () => ziehe(SCHREIBFENSTER_ZUG_SCHWELLE + 40)],
     ];
-    it.each(wege)('[REQ-108/AK-4] Haken „Sagas“ entfernt, Schließen über %s: alle vier Abschnitte, beim erneuten Öffnen Haken gesetzt', async (_, schliesse) => {
+    it.each(wege)('[REQ-114/AK-4] Haken „Sagas“ entfernt, Schließen über %s: alle vier Abschnitte, beim erneuten Öffnen Haken gesetzt', async (_, schliesse) => {
       const repo = await zeige();
       await oeffne();
       await tippe(zeile('Sagas'));
@@ -190,7 +190,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       expect(haken('Sagas')).toBe('true');
     });
 
-    it('[REQ-108/AK-4] bei gespeicherter Auswahl (ohne Sammlungen): Änderung verworfen, gespeicherte Auswahl bleibt und wird wieder angezeigt', async () => {
+    it('[REQ-114/AK-4] bei gespeicherter Auswahl (ohne Sammlungen): Änderung verworfen, gespeicherte Auswahl bleibt und wird wieder angezeigt', async () => {
       const repo = new InMemoryEinstellungRepository();
       await repo.speichern(SCHLUESSEL, JSON.stringify(['sammlungen']));
       await zeige(repo);
@@ -208,7 +208,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
 
   // ---------------------------------------------------------------- AK-5
   describe('AK-5 Mindestens ein Haken', () => {
-    it('[REQ-108/AK-5] nur „Alle Bücher“ angehakt, antippen: bleibt gesetzt, Hinweis erscheint und verschwindet wieder', async () => {
+    it('[REQ-114/AK-5] nur „Alle Bücher“ angehakt, antippen: bleibt gesetzt, Hinweis erscheint und verschwindet wieder', async () => {
       await zeige();
       await oeffne();
       for (const n of ['Noch zu lesen', 'Sagas', 'Sammlungen']) await tippe(zeile(n));
@@ -227,7 +227,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       vi.useRealTimers();
     });
 
-    it('[REQ-108/AK-5] Grenzfall: Hinweis ist „kurz“ (höchstens 10 s) und erscheint bei erneutem Antippen wieder', async () => {
+    it('[REQ-114/AK-5] Grenzfall: Hinweis ist „kurz“ (höchstens 10 s) und erscheint bei erneutem Antippen wieder', async () => {
       expect(FUER_DICH_HINWEIS_MS).toBeGreaterThan(0);
       expect(FUER_DICH_HINWEIS_MS).toBeLessThanOrEqual(10_000);
       await zeige();
@@ -245,7 +245,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       vi.useRealTimers();
     });
 
-    it('[REQ-108/AK-5] Negativfall: solange zwei Haken gesetzt sind, lässt sich einer entfernen, ohne Hinweis', async () => {
+    it('[REQ-114/AK-5] Negativfall: solange zwei Haken gesetzt sind, lässt sich einer entfernen, ohne Hinweis', async () => {
       await zeige();
       await oeffne();
       for (const n of ['Noch zu lesen', 'Sagas']) await tippe(zeile(n));
@@ -260,7 +260,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
 
   // ---------------------------------------------------------------- AK-6
   describe('AK-6 Dauerhaft gespeichert', () => {
-    it('[REQ-108/AK-6] „Sagas“ ausgeblendet, gespeichert, Neustart (App): „Sagas“ fehlt weiter, Haken nicht gesetzt', async () => {
+    it('[REQ-114/AK-6] „Sagas“ ausgeblendet, gespeichert, Neustart (App): „Sagas“ fehlt weiter, Haken nicht gesetzt', async () => {
       const repo = new InMemoryEinstellungRepository();
       const start = async () => {
         render(<App einstellungRepository={repo} />);
@@ -287,7 +287,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
   describe('AK-7 Neuer Abschnitt erscheint automatisch und sichtbar', () => {
     const mitNeu = [...buecherAbschnitte, { id: 'neu', titel: 'Neu', darstellen: () => <section aria-label="Neu" /> }];
 
-    it('[REQ-108/AK-7] gespeichert ohne „Sagas“, neuer Abschnitt ergänzt: im Blatt mit gesetztem Haken, bei „Für dich“ sichtbar, „Sagas“ bleibt aus', async () => {
+    it('[REQ-114/AK-7] gespeichert ohne „Sagas“, neuer Abschnitt ergänzt: im Blatt mit gesetztem Haken, bei „Für dich“ sichtbar, „Sagas“ bleibt aus', async () => {
       const repo = new InMemoryEinstellungRepository();
       await zeige(repo);
       await oeffne();
@@ -305,7 +305,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       expect(haken('Sagas')).toBe('false');
     });
 
-    it('[REQ-108/AK-7] neuer Abschnitt lässt sich wie die übrigen ausblenden', async () => {
+    it('[REQ-114/AK-7] neuer Abschnitt lässt sich wie die übrigen ausblenden', async () => {
       await zeige(new InMemoryEinstellungRepository(), { abschnitte: mitNeu });
       await oeffne();
       await tippe(zeile('Neu'));
@@ -316,7 +316,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
 
   // ---------------------------------------------------------------- AK-8
   describe('AK-8 Ziehgriff antippen schließt nicht', () => {
-    it('[REQ-108/AK-8] bloßes Antippen des Ziehgriffs: Blatt bleibt offen, Entwurf bleibt erhalten', async () => {
+    it('[REQ-114/AK-8] bloßes Antippen des Ziehgriffs: Blatt bleibt offen, Entwurf bleibt erhalten', async () => {
       await zeige();
       await oeffne();
       await tippe(zeile('Sagas'));
@@ -325,7 +325,7 @@ describe('REQ-108 Blatt „„Für dich“ anpassen“', () => {
       expect(haken('Sagas')).toBe('false');
     });
 
-    it('[REQ-108/AK-8] Grenzwert: Ziehen knapp unter der Schwelle schließt nicht, ab der Schwelle schließt es', async () => {
+    it('[REQ-114/AK-8] Grenzwert: Ziehen knapp unter der Schwelle schließt nicht, ab der Schwelle schließt es', async () => {
       await zeige();
       await oeffne();
       await ziehe(SCHREIBFENSTER_ZUG_SCHWELLE - 1);

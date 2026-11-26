@@ -233,7 +233,7 @@ const markeStil: CSSProperties = {
   borderRadius: '50%',
 };
 
-/** Haken (gewählt) bzw. leerer Kreis am Zeilenende; auch im Blatt „„Für dich“ anpassen“ (REQ-108). */
+/** Haken (gewählt) bzw. leerer Kreis am Zeilenende; auch im Blatt „„Für dich“ anpassen“ (REQ-114). */
 export function Marke({ aktiv }: { aktiv: boolean }) {
   return aktiv ? (
     <span data-haken="" style={{ ...markeStil, backgroundColor: detailsFarbe('hakenFlaeche') }}>

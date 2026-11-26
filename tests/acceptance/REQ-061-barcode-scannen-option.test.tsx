@@ -91,7 +91,7 @@ describe('REQ-061 Barcode scannen', () => {
     await zeige();
     const m = await oeffneMenue();
     const opt = within(m).getAllByRole('menuitem');
-    // Seit REQ-110 zusätzlich „Online suchen“ an erster Stelle.
+    // Seit REQ-116 zusätzlich „Online suchen“ an erster Stelle.
     expect(opt).toHaveLength(3);
     const bc = within(m).getByRole('menuitem', { name: /Barcode scannen/ });
     expect(bc).toHaveAttribute('data-option', 'barcode');

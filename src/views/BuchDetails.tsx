@@ -285,7 +285,7 @@ export default function BuchDetails({
           return false;
         },
       )
-      // Format, Maße oder Seitenzahl geändert: gespeicherte Bilder neu zuschneiden (REQ-109, AK-4 bis AK-6),
+      // Format, Maße oder Seitenzahl geändert: gespeicherte Bilder neu zuschneiden (REQ-115, AK-4 bis AK-6),
       // nur nach erfolgreichem Speichern.
       .then(async (gespeichert) => {
         if (!gespeichert || !alt || geaenderteBereiche(alt, neu).length === 0) return;

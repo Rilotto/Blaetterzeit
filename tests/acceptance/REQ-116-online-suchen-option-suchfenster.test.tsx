@@ -1,5 +1,5 @@
 /**
- * Akzeptanztests REQ-110 – Menü „Buch hinzufügen“: Option „Online suchen“ und Suchfenster.
+ * Akzeptanztests REQ-116 – Menü „Buch hinzufügen“: Option „Online suchen“ und Suchfenster.
  * Abgeleitet aus dem REQ-Text. Schnittstellen laut Entwickler (Sprint 12):
  *  - BuecherAnsicht { onlineSuche: { suchen(text): Promise<Treffer[]> } }; [] = keine Treffer, reject = kein Internet.
  *  - onlineSucheMit(http) aus @/barcode/suche mit Fake-HttpClient (text/bild) zum Prüfen der Anfragen.
@@ -117,9 +117,9 @@ async function menueWiederOffen() {
   expect(screen.getByRole('button', { name: 'Menü schließen' }).querySelector('[data-icon="icon-x.png"]')).not.toBeNull();
 }
 
-describe('REQ-110 Online suchen', () => {
+describe('REQ-116 Online suchen', () => {
   describe('AK-1 Option im Menü', () => {
-    it('[REQ-110/AK-1] Menü enthält „Online suchen“ (an erster Stelle, Untertitel, Lupen-Icon), „Barcode scannen“, „Von Hand eintragen“; kein „Deine Bücher importieren“', async () => {
+    it('[REQ-116/AK-1] Menü enthält „Online suchen“ (an erster Stelle, Untertitel, Lupen-Icon), „Barcode scannen“, „Von Hand eintragen“; kein „Deine Bücher importieren“', async () => {
       await zeige({ suchen: vi.fn(async () => []) });
       const m = await oeffneMenue();
       const items = within(m).getAllByRole('menuitem');
@@ -134,7 +134,7 @@ describe('REQ-110 Online suchen', () => {
       expect(screen.queryByText(/Deine Bücher importieren/)).toBeNull();
     });
 
-    it('[REQ-110/AK-1] Untertitel steht unter dem Titel', async () => {
+    it('[REQ-116/AK-1] Untertitel steht unter dem Titel', async () => {
       await zeige({ suchen: vi.fn(async () => []) });
       const m = await oeffneMenue();
       const opt = m.querySelector('[data-option="online"]')!;
@@ -145,7 +145,7 @@ describe('REQ-110 Online suchen', () => {
   });
 
   describe('AK-2 Option öffnet das Suchfenster', () => {
-    it('[REQ-110/AK-2] Antippen: Menü zu, Suchfenster mit Zurück-Pfeil und Suchfeld offen, Suchfeld hat den Fokus', async () => {
+    it('[REQ-116/AK-2] Antippen: Menü zu, Suchfenster mit Zurück-Pfeil und Suchfeld offen, Suchfeld hat den Fokus', async () => {
       const suche = { suchen: vi.fn(async () => []) };
       await zeige(suche);
       const f = await oeffneSuche();
@@ -157,7 +157,7 @@ describe('REQ-110 Online suchen', () => {
       expect(suche.suchen).not.toHaveBeenCalled();
     });
 
-    it('[REQ-110/AK-2] auch über den Leere-Liste-Platzhalter (REQ-011) geöffnetes Menü öffnet das Suchfenster', async () => {
+    it('[REQ-116/AK-2] auch über den Leere-Liste-Platzhalter (REQ-011) geöffnetes Menü öffnet das Suchfenster', async () => {
       render(<BuecherAnsicht repository={repoFake([])} bildspeicher={speicherFake()} onlineSuche={{ suchen: vi.fn(async () => []) }} />);
       const leer = await vi.waitFor(() => {
         const e = document.querySelector('[data-leere-liste]');
@@ -174,7 +174,7 @@ describe('REQ-110 Online suchen', () => {
   });
 
   describe('AK-3 Suche erst mit der Such-Taste', () => {
-    it('[REQ-110/AK-3] Eintippen sendet keine Anfrage; Such-Taste fragt DNB und Open Library ab', async () => {
+    it('[REQ-116/AK-3] Eintippen sendet keine Anfrage; Such-Taste fragt DNB und Open Library ab', async () => {
       const http = httpFake();
       await zeige(onlineSucheMit(http));
       await oeffneSuche();
@@ -189,7 +189,7 @@ describe('REQ-110 Online suchen', () => {
       expect(hosts.some((h) => /openlibrary\.org$/.test(h))).toBe(true);
     });
 
-    it('[REQ-110/AK-3] beide Anfragen starten gleichzeitig (die zweite wartet nicht auf die Antwort der ersten)', async () => {
+    it('[REQ-116/AK-3] beide Anfragen starten gleichzeitig (die zweite wartet nicht auf die Antwort der ersten)', async () => {
       const http = httpFake(() => new Promise<never>(() => {}));
       await zeige(onlineSucheMit(http));
       await oeffneSuche();
@@ -198,7 +198,7 @@ describe('REQ-110 Online suchen', () => {
       await vi.waitFor(() => expect(http.text).toHaveBeenCalledTimes(2), W);
     });
 
-    it('[REQ-110/AK-3] Absenden des Suchformulars (Such-Taste) startet die Suche mit dem Suchtext', async () => {
+    it('[REQ-116/AK-3] Absenden des Suchformulars (Such-Taste) startet die Suche mit dem Suchtext', async () => {
       const suche = { suchen: vi.fn(async () => [T1]) };
       await zeige(suche);
       const f = await oeffneSuche();
@@ -212,7 +212,7 @@ describe('REQ-110 Online suchen', () => {
       expect(suche.suchen).toHaveBeenCalledWith('Harry Potter Rowling');
     });
 
-    it('[REQ-110/AK-3] Titel, Autor und ISBN (auch kombiniert) werden angenommen: Wörter landen in beiden Anfragen', async () => {
+    it('[REQ-116/AK-3] Titel, Autor und ISBN (auch kombiniert) werden angenommen: Wörter landen in beiden Anfragen', async () => {
       const http = httpFake();
       await zeige(onlineSucheMit(http));
       await oeffneSuche();
@@ -224,7 +224,7 @@ describe('REQ-110 Online suchen', () => {
       }
     });
 
-    it('[REQ-110/AK-3] Laufanzeige während der Suche; neue Suche ersetzt die bisherigen Ergebnisse', async () => {
+    it('[REQ-116/AK-3] Laufanzeige während der Suche; neue Suche ersetzt die bisherigen Ergebnisse', async () => {
       let loesen: (t: Treffer[]) => void = () => {};
       const suche = {
         suchen: vi
@@ -253,7 +253,7 @@ describe('REQ-110 Online suchen', () => {
   });
 
   describe('AK-4 Nur der Suchtext wird übermittelt', () => {
-    it('[REQ-110/AK-4] keine Anfrage (auch Cover) enthält Angaben der eigenen Bücher; Textanfragen enthalten die ISBN', async () => {
+    it('[REQ-116/AK-4] keine Anfrage (auch Cover) enthält Angaben der eigenen Bücher; Textanfragen enthalten die ISBN', async () => {
       const ol = JSON.stringify({ docs: [{ title: 'Harry Potter', author_name: ['J. K. Rowling'], isbn: [ISBN], cover_i: 42 }] });
       const http = httpFake((u) => (u.includes('openlibrary') ? { status: 200, text: ol } : { status: 404, text: '' }));
       await zeige(onlineSucheMit(http));
@@ -269,7 +269,7 @@ describe('REQ-110 Online suchen', () => {
       for (const c of http.text.mock.calls) expect(c[0]).toContain(ISBN);
     });
 
-    it('[REQ-110/AK-4] die Anfragen hängen nur vom Suchtext ab (anderer Suchtext → nur der Suchtext ändert sich)', async () => {
+    it('[REQ-116/AK-4] die Anfragen hängen nur vom Suchtext ab (anderer Suchtext → nur der Suchtext ändert sich)', async () => {
       const a = httpFake();
       const b = httpFake();
       await onlineSucheMit(a).suchen(ISBN);
@@ -282,7 +282,7 @@ describe('REQ-110 Online suchen', () => {
   });
 
   describe('AK-5 Leeres Suchfeld', () => {
-    it.each([[''], ['   '], ['\t  ']])('[REQ-110/AK-5] Suchfeld %j: Such-Taste sendet keine Anfrage', async (text) => {
+    it.each([[''], ['   '], ['\t  ']])('[REQ-116/AK-5] Suchfeld %j: Such-Taste sendet keine Anfrage', async (text) => {
       const http = httpFake();
       await zeige(onlineSucheMit(http));
       const f = await oeffneSuche();
@@ -301,7 +301,7 @@ describe('REQ-110 Online suchen', () => {
   });
 
   describe('AK-6 Keine Treffer', () => {
-    it('[REQ-110/AK-6] Fenster bleibt offen, Suchtext im Feld, kurz „Keine Bücher gefunden“', async () => {
+    it('[REQ-116/AK-6] Fenster bleibt offen, Suchtext im Feld, kurz „Keine Bücher gefunden“', async () => {
       const { repo } = await zeige({ suchen: vi.fn(async () => []) });
       await oeffneSuche();
       eintippen('Gibtsnicht Xyz');
@@ -319,7 +319,7 @@ describe('REQ-110 Online suchen', () => {
       expect(neue(repo)).toHaveLength(0);
     });
 
-    it('[REQ-110/AK-6] über onlineSucheMit: beide Quellen ohne Treffer → „Keine Bücher gefunden“', async () => {
+    it('[REQ-116/AK-6] über onlineSucheMit: beide Quellen ohne Treffer → „Keine Bücher gefunden“', async () => {
       const dnbLeer = '<?xml version="1.0"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/"><numberOfRecords>0</numberOfRecords></searchRetrieveResponse>';
       const http = httpFake((u) => (u.includes('openlibrary') ? { status: 200, text: JSON.stringify({ docs: [] }) } : { status: 200, text: dnbLeer }));
       await zeige(onlineSucheMit(http));
@@ -329,7 +329,7 @@ describe('REQ-110 Online suchen', () => {
       await vi.waitFor(() => expect(hinweis()).toHaveTextContent('Keine Bücher gefunden'), W);
     });
 
-    it('[REQ-110/AK-6] nur eine Quelle scheitert mit Fehler: Treffer der anderen ohne Hinweis', async () => {
+    it('[REQ-116/AK-6] nur eine Quelle scheitert mit Fehler: Treffer der anderen ohne Hinweis', async () => {
       const ol = JSON.stringify({ docs: [{ title: 'Nur Open Library', author_name: ['Autorin'] }] });
       const http = httpFake((u) => (u.includes('openlibrary') ? { status: 200, text: ol } : Promise.reject(new TypeError('DNB down'))));
       await zeige(onlineSucheMit(http));
@@ -343,7 +343,7 @@ describe('REQ-110 Online suchen', () => {
   });
 
   describe('AK-7 Kein Internet', () => {
-    it('[REQ-110/AK-7] Suche scheitert: Fenster offen, Suchtext bleibt, kurz „Keine Internetverbindung“, kein Buch', async () => {
+    it('[REQ-116/AK-7] Suche scheitert: Fenster offen, Suchtext bleibt, kurz „Keine Internetverbindung“, kein Buch', async () => {
       vi.spyOn(console, 'warn').mockImplementation(() => {});
       const { repo } = await zeige({ suchen: vi.fn(async () => Promise.reject(new TypeError('offline'))) });
       await oeffneSuche();
@@ -357,7 +357,7 @@ describe('REQ-110 Online suchen', () => {
       expect(fenster()).not.toBeNull();
     });
 
-    it('[REQ-110/AK-7] über onlineSucheMit: beide Quellen nicht erreichbar → „Keine Internetverbindung“', async () => {
+    it('[REQ-116/AK-7] über onlineSucheMit: beide Quellen nicht erreichbar → „Keine Internetverbindung“', async () => {
       vi.spyOn(console, 'warn').mockImplementation(() => {});
       const http = httpFake(() => Promise.reject(new TypeError('offline')));
       const { repo } = await zeige(onlineSucheMit(http));
@@ -372,7 +372,7 @@ describe('REQ-110 Online suchen', () => {
   });
 
   describe('AK-8 Zurück führt eine Stufe zurück', () => {
-    it('[REQ-110/AK-8] Zurück-Pfeil ohne Ergebnisse: Menü offen, Plus zeigt „ד, kein Buch', async () => {
+    it('[REQ-116/AK-8] Zurück-Pfeil ohne Ergebnisse: Menü offen, Plus zeigt „ד, kein Buch', async () => {
       const { repo } = await zeige({ suchen: vi.fn(async () => []) });
       const f = await oeffneSuche();
       await tippe(f.querySelector('[data-online-suche-zurueck]')!);
@@ -380,7 +380,7 @@ describe('REQ-110 Online suchen', () => {
       expect(repo.save).not.toHaveBeenCalled();
     });
 
-    it('[REQ-110/AK-8] Zurück-Pfeil mit Ergebnissen: Menü offen, kein Buch; erneutes „Online suchen“ öffnet das Fenster wieder', async () => {
+    it('[REQ-116/AK-8] Zurück-Pfeil mit Ergebnissen: Menü offen, kein Buch; erneutes „Online suchen“ öffnet das Fenster wieder', async () => {
       const { repo } = await zeige({ suchen: vi.fn(async () => [T1, T2]) });
       const f = await oeffneSuche();
       eintippen('Harry');
@@ -393,7 +393,7 @@ describe('REQ-110 Online suchen', () => {
       await vi.waitFor(() => expect(fenster()).not.toBeNull(), W);
     });
 
-    it('[REQ-110/AK-8] Android-Zurück-Taste (popstate): Menü offen, kein Buch', async () => {
+    it('[REQ-116/AK-8] Android-Zurück-Taste (popstate): Menü offen, kein Buch', async () => {
       const { repo } = await zeige({ suchen: vi.fn(async () => [T1]) });
       const f = await oeffneSuche();
       eintippen('Harry');
@@ -407,7 +407,7 @@ describe('REQ-110 Online suchen', () => {
       expect(repo.save).not.toHaveBeenCalled();
     });
 
-    it('[REQ-110/AK-8] Herunterziehen am Ziehgriff: Menü offen, kein Buch', async () => {
+    it('[REQ-116/AK-8] Herunterziehen am Ziehgriff: Menü offen, kein Buch', async () => {
       const { repo } = await zeige({ suchen: vi.fn(async () => []) });
       const f = await oeffneSuche();
       const griff = f.querySelector('[data-ziehgriff]')!;
@@ -421,7 +421,7 @@ describe('REQ-110 Online suchen', () => {
       expect(repo.save).not.toHaveBeenCalled();
     });
 
-    it('[REQ-110/AK-8] Negativfall: kurzes Ziehen schließt das Fenster nicht', async () => {
+    it('[REQ-116/AK-8] Negativfall: kurzes Ziehen schließt das Fenster nicht', async () => {
       await zeige({ suchen: vi.fn(async () => []) });
       const f = await oeffneSuche();
       const griff = f.querySelector('[data-ziehgriff]')!;

@@ -186,7 +186,7 @@ export function dnbTrefferLesen(xml: string, gesuchteIsbn?: string): Treffer[] {
     const seiten = seitenAus(unterfeld(erstes('300'), 'a'));
     const isbns = f.filter((x) => x.tag === '020').flatMap((x) => x.unterfelder.filter(([c]) => c === 'a' || c === '9').map(([, w]) => w));
     const isbn = isbns.map((w) => isbnNormalisieren(w.split(/\s/)[0] ?? '')).find((w) => w !== null) ?? gesuchteIsbn;
-    // Cover über die gesuchte ISBN (Barcode, REQ-062), bei der Freitextsuche (REQ-110) über die ISBN des Datensatzes.
+    // Cover über die gesuchte ISBN (Barcode, REQ-062), bei der Freitextsuche (REQ-116) über die ISBN des Datensatzes.
     const coverIsbn = gesuchteIsbn ?? isbn;
     // Preis und Einbandart (REQ-062 AK-9): 020 $c (Bezugsbedingungen) bzw. 020 $q; Medientyp aus 337/338.
     const bezug = f.filter((x) => x.tag === '020').flatMap((x) => x.unterfelder.filter(([c]) => c === 'c' || c === 'q').map(([, w]) => w)).join(' ');
@@ -302,10 +302,10 @@ export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Tre
 }
 
 // ---------------------------------------------------------------------------
-// Freitextsuche „Online suchen“ (REQ-110, REQ-111): Titel, Autor oder ISBN, auch kombiniert
+// Freitextsuche „Online suchen“ (REQ-116, REQ-117): Titel, Autor oder ISBN, auch kombiniert
 // ---------------------------------------------------------------------------
 
-/** Höchstzahl der Treffer insgesamt und je Quelle (REQ-111, AK-1). */
+/** Höchstzahl der Treffer insgesamt und je Quelle (REQ-117, AK-1). */
 export const ONLINE_SUCHE_MAX = 9;
 
 /** Wörter des Suchtexts für die CQL-Abfrage der DNB; Anführungszeichen und Backslash werden entfernt. */
@@ -395,7 +395,7 @@ export function openLibrarySucheLesen(json: string, gesuchteIsbn?: string | null
 
 /**
  * Ordnet die Treffer abwechselnd an (DNB, Open Library, DNB, …), je in der Reihenfolge der Quelle; liefert eine
- * Quelle weniger, füllt die andere auf. Höchstens `max` Treffer (REQ-111, AK-1 bis AK-3). Keine Zusammenführung.
+ * Quelle weniger, füllt die andere auf. Höchstens `max` Treffer (REQ-117, AK-1 bis AK-3). Keine Zusammenführung.
  */
 export function trefferMischen(dnb: readonly Treffer[], ol: readonly Treffer[], max = ONLINE_SUCHE_MAX): Treffer[] {
   const ergebnis: Treffer[] = [];

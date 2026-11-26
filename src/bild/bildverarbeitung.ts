@@ -75,7 +75,7 @@ export async function zuschneiden(dataUrl: string, eckenNormiert: Ecken, seitenv
 }
 
 /**
- * Mittiger Zuschnitt auf ein Seitenverhältnis (REQ-109): größtmöglicher mittiger Ausschnitt, unverzerrt,
+ * Mittiger Zuschnitt auf ein Seitenverhältnis (REQ-115): größtmöglicher mittiger Ausschnitt, unverzerrt,
  * ohne Ränder. Passt das Bild bereits, kommt es unverändert zurück (AK-2). Ohne Canvas (Testumgebung)
  * bleibt das Bild unverändert.
  */

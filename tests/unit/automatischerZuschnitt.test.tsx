@@ -26,7 +26,7 @@ beforeEach(() => {
 });
 afterEach(() => cleanup());
 
-describe('REQ-109 mittiger Ausschnitt (rein)', () => {
+describe('REQ-115 mittiger Ausschnitt (rein)', () => {
   it('600 × 600 auf Taschenbuch: volle Höhe, links und rechts gleich viel weg', () => {
     const a = mittigerAusschnitt(600, 600, TB);
     expect(a).toEqual({ x: 110, y: 0, breite: 380, hoehe: 600 });
@@ -44,7 +44,7 @@ describe('REQ-109 mittiger Ausschnitt (rein)', () => {
   });
 });
 
-describe('REQ-109 Zuschnitt nach Änderung', () => {
+describe('REQ-115 Zuschnitt nach Änderung', () => {
   it('Formatwechsel betrifft Cover, Rücken und Schnitt', () => {
     expect(geaenderteBereiche({ format: 'print', unterformat: 'taschenbuch' }, { format: 'print', unterformat: 'kleinformat' })).toEqual([
       'ruecken',
@@ -73,7 +73,7 @@ describe('REQ-109 Zuschnitt nach Änderung', () => {
   });
 });
 
-describe('REQ-109 Manueller Eintrag', () => {
+describe('REQ-115 Manueller Eintrag', () => {
   it('übernommenes Cover wird zugeschnitten und nach Formatwechsel vor „Hinzufügen“ neu', async () => {
     const repo = new InMemoryBookRepository();
     const bilder = new InMemoryImageStore();
@@ -100,7 +100,7 @@ describe('REQ-109 Manueller Eintrag', () => {
   });
 });
 
-describe('REQ-109 Buchdetails: Zuschnitt nur nach erfolgreichem Speichern', () => {
+describe('REQ-115 Buchdetails: Zuschnitt nur nach erfolgreichem Speichern', () => {
   const klick = async (el: Element) =>
     act(async () => {
       fireEvent.click(el);

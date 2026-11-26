@@ -580,7 +580,7 @@ describe('REQ-005 Seite „Bücher“ – Kopfbereich', () => {
   // Anpassung Sprint 04 (REQ-005 vom 2026-11-10): AK-10 gilt nur noch für die Filter-/Einstellungen-
   // Schaltfläche. Die Wirkung der Plus-Schaltfläche legt REQ-029 fest (Menü „Buch hinzufügen“, „+“↔„×“),
   // deshalb prüfen diese Tests die Plus-Schaltfläche nicht mehr auf „bewirkt nichts“.
-  // Anpassung Sprint 12 (REQ-005 vom 2026-11-25): Die Schaltfläche öffnet das Blatt „„Für dich“ anpassen“ (REQ-108).
+  // Anpassung Sprint 12 (REQ-005 vom 2026-11-25): Die Schaltfläche öffnet das Blatt „„Für dich“ anpassen“ (REQ-114).
   describe('AK-10 Antippen der Filter-/Einstellungen-Schaltfläche öffnet „„Für dich“ anpassen“, kein aktiver Zustand', () => {
     it('[REQ-005/AK-10] die Filter-/Einstellungen-Schaltfläche hat keinen Umschaltzustand (kein aria-pressed/aria-expanded/aria-current)', () => {
       zeige();
@@ -594,7 +594,7 @@ describe('REQ-005 Seite „Bücher“ – Kopfbereich', () => {
       expect(plusBtn()).not.toHaveAttribute('data-aktiv');
     });
 
-    it('[REQ-005/AK-10] Antippen von „Filter und Einstellungen“ öffnet das Blatt „„Für dich“ anpassen“ (REQ-108)', () => {
+    it('[REQ-005/AK-10] Antippen von „Filter und Einstellungen“ öffnet das Blatt „„Für dich“ anpassen“ (REQ-114)', () => {
       render(<App />);
       tapMenue('Bücher');
       expect(screen.queryByRole('dialog', { name: '„Für dich“ anpassen' })).toBeNull();

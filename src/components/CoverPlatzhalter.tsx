@@ -18,7 +18,7 @@ const stil: CSSProperties = {
  */
 export default function CoverPlatzhalter({ breite, hoehe, fuellen = false }: { breite?: number; hoehe?: number; fuellen?: boolean } = {}) {
   // Abweichende Größe nur für kleinere Coverflächen (Listenansicht der Übersicht, REQ-037);
-  // `fuellen`: füllt die umgebende Coverfläche (Raster der Online-Suche, REQ-111).
+  // `fuellen`: füllt die umgebende Coverfläche (Raster der Online-Suche, REQ-117).
   const groesse = fuellen
     ? { width: '100%', height: '100%' }
     : breite !== undefined && hoehe !== undefined

@@ -38,7 +38,7 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 - Das System muss im Auswahlfenster einen Zurück-Pfeil anzeigen. Wenn der Nutzer ihn antippt oder die Android-Zurück-Taste betätigt, muss das System die Seite „Bücher“ anzeigen, ohne ein Buch anzulegen.
 
 **Übernahme**
-- Wenn der Nutzer einen Treffer antippt, muss das System das Blatt „Manueller Eintrag“ (REQ-030, REQ-060) öffnen und dessen Felder mit den Angaben dieses Treffers ausfüllen; ein vorhandenes Coverfoto wird als Cover übernommen (wie REQ-032). Das Coverfoto wird dabei nach REQ-109 auf das Seitenverhältnis des Buches zugeschnitten.
+- Wenn der Nutzer einen Treffer antippt, muss das System das Blatt „Manueller Eintrag“ (REQ-030, REQ-060) öffnen und dessen Felder mit den Angaben dieses Treffers ausfüllen; ein vorhandenes Coverfoto wird als Cover übernommen (wie REQ-032). Das Coverfoto wird dabei nach REQ-115 auf das Seitenverhältnis des Buches zugeschnitten.
 - Wenn der Treffer einen Preis und/oder ein Format liefert, muss das System auch diese Angaben in den Manuellen Eintrag übernehmen.
 - Wenn zu einem Feld keine Angabe vorliegt, muss das System dieses Feld leer lassen.
 - Das System übernimmt den Autor so, wie die Quelle ihn liefert, ohne die Schreibweise zu vereinheitlichen.
@@ -125,4 +125,4 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 | 2026-11-16 | Erstellt (Entwurf aus der CEO-Antwort zum Änderungsantrag „Buch anlegen“) | Anforderungsmanager |
 | 2026-11-16 | CEO-Antworten und angenommener Vorschlag eingearbeitet: Quellen DNB und Open Library, Auswahlfenster mit Quellenhinweis und Zurück-Pfeil, Übernahme ins Blatt „Manueller Eintrag“, kein Internet/nichts gefunden zur Seite „Bücher“. Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
 | 2026-11-18 | Preis und Format werden übernommen (neu AK-9). CEO auf die Frage „Preis und Format beim Scan nicht übernehmen?“: „doch, sollen auch übernommen werden“. Autor wie geliefert, CEO auf die Frage „Autor-Schreibweise beim Scan vereinheitlichen?“: „nein das ist egal“. Status unverändert | Anforderungsmanager |
-| 2026-11-25 | Hinweis: übernommenes Coverfoto wird nach REQ-109 zugeschnitten; dieselbe Übernahme nutzt „Online suchen“ (REQ-111). AKs unverändert, Status unverändert | Anforderungsmanager |
+| 2026-11-25 | Hinweis: übernommenes Coverfoto wird nach REQ-115 zugeschnitten; dieselbe Übernahme nutzt „Online suchen“ (REQ-117). AKs unverändert, Status unverändert | Anforderungsmanager |
