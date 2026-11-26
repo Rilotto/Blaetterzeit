@@ -1,7 +1,7 @@
 ---
 id: REQ-032
 titel: Manueller Eintrag – Cover über Kamera oder Galerie hinzufügen
-status: Implementiert
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -21,7 +21,7 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 ## Anforderung (Satzschablone)
 
 **Auswahlmenü**
-- Wenn der Nutzer im Blatt „Manueller Eintrag“ das Feld „Cover hinzufügen“ antippt, muss das System dasselbe Auswahlmenü wie in den Buchdetails (REQ-015) anzeigen, mit „Scannen“, „Aus Galerie auswählen“ und „Cover online suchen“ (sichtbar, ohne Funktion wie in REQ-015) (CEO-bestätigter Vorschlag).
+- Wenn der Nutzer im Blatt „Manueller Eintrag“ das Feld „Cover hinzufügen“ antippt, muss das System dasselbe Auswahlmenü wie in den Buchdetails (REQ-015) anzeigen, mit „Scannen“, „Aus Galerie auswählen“ und „Cover online suchen“ (CEO-bestätigter Vorschlag). „Cover online suchen“ öffnet seit 2026-11-26 das Fenster „Cover online suchen“ (REQ-118); ein dort gewähltes Cover wird wie ein Kamera-/Galeriebild im Feld vorgemerkt.
 - Ist im Feld bereits ein Bild vorgemerkt, muss das Auswahlmenü zusätzlich „Foto entfernen“ anzeigen, wie in REQ-015.
 - Wenn der Nutzer „Foto entfernen“ antippt, muss das System das vorgemerkte Bild verwerfen und im Feld wieder Kamera-Icon und „Cover hinzufügen“ anzeigen.
 
@@ -65,10 +65,11 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 - **Dann** zeigt das Feld wieder Kamera-Icon und „Cover hinzufügen“
 - **Und** ein danach angelegtes Buch hat kein Frontcover
 
-### AK-6 „Cover online suchen“ ohne Funktion
-- **Gegeben** das Auswahlmenü ist über „Cover hinzufügen“ geöffnet
+### AK-6 „Cover online suchen“ öffnet das Cover-Suchfenster
+- **Gegeben** das Auswahlmenü ist über „Cover hinzufügen“ geöffnet, Titel und Autor sind eingetragen
 - **Wenn** der Nutzer „Cover online suchen“ antippt
-- **Dann** verhält sich die App wie beim Antippen von „Cover online suchen“ in den Buchdetails (REQ-015)
+- **Dann** ist das Auswahlmenü geschlossen und das Fenster „Cover online suchen“ (REQ-118) geöffnet
+- **Und** Titel und Autor im Blatt „Manueller Eintrag“ sind unverändert
 
 ### AK-7 Bild wird Frontcover
 - **Gegeben** im Feld ist ein Bild vorgemerkt und ein Titel eingetragen
@@ -85,7 +86,7 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Kamera-, Galerie- und Zuschnitt-Technik selbst (REQ-016, REQ-017).
-- Funktion „Cover online suchen“ (To-do-Liste).
+- Fenster und Ablauf „Cover online suchen“ (REQ-118).
 - Speichern des Buches (REQ-031).
 - Bilder für Buchrücken und Schnitt beim manuellen Eintrag.
 
@@ -108,3 +109,4 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 | 2026-11-10 | Erstellt (Entwurf aus der CEO-Vorgabe „Cover hinzufügen“) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet. F6: gleiches Auswahlmenü wie in den Buchdetails inkl. „Cover online suchen“ (ohne Funktion) und „Foto entfernen“; Bild wird Frontcover; Zuschnitt beginnt im Cover-Format (AK-1 präzisiert, neu AK-4 bis AK-8). F7: Farben des Felds in REQ-030. Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
 | 2026-11-10 | Vom CEO mit „Ja“ bestätigt: „Foto entfernen“ verwirft das vorgemerkte Bild (AK-5). Folgeänderung aus REQ-030: Bild wird auch beim Schließen per Android-Zurück-Taste oder Herunterziehen nicht gespeichert (AK-8 erweitert). Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-26 | „Cover online suchen“ bekommt Funktion (REQ-118): Anforderungstext und AK-6 geändert (öffnet das Cover-Suchfenster statt „ohne Funktion“). Inhalte vom CEO am 2026-11-26 im Chat festgelegt, Umsetzung beauftragt. Status „Abgestimmt“ (vorher „Implementiert“) | Anforderungsmanager |

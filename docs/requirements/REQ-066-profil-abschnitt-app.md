@@ -24,6 +24,7 @@ Abstimmung des Mockups des Scrum Masters (CEO, wörtlich): „Deine Ideen gefall
 - Das System muss in der Zeile „Design“ rechts die aktuelle Wahl als „<Farbdesign> · <Schrift> ›“ anzeigen (z. B. „Klassisch · Fraunces ›“).
 - Wenn der Nutzer die Zeile „Design“ antippt, muss das System das Fenster „Design“ (REQ-067) öffnen.
 - Die Zielansicht „Profil“ zeigt nicht mehr „under construction :)“.
+- Das System muss alle Karten und Zeilen der Seite „Profil“ (Abschnitte „Du“, „Deine Bibliothek“, „App“) über die verfügbare Bildschirmbreite anzeigen, links und rechts mit demselben Abstand zum Bildschirmrand wie auf der Seite „Bücher“ (Bildschirmrand aus dem Abstandsraster, REQ-065) (CEO 2026-11-26).
 
 ## Akzeptanzkriterien
 
@@ -45,9 +46,15 @@ Abstimmung des Mockups des Scrum Masters (CEO, wörtlich): „Deine Ideen gefall
 - **Wenn** der Nutzer die Zeile „Design“ antippt
 - **Dann** öffnet sich das Fenster „Design“
 
+### AK-4 Volle Breite wie auf der Seite „Bücher“
+- **Gegeben** die Seite „Profil“ mit den Abschnitten „Du“, „Deine Bibliothek“ und „App“, auf schmalem (360 px) und breitem (480 px) Bildschirm
+- **Wenn** die Breite der Karten bzw. Zeilen gemessen wird
+- **Dann** reicht jede Karte bzw. Zeile bis auf den Bildschirmrand-Abstand über die ganze Bildschirmbreite (keine feste Höchstbreite, nicht schmaler als der Inhaltsbereich)
+- **Und** ihr linker und rechter Abstand zum Bildschirmrand ist gleich dem Abstand der Inhalte der Seite „Bücher“ zum Bildschirmrand
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Weitere Abschnitte oder Zeilen der Seite „Profil“. Die Zeile „Versionsinfo“ regelt REQ-113.
+- Weitere Abschnitte oder Zeilen der Seite „Profil“. Die Zeile „Versionsinfo“ regelt REQ-113, den Abschnitt „Du“ REQ-107, den Abschnitt „Deine Bibliothek“ REQ-121. Die Breitenregel (AK-4) gilt für alle Abschnitte.
 - Inhalt des Fensters „Design“ (REQ-067 bis REQ-069).
 
 ## Qualitätsanforderungen
@@ -70,3 +77,4 @@ Abstimmung des Mockups des Scrum Masters (CEO, wörtlich): „Deine Ideen gefall
 | 2026-11-18 | Erstellt aus der CEO-Anforderung und dem angenommenen Mockup. Status „Abgestimmt“ (CEO, wörtlich: „Deine Ideen gefallen mir alle. Setzen wir so um.“) | Anforderungsmanager |
 | 2026-11-18 | Karte wie „Ausgabe“ präzisiert (gleiche helle Fläche, Zeilen, Trennlinien, Pfeil), AK-1 ergänzt. CEO zum Prototyp: „Schau mal bitte das Menü bei App an... da ist der Menühintergrund nicht in einem helleren / weißeren Ton wie bei den Buchdetails -> Ausgabe.... da gefällt mir das Menüdesign total gut. Können wir das bitte hier auch übernehmen?“ Status unverändert | Anforderungsmanager |
 | 2026-11-25 | An REQ-113 angepasst: Karte „App“ mit zweiter Zeile „Versionsinfo“ unter „Design“. CEO (wörtlich): „in dieser ist immer die jeweilige Appversion fest hinterlegt und kann auch nicht geändert werden manuell. Die App hat aktuell 0.11“. Anforderung und AK-1 geändert. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-26 | Mini-Änderung: Zeilen im Reiter „Profil“ in voller Breite, Randabstand wie im Reiter „Bücher“ (Anforderung ergänzt, neu AK-4, gilt für alle Profil-Abschnitte). Inhalte vom CEO am 2026-11-26 im Chat festgelegt, Umsetzung beauftragt. Status „Abgestimmt“ (vorher „In Umsetzung“) | Anforderungsmanager |

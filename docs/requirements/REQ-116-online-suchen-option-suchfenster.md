@@ -1,7 +1,7 @@
 ---
 id: REQ-116
 titel: Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster
-status: Implementiert
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -26,10 +26,11 @@ Referenzbild Menü: [referenzen/REF-buch-anlegen-01-menue.png](referenzen/REF-bu
 
 **Suchfenster**
 - Das System muss im Suchfenster einen Zurück-Pfeil und ein Suchfeld anzeigen; beim Öffnen hat das Suchfeld den Fokus und die Tastatur ist sofort offen.
+- Das System muss über dem Suchfeld den Sprachfilter „Sprache“ (REQ-119) anzeigen; die Suche ist auf die dort gewählte(n) Sprache(n) beschränkt (seit 2026-11-26).
 - Das System muss als Suchtext Titel, Autor oder ISBN sowie Kombinationen daraus annehmen.
 - Das System darf während der Eingabe nicht suchen. Wenn der Nutzer die Such-Taste der Tastatur betätigt und das Suchfeld nicht nur Leerzeichen enthält, muss das System die Suche starten; bei leerem Suchfeld geschieht nichts (**Auslegung**).
 - Das System muss den Suchtext gleichzeitig bei der Deutschen Nationalbibliothek und bei Open Library suchen (wie REQ-062).
-- Das System darf an diese Dienste ausschließlich den Suchtext übermitteln.
+- Das System darf an diese Dienste ausschließlich den Suchtext und die Sprachauswahl (REQ-119) übermitteln.
 - Während die Suche läuft, muss das System dies im Fenster erkennbar anzeigen (**Auslegung**).
 - Eine neue Suche ersetzt die bisherigen Ergebnisse (**Auslegung**).
 
@@ -65,10 +66,10 @@ Referenzbild Menü: [referenzen/REF-buch-anlegen-01-menue.png](referenzen/REF-bu
 - **Dann** wurde noch keine Anfrage gesendet
 - **Und** nach Betätigen der Such-Taste gehen Anfragen an die Deutsche Nationalbibliothek und an Open Library
 
-### AK-4 Nur der Suchtext wird übermittelt
+### AK-4 Nur Suchtext und Sprachauswahl werden übermittelt
 - **Gegeben** der Suchtext „9783551551672“
 - **Wenn** die Suche läuft
-- **Dann** enthält jede Anfrage außer dem Suchtext keine Angaben des Nutzers oder seiner Bücher
+- **Dann** enthält jede Anfrage außer dem Suchtext und der Sprachauswahl (REQ-119) keine Angaben des Nutzers oder seiner Bücher
 
 ### AK-5 Leeres Suchfeld
 - **Gegeben** das Suchfeld ist leer oder enthält nur Leerzeichen
@@ -102,11 +103,11 @@ Referenzbild Menü: [referenzen/REF-buch-anlegen-01-menue.png](referenzen/REF-bu
 
 ## Qualitätsanforderungen
 
-- Datenschutz: An externe Dienste wird ausschließlich der Suchtext übermittelt (AK-4).
+- Datenschutz: An externe Dienste werden ausschließlich Suchtext und Sprachauswahl übermittelt (AK-4).
 
 ## Abhängigkeiten
 
-- REQ-029 (Menü; dessen AK-2 „genau eine Option“ ist wie bereits durch REQ-061 hinfällig), REQ-061, REQ-062 (Quellen), REQ-011 (Öffnen über den Platzhalter), REQ-117.
+- REQ-029 (Menü; dessen AK-2 „genau eine Option“ ist wie bereits durch REQ-061 hinfällig), REQ-061, REQ-062 (Quellen), REQ-011 (Öffnen über den Platzhalter), REQ-117, REQ-119 (Sprachfilter).
 
 ## Offene Fragen
 
@@ -117,3 +118,4 @@ Referenzbild Menü: [referenzen/REF-buch-anlegen-01-menue.png](referenzen/REF-bu
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-25 | Erstellt. Inhalte vom CEO am 2026-11-25 im Chat festgelegt, Umsetzung beauftragt. Auslegungen markiert. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-26 | Sprachfilter „Sprache“ über dem Suchfeld ergänzt (Verweis auf REQ-119); übermittelt werden Suchtext und Sprachauswahl (Anforderung, AK-4, Qualität angepasst). Trefferzahl 15 statt 9 siehe REQ-117. Inhalte vom CEO am 2026-11-26 im Chat festgelegt, Umsetzung beauftragt. Status „Abgestimmt“ (vorher „Implementiert“) | Anforderungsmanager |

@@ -1,7 +1,7 @@
 ---
 id: REQ-015
 titel: Buchdetails – Auswahlmenü beim Antippen eines Bereichs der Buchdarstellung
-status: Implementiert
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -33,8 +33,8 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 **Optionen**
 - Das System muss im Auswahlmenü die Option „Scannen“ anbieten.
 - Das System muss im Auswahlmenü die Option „Aus Galerie auswählen“ anbieten.
-- Das System muss im Auswahlmenü die Option „Cover online suchen“ darstellen.
-- Wenn der Nutzer „Cover online suchen“ antippt, darf sich der Bereich nicht verändern; eine Online-Suche findet nicht statt (CEO: „umsetzen, aber ohne Funktion“; Funktion in der To-do-Liste).
+- Das System muss im Auswahlmenü des Bereichs „Cover“ die Option „Cover online suchen“ darstellen. In den Auswahlmenüs der Bereiche „Buchrücken“ und „Schnitt“ entfällt sie (**Auslegung** 2026-11-26, siehe REQ-118).
+- Wenn der Nutzer „Cover online suchen“ antippt, muss das System das Auswahlmenü schließen und das Fenster „Cover online suchen“ öffnen (REQ-118). (Bis 2026-11-25: „ohne Funktion“.)
 - Wenn für den Bereich ein Bild hinterlegt ist, muss das System im Auswahlmenü zusätzlich die Option „Foto entfernen“ mit einem X-Icon anbieten.
 - Wenn für den Bereich kein Bild hinterlegt ist, darf das System die Option „Foto entfernen“ nicht darstellen.
 
@@ -54,7 +54,8 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 ### AK-1 Menü öffnet sich für jeden der drei Bereiche
 - **Gegeben** die Buchdetails werden angezeigt und kein Bereich hat ein Bild
 - **Wenn** der Nutzer nacheinander „Buchrücken“, „Cover“ und „Schnitt“ antippt
-- **Dann** erscheint jeweils das Auswahlmenü mit den Optionen „Scannen“, „Aus Galerie auswählen“ und „Cover online suchen“
+- **Dann** erscheint jeweils das Auswahlmenü mit den Optionen „Scannen“ und „Aus Galerie auswählen“
+- **Und** nur beim Bereich „Cover“ zusätzlich mit „Cover online suchen“
 - **Und** ohne die Option „Foto entfernen“
 
 ### AK-2 Bei vorhandenem Bild zusätzlich „Foto entfernen“
@@ -75,11 +76,11 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 - **Dann** wird die Bildauswahl aus der Galerie gestartet
 - **Und** das Auswahlmenü ist geschlossen
 
-### AK-5 „Cover online suchen“ sichtbar, aber ohne Funktion
-- **Gegeben** das Auswahlmenü ist geöffnet
+### AK-5 „Cover online suchen“ öffnet das Cover-Suchfenster
+- **Gegeben** das Auswahlmenü des Bereichs „Cover“ ist geöffnet
 - **Wenn** der Nutzer „Cover online suchen“ antippt
-- **Dann** findet keine Online-Suche statt
-- **Und** das Bild des Bereichs ist unverändert
+- **Dann** ist das Auswahlmenü geschlossen und das Fenster „Cover online suchen“ (REQ-118) geöffnet
+- **Und** das Bild des Bereichs ist unverändert, solange kein Cover angetippt wurde
 
 ### AK-6 „Foto entfernen“ löscht das Bild
 - **Gegeben** für den Bereich „Cover“ ist ein Bild hinterlegt und das Auswahlmenü dieses Bereichs ist geöffnet
@@ -107,7 +108,7 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Funktion der Online-Suche nach Covern (To-do-Liste).
+- Fenster und Ablauf der Online-Suche nach Covern (REQ-118).
 - Technik der Kamera- und Galeriezugriffe (REQ-016), Zuschnitt (REQ-017), dauerhafte Speicherung (REQ-019).
 
 ## Qualitätsanforderungen
@@ -135,3 +136,4 @@ Referenzbild: [referenzen/REF-buchdetails-02-auswahlmenue.png](referenzen/REF-bu
 | 2026-11-09 | CEO-Antworten 3 und 7 eingearbeitet: Wortlaut „Aus Galerie auswählen“, „Cover online suchen“ sichtbar ohne Funktion (AK-5 geändert, Funktion in To-do), Schließen durch Tippen außerhalb (neu AK-7), „Foto entfernen“ mit X-Icon (neu AK-2/AK-6), Icons nachgebildet (neu AK-9), Farbe/Schrift wie Referenzbild. Offen: Priorität | Anforderungsmanager |
 | 2026-11-09 | Priorität Must (CEO). Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |
 | 2026-11-21 | CEO (wörtlich): „ja passt.“ Hinweis ergänzt: Einfacher Tipp aufs Cover öffnet das Menü erst nach etwa 0,3 s Wartezeit auf einen Doppeltipp (REQ-074). AKs unverändert; Tests müssen die Wartezeit abwarten. Status unverändert | Anforderungsmanager |
+| 2026-11-26 | „Cover online suchen“ bekommt Funktion (REQ-118): AK-5 geändert (öffnet das Cover-Suchfenster statt „ohne Funktion“). **Auslegung:** Option nur noch im Menü des Bereichs „Cover“, bei Buchrücken und Schnitt entfällt sie (AK-1 geändert). Inhalte vom CEO am 2026-11-26 im Chat festgelegt, Umsetzung beauftragt. Status „Abgestimmt“ (vorher „Implementiert“) | Anforderungsmanager |

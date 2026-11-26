@@ -1,7 +1,7 @@
 ---
 id: REQ-117
-titel: „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan
-status: Implementiert
+titel: „Online suchen“ – bis zu 15 Treffer im Raster mit 3 Spalten abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -16,16 +16,18 @@ Als **Nutzer** möchte ich **die Treffer der Online-Suche übersichtlich mit Cov
 
 CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechselnd aus beiden Quellen (DNB, Open Library, DNB, …); liefert eine Quelle weniger, füllt die andere auf. Raster mit 3 Spalten (3×3): je Treffer Cover (sonst Cover-Platzhalter), darunter Titel, Autor und Quelle. Dasselbe Buch aus beiden Quellen erscheint getrennt mit Quellenangabe. Antippen eines Treffers → weiter genau wie nach Auswahl eines Treffers beim Barcode-Scan. Pfeil zurück jeweils eine Stufe zurück.
 
+CEO (2026-11-26, im Chat festgelegt): bis zu 15 statt 9 Treffer; Raster bleibt 3 Spalten (3 × 5), abwechselnd DNB/Open Library, die andere füllt auf; weniger Treffer → weniger angezeigt.
+
 ## Anforderung (Satzschablone)
 
 **Auswahl und Reihenfolge**
-- Das System muss nach einer Suche (REQ-116) höchstens 9 Treffer anzeigen.
+- Das System muss nach einer Suche (REQ-116) höchstens 15 Treffer anzeigen; gibt es weniger, entsprechend weniger.
 - Das System muss die Treffer abwechselnd aus beiden Quellen anordnen, beginnend mit der Deutschen Nationalbibliothek (DNB, Open Library, DNB, …), jeweils in der von der Quelle gelieferten Reihenfolge.
 - Wenn eine Quelle weniger Treffer liefert, muss das System die freien Plätze mit den weiteren Treffern der anderen Quelle in deren Reihenfolge auffüllen.
 - Das System darf Treffer verschiedener Quellen nicht zusammenführen; dasselbe Buch aus beiden Quellen erscheint als zwei Einträge.
 
 **Darstellung**
-- Das System muss die Treffer im Suchfenster unter dem Suchfeld als Raster mit 3 Spalten anzeigen, zeilenweise von links nach rechts.
+- Das System muss die Treffer im Suchfenster unter dem Suchfeld als Raster mit 3 Spalten anzeigen, zeilenweise von links nach rechts (bei 15 Treffern 5 Zeilen). Passen nicht alle Zeilen auf den Bildschirm, ist das Raster scrollbar (**Auslegung**).
 - Das System muss je Treffer das Cover anzeigen; liefert der Treffer kein Cover, den Cover-Platzhalter (REQ-010).
 - Das System muss unter dem Cover Titel, Autor und Quelle anzeigen. Ohne Autor entfällt die Autorzeile (**Auslegung**). Liefert die Quelle ein Erscheinungsjahr, darf es zusätzlich angezeigt werden (**Auslegung**: optional, kein Akzeptanzkriterium).
 - Lange Titel kürzt das System (**Auslegung**: höchstens zwei Zeilen); Optik prüft der CEO im Prototyp.
@@ -37,15 +39,15 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 
 ## Akzeptanzkriterien
 
-### AK-1 Abwechselnd, höchstens 9
-- **Gegeben** die DNB liefert die Treffer D1–D6 und Open Library die Treffer O1–O6
+### AK-1 Abwechselnd, höchstens 15
+- **Gegeben** die DNB liefert die Treffer D1–D10 und Open Library die Treffer O1–O10
 - **Wenn** die Suche abgeschlossen ist
-- **Dann** zeigt das Raster genau 9 Treffer in der Reihenfolge D1, O1, D2, O2, D3, O3, D4, O4, D5
+- **Dann** zeigt das Raster genau 15 Treffer in der Reihenfolge D1, O1, D2, O2, D3, O3, D4, O4, D5, O5, D6, O6, D7, O7, D8
 
 ### AK-2 Auffüllen durch die andere Quelle
-- **Gegeben** die DNB liefert D1–D2 und Open Library O1–O10
+- **Gegeben** die DNB liefert D1–D2 und Open Library O1–O20
 - **Wenn** die Suche abgeschlossen ist
-- **Dann** zeigt das Raster D1, O1, D2, O2, O3, O4, O5, O6, O7
+- **Dann** zeigt das Raster D1, O1, D2, O2, O3, O4, O5, O6, O7, O8, O9, O10, O11, O12, O13
 
 ### AK-3 Nur eine Quelle liefert
 - **Gegeben** die DNB liefert nichts, Open Library liefert O1–O4
@@ -53,9 +55,9 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 - **Dann** zeigt das Raster O1, O2, O3, O4
 
 ### AK-4 Raster mit 3 Spalten und Angaben je Treffer
-- **Gegeben** 9 Treffer werden angezeigt
+- **Gegeben** 15 Treffer werden angezeigt
 - **Wenn** der Nutzer das Suchfenster betrachtet
-- **Dann** stehen sie in 3 Zeilen zu je 3 Spalten
+- **Dann** stehen sie in 5 Zeilen zu je 3 Spalten
 - **Und** jeder Treffer zeigt Cover, Titel, Autor und Quelle
 
 ### AK-5 Ohne Cover der Cover-Platzhalter
@@ -83,7 +85,8 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Suchfenster, Suche, Hinweise und Zurück (REQ-116).
-- Weitere Treffer nachladen (mehr als 9) – nicht vorgesehen.
+- Weitere Treffer nachladen (mehr als 15) – nicht vorgesehen.
+- Sprachfilter (REQ-119): Die Regeln dieses REQ gelten für die bereits nach Sprache gefilterten Treffer.
 - Google Books (To-do-Liste).
 
 ## Qualitätsanforderungen
@@ -103,3 +106,4 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-25 | Erstellt. Inhalte vom CEO am 2026-11-25 im Chat festgelegt, Umsetzung beauftragt. Auslegungen markiert. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-26 | Mini-Änderung: bis zu 15 statt 9 Treffer, Raster 3 × 5, scrollbar (**Auslegung**). Titel, Anforderung, AK-1, AK-2, AK-4 und Abgrenzung angepasst; Verweis auf Sprachfilter REQ-119. Inhalte vom CEO am 2026-11-26 im Chat festgelegt, Umsetzung beauftragt. Status „Abgestimmt“ (vorher „Implementiert“) | Anforderungsmanager |

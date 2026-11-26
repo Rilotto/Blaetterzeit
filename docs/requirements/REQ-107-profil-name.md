@@ -19,7 +19,8 @@ CEO (wörtlich, 2026-11-24) auf die Frage, ob der Name fest oder einstellbar sei
 ## Anforderung (Satzschablone)
 
 - Das System muss auf der Seite „Profil“ eine Zeile „Name“ im Stil der Karte „Ausgabe“ (wie die Zeile „Design“, REQ-066) mit dem hinterlegten Namen rechts und Pfeil „›“ anzeigen. Ohne Namen ist die rechte Seite leer.
-- Die Zeile „Name“ steht in einem eigenen Abschnitt „Du“ oberhalb des Abschnitts „App“ (**Auslegung**: Lage und Abschnittsname nicht festgelegt, kein Akzeptanzkriterium).
+- Die Zeile „Name“ steht in einem eigenen Abschnitt „Du“ oberhalb des Abschnitts „App“ (**Auslegung**: Lage und Abschnittsname nicht festgelegt, kein Akzeptanzkriterium). Seit 2026-11-26 steht zwischen „Du“ und „App“ der Abschnitt „Deine Bibliothek“ (REQ-121).
+- Die Zeile nutzt die volle Bildschirmbreite mit dem Randabstand der Seite „Bücher“ (CEO 2026-11-26; Prüfung in REQ-066 AK-4).
 - Wenn der Nutzer die Zeile antippt, muss das System ein Blatt nach dem Muster „Verlag“ (REQ-063) mit einem Textfeld (vorbefüllt mit dem Namen) und „Sichern“ anzeigen.
 - „Sichern“ speichert den Namen dauerhaft über die Repository-Schnittstelle (ADR-0002). Führende und folgende Leerzeichen werden entfernt (**Auslegung**). Ein leeres Feld bzw. nur Leerzeichen entfernt den Namen (REQ-093). Schließen ohne „Sichern“ verwirft.
 - Der Name erscheint im Gruß der Startseite (REQ-101). Ohne Namen zeigt die Startseite nur den Gruß.
@@ -69,3 +70,4 @@ CEO (wörtlich, 2026-11-24) auf die Frage, ob der Name fest oder einstellbar sei
 |---|---|---|
 | 2026-11-24 | Erstellt aus CEO-Antwort „Im Profil selbst anlegen können“, Entwurf | Anforderungsmanager |
 | 2026-11-24 | Vom CEO bestätigt (wörtlich): „sieht alles super aus! Danke!“, einschließlich Abschnitt „Du“ mit Zeile „Name“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-26 | Mini-Änderung: Zeile in voller Breite (Prüfung über REQ-066 AK-4); Hinweis auf neuen Abschnitt „Deine Bibliothek“ (REQ-121). AKs unverändert, Status unverändert. Inhalte vom CEO am 2026-11-26 im Chat festgelegt | Anforderungsmanager |
