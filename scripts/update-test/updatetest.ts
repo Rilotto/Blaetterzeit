@@ -12,6 +12,8 @@
  * Datenzugriff ausschließlich über die Repository-Schnittstellen (ADR-0002) auf einer SqlVerbindung über node:sqlite.
  * Beim Prüfen wird bewusst NICHT migriert: Die Schemaversion muss die neue App selbst hochgezogen haben.
  */
+import { readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { expect, it } from 'vitest';
 import type { SqlVerbindung, SqlWert } from '@/storage/sqlite/SqlVerbindung';
 import { MIGRATIONEN, migrieren, schemaVersion } from '@/storage/sqlite/migrationen';
@@ -51,6 +53,13 @@ async function oeffnen(pfad: string): Promise<{ db: DatabaseSync; v: SqlVerbindu
 
 const modus = process.env.UPDATE_TEST_MODUS;
 const pfad = process.env.UPDATE_TEST_DB ?? '';
+// Schemaversion der Basis nach dem Anlegen; liegt neben der DB, aber nicht als bz.db* (holen() löscht diese).
+const basisVersionDatei = () => join(dirname(pfad), 'basis-schemaversion.txt');
+
+/** Version der Migration „Bandnummer aus liste_buch.band übernehmen“ (REQ-112, AK-10), undefined wenn nicht vorhanden. */
+function ak10Version(): number | undefined {
+  return MIGRATIONEN.find((m) => m.beschreibung.includes('REQ-112, AK-10'))?.version;
+}
 
 it(`Update-Test: ${modus ?? '(kein Modus)'}`, async () => {
   expect(['anlegen', 'pruefen']).toContain(modus);
@@ -64,6 +73,7 @@ it(`Update-Test: ${modus ?? '(kein Modus)'}`, async () => {
     if (modus === 'anlegen') {
       // Die Basis-App hat die Datei beim ersten Start angelegt; Migrieren ist hier nur eine Absicherung (idempotent).
       await migrieren(v);
+      const basisHatAk10 = ak10Version() !== undefined;
       await buecher.save({
         id: BUCH_ID,
         titel: 'Updatetest Fourth Wing',
@@ -72,13 +82,18 @@ it(`Update-Test: ${modus ?? '(kein Modus)'}`, async () => {
         seitenanzahl: 400,
         aktuelleSeite: 42,
         sitzungen: [{ zeitpunkt: SITZUNG, seite: 42 }],
-      });
+        // Enthält schon die Basis die AK-10-Migration, kennt sie die Bandnummer am Buch: dann direkt setzen,
+        // damit das Update sie erhalten muss. Sonst bleibt sie leer und muss aus der Zugehörigkeit entstehen.
+        ...(basisHatAk10 ? { bandnummer: 1 } : {}),
+      } as Parameters<typeof buecher.save>[0]);
       await listen.listeSpeichern({ id: LISTE_ID, art: 'saga', name: 'Updatetest Empyrean' });
       // Basisversion: Band 1 an der Zugehörigkeit (vor REQ-112). Das Buch selbst hat keine Bandnummer.
       // Cast, weil die aktuelle Zugehoerigkeit kein „band“ mehr kennt; die Basisversion speichert es.
       await listen.zuordnen({ listeId: LISTE_ID, buchId: BUCH_ID, band: 1 } as Parameters<typeof listen.zuordnen>[0]);
       await zitate.speichern({ id: ZITAT_ID, buchId: BUCH_ID, text: 'Ich bin nicht das Feuer.', sprecher: 'Violet', seite: 312, angelegtAm: SITZUNG });
-      console.log(`Basis: Schemaversion ${await schemaVersion(v)}, Testdaten angelegt`);
+      const basisVersion = await schemaVersion(v);
+      writeFileSync(basisVersionDatei(), String(basisVersion));
+      console.log(`Basis: Schemaversion ${basisVersion}, Bandnummer am Buch ${basisHatAk10 ? 'gesetzt' : 'leer'}, Testdaten angelegt`);
     } else {
       // Beweis, dass die neue App die Datei tatsächlich geöffnet und migriert hat (sonst liefe sie ggf. im
       // Arbeitsspeicher-Rückfall und die Datei bliebe unberührt).
@@ -92,8 +107,17 @@ it(`Update-Test: ${modus ?? '(kein Modus)'}`, async () => {
       expect(buch!.sitzungen?.map((s) => s.zeitpunkt), 'Sitzung nach dem Update vorhanden').toEqual([SITZUNG]);
 
       expect(await listen.listen()).toContainEqual(expect.objectContaining({ id: LISTE_ID, art: 'saga', name: 'Updatetest Empyrean' }));
-      // REQ-112 AK-10: Band 1 der Zugehörigkeit ist zur Bandnummer des Buches geworden, die Zugehörigkeit besteht weiter.
-      expect(buch!.bandnummer, 'Bandnummer aus der Saga-Zugehörigkeit übernommen (REQ-112, AK-10)').toBe(1);
+      // REQ-112 AK-10: Lag die Basis vor der Migration, ist Band 1 der Zugehörigkeit zur Bandnummer des Buches
+      // geworden. Enthielt die Basis sie schon, wurde die Bandnummer direkt am Buch gesetzt und muss erhalten sein.
+      // In beiden Fällen 1 – fehlt sie, ist das ein Datenverlust. Die Zugehörigkeit besteht weiter.
+      const basisVersion = Number(readFileSync(basisVersionDatei(), 'utf8'));
+      const ak10 = ak10Version();
+      expect(Number.isInteger(basisVersion), 'Basis-Schemaversion aus dem Anlegen-Schritt').toBe(true);
+      const meldung =
+        ak10 !== undefined && basisVersion < ak10
+          ? `Bandnummer aus der Saga-Zugehörigkeit übernommen (REQ-112, AK-10; Basis v${basisVersion} < v${ak10})`
+          : `In der Basis gesetzte Bandnummer erhalten (Basis v${basisVersion}, schon mit AK-10-Migration)`;
+      expect(buch!.bandnummer, meldung).toBe(1);
       expect(await listen.zugehoerigkeiten()).toContainEqual(expect.objectContaining({ listeId: LISTE_ID, buchId: BUCH_ID }));
 
       expect(await zitate.alle()).toContainEqual(
