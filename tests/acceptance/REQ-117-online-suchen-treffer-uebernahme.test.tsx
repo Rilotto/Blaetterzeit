@@ -1,5 +1,6 @@
 /**
- * Akzeptanztests REQ-117 – „Online suchen“: Treffer als 3×3-Raster abwechselnd aus beiden Quellen, Übernahme wie beim Barcode-Scan.
+ * Akzeptanztests REQ-117 – „Online suchen“: bis zu 15 Treffer im 3-Spalten-Raster (3 × 5) abwechselnd aus beiden Quellen, Übernahme wie beim Barcode-Scan.
+ * Mini-Änderung 2026-11-26 (Entwickler): 15 statt 9 Treffer; Quell-Fakes mit Sprachangabe „ger“, da die UI nach Sprache filtert (REQ-119).
  * Abgeleitet aus dem REQ-Text. Schnittstellen laut Entwickler (Sprint 12):
  *  - onlineSucheMit(http) aus @/barcode/suche (DNB SRU MARC21-xml, Open Library search.json), trefferMischen/ONLINE_SUCHE_MAX aus @/barcode/treffer.
  *  - BuecherAnsicht { onlineSuche } liefert bereits gemischte Liste.
@@ -41,6 +42,7 @@ const dnbRecord = (titel: string, autor = 'Autor DNB', isbn?: string) => `
       <record xmlns="http://www.loc.gov/MARC21/slim" type="Bibliographic">
         <leader>00000nam a2200000 c 4500</leader>
         ${isbn ? `<datafield tag="020" ind1=" " ind2=" "><subfield code="a">${isbn}</subfield></datafield>` : ''}
+        <datafield tag="041" ind1=" " ind2=" "><subfield code="a">ger</subfield></datafield>
         <datafield tag="100" ind1="1" ind2=" "><subfield code="a">${autor}</subfield></datafield>
         <datafield tag="245" ind1="1" ind2="0"><subfield code="a">${titel}</subfield></datafield>
       </record>`;
@@ -50,7 +52,7 @@ const dnbXml = (records: string[]) => `<?xml version="1.0" encoding="UTF-8"?>
   <records>${records.map((r, i) => `<record><recordSchema>MARC21-xml</recordSchema><recordPacking>xml</recordPacking><recordData>${r}</recordData><recordPosition>${i + 1}</recordPosition></record>`).join('')}</records>
 </searchRetrieveResponse>`;
 const dnbN = (n: number) => dnbXml(Array.from({ length: n }, (_, i) => dnbRecord(`D${i + 1}`)));
-const olN = (n: number) => JSON.stringify({ docs: Array.from({ length: n }, (_, i) => ({ title: `O${i + 1}`, author_name: ['Autor OL'] })) });
+const olN = (n: number) => JSON.stringify({ docs: Array.from({ length: n }, (_, i) => ({ title: `O${i + 1}`, author_name: ['Autor OL'], language: ['ger'] })) });
 
 function httpFake(dnb: string | null, ol: string | null, bild: (url: string) => string | null = () => null) {
   const urls: string[] = [];
@@ -139,42 +141,44 @@ const tr = (quelle: Treffer['quelle'], t: string, extra: Treffer['angaben'] = {}
 
 // ---------------------------------------------------------------------------
 describe('REQ-117 Auswahl und Reihenfolge', () => {
-  it('[REQ-117/AK-1] DNB D1–D6, Open Library O1–O6 → genau 9: D1,O1,D2,O2,D3,O3,D4,O4,D5', async () => {
-    const t = await onlineSucheMit(httpFake(dnbN(6), olN(6))).suchen('Harry Potter');
-    expect(titel(t)).toEqual(['D1', 'O1', 'D2', 'O2', 'D3', 'O3', 'D4', 'O4', 'D5']);
-    expect(t.map((x) => x.quelle)).toEqual(['dnb', 'openlibrary', 'dnb', 'openlibrary', 'dnb', 'openlibrary', 'dnb', 'openlibrary', 'dnb']);
+  it('[REQ-117/AK-1] DNB D1–D10, Open Library O1–O10 → genau 15: D1,O1,…,O7,D8', async () => {
+    const t = await onlineSucheMit(httpFake(dnbN(10), olN(10))).suchen('Harry Potter');
+    expect(titel(t)).toEqual(['D1', 'O1', 'D2', 'O2', 'D3', 'O3', 'D4', 'O4', 'D5', 'O5', 'D6', 'O6', 'D7', 'O7', 'D8']);
+    expect(t.map((x) => x.quelle)).toEqual(Array.from({ length: 15 }, (_, i) => (i % 2 ? 'openlibrary' : 'dnb')));
   });
 
-  it('[REQ-117/AK-1] auch wenn eine Quelle mehr als angefragt liefert: höchstens 9', async () => {
-    const t = await onlineSucheMit(httpFake(dnbN(12), olN(12))).suchen('Harry Potter');
+  it('[REQ-117/AK-1] auch wenn eine Quelle mehr als angefragt liefert: höchstens 15', async () => {
+    const t = await onlineSucheMit(httpFake(dnbN(20), olN(20))).suchen('Harry Potter');
     expect(t).toHaveLength(ONLINE_SUCHE_MAX);
-    expect(ONLINE_SUCHE_MAX).toBe(9);
+    expect(ONLINE_SUCHE_MAX).toBe(15);
   });
 
-  it('[REQ-117/AK-1] jede Quelle wird um höchstens 9 Treffer gebeten (keine unnötig großen Abfragen)', async () => {
+  it('[REQ-117/AK-1] jede Quelle wird um höchstens 15 Treffer gebeten (keine unnötig großen Abfragen)', async () => {
     const http = httpFake(dnbN(0), olN(0));
     await onlineSucheMit(http).suchen('Harry Potter');
     const dnb = http.text.mock.calls.map((c) => c[0]).find((u) => u.includes('dnb.de'))!;
     const ol = http.text.mock.calls.map((c) => c[0]).find((u) => u.includes('openlibrary'))!;
-    expect(new URL(dnb).searchParams.get('maximumRecords')).toBe('9');
-    expect(new URL(ol).searchParams.get('limit')).toBe('9');
+    expect(new URL(dnb).searchParams.get('maximumRecords')).toBe('15');
+    expect(new URL(ol).searchParams.get('limit')).toBe('15');
   });
 
-  it('[REQ-117/AK-1] UI: Raster zeigt die 9 Treffer in genau der gelieferten Reihenfolge', async () => {
-    const liste = ['D1', 'O1', 'D2', 'O2', 'D3', 'O3', 'D4', 'O4', 'D5'].map((t) => tr(t[0] === 'D' ? 'dnb' : 'openlibrary', t));
+  const FUENFZEHN = ['D1', 'O1', 'D2', 'O2', 'D3', 'O3', 'D4', 'O4', 'D5', 'O5', 'D6', 'O6', 'D7', 'O7', 'D8'];
+
+  it('[REQ-117/AK-1] UI: Raster zeigt die 15 Treffer in genau der gelieferten Reihenfolge', async () => {
+    const liste = FUENFZEHN.map((t) => tr(t[0] === 'D' ? 'dnb' : 'openlibrary', t));
     await sucheIn({ suchen: vi.fn(async () => liste) });
-    expect(kacheln().map((k) => norm(k.querySelector('[data-treffer-titel]')!.textContent))).toEqual(['D1', 'O1', 'D2', 'O2', 'D3', 'O3', 'D4', 'O4', 'D5']);
+    expect(kacheln().map((k) => norm(k.querySelector('[data-treffer-titel]')!.textContent))).toEqual(FUENFZEHN);
   });
 
-  it('[REQ-117/AK-2] DNB D1–D2, Open Library O1–O10 → D1,O1,D2,O2,O3,O4,O5,O6,O7', async () => {
-    const t = await onlineSucheMit(httpFake(dnbN(2), olN(10))).suchen('Harry Potter');
-    expect(titel(t)).toEqual(['D1', 'O1', 'D2', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7']);
+  it('[REQ-117/AK-2] DNB D1–D2, Open Library O1–O20 → D1,O1,D2,O2,O3,…,O13', async () => {
+    const t = await onlineSucheMit(httpFake(dnbN(2), olN(20))).suchen('Harry Potter');
+    expect(titel(t)).toEqual(['D1', 'O1', 'D2', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7', 'O8', 'O9', 'O10', 'O11', 'O12', 'O13']);
   });
 
-  it('[REQ-117/AK-2] umgekehrt: Open Library O1–O2, DNB D1–D10 → DNB füllt auf', () => {
-    const d = Array.from({ length: 10 }, (_, i) => tr('dnb', `D${i + 1}`));
+  it('[REQ-117/AK-2] umgekehrt: Open Library O1–O2, DNB D1–D20 → DNB füllt auf', () => {
+    const d = Array.from({ length: 20 }, (_, i) => tr('dnb', `D${i + 1}`));
     const o = [tr('openlibrary', 'O1'), tr('openlibrary', 'O2')];
-    expect(titel(trefferMischen(d, o))).toEqual(['D1', 'O1', 'D2', 'O2', 'D3', 'D4', 'D5', 'D6', 'D7']);
+    expect(titel(trefferMischen(d, o))).toEqual(['D1', 'O1', 'D2', 'O2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13']);
   });
 
   it('[REQ-117/AK-3] DNB liefert nichts, Open Library O1–O4 → O1,O2,O3,O4', async () => {
@@ -195,8 +199,8 @@ describe('REQ-117 Auswahl und Reihenfolge', () => {
 });
 
 describe('REQ-117 Darstellung', () => {
-  it('[REQ-117/AK-4] 9 Treffer: Raster mit 3 Spalten (3 Zeilen à 3), unter dem Suchfeld; je Treffer Cover, Titel, Autor, Quelle', async () => {
-    const liste = Array.from({ length: 9 }, (_, i) => tr(i % 2 ? 'openlibrary' : 'dnb', `Buch ${i + 1}`, { cover: PNG }));
+  it('[REQ-117/AK-4] 15 Treffer: Raster mit 3 Spalten (5 Zeilen à 3), scrollbar, unter dem Suchfeld; je Treffer Cover, Titel, Autor, Quelle', async () => {
+    const liste = Array.from({ length: 15 }, (_, i) => tr(i % 2 ? 'openlibrary' : 'dnb', `Buch ${i + 1}`, { cover: PNG }));
     await sucheIn({ suchen: vi.fn(async () => liste) });
     const raster = fenster()!.querySelector<HTMLElement>('[data-online-treffer-raster]')!;
     expect(raster).toHaveAttribute('role', 'list');
@@ -204,7 +208,8 @@ describe('REQ-117 Darstellung', () => {
     expect(raster.style.gridTemplateColumns.replace(/\s+/g, '')).toMatch(/^repeat\(3,/);
     const sf = within(fenster()!).getByRole('searchbox');
     expect(sf.compareDocumentPosition(raster) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(kacheln()).toHaveLength(9);
+    expect(kacheln()).toHaveLength(15);
+    expect(raster.parentElement!.style.overflowY).toBe('auto');
     kacheln().forEach((k, i) => {
       expect(k.parentElement).toBe(raster);
       const img = k.querySelector('img[data-treffer-cover]');
@@ -232,7 +237,7 @@ describe('REQ-117 Darstellung', () => {
 
   it('[REQ-117/AK-4] Cover werden aus den Quellen geladen (DNB per ISBN, Open Library per Cover-ID) und angezeigt', async () => {
     const dnb = dnbXml([dnbRecord('Mit DNB-Cover', 'A', ISBN)]);
-    const ol = JSON.stringify({ docs: [{ title: 'Mit OL-Cover', author_name: ['B'], cover_i: 4711 }] });
+    const ol = JSON.stringify({ docs: [{ title: 'Mit OL-Cover', author_name: ['B'], cover_i: 4711, language: ['ger'] }] });
     const http = httpFake(dnb, ol, (u) => (u.includes('portal.dnb.de') || u.includes('covers.openlibrary.org/b/id/4711') ? PNG : null));
     await sucheIn(onlineSucheMit(http));
     expect(http.bild.mock.calls.some((c) => c[0].includes('portal.dnb.de') && c[0].includes(ISBN))).toBe(true);
@@ -253,14 +258,14 @@ describe('REQ-117 Darstellung', () => {
   });
 
   it('[REQ-117/AK-5] Cover-Abruf liefert nichts (Fehlerstatus): Platzhalter', async () => {
-    const ol = JSON.stringify({ docs: [{ title: 'Cover kaputt', cover_i: 99 }] });
+    const ol = JSON.stringify({ docs: [{ title: 'Cover kaputt', cover_i: 99, language: ['ger'] }] });
     await sucheIn(onlineSucheMit(httpFake(dnbN(0), ol, () => null)));
     expect(kacheln()[0].querySelector('[data-cover-platzhalter]')).not.toBeNull();
   });
 
   it('[REQ-117/AK-6] dasselbe Buch aus DNB und Open Library: zwei Einträge mit je eigener Quellenangabe', async () => {
     const dnb = dnbXml([dnbRecord('Harry Potter und der Stein der Weisen', 'Rowling, J. K.', ISBN)]);
-    const ol = JSON.stringify({ docs: [{ title: 'Harry Potter und der Stein der Weisen', author_name: ['J. K. Rowling'], isbn: [ISBN] }] });
+    const ol = JSON.stringify({ docs: [{ title: 'Harry Potter und der Stein der Weisen', author_name: ['J. K. Rowling'], isbn: [ISBN], language: ['ger'] }] });
     const t = await onlineSucheMit(httpFake(dnb, ol)).suchen(ISBN);
     expect(t.map((x) => x.quelle)).toEqual(['dnb', 'openlibrary']);
     cleanup();

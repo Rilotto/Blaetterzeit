@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- REQ-120: Pergamentfarbe des Logo-Grunds. Erzeugt von scripts/icons/erzeuge-launcher-icons.py -->
 <resources>
-    <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="ic_launcher_background">#FEE8C8</color>
 </resources>

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import BarcodeAblauf from '@/barcode/BarcodeAblauf';
 import { standardBarcodeScanner, type BarcodeScanner } from '@/barcode/scanner';
-import { standardIsbnSuche, standardOnlineSuche, type IsbnSuche, type OnlineSuche } from '@/barcode/suche';
+import { standardCoverSuche, standardIsbnSuche, standardOnlineSuche, type CoverSuche, type IsbnSuche, type OnlineSuche } from '@/barcode/suche';
 import type { Bildquelle } from '@/bild/bildquelle';
 import type { Vorbelegung } from '@/buchanlegen/eingabe';
 import ManuellerEintrag from '@/buchanlegen/ManuellerEintrag';
@@ -55,9 +55,11 @@ interface Props {
   isbnSuche?: IsbnSuche;
   /** Freitextsuche „Online suchen“ (REQ-116, REQ-117); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
   onlineSuche?: OnlineSuche;
+  /** Cover-Suche „Cover online suchen“ (REQ-118) in Buchdetails und Manuellem Eintrag; ohne Angabe DNB + Open Library. */
+  coverSuche?: CoverSuche;
   /** Listenspeicher (Sagas, Sammlungen, Bibliotheken, REQ-095); ohne Angabe der der App. In Tests ersetzbar. */
   listenRepository?: ListenRepository;
-  /** Einstellungsspeicher (Auswahl „Für dich“, REQ-114); ohne Angabe der des DesignAnbieters bzw. flüchtig. In Tests ersetzbar. */
+  /** Einstellungsspeicher (Auswahl „Für dich“, REQ-114; Sprachauswahl der Online-Suchen, REQ-119); ohne Angabe der des DesignAnbieters bzw. flüchtig. In Tests ersetzbar. */
   einstellungRepository?: EinstellungRepository;
   /** Abschnitte der Seite „Bücher“; ohne Angabe die zentrale Liste (REQ-114). In Tests ersetzbar. */
   abschnitte?: readonly AbschnittDefinition[];
@@ -176,6 +178,7 @@ export default function BuecherAnsicht({
   barcodeScanner,
   isbnSuche,
   onlineSuche,
+  coverSuche,
   listenRepository,
   einstellungRepository,
   abschnitte = buecherAbschnitte,
@@ -195,6 +198,7 @@ export default function BuecherAnsicht({
   const scanner = useMemo(() => barcodeScanner ?? standardBarcodeScanner(), [barcodeScanner]);
   const isbnSucheAktiv = useMemo(() => isbnSuche ?? standardIsbnSuche(), [isbnSuche]);
   const onlineSucheAktiv = useMemo(() => onlineSuche ?? standardOnlineSuche(), [onlineSuche]);
+  const coverSucheAktiv = useMemo(() => coverSuche ?? standardCoverSuche(), [coverSuche]);
   // Suchfenster „Online suchen“ (REQ-116) als Blatt über der Seite.
   const [sucheOffen, setSucheOffen] = useState(false);
   const ansichtSpeicher = useMemo(() => ansichtRepository ?? standardAnsichtRepository(), [ansichtRepository]);
@@ -266,6 +270,8 @@ export default function BuecherAnsicht({
         bildspeicher={speicher}
         repository={repository}
         jetzt={jetzt}
+        coverSuche={coverSucheAktiv}
+        einstellungRepository={einstellungen}
         onZurueck={() => {
           void listenNeuLaden();
           zurueck(true);
@@ -298,6 +304,8 @@ export default function BuecherAnsicht({
         bildspeicher={speicher}
         bildquelle={bildquelle}
         jetzt={jetzt}
+        coverSuche={coverSucheAktiv}
+        einstellungRepository={einstellungen}
         onZurueck={() => zurueck(false)}
         onAngelegt={(buch) => {
           // Danach die Buchdetails des neuen Buches (REQ-031, AK-7); die Liste lädt neu.
@@ -337,6 +345,7 @@ export default function BuecherAnsicht({
       {sucheOffen ? (
         <Suchfenster
           suche={onlineSucheAktiv}
+          einstellungRepository={einstellungen}
           // Zurück: eine Stufe zurück ins Menü „Buch hinzufügen“ (REQ-116, AK-8).
           onZurueck={() => {
             setSucheOffen(false);

@@ -37,7 +37,7 @@ Antworten des CEO (wörtlich, 2026-11-09):
 **Verweigerter Zugriff**
 - Wenn der Nutzer den Zugriff auf die Kamera verweigert hat, kann über „Scannen“ kein Bild aufgenommen werden; das System darf das Bild des Bereichs dann nicht verändern.
 - Wenn der Nutzer den Zugriff auf die Galerie verweigert hat, kann über „Aus Galerie auswählen“ kein Bild ausgewählt werden; das System darf das Bild des Bereichs dann nicht verändern.
-- Laut CEO bleibt in diesem Fall nur die Online-Auswahl („Cover online suchen“); diese ist derzeit ohne Funktion (REQ-015, To-do-Liste). Darüber hinausgehendes Verhalten der App bei verweigertem Zugriff hat der CEO nicht festgelegt und ist nicht Teil dieses REQ.
+- Laut CEO bleibt in diesem Fall nur die Online-Auswahl „Cover online suchen“ (REQ-118); sie funktioniert ohne Kamera- und Galeriezugriff (REQ-118, AK-17). Darüber hinausgehendes Verhalten der App bei verweigertem Zugriff hat der CEO nicht festgelegt und ist nicht Teil dieses REQ.
 
 **Speicherzugriff**
 - Das System muss Bilder ausschließlich über die Repository-Schnittstelle speichern (ADR-0002); dauerhafte Speicherung siehe REQ-019.
@@ -87,7 +87,7 @@ Antworten des CEO (wörtlich, 2026-11-09):
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Zuschnitt (REQ-017), dauerhafte Speicherung (REQ-019).
-- Online-Suche nach Covern (To-do-Liste).
+- Online-Suche nach Covern (REQ-118).
 - Hinweise, Dialoge oder erneute Berechtigungsanfragen bei verweigertem Zugriff (vom CEO nicht festgelegt).
 
 ## Qualitätsanforderungen
@@ -112,3 +112,4 @@ Antworten des CEO (wörtlich, 2026-11-09):
 | 2026-11-09 | Erstellt (Entwurf aus der CEO-Beschreibung „Buchdetails“ Teil 1) | Anforderungsmanager |
 | 2026-11-09 | CEO-Antworten 3, 4 und 6 eingearbeitet: Kameraansicht in der App mit Zurück-Pfeil (AK-1, AK-2), Wortlaut „Aus Galerie auswählen“, verweigerter Zugriff (neu AK-6), dauerhafte Speicherung ausgelagert in REQ-019. Offen: Priorität | Anforderungsmanager |
 | 2026-11-09 | Farbe des Zurück-Pfeils Tertiär wie in REQ-013 (AK-1 ergänzt), Priorität Must (CEO). Status „Abgestimmt“ (CEO 2026-11-09) | Anforderungsmanager |
+| 2026-11-26 | Hinweis aktualisiert: „Cover online suchen“ hat jetzt Funktion (REQ-118) und ist bei verweigertem Zugriff der Weg zu einem Cover. AKs unverändert, Status unverändert | Anforderungsmanager |

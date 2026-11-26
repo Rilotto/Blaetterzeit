@@ -22,7 +22,8 @@ const leisteStil: CSSProperties = {
   marginTop: abstand('l'),
 };
 
-const kapselStil = (aktiv: boolean): CSSProperties => ({
+/** Pille eines Filters, aktiv bzw. inaktiv (REQ-006); auch Sprachfilter der Online-Suchen (REQ-119). */
+export const kapselStil = (aktiv: boolean): CSSProperties => ({
   boxSizing: 'border-box',
   flex: '0 0 auto',
   height: `${HOEHE}px`,

@@ -5,7 +5,10 @@ import { mittigZuschneiden, zuschneiden } from '@/bild/bildverarbeitung';
 import { verhaeltnisGleich } from '@/bild/mittigerAusschnitt';
 import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
 import type { Ecken } from '@/bild/entzerren';
+import { standardCoverSuche, type CoverSuche } from '@/barcode/suche';
 import { standardRepository } from '@/buecher/buchQuelle';
+import { onlineCoverZuschneiden } from '@/buchdetails/automatischerZuschnitt';
+import CoverSuchfenster, { coverSuchtext } from '@/onlinesuche/CoverSuchfenster';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattMasse from '@/buchdetails/BlattMasse';
 import BlattPreis from '@/buchdetails/BlattPreis';
@@ -20,7 +23,7 @@ import Icon from '@/components/Icon';
 import { datumText, type Formatangaben, type Masse } from '@/domain/ausgabe';
 import type { Buch } from '@/domain/buch';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
-import type { BookRepository, ImageStore } from '@/storage';
+import type { BookRepository, EinstellungRepository, ImageStore } from '@/storage';
 import { buchAnlegenFarbe, detailsFarbe, textstufe, bildschirmrandPx, pillenhoehe, kartenSchatten, abstand, stilRolle } from '@/theme';
 import {
   buchAusEingaben,
@@ -48,6 +51,10 @@ export interface ManuellerEintragProps {
   jetzt?: () => Date;
   /** Vorbefüllte Angaben beim Öffnen, z. B. aus einem Barcode-Treffer (REQ-062). Nur beim ersten Anzeigen gelesen. */
   vorbelegung?: Vorbelegung;
+  /** Cover-Suche „Cover online suchen“ (REQ-118); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
+  coverSuche?: CoverSuche;
+  /** Speicher der Sprachauswahl (REQ-119); ohne Angabe der des DesignAnbieters bzw. flüchtig. In Tests ersetzbar. */
+  einstellungRepository?: EinstellungRepository;
 }
 
 /** Blätter über dem Manuellen Eintrag für die Zeilen der Karte „Ausgabe“ (REQ-060). */
@@ -321,7 +328,12 @@ export default function ManuellerEintrag({
   onAngelegt,
   jetzt,
   vorbelegung,
+  coverSuche,
+  einstellungRepository,
 }: ManuellerEintragProps) {
+  const [coverSucheAktiv] = useState(() => coverSuche ?? standardCoverSuche());
+  // Fenster „Cover online suchen“ (REQ-118) mit der Vorbelegung beim Öffnen.
+  const [coverSucheText, setCoverSucheText] = useState<string | null>(null);
   const [eingaben, setEingaben] = useState<Eingaben>(() => eingabenAusVorbelegung(vorbelegung));
   const [titelHinweis, setTitelHinweis] = useState(false);
   const [seitenFehler, setSeitenFehler] = useState(false);
@@ -488,13 +500,25 @@ export default function ManuellerEintrag({
         await bildHolen(() => quelle().galerie());
         return;
       case 'online':
-        // „Cover online suchen“: sichtbar, ohne Funktion – wie in den Buchdetails (REQ-015, REQ-032 AK-6).
+        // „Cover online suchen“ (REQ-118, REQ-032 AK-6): Vorbelegung aus den eingetippten Angaben.
+        setMenue(false);
+        setCoverSucheText(coverSuchtext(eingaben));
         return;
       case 'entfernen':
         setCover(null);
         setMenue(false);
         return;
     }
+  };
+
+  // Online-Cover vormerken (REQ-118, AK-14): nach REQ-115 zugeschnitten; gespeichert wird erst mit „Hinzufügen“.
+  const onlineCoverVormerken = async (bild: string) => {
+    setCoverSucheText(null);
+    const verhaeltnis = zielVerhaeltnis;
+    const ergebnis = await onlineCoverZuschneiden(bild, massQuelle);
+    if (!aktiv.current) return;
+    setCoverVerhaeltnis(verhaeltnis);
+    setCover(ergebnis);
   };
 
   const zuschnittBestaetigen = async (bild: string, ecken: Ecken) => {
@@ -548,6 +572,7 @@ export default function ManuellerEintrag({
   }
 
   return (
+    <>
     <div role="dialog" aria-modal="true" aria-label="Manueller Eintrag" data-sicherer-bereich="" {...stilRolle('blatt')} style={blattStil(versatz)}>
       <div style={innenStil}>
         <div
@@ -725,5 +750,15 @@ export default function ManuellerEintrag({
         />
       ) : null}
     </div>
+    {coverSucheText !== null ? (
+      <CoverSuchfenster
+        suche={coverSucheAktiv}
+        vorbelegung={coverSucheText}
+        einstellungRepository={einstellungRepository}
+        onZurueck={() => setCoverSucheText(null)}
+        onWahl={(bild) => void onlineCoverVormerken(bild)}
+      />
+    ) : null}
+    </>
   );
 }

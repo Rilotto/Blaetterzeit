@@ -10,6 +10,8 @@
  *  - Zuschnitt: <section aria-label="Zuschnitt"> mit „Zurück“ und Bestätigung laut REQ-017
  *  - Bildquelle { scannen(), galerie() } → Data-URL | null; ImageStore { get, put, remove }
  * Bildquelle und ImageStore sind Test-Doubles (Props von BuchDetails).
+ * Anpassung 2026-11-26 (Entwickler, REQ-118): „Cover online suchen“ nur im Bereich „Cover“ (AK-1) und öffnet das
+ * Fenster „Cover online suchen“ (AK-5); Cover-Suche als Test-Double (Prop `coverSuche`).
  */
 import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -35,6 +37,10 @@ const PNG = {
 type Bereich = 'ruecken' | 'cover' | 'schnitt';
 const BEREICHE: Bereich[] = ['ruecken', 'cover', 'schnitt'];
 const OPTIONEN = ['Scannen', 'Aus Galerie auswählen', 'Cover online suchen'];
+/** Optionen je Bereich: „Cover online suchen“ nur beim Cover (REQ-015 AK-1, REQ-118). */
+const optionen = (b: Bereich) => (b === 'cover' ? OPTIONEN : OPTIONEN.filter((o) => o !== 'Cover online suchen'));
+/** Cover-Suche, die nie antwortet (kein Netz im Test). */
+const coverSucheFake = () => ({ suchen: vi.fn(() => new Promise<never>(() => {})) });
 
 type FsLike = { existsSync(p: URL): boolean; readFileSync(p: URL, enc: 'utf8'): string };
 const NODE_FS = 'node:fs';
@@ -66,11 +72,15 @@ function quelle(scan: string | null = PNG.gelb, gal: string | null = PNG.gelb) {
   return { scannen: vi.fn(async () => scan), galerie: vi.fn(async () => gal) } satisfies Bildquelle;
 }
 /** `q` null: Standard-Bildquelle der App (kein Test-Double). */
-async function zeige(bilder: Partial<Record<Bereich, string>> = {}, q: ReturnType<typeof quelle> | Bildquelle | null = quelle()) {
+async function zeige(
+  bilder: Partial<Record<Bereich, string>> = {},
+  q: ReturnType<typeof quelle> | Bildquelle | null = quelle(),
+  coverSuche: ReturnType<typeof coverSucheFake> = coverSucheFake(),
+) {
   const s = speicher(bilder);
   render(
     <div style={farbVariablen() as CSSProperties}>
-      <BuchDetails buchId={BUCH.id} bildquelle={q ?? undefined} bildspeicher={s} onZurueck={() => {}} />
+      <BuchDetails buchId={BUCH.id} bildquelle={q ?? undefined} bildspeicher={s} coverSuche={coverSuche} onZurueck={() => {}} />
     </div>,
   );
   await screen.findByRole('region', { name: 'Buchdetails' });
@@ -110,12 +120,12 @@ const darstellung = () => BEREICHE.map((b) => bereich(b).innerHTML);
 // ===========================================================================
 describe('REQ-015 Auswahlmenü beim Antippen eines Bereichs', () => {
   describe('AK-1 Menü öffnet sich für jeden der drei Bereiche', () => {
-    it('[REQ-015/AK-1] nacheinander Buchrücken, Cover, Schnitt: jeweils genau die drei Optionen, ohne „Foto entfernen“', async () => {
+    it('[REQ-015/AK-1] nacheinander Buchrücken, Cover, Schnitt: „Scannen“, „Aus Galerie auswählen“, nur beim Cover „Cover online suchen“, ohne „Foto entfernen“', async () => {
       await zeige();
       for (const b of BEREICHE) {
         expect(menue()).toBeNull();
         await oeffne(b);
-        expect(namen()).toEqual(OPTIONEN);
+        expect(namen()).toEqual(optionen(b));
         expect(within(menue()!).queryByRole('menuitem', { name: /Foto entfernen/ })).toBeNull();
         fireEvent.click(document.querySelector('[data-menue-hintergrund]')!);
         await vi.waitFor(() => expect(menue()).toBeNull());
@@ -138,11 +148,11 @@ describe('REQ-015 Auswahlmenü beim Antippen eines Bereichs', () => {
   });
 
   describe('AK-2 Bei vorhandenem Bild zusätzlich „Foto entfernen“', () => {
-    it.each(BEREICHE)('[REQ-015/AK-2] Bild in %s: Menü mit den drei Optionen und „Foto entfernen“ mit X-Icon', async (b) => {
+    it.each(BEREICHE)('[REQ-015/AK-2] Bild in %s: Menü mit den Optionen des Bereichs und „Foto entfernen“ mit X-Icon', async (b) => {
       await zeige({ [b]: PNG.rot });
       await oeffne(b);
-      expect(namen()).toEqual(expect.arrayContaining([...OPTIONEN, 'Foto entfernen']));
-      expect(namen()).toHaveLength(4);
+      expect(namen()).toEqual(expect.arrayContaining([...optionen(b), 'Foto entfernen']));
+      expect(namen()).toHaveLength(optionen(b).length + 1);
       const icon = within(menue()!).getByRole('menuitem', { name: 'Foto entfernen' }).querySelector('[data-icon]');
       expect(icon).not.toBeNull();
       expect(icon!.getAttribute('data-icon')).toMatch(/(^|[-_])(x|kreuz|schliessen|schließen|close|entfernen)([-_.]|$)/i);
@@ -151,7 +161,7 @@ describe('REQ-015 Auswahlmenü beim Antippen eines Bereichs', () => {
     it('[REQ-015/AK-2] Negativfall: Bild nur im Cover → Menü von Buchrücken ohne „Foto entfernen“', async () => {
       await zeige({ cover: PNG.rot });
       await oeffne('ruecken');
-      expect(namen()).toEqual(OPTIONEN);
+      expect(namen()).toEqual(optionen('ruecken'));
     });
   });
 
@@ -194,8 +204,8 @@ describe('REQ-015 Auswahlmenü beim Antippen eines Bereichs', () => {
     });
   });
 
-  describe('AK-5 „Cover online suchen“ sichtbar, aber ohne Funktion', () => {
-    it.each([{}, { cover: PNG.rot }])('[REQ-015/AK-5] Antippen: keine Online-Suche, keine Bildquelle, Bild unverändert (%o)', async (bilder) => {
+  describe('AK-5 „Cover online suchen“ öffnet das Cover-Suchfenster', () => {
+    it.each([{}, { cover: PNG.rot }])('[REQ-015/AK-5] Antippen: Menü zu, Fenster „Cover online suchen“ offen, keine Bildquelle, Bild unverändert (%o)', async (bilder) => {
       const fetchSpy = vi.fn();
       vi.stubGlobal('fetch', fetchSpy);
       const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
@@ -208,6 +218,8 @@ describe('REQ-015 Auswahlmenü beim Antippen eines Bereichs', () => {
         await act(async () => {
           await new Promise((r) => setTimeout(r, 20));
         });
+        expect(menue()).toBeNull();
+        expect(screen.getByRole('dialog', { name: 'Cover online suchen' })).toBeInTheDocument();
         expect(fetchSpy).not.toHaveBeenCalled();
         expect(openSpy).not.toHaveBeenCalled();
         expect(q.scannen).not.toHaveBeenCalled();
@@ -215,8 +227,6 @@ describe('REQ-015 Auswahlmenü beim Antippen eines Bereichs', () => {
         expect(s.daten).toEqual(vorherDaten);
         expect(screen.queryByRole('region', { name: 'Kamera' })).toBeNull();
         expect(screen.queryByRole('region', { name: 'Zuschnitt' })).toBeNull();
-        if (menue()) fireEvent.click(document.querySelector('[data-menue-hintergrund]')!);
-        await vi.waitFor(() => expect(menue()).toBeNull());
         expect(darstellung()).toEqual(vorher);
       } finally {
         vi.unstubAllGlobals();
@@ -260,7 +270,7 @@ describe('REQ-015 Auswahlmenü beim Antippen eines Bereichs', () => {
       await vi.waitFor(() => expect(menue()).toBeNull());
       await vi.waitFor(() => expect(bereich('cover').querySelector('img')).toBeNull());
       await oeffne('cover');
-      expect(namen()).toEqual(OPTIONEN);
+      expect(namen()).toEqual(optionen('cover'));
     });
   });
 

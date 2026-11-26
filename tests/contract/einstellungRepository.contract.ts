@@ -49,6 +49,15 @@ export function runEinstellungRepositoryContract(name: string, factory: () => Ei
       if (umgebung.neustart) expect(await umgebung.neustart().lesen('fuerDichAusgeblendet')).toBe('["sagas"]');
     });
 
+    it('merkt die Sprachauswahl der Online-Suchen getrennt (REQ-119)', async () => {
+      const { repo } = umgebung;
+      expect(await repo.lesen('onlineSucheSprachen')).toBeUndefined();
+      await repo.speichern('onlineSucheSprachen', '["eng"]');
+      await repo.speichern('fuerDichAusgeblendet', '[]');
+      expect(await repo.lesen('onlineSucheSprachen')).toBe('["eng"]');
+      if (umgebung.neustart) expect(await umgebung.neustart().lesen('onlineSucheSprachen')).toBe('["eng"]');
+    });
+
     it('nach einem Neustart bleiben die Werte erhalten (falls dauerhaft)', async () => {
       if (!umgebung.neustart) return;
       await umgebung.repo.speichern('farbdesign', 'salbei');

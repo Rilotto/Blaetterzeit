@@ -1,5 +1,6 @@
-// Suchfenster „Online suchen“ (REQ-116) mit Trefferraster (REQ-117).
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
+// Suchfenster „Online suchen“ (REQ-116) mit Trefferraster (REQ-117) und gemeinsamer Rahmen für
+// „Cover online suchen“ (REQ-118): Ziehgriff, Zurück-Pfeil, Sprachfilter (REQ-119), Suchzeile, Hinweise, Raster.
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import iconLupe from '@/assets/icons/icon-lupe.png';
 import iconZurueck from '@/assets/icons/icon-zurueck.png';
 import type { OnlineSuche } from '@/barcode/suche';
@@ -9,7 +10,11 @@ import { SCHREIBFENSTER_ZUG_SCHWELLE } from '@/buchdetails/reiter/rezension';
 import type { Vorbelegung } from '@/buchanlegen/eingabe';
 import CoverPlatzhalter from '@/components/CoverPlatzhalter';
 import Icon from '@/components/Icon';
+import { useDesign } from '@/design/designwahl';
 import { useZurueckTaste } from '@/plattform/zurueckTaste';
+import type { EinstellungRepository } from '@/storage';
+import Sprachfilter from './Sprachfilter';
+import { fluechtigeEinstellungen, useSprachauswahl, type Sprache } from './sprache';
 import { fensterStil, griffBereichStil, griffStil, hintergrundStil } from '@/profil/blattStil';
 import { abstand, barcodeFarbe, coverSchatten, stilRolle, textstufe, uebersichtFarbe } from '@/theme';
 
@@ -27,6 +32,8 @@ interface Props {
   onZurueck: () => void;
   /** Treffer angetippt: weiter wie beim Barcode-Scan (REQ-117, AK-7). */
   onWahl: (vorbelegung: Vorbelegung) => void;
+  /** Speicher der gemeinsamen Sprachauswahl (REQ-119); ohne Angabe der des DesignAnbieters bzw. flüchtig. */
+  einstellungRepository?: EinstellungRepository;
 }
 
 type Stand = { art: 'leer' } | { art: 'laeuft' } | { art: 'ergebnis'; treffer: Treffer[] };
@@ -95,7 +102,7 @@ const rasterStil: CSSProperties = {
   paddingBottom: abstand('l'),
 };
 
-const trefferStil: CSSProperties = {
+export const trefferStil: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   minWidth: 0,
@@ -110,7 +117,7 @@ const trefferStil: CSSProperties = {
 };
 
 // Cover im Seitenverhältnis 2:3 wie die Coverflächen der Seite „Bücher“.
-const coverRahmenStil: CSSProperties = {
+export const coverRahmenStil: CSSProperties = {
   position: 'relative',
   width: '100%',
   aspectRatio: '2 / 3',
@@ -119,7 +126,7 @@ const coverRahmenStil: CSSProperties = {
   boxShadow: coverSchatten,
 };
 
-const coverBildStil: CSSProperties = { display: 'block', width: '100%', height: '100%', objectFit: 'cover' };
+export const coverBildStil: CSSProperties = { display: 'block', width: '100%', height: '100%', objectFit: 'cover' };
 
 const titelStil: CSSProperties = {
   display: '-webkit-box',
@@ -137,7 +144,7 @@ const einzeilig: CSSProperties = { display: 'block', overflow: 'hidden', textOve
 
 const autorStil: CSSProperties = { ...einzeilig, marginTop: '2px', ...textstufe('meta'), lineHeight: 1.3, color: barcodeFarbe('trefferText') };
 
-const quelleStil: CSSProperties = {
+export const quelleStil: CSSProperties = {
   ...einzeilig,
   marginTop: '2px',
   ...textstufe('meta'),
@@ -146,12 +153,55 @@ const quelleStil: CSSProperties = {
   color: barcodeFarbe('quelle'),
 };
 
+/** Art des Fensters; bestimmt die Kennzeichen `data-<art>-…` (z. B. `data-online-suche`, `data-cover-suche`). */
+export type SuchfensterArt = 'online' | 'cover';
+
+export interface SuchblattProps {
+  art: SuchfensterArt;
+  /** Name des Fensters (Dialog-Beschriftung). */
+  titel: string;
+  /** Suche mit Suchtext und gewählten Sprachen; leere Liste = nichts gefunden, Fehler = keine Verbindung. */
+  suchen: (text: string, sprachen: readonly Sprache[]) => Promise<Treffer[]>;
+  /** Hinweis ohne Ergebnis. */
+  keineTrefferHinweis: string;
+  /** Anzeigedauer der Hinweise; ohne Angabe bleiben sie bis zur nächsten Suche. */
+  hinweisMs?: number;
+  /** Vorbelegung der Suchzeile; nicht leer: Suche startet beim Öffnen automatisch (REQ-118). */
+  vorbelegung?: string;
+  einstellungRepository?: EinstellungRepository;
+  /** Beschriftung des Rasters (Bedienhilfen). */
+  rasterName: string;
+  /** Inhalt einer Kachel. */
+  kachel: (t: Treffer) => ReactNode;
+  /** Bedienhilfen-Name einer Kachel; ohne Angabe ihr Text. */
+  kachelName?: (t: Treffer) => string;
+  onZurueck: () => void;
+  onWahl: (t: Treffer) => void;
+}
+
 /**
- * Suchfenster „Online suchen“ (REQ-116): Blatt von unten mit Zurück-Pfeil und Suchfeld (Fokus beim Öffnen).
- * Gesucht wird erst mit der Such-Taste; Treffer erscheinen im 3-Spalten-Raster (REQ-117).
+ * Gemeinsames Suchfenster (REQ-116, REQ-118): Blatt von unten mit Ziehgriff, Zurück-Pfeil, Sprachfilter (REQ-119) und
+ * Suchzeile. Gesucht wird mit der Such-Taste, bei Vorbelegung sofort beim Öffnen, und nach einer Änderung der
+ * Sprachauswahl erneut, sofern im Fenster schon gesucht wurde. Treffer erscheinen im 3-Spalten-Raster.
  */
-export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
-  const [text, setText] = useState('');
+export function Suchblatt({
+  art,
+  titel,
+  suchen,
+  keineTrefferHinweis,
+  hinweisMs,
+  vorbelegung = '',
+  einstellungRepository,
+  rasterName,
+  kachel,
+  kachelName,
+  onZurueck,
+  onWahl,
+}: SuchblattProps) {
+  const design = useDesign();
+  const [ersatz] = useState(fluechtigeEinstellungen);
+  const [sprachen, sprachenSetzen] = useSprachauswahl(einstellungRepository ?? design.einstellungRepository ?? ersatz);
+  const [text, setText] = useState(vorbelegung);
   const [stand, setStand] = useState<Stand>({ art: 'leer' });
   const [hinweis, setHinweis] = useState<{ text: string; n: number } | null>(null);
   const [versatz, setVersatz] = useState(0);
@@ -159,21 +209,28 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
   const feld = useRef<HTMLInputElement>(null);
   const aktiv = useRef(true);
   const lauf = useRef(0);
+  // Suchtext, der auf das Laden der Sprachauswahl wartet (Autostart bzw. sehr schnelle Such-Taste).
+  const wartet = useRef<string | null>(null);
+  const gesucht = useRef(false);
 
   useEffect(() => {
     aktiv.current = true;
-    // Fokus beim Öffnen: Tastatur sofort offen (REQ-116, AK-2).
-    feld.current?.focus();
+    // Tastatur nur bei leerer Suchzeile (REQ-116, AK-2; REQ-118: bei Vorbelegung nicht).
+    if (vorbelegung.trim() === '') feld.current?.focus();
+    // Automatischer Start mit der Vorbelegung (REQ-118, AK-2/AK-3/AK-12).
+    else wartet.current = vorbelegung;
     return () => {
       aktiv.current = false;
     };
+    // Nur beim Öffnen.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!hinweis) return;
-    const t = setTimeout(() => setHinweis(null), ONLINE_SUCHE_HINWEIS_MS);
+    if (!hinweis || hinweisMs === undefined) return;
+    const t = setTimeout(() => setHinweis(null), hinweisMs);
     return () => clearTimeout(t);
-  }, [hinweis]);
+  }, [hinweis, hinweisMs]);
 
   const verlassen = useZurueckTaste(() => {
     aktiv.current = false;
@@ -192,24 +249,22 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
     if (!aktiv.current) return;
     aktiv.current = false;
     verlassen();
-    onWahl(t.angaben);
+    onWahl(t);
   };
 
   const hinweisZeigen = (h: string) => setHinweis((alt) => ({ text: h, n: (alt?.n ?? 0) + 1 }));
 
-  const starten = () => {
-    // Leeres Suchfeld bzw. nur Leerzeichen: nichts (REQ-116, AK-5).
-    if (text.trim() === '' || !aktiv.current) return;
+  const ausfuehren = (suchtext: string, spr: readonly Sprache[]) => {
+    if (!aktiv.current) return;
+    gesucht.current = true;
     const nr = ++lauf.current;
     setHinweis(null);
     setStand({ art: 'laeuft' });
-    // Tastatur schließen, damit die Treffer sichtbar sind.
-    feld.current?.blur();
-    void suche.suchen(text).then(
+    void suchen(suchtext, spr).then(
       (treffer) => {
         if (!aktiv.current || nr !== lauf.current) return;
         setStand({ art: 'ergebnis', treffer });
-        if (treffer.length === 0) hinweisZeigen(KEINE_TREFFER_HINWEIS);
+        if (treffer.length === 0) hinweisZeigen(keineTrefferHinweis);
       },
       (fehler: unknown) => {
         if (!aktiv.current || nr !== lauf.current) return;
@@ -218,6 +273,35 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
         hinweisZeigen(KEIN_INTERNET_HINWEIS);
       },
     );
+  };
+
+  // Sprachauswahl geladen: wartende Suche ausführen.
+  useEffect(() => {
+    if (!sprachen || wartet.current === null) return;
+    const t = wartet.current;
+    wartet.current = null;
+    ausfuehren(t, sprachen);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sprachen]);
+
+  const starten = () => {
+    // Leere Suchzeile bzw. nur Leerzeichen: nichts (REQ-116, AK-5).
+    if (text.trim() === '' || !aktiv.current) return;
+    // Tastatur schließen, damit die Treffer sichtbar sind.
+    feld.current?.blur();
+    if (!sprachen) {
+      wartet.current = text;
+      setHinweis(null);
+      setStand({ art: 'laeuft' });
+      return;
+    }
+    ausfuehren(text, sprachen);
+  };
+
+  // Änderung der Sprachauswahl: nach einer Suche sofort neu suchen (REQ-119, AK-6).
+  const sprachenAendern = (neu: Sprache[]) => {
+    sprachenSetzen(neu);
+    if (gesucht.current && text.trim() !== '') ausfuehren(text, neu);
   };
 
   const zugStart = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -245,18 +329,12 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
   };
 
   const treffer = stand.art === 'ergebnis' ? stand.treffer : [];
+  const kennung = (name: string) => ({ [`data-${art}-${name}`]: '' });
 
   return (
     <>
-      <div data-online-suche-hintergrund="" onClick={zurueck} style={hintergrundStil} />
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Online suchen"
-        data-online-suche=""
-        {...stilRolle('blatt')}
-        style={fenster(versatz)}
-      >
+      <div {...kennung('suche-hintergrund')} onClick={zurueck} style={hintergrundStil} />
+      <div role="dialog" aria-modal="true" aria-label={titel} {...kennung('suche')} {...stilRolle('blatt')} style={fenster(versatz)}>
         <div
           data-ziehgriff=""
           onPointerDown={zugStart}
@@ -267,8 +345,9 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
         >
           <span style={griffStil} />
         </div>
+        <Sprachfilter auswahl={sprachen ?? []} onAendern={sprachenAendern} />
         <div style={kopfStil}>
-          <button type="button" aria-label="Zurück" data-online-suche-zurueck="" onClick={zurueck} style={zurueckStil}>
+          <button type="button" aria-label="Zurück" {...kennung('suche-zurueck')} onClick={zurueck} style={zurueckStil}>
             <Icon datei="icon-zurueck.png" url={iconZurueck} farbe={barcodeFarbe('zurueckIcon')} groesse={24} />
           </button>
           <form
@@ -288,8 +367,7 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
                 enterKeyHint="search"
                 inputMode="search"
                 autoComplete="off"
-                autoFocus
-                data-online-suchfeld=""
+                {...kennung('suchfeld')}
                 data-bz-eingabe=""
                 aria-label={ONLINE_SUCHFELD_TEXT}
                 placeholder={ONLINE_SUCHFELD_TEXT}
@@ -309,47 +387,31 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
         </div>
 
         {stand.art === 'laeuft' ? (
-          <p role="status" data-online-suche-laeuft="" style={statusStil}>
+          <p role="status" {...kennung('suche-laeuft')} style={statusStil}>
             Ich suche …
           </p>
         ) : null}
         {hinweis ? (
-          <p role="status" key={hinweis.n} data-online-suche-hinweis="" style={statusStil}>
+          <p role="status" key={hinweis.n} {...kennung('suche-hinweis')} style={statusStil}>
             {hinweis.text}
           </p>
         ) : null}
 
         <div style={inhaltStil}>
           {treffer.length > 0 ? (
-            <div role="list" aria-label="Gefundene Bücher" data-online-treffer-raster="" style={rasterStil}>
+            <div role="list" aria-label={rasterName} {...kennung('treffer-raster')} style={rasterStil}>
               {treffer.map((t, i) => (
                 <button
                   key={`${t.quelle}-${i}`}
                   type="button"
                   role="listitem"
-                  data-online-treffer={i}
+                  {...{ [`data-${art}-treffer`]: i }}
                   data-quelle={t.quelle}
+                  aria-label={kachelName?.(t)}
                   onClick={() => waehlen(t)}
                   style={trefferStil}
                 >
-                  <span style={coverRahmenStil}>
-                    {t.angaben.cover ? (
-                      <img src={t.angaben.cover} alt="" data-treffer-cover="" style={coverBildStil} />
-                    ) : (
-                      <CoverPlatzhalter fuellen />
-                    )}
-                  </span>
-                  <span data-treffer-titel="" style={titelStil}>
-                    {t.angaben.titel}
-                  </span>
-                  {t.angaben.autor ? (
-                    <span data-treffer-autor="" style={autorStil}>
-                      {t.angaben.autor}
-                    </span>
-                  ) : null}
-                  <span data-treffer-quelle="" style={quelleStil}>
-                    {QUELLEN_NAME[t.quelle]}
-                  </span>
+                  {kachel(t)}
                 </button>
               ))}
             </div>
@@ -357,5 +419,48 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
         </div>
       </div>
     </>
+  );
+}
+
+/** Kachel eines Buch-Treffers: Cover (sonst Platzhalter), Titel, Autor, Quelle (REQ-117, AK-4/AK-5). */
+function buchKachel(t: Treffer) {
+  return (
+    <>
+      <span style={coverRahmenStil}>
+        {t.angaben.cover ? <img src={t.angaben.cover} alt="" data-treffer-cover="" style={coverBildStil} /> : <CoverPlatzhalter fuellen />}
+      </span>
+      <span data-treffer-titel="" style={titelStil}>
+        {t.angaben.titel}
+      </span>
+      {t.angaben.autor ? (
+        <span data-treffer-autor="" style={autorStil}>
+          {t.angaben.autor}
+        </span>
+      ) : null}
+      <span data-treffer-quelle="" style={quelleStil}>
+        {QUELLEN_NAME[t.quelle]}
+      </span>
+    </>
+  );
+}
+
+/**
+ * Suchfenster „Online suchen“ (REQ-116): Blatt von unten mit Sprachfilter (REQ-119), Zurück-Pfeil und Suchfeld
+ * (Fokus beim Öffnen). Gesucht wird erst mit der Such-Taste; Treffer erscheinen im 3-Spalten-Raster (REQ-117).
+ */
+export default function Suchfenster({ suche, onZurueck, onWahl, einstellungRepository }: Props) {
+  return (
+    <Suchblatt
+      art="online"
+      titel="Online suchen"
+      suchen={(text, sprachen) => suche.suchen(text, sprachen)}
+      keineTrefferHinweis={KEINE_TREFFER_HINWEIS}
+      hinweisMs={ONLINE_SUCHE_HINWEIS_MS}
+      einstellungRepository={einstellungRepository}
+      rasterName="Gefundene Bücher"
+      kachel={buchKachel}
+      onZurueck={onZurueck}
+      onWahl={(t) => onWahl(t.angaben)}
+    />
   );
 }
