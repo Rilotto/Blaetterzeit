@@ -12,6 +12,8 @@ import App from '@/App';
 import { InMemoryEinstellungRepository, type ImageStore } from '@/storage';
 import { InMemoryBookRepository } from '@/storage/InMemoryBookRepository';
 import BuchDetails from '@/views/BuchDetails';
+import { bildschirmrand, bildschirmrandPx } from '@/theme';
+import { seitenRand } from '@/buecher/layout';
 
 vi.mock('@/buecher/demodaten', () => ({ demoBuecher: [] }));
 beforeEach(() => localStorage.clear());
@@ -167,6 +169,52 @@ describe('REQ-066 Profil › App › Design', () => {
     await tippe(f.querySelector('[data-design-reiter="schriftart"]')!);
     await tippe(f.querySelector('button[data-schrift-zeile="fraunces"]')!);
     await vi.waitFor(() => expect(anzeige()).toBe('Nachtlektüre · Fraunces · Klassisch ›'), W);
+  });
+
+  // Mini-Änderung 2026-11-26: volle Breite, Randabstand wie Seite „Bücher“ (gilt für alle Profil-Abschnitte).
+  it('[REQ-066/AK-4] Karten und Zeilen aller Profil-Abschnitte: volle Breite, links/rechts genau ein Bildschirmrand wie bei „Bücher“', async () => {
+    const randPx = bildschirmrandPx;
+    const px = (v: string) => {
+      if (!v || v === '0' || v === 'auto') return 0;
+      if (v === bildschirmrand) return randPx;
+      const m = /^(-?\d+(?:\.\d+)?)px$/.exec(v);
+      if (!m) throw new Error(`unerwarteter Abstand ${v}`);
+      return Number(m[1]);
+    };
+    /** Summe der seitlichen Außen- und Innenabstände von e (ohne eigenen Innenabstand) und allen Vorfahren. */
+    const seitlich = (e: HTMLElement) => {
+      let l = px(e.style.marginLeft);
+      let r = px(e.style.marginRight);
+      for (let n = e.parentElement; n && n !== document.body; n = n.parentElement) {
+        l += px(n.style.marginLeft) + px(n.style.paddingLeft);
+        r += px(n.style.marginRight) + px(n.style.paddingRight);
+      }
+      return [l, r];
+    };
+    const ohneHoechstbreite = (e: HTMLElement) => {
+      for (let n: HTMLElement | null = e; n && n !== document.body; n = n.parentElement) {
+        expect(n.style.maxWidth, 'keine feste Höchstbreite').toBe('');
+        expect(['', 'auto', '100%']).toContain(n.style.width);
+      }
+    };
+    // Bezug: Seite „Bücher“ (Inhalte mit seitenRand)
+    expect(seitenRand).toBe(randPx);
+
+    await starteMit();
+    await profil();
+    const karten = ['[data-profil-karte-du]', '[data-profil-karte-bibliothek]', '[data-profil-karte]'].map((s) => {
+      const k = document.querySelector<HTMLElement>(s);
+      expect(k, s).not.toBeNull();
+      return k!;
+    });
+    for (const k of karten) {
+      expect(seitlich(k)).toEqual([randPx, randPx]);
+      ohneHoechstbreite(k);
+      for (const z of Array.from(k.children) as HTMLElement[]) {
+        expect(z.style.width).toBe('100%');
+        expect(z.style.maxWidth).toBe('');
+      }
+    }
   });
 
   it('[REQ-066/AK-3] Zeile „Design“ antippen öffnet das Fenster „Design“', async () => {
