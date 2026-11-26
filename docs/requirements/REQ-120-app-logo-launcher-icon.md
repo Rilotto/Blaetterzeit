@@ -1,7 +1,7 @@
 ---
 id: REQ-120
 titel: App-Logo als Android-Launcher-Icon (Adaptive Icon mit Pergament-Hintergrund, Legacy-Icons in allen Dichten)
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: qualitaet
 quelle: CEO

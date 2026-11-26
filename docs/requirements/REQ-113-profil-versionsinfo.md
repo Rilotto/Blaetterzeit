@@ -1,7 +1,7 @@
 ---
 id: REQ-113
 titel: Seite „Profil“ – Zeile „Versionsinfo“ im Abschnitt „App“, nur Anzeige, aus einer einzigen Versionsquelle
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO
