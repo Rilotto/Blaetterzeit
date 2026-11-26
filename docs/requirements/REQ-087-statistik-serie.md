@@ -57,7 +57,7 @@ CEO (2026-11-22): Zeile „Serie X Tage“ = dieselbe Lesesträhne wie in den Bu
 ## Abhängigkeiten
 
 - **REQ-027, REQ-024.**
-- **REQ-108 (Entwurf):** Die Flamme ist ausgegraut, wenn gestern, aber heute noch nicht gelesen wurde. **REQ-109 (Entwurf):** Der „Streak je Buch“ in AK-4 und in der Abgrenzung wird zum Rekord „Längste Serie“.
+- **REQ-108:** Die Flamme ist ausgegraut, wenn gestern, aber heute noch nicht gelesen wurde. **REQ-109:** Beschriftung und Rekord der Flamme in den Buchdetails („Streak je Buch“ in AK-4 und in der Abgrenzung): abgelöst durch REQ-109 („Längste Serie“, Fix, CEO 2026-11-26).
 
 ## Offene Fragen
 
@@ -70,3 +70,4 @@ CEO (2026-11-22): Zeile „Serie X Tage“ = dieselbe Lesesträhne wie in den Bu
 | 2026-11-25 | Verweise auf REQ-108 und REQ-109 (Entwurf) unter Abhängigkeiten ergänzt. AKs bleiben bis zur Abstimmung unverändert. Status unverändert | Anforderungsmanager |
 | 2026-11-25 | An REQ-108 und REQ-109 angepasst (Abgestimmt, CEO: „beide punkte passen für mich.“): AK-4 nennt den Rekord je Buch und die angezündete Flamme. Abgrenzung angepasst. Status unverändert | Anforderungsmanager |
 | 2026-11-25 | Beschriftung an REQ-109 angepasst (CEO: „Ändern wir den Text bitte unter der Flamme zu Längste Serie“): „Längste Serie“ statt „Längster Streak für dieses Buch“ (AK-4, Abhängigkeiten). Status unverändert | Anforderungsmanager |
+| 2026-11-26 | Abhängigkeits-Hinweise auf gültigen Stand gebracht (CEO: „Req-109 löst 026 und 087 entsprechend als fix ab.“): REQ-108/REQ-109 nicht mehr als Entwurf geführt; Beschriftung und Rekord der Flamme in den Buchdetails gelten nach REQ-109. AKs und Status unverändert | Anforderungsmanager |

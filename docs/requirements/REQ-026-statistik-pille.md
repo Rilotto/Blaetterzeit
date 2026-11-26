@@ -86,7 +86,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 ## Abhängigkeiten
 
 - **REQ-023, REQ-024, REQ-027.** **REQ-006:** Farbrubriken Ghost, GhostFrame. **REQ-009:** Farbrubrik Dunkelbraun.
-- **REQ-109 (Entwurf):** Mit dessen Abstimmung lautet die Beschriftung unter der Flamme „Längste Serie“ statt „Tage in Folge“ (betrifft Anforderung, AK-1, AK-2).
+- **REQ-109:** Beschriftung und Rekord der Flamme in den Buchdetails: abgelöst durch REQ-109 („Längste Serie“, Fix, CEO 2026-11-26). Betrifft Anforderung, AK-1, AK-2; diese nennen bereits „Längste Serie“.
 
 ## Offene Fragen
 
@@ -104,3 +104,4 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 | 2026-11-25 | Verweis auf REQ-109 (Entwurf, neue Beschriftung) unter Abhängigkeiten ergänzt. AKs bleiben bis zur Abstimmung unverändert. Status unverändert | Anforderungsmanager |
 | 2026-11-25 | An REQ-109 angepasst (Abgestimmt, CEO: „beide punkte passen für mich.“): Beschriftung „Längster Streak für dieses Buch“ statt „Tage in Folge“ (Anforderung, AK-1, AK-2). Status unverändert | Anforderungsmanager |
 | 2026-11-25 | Beschriftung an REQ-109 angepasst (CEO: „Ändern wir den Text bitte unter der Flamme zu Längste Serie“): „Längste Serie“ statt „Längster Streak für dieses Buch“ (Anforderung, AK-1, AK-2, Abhängigkeiten). Status unverändert | Anforderungsmanager |
+| 2026-11-26 | Abhängigkeits-Hinweis auf gültigen Stand gebracht (CEO: „Req-109 löst 026 und 087 entsprechend als fix ab.“): Beschriftung und Rekord der Flamme in den Buchdetails gelten nach REQ-109. AKs und Status unverändert | Anforderungsmanager |
