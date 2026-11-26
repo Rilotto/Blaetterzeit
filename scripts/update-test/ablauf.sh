@@ -27,25 +27,33 @@ diagnose() {
 }
 trap 'diagnose' ERR
 
-# Zählt Absturzmeldungen für $PKG im logcat: FATAL EXCEPTION (AndroidRuntime, Folgezeile „Process: $PKG, PID …“)
-# und „Process $PKG (pid …) has died“ (ActivityManager).
+# Zählt Absturzmeldungen für $PKG im logcat: FATAL EXCEPTION (AndroidRuntime, Folgezeile „Process: $PKG, PID …“),
+# „Process $PKG (pid …) has died“ (ActivityManager) und native Abstürze (Tombstone-Zeile „>>> $PKG <<<“).
 absturz_zahl() {
-  local n
-  n="$(adb logcat -d 2>/dev/null | tr -d '\r' \
-    | grep -A3 "FATAL EXCEPTION" | grep -c -F "Process: $PKG," || true)"
-  local m
-  m="$(adb logcat -d 2>/dev/null | tr -d '\r' \
-    | grep -c -E "Process ${PKG//./\\.} \(pid [0-9]+\) has died" || true)"
-  echo $(( ${n:-0} + ${m:-0} ))
+  local log n m t
+  log="$(adb logcat -d 2>/dev/null | tr -d '\r')"
+  n="$(grep -A3 "FATAL EXCEPTION" <<<"$log" | grep -c -F "Process: $PKG," || true)"
+  m="$(grep -c -E "Process ${PKG//./\\.} \(pid [0-9]+\) has died" <<<"$log" || true)"
+  t="$(grep -c -F ">>> $PKG <<<" <<<"$log" || true)"
+  echo $(( ${n:-0} + ${m:-0} + ${t:-0} ))
+}
+
+# Zählt Beendigungen von $PKG durch das System (ActivityManager „Killing <pid>:$PKG/…“), z. B. wenn im Emulator
+# der Google-Play-Dienst stirbt, von dessen FontsProvider die WebView abhängt („depends on provider … in dying proc“).
+# Das ist kein Absturz der App; laeuft() startet sie dann einmal neu.
+kill_zahl() {
+  adb logcat -d 2>/dev/null | tr -d '\r' | grep -c -E "ActivityManager: Killing [0-9]+:${PKG//./\\.}/" || true
 }
 
 ABSTURZ_BASIS=0
+KILL_BASIS=0
 
 starten() {
   adb shell am force-stop "$PKG" || true
   sleep 1
-  # Stand vor dem Start merken, damit Meldungen früherer Phasen nicht mitzählen.
+  # Stand vor dem Start merken, damit Meldungen früherer Phasen (und das force-stop) nicht mitzählen.
   ABSTURZ_BASIS="$(absturz_zahl)"
+  KILL_BASIS="$(kill_zahl)"
   adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 }
 
@@ -68,22 +76,43 @@ warte_auf_datei() {
 }
 
 # Läuft die App (kein Absturz beim Start)? Prüft wiederholt bis zum Zeitlimit ($1 Sekunden, Standard 60).
-# Fehler nur, wenn logcat seit dem letzten Start einen Absturz von $PKG zeigt oder die App im Zeitlimit nie lief.
+# Fehler, wenn logcat seit dem letzten Start einen Absturz von $PKG zeigt oder die App im Zeitlimit nicht läuft.
+# Wurde die App vom System beendet (kill_zahl gestiegen, kein Absturz), wird sie genau einmal neu gestartet.
+# Erfolg erst, wenn der Prozess bei zwei Prüfungen im Abstand von 5 s mit derselben PID läuft.
 laeuft() {
-  local limit="${1:-60}" ende pid aktuell
+  local limit="${1:-60}" ende pid pid2 neustart=0
   ende=$(( SECONDS + limit ))
   while :; do
-    aktuell="$(absturz_zahl)"
-    if [ "$aktuell" -gt "$ABSTURZ_BASIS" ]; then
-      echo "App $PKG ist abgestürzt (logcat: FATAL EXCEPTION bzw. has died)"
+    if [ "$(absturz_zahl)" -gt "$ABSTURZ_BASIS" ]; then
+      echo "App $PKG ist abgestürzt (logcat: FATAL EXCEPTION, has died bzw. Tombstone)"
       return 1
     fi
     pid="$(adb shell pidof "$PKG" 2>/dev/null | tr -d '\r' || true)"
     if [ -n "$pid" ]; then
-      return 0
+      sleep 5
+      pid2="$(adb shell pidof "$PKG" 2>/dev/null | tr -d '\r' || true)"
+      if [ "$pid2" = "$pid" ] && [ "$(absturz_zahl)" -le "$ABSTURZ_BASIS" ]; then
+        return 0
+      fi
+      continue
+    fi
+    if [ "$(kill_zahl)" -gt "$KILL_BASIS" ]; then
+      if [ "$neustart" -eq 0 ]; then
+        echo "Hinweis: $PKG wurde vom System beendet (kein Absturz):"
+        adb logcat -d 2>/dev/null | tr -d '\r' | grep -E "ActivityManager: Killing [0-9]+:${PKG//./\\.}/" | tail -n 1 || true
+        echo "Starte $PKG einmal neu"
+        neustart=1
+        KILL_BASIS="$(kill_zahl)"
+        adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
+        ende=$(( SECONDS + limit ))
+        sleep 8
+        continue
+      fi
+      echo "App $PKG wurde auch nach dem Neustart vom System beendet"
+      return 1
     fi
     if [ "$SECONDS" -ge "$ende" ]; then
-      echo "App $PKG lief innerhalb von ${limit} s nie (Absturz?)"
+      echo "App $PKG lief innerhalb von ${limit} s nicht (Absturz?)"
       return 1
     fi
     sleep 2
