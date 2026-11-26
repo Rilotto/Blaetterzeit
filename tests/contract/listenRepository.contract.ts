@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { neueListe } from '@/domain/listen';
+import type { Zugehoerigkeit } from '@/domain/listen';
 import type { ListenRepository } from '@/storage/ListenRepository';
 
 export interface ListenUmgebung {
@@ -35,16 +36,17 @@ export function runListenRepositoryContract(name: string, fabrik: Fabrik) {
       expect(alle).toContainEqual(saga);
     });
 
-    it('ordnet zu, überschreibt den Band, entfernt den Band und nimmt heraus', async () => {
+    it('ordnet zu (Upsert ohne Doppelung) und nimmt heraus; Zugehörigkeiten tragen keinen Band (REQ-112)', async () => {
       const saga = neueListe('saga', 'Crescent City');
       await u.repo.listeSpeichern(saga);
-      await u.repo.zuordnen({ listeId: saga.id, buchId: 'b1', band: 2 });
-      await u.repo.zuordnen({ listeId: saga.id, buchId: 'b2' });
-      await u.repo.zuordnen({ listeId: saga.id, buchId: 'b1', band: 3 });
-      expect(await u.repo.zugehoerigkeiten()).toHaveLength(2);
-      expect(await u.repo.zugehoerigkeiten()).toContainEqual({ listeId: saga.id, buchId: 'b1', band: 3 });
-      expect(await u.repo.zugehoerigkeiten()).toContainEqual({ listeId: saga.id, buchId: 'b2' });
       await u.repo.zuordnen({ listeId: saga.id, buchId: 'b1' });
+      await u.repo.zuordnen({ listeId: saga.id, buchId: 'b2' });
+      await u.repo.zuordnen({ listeId: saga.id, buchId: 'b1' });
+      expect(await u.repo.zugehoerigkeiten()).toHaveLength(2);
+      expect(await u.repo.zugehoerigkeiten()).toContainEqual({ listeId: saga.id, buchId: 'b1' });
+      expect(await u.repo.zugehoerigkeiten()).toContainEqual({ listeId: saga.id, buchId: 'b2' });
+      // Ein altes Feld „band“ (vor REQ-112) wird weder gespeichert noch geliefert.
+      await u.repo.zuordnen({ listeId: saga.id, buchId: 'b1', band: 3 } as Zugehoerigkeit);
       expect(await u.repo.zugehoerigkeiten()).toContainEqual({ listeId: saga.id, buchId: 'b1' });
       await u.repo.herausnehmen(saga.id, 'b1');
       expect(await u.repo.zugehoerigkeiten()).toEqual([{ listeId: saga.id, buchId: 'b2' }]);
@@ -70,10 +72,10 @@ export function runListenRepositoryContract(name: string, fabrik: Fabrik) {
       if (!u.neustart) return;
       const l = neueListe('bibliothek', 'Zuhause');
       await u.repo.listeSpeichern(l);
-      await u.repo.zuordnen({ listeId: l.id, buchId: 'b9', band: 1 });
+      await u.repo.zuordnen({ listeId: l.id, buchId: 'b9' });
       const neu = await u.neustart();
       expect(await neu.listen()).toEqual([l]);
-      expect(await neu.zugehoerigkeiten()).toEqual([{ listeId: l.id, buchId: 'b9', band: 1 }]);
+      expect(await neu.zugehoerigkeiten()).toEqual([{ listeId: l.id, buchId: 'b9' }]);
     });
   });
 }

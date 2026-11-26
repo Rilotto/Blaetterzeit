@@ -56,9 +56,15 @@ async function liste(w: Welt, art: ListenArt, name: string): Promise<Liste> {
   await w.listen.listeSpeichern(l);
   return l;
 }
+/** Buch in eine Liste aufnehmen; ein Band gehört seit REQ-112 zum Buch (Buch.bandnummer), nicht zur Zugehörigkeit. */
 async function zuordnen(w: Welt, l: Liste, b: Buch, band?: number) {
-  await w.listen.zuordnen(band === undefined ? { listeId: l.id, buchId: b.id } : { listeId: l.id, buchId: b.id, band });
+  if (band !== undefined) await w.repo.save({ ...((await w.repo.get(b.id)) ?? b), bandnummer: band });
+  await w.listen.zuordnen({ listeId: l.id, buchId: b.id });
 }
+/** Bandnummer des Buches (REQ-112). */
+const bandVon = async (w: Welt, b: Buch) => (await w.repo.get(b.id))?.bandnummer;
+/** Zugehörigkeiten ohne Bandangabe (nur listeId/buchId). */
+const zugOhneBand = async (w: Welt) => (await w.listen.zugehoerigkeiten()).map((z) => ({ listeId: z.listeId, buchId: z.buchId }));
 /** Element sichtbar (kein hidden, aria-hidden, display:none, inert in der Kette). */
 function sichtbar(el: Element | null): boolean {
   for (let n = el as HTMLElement | null; n; n = n.parentElement) {
@@ -183,7 +189,7 @@ function zeile(d: HTMLElement, bez: string) {
 }
 /** Wert der Zeile ohne Bezeichnung und Pfeil. */
 const zeilenWert = (d: HTMLElement, bez: string) => norm(norm(zeile(d, bez)?.textContent).slice(bez.length).replace('›', ''));
-void [ohneLeer, textEls, zuordnen, blatt, zeilenWert, pillenTexte, neustartDetails, haken, angehakt, neuerName, sichern, schliessen, markiert, bandFeld, ARTEN, checkboxen];
+void [bandVon, zugOhneBand, ohneLeer, textEls, zuordnen, blatt, zeilenWert, pillenTexte, neustartDetails, haken, angehakt, neuerName, sichern, schliessen, markiert, bandFeld, ARTEN, checkboxen];
 // ----------------------------------------------------------------------------- Ende Kopf
 
 /** Seite „Bücher“ mit den Repositories der App. */
@@ -220,6 +226,12 @@ function eintrag(name: string) {
 const eintragText = (name: string) => norm(eintrag(name)?.textContent);
 const zurueck = () => screen.getAllByRole('button', { name: 'Zurück' }).filter((b) => sichtbar(b)).at(-1)!;
 const zugVon = async (w: Welt, b: Buch) => (await w.listen.zugehoerigkeiten()).filter((z) => z.buchId === b.id);
+/** Wert der Zeile „Band“ der Karte „Ausgabe“ (REQ-112), Reiter „Details“ aktiv. */
+function ausgabeBand(d: HTMLElement) {
+  const z = Array.from(d.querySelectorAll<HTMLElement>('[data-ausgabe-zeile]')).find((e) => norm(e.querySelector('[data-zeile-bezeichnung]')?.textContent) === 'Band');
+  expect(z, 'Zeile „Band“ in der Karte „Ausgabe“').toBeDefined();
+  return norm(z!.querySelector('[data-zeile-wert]')?.textContent);
+}
 
 describe('REQ-097 Listenübersicht und Erreichbarkeit', () => {
   describe('AK-1 Alle Listen der Art mit Anzahl', () => {
@@ -401,6 +413,80 @@ describe('REQ-097 Listenübersicht und Erreichbarkeit', () => {
       await warte(60);
       expect(await w.listen.zugehoerigkeiten()).toEqual([]);
       expect((await w.listen.listen()).map((l) => [l.art, l.name])).toEqual([['saga', 'Crescent City']]);
+    });
+  });
+
+  // Neu 2026-11-25 (REQ-112, CEO-Entscheidung „a“): genau ein Feld „Band“ mit der Bandnummer des Buches.
+  describe('AK-11 Ein Feld „Band“ mit der Bandnummer des Buches', () => {
+    async function aufbau(band?: number) {
+      const w = await starte();
+      const b = buch('Crossover', { autor: 'Rebecca Yarros', ...(band === undefined ? {} : { bandnummer: band }) });
+      await w.repo.save(b);
+      const e = await liste(w, 'saga', 'The Empyrean');
+      const c = await liste(w, 'saga', 'Crescent City');
+      await zuordnen(w, e, b);
+      await zuordnen(w, c, b);
+      const d = await details(w, b.id);
+      await tippe(zeile(d, 'In Saga')!);
+      await uebersichtOffen('Sagas');
+      return { w, b, e, c };
+    }
+    const bandFeldUebersicht = () => bandFelder(document.body).filter((f) => sichtbar(f));
+    async function bandAendern(wert: string) {
+      const f = bandFeldUebersicht()[0];
+      fireEvent.change(f, { target: { value: wert } });
+      fireEvent.blur(f);
+      await warte(60);
+    }
+    const sagaZeilenTexte = () => textEls(/^Band \d+ · .+$/, screen.getByRole('region', { name: 'Buchdetails' })).map((x) => norm(x.textContent));
+
+    it('[REQ-097/AK-11] Buch mit Band 2 in zwei Sagas: „In Saga“ → genau ein Feld „Band“ mit 2', async () => {
+      await aufbau(2);
+      expect(bandFeldUebersicht()).toHaveLength(1);
+      expect(bandFeldUebersicht()[0].value).toBe('2');
+    });
+
+    it('[REQ-097/AK-11] auf 4 ändern → Buchdetails „Band 4 · Crescent City“, „Band 4 · The Empyrean“, Zeile „Band“ „4“; gespeichert', async () => {
+      const { w, b } = await aufbau(2);
+      await bandAendern('4');
+      await tippe(zurueck());
+      await vi.waitFor(() => expect(sagaZeilenTexte()).toEqual(['Band 4 · Crescent City', 'Band 4 · The Empyrean']), W);
+      expect(ausgabeBand(screen.getByRole('region', { name: 'Buchdetails' }))).toBe('4');
+      expect(await bandVon(w, b)).toBe(4);
+    });
+
+    it('[REQ-097/AK-11] nach Ändern auf 4 Häkchen bei „Crescent City“ entfernen → Bandnummer bleibt 4, nur noch „Band 4 · The Empyrean“', async () => {
+      const { w, b, e } = await aufbau(2);
+      await bandAendern('4');
+      await tippe(haken(document.body, 'Crescent City'));
+      await warte(60);
+      expect((await zugVon(w, b)).map((z) => z.listeId)).toEqual([e.id]);
+      expect(await bandVon(w, b)).toBe(4);
+      await tippe(zurueck());
+      await vi.waitFor(() => expect(sagaZeilenTexte()).toEqual(['Band 4 · The Empyrean']), W);
+    });
+
+    it('[REQ-097/AK-11] Grenzfall: letztes Häkchen entfernen → Bandnummer bleibt am Buch', async () => {
+      const { w, b } = await aufbau(2);
+      await tippe(haken(document.body, 'Crescent City'));
+      await tippe(haken(document.body, 'The Empyrean'));
+      await warte(60);
+      expect(await zugVon(w, b)).toEqual([]);
+      expect(await bandVon(w, b)).toBe(2);
+    });
+
+    it('[REQ-097/AK-11] Negativfall: ungültige Eingabe 0 ändert die Bandnummer nicht', async () => {
+      const { w, b } = await aufbau(2);
+      await bandAendern('0');
+      expect(await bandVon(w, b)).toBe(2);
+    });
+
+    it('[REQ-097/AK-11] Buch ohne Band: Feld leer; 1 eintragen → Bandnummer 1', async () => {
+      const { w, b } = await aufbau();
+      expect(bandFeldUebersicht()).toHaveLength(1);
+      expect(bandFeldUebersicht()[0].value).toBe('');
+      await bandAendern('1');
+      expect(await bandVon(w, b)).toBe(1);
     });
   });
 

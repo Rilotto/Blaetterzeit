@@ -1,7 +1,7 @@
 ---
 id: REQ-060
 titel: Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht
-status: Implementiert
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -35,8 +35,8 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 - Das System muss die bisherige Angabe „ERSCHEINUNGSDATUM“ im Blatt als „Erschienen“ bezeichnen; sie ist dieselbe Angabe wie die Zeile „Erschienen“ der Karte „Ausgabe“ (Erscheinungsdatum, REQ-033). ~~Das Feld „JAHR“ bleibt unverändert.~~ Abgelöst durch REQ-092: Das Feld „JAHR“ entfällt.
 
 **Eingabe**
-- Das System muss dem Nutzer die Möglichkeit bieten, im Blatt „Manueller Eintrag“ vor dem Anlegen jede Angabe der Karte „Ausgabe“ außer „Fotos“ einzugeben: Seiten, Format, Exemplar, Sonderausgabe, Preis, Verlag, Erschienen, ISBN, Hinzugefügt.
-- Die Eingabe erfolgt wie in der kopierten Karte „Ausgabe“: Seiten (REQ-057), Format/Exemplar/Sonderausgabe (REQ-058), Preis (REQ-059), Verlag und ISBN (REQ-063), Hinzugefügt (REQ-064).
+- Das System muss dem Nutzer die Möglichkeit bieten, im Blatt „Manueller Eintrag“ vor dem Anlegen jede Angabe der Karte „Ausgabe“ außer „Fotos“ einzugeben: Seiten, Format, Exemplar, Band, Sonderausgabe, Preis, Verlag, Erschienen, ISBN, Hinzugefügt.
+- Die Eingabe erfolgt wie in der kopierten Karte „Ausgabe“: Seiten (REQ-057), Format/Exemplar/Sonderausgabe (REQ-058), Band (REQ-112), Preis (REQ-059), Verlag und ISBN (REQ-063), Hinzugefügt (REQ-064).
 - Das System muss dem Nutzer die Möglichkeit bieten, „Erschienen“ als Datum im Format TT.MM.JJJJ (CEO 2026-11-10, To-do-Liste) oder nur als Jahr JJJJ einzugeben (REQ-092). Damit erhält „+ Erscheinungsdatum hinzufügen“ (REQ-030: ohne Funktion) eine Funktion.
 
 **Hinzugefügt**
@@ -58,7 +58,7 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 ### AK-1 Karte „Ausgabe“ im Blatt ohne „Fotos“
 - **Gegeben** das Blatt „Manueller Eintrag“ ist geöffnet
 - **Wenn** der Nutzer es betrachtet
-- **Dann** enthält es zusätzlich zum bisherigen Inhalt die Zeilen Seiten, Format, Exemplar, Sonderausgabe, Preis, Verlag, Erschienen, ISBN, Hinzugefügt
+- **Dann** enthält es zusätzlich zum bisherigen Inhalt die Zeilen Seiten, Format, Exemplar, Band, Sonderausgabe, Preis, Verlag, Erschienen, ISBN, Hinzugefügt
 - **Und** die Zeile „Fotos“ fehlt
 
 ### AK-2 Keine doppelten Angaben, „Erschienen“ statt „Erscheinungsdatum“
@@ -141,3 +141,4 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 | 2026-11-16 | CEO-Antworten eingearbeitet: nur „Von Hand eintragen“, alle Ausgabe-Angaben außer Fotos, „Hinzugefügt“ automatisch und überschreibbar, Layout „Ausgabe“ ins Blatt kopieren, Pflicht Titel und Seitenzahl, Priorität Should | Anforderungsmanager |
 | 2026-11-16 | CEO-Antwort 5 eingearbeitet: „Erscheinungsdatum“ heißt „Erschienen“ (Eingabe TT.MM.JJJJ), Seiten nur einmal, fehlende Seitenzahl wie ungültiges „JAHR“ hervorgehoben (AK-2, AK-3, AK-5, AK-6). „Hinzugefügt“-Eingabe nach REQ-064. Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
 | 2026-11-23 | An REQ-092 angepasst (Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Feld „JAHR“ entfällt, „Erschienen“ auch als JJJJ. Nur Anforderungstext geändert, AKs unverändert. Status unverändert | Anforderungsmanager |
+| 2026-11-25 | An REQ-112 angepasst: Zeile „Band“ auch im Manuellen Eintrag (Auslegung, vom CEO ohne Gegenrede). Anforderung und AK-1 ergänzt. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |

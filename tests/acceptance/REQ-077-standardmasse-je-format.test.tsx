@@ -8,9 +8,12 @@
  * Konkrete Zahlen sind auf Zuruf änderbar; eingefroren ist die Zuordnung Format → Standardwert.
  */
 import '@testing-library/jest-dom/vitest';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import BuchDetails from '@/views/BuchDetails';
+import BuecherAnsicht from '@/views/BuecherAnsicht';
+import { isbnSucheMit } from '@/barcode/suche';
+import type { Treffer } from '@/barcode/treffer';
 import { STANDARD_MASSE_MM, wirksameMasse } from '@/buchdetails/masse';
 import type { Buch } from '@/domain/buch';
 import type { ImageStore } from '@/storage/ImageStore';
@@ -171,7 +174,8 @@ describe('REQ-077 Standardmaße je Format', () => {
       const p = darstellung();
       expect(p.cover).toBeCloseTo(148 / 240, 2);
       expect(p.ruecken).toBeCloseTo(28 / 148, 2);
-      expect(masseWert(d)).toBe('– × 24,0 × – cm');
+      // Fassung 2026-11-25 (REQ-072 AK-2 / REQ-077 AK-10): Zeile ergänzt die fehlenden Werte mit „ca.“
+      expect(masseWert(d)).toBe('ca. 14,8 × 24,0 × 2,8 cm');
     });
   });
 
@@ -195,6 +199,134 @@ describe('REQ-077 Standardmaße je Format', () => {
       const g = (await repo.get(id))!;
       expect(g.unterformat).toBe('hardcover');
       expect([g.breiteMm, g.hoeheMm, g.dickeMm]).toEqual([undefined, undefined, undefined]);
+    });
+  });
+});
+
+// ============================================================================= Sprint 11: nach dem Barcode-Scan (AK-8 bis AK-10)
+describe('REQ-077 Standardmaße nach dem Barcode-Scan', () => {
+  const ISBN = '9783551551672';
+  function olAntwort(f: Record<string, unknown>) {
+    const satz = { title: 'Scanbuch', number_of_pages: 400, isbn_13: [ISBN], ...f };
+    return JSON.stringify({ [`ISBN:${ISBN}`]: { ...satz, details: satz } });
+  }
+  /** Suche über die echte Auswertung; Open Library liefert die Angaben `f`, die DNB nichts. */
+  const olSuche = (f: Record<string, unknown>) =>
+    isbnSucheMit({
+      text: async (url: string) => (/openlibrary\.org/.test(url) ? { status: 200, text: olAntwort(f) } : { status: 404, text: '' }),
+      bild: async () => null,
+    });
+  const trefferSuche = (angaben: Treffer['angaben']) => ({ suchen: async () => [{ quelle: 'dnb', angaben } as Treffer] });
+  /** Barcode scannen, einzigen Treffer antippen; Manueller Eintrag ist offen. */
+  async function scanne(suche: { suchen: (isbn: string) => Promise<Treffer[]> }) {
+    const repo = new InMemoryBookRepository();
+    const scanner = {
+      optionen: null as { beiIsbn: (isbn: string) => void } | null,
+      starten: vi.fn(async (o: { beiIsbn: (isbn: string) => void }) => void (scanner.optionen = o)),
+      lichtSetzen: vi.fn(async () => {}),
+      beenden: vi.fn(async () => {}),
+    };
+    render(<BuecherAnsicht repository={repo} bildspeicher={leer} bildquelle={{ scannen: async () => null, galerie: async () => null }} barcodeScanner={scanner} isbnSuche={suche} />);
+    await screen.findByRole('heading', { name: 'Deine Bücher' }, W);
+    await tippe(screen.getByRole('button', { name: 'Buch hinzufügen' }));
+    const m = await screen.findByRole('menu', { name: 'Buch hinzufügen' }, W);
+    await tippe(m.querySelector('[data-option="barcode"]')!);
+    await vi.waitFor(() => expect(scanner.optionen).not.toBeNull(), W);
+    await act(async () => {
+      scanner.optionen!.beiIsbn(ISBN);
+      await new Promise((r) => setTimeout(r, 30));
+    });
+    const a = await screen.findByRole('dialog', { name: 'Gefundene Bücher' }, W);
+    await tippe(a.querySelector('[data-treffer]')!);
+    const blatt = await screen.findByRole('dialog', { name: 'Manueller Eintrag' }, W);
+    return { repo, blatt };
+  }
+  const wertIm = (root: HTMLElement, id: string) => norm(root.querySelector(`[data-ausgabe-zeile="${id}"] [data-zeile-wert]`)?.textContent);
+  async function anlegen(blatt: HTMLElement, repo: InMemoryBookRepository) {
+    await tippe(within(blatt).getByRole('button', { name: 'Hinzufügen' }));
+    const d = await screen.findByRole('region', { name: 'Buchdetails' }, W);
+    const [b] = await repo.list();
+    expect(b, 'angelegtes Buch').toBeDefined();
+    await vi.waitFor(() => expect(document.querySelectorAll('[data-bereich]')).toHaveLength(3), W);
+    await tippe(await vi.waitFor(() => d.querySelector<HTMLElement>('[data-reiter="details"]')!, W));
+    await vi.waitFor(() => expect(d.querySelector('[data-ausgabe-zeile="masse"]')).not.toBeNull(), W);
+    return { d, b };
+  }
+  const HC_TEXT = 'ca. 14,8 × 21,0 × 2,8 cm';
+  const TB_TEXT = 'ca. 13,8 × 21,8 × 2,4 cm';
+
+  describe('AK-8 Scan ohne Maße, mit Format Hardcover', () => {
+    it('[REQ-077/AK-8] Open Library „Hardcover“, 400 Seiten, ohne Maße: Manueller Eintrag zeigt „Print · Hardcover“ und den Vorschlag „ca. 14,8 × 21,0 × 2,8 cm“', async () => {
+      const { blatt } = await scanne(olSuche({ physical_format: 'Hardcover' }));
+      await vi.waitFor(() => expect(wertIm(blatt, 'format')).toBe('Print · Hardcover'), W);
+      expect(wertIm(blatt, 'masse')).toBe(HC_TEXT);
+    });
+
+    it('[REQ-077/AK-8] nach „Hinzufügen“: Zeile „Maße“ der Buchdetails zeigt denselben Vorschlag, Buchdarstellung nutzt ihn, keine Maße gespeichert', async () => {
+      const { blatt, repo } = await scanne(olSuche({ physical_format: 'Hardcover' }));
+      const { d, b } = await anlegen(blatt, repo);
+      expect(masseWert(d)).toBe(HC_TEXT);
+      expect(d.querySelector('[data-ausgabe-zeile="masse"] [data-zeile-wert]')).toHaveAttribute('data-zeile-vorschlag', 'true');
+      const x = darstellung();
+      expect(x.cover).toBeCloseTo(148 / 210, 2);
+      expect(x.ruecken).toBeCloseTo(28 / 148, 2);
+      const gespeichert = (await repo.get(b.id))!;
+      expect(gespeichert).toMatchObject({ format: 'print', unterformat: 'hardcover' });
+      expect(gespeichert.breiteMm).toBeUndefined();
+      expect(gespeichert.hoeheMm).toBeUndefined();
+      expect(gespeichert.dickeMm).toBeUndefined();
+    });
+
+    it('[REQ-077/AK-8] Variante: Treffer mit Format Hardcover (fertig zugeordnet), ohne Maße → Vorschlag „ca. 14,8 × 21,0 × 2,8 cm“', async () => {
+      const { blatt } = await scanne(trefferSuche({ titel: 'Scanbuch', seitenanzahl: 400, isbn: ISBN, format: 'print', unterformat: 'hardcover' }));
+      await vi.waitFor(() => expect(wertIm(blatt, 'masse')).toBe(HC_TEXT), W);
+    });
+  });
+
+  describe('AK-9 Scan ohne Maße, mit Format Taschenbuch bzw. ohne Format', () => {
+    it.each([
+      ['„Paperback“', { physical_format: 'Paperback' }],
+      ['ohne Formatangabe', {}],
+    ])('[REQ-077/AK-9] Open Library %s, 400 Seiten, ohne Maße: Vorschlag „ca. 13,8 × 21,8 × 2,4 cm“', async (_n, f) => {
+      const { blatt } = await scanne(olSuche(f));
+      await vi.waitFor(() => expect(wertIm(blatt, 'masse')).toBe(TB_TEXT), W);
+    });
+
+    it('[REQ-077/AK-9] ohne Formatangabe angelegt: Buchdetails zeigen den Taschenbuch-Vorschlag, keine Maße gespeichert', async () => {
+      const { blatt, repo } = await scanne(olSuche({}));
+      const { d, b } = await anlegen(blatt, repo);
+      expect(masseWert(d)).toBe(TB_TEXT);
+      const g = (await repo.get(b.id))!;
+      expect([g.breiteMm, g.hoeheMm, g.dickeMm]).toEqual([undefined, undefined, undefined]);
+    });
+
+    it('[REQ-077/AK-9] Grenzfall: nicht zuordenbare Formatangabe („Audio CD“) → Taschenbuch-Standardmaße', async () => {
+      const { blatt } = await scanne(olSuche({ physical_format: 'Audio CD' }));
+      await vi.waitFor(() => expect(wertIm(blatt, 'masse')).toBe(TB_TEXT), W);
+    });
+  });
+
+  describe('AK-10 Online gefundene Maße haben Vorrang', () => {
+    it('[REQ-077/AK-10] Hardcover, 400 Seiten, gelieferte Höhe 24,0 cm: Höhe 24,0 gespeichert, Breite 14,8 und Dicke 2,8 als Standard', async () => {
+      const { blatt, repo } = await scanne(trefferSuche({ titel: 'Scanbuch', seitenanzahl: 400, isbn: ISBN, format: 'print', unterformat: 'hardcover', hoeheMm: 240 }));
+      await vi.waitFor(() => expect(wertIm(blatt, 'masse')).toMatch(/14,8 × 24,0 × 2,8 cm/), W);
+      const { d, b } = await anlegen(blatt, repo);
+      const g = (await repo.get(b.id))!;
+      expect(g.hoeheMm).toBe(240);
+      expect(g.breiteMm).toBeUndefined();
+      expect(g.dickeMm).toBeUndefined();
+      const w = wirksameMasse(g);
+      expect([w.breiteMm, w.hoeheMm, w.dickeMm]).toEqual([148, 240, 28]);
+      expect(masseWert(d)).toBe('ca. 14,8 × 24,0 × 2,8 cm');
+      expect(getComputedStyle(d.querySelector<HTMLElement>('[data-ausgabe-zeile="masse"] [data-zeile-wert]')!).fontStyle).toBe('italic');
+    });
+
+    it('[REQ-077/AK-10] alle drei Maße online (Open Library 20 x 13 x 2 cm) haben Vorrang vor dem Hardcover-Standard', async () => {
+      const { blatt, repo } = await scanne(olSuche({ physical_format: 'Hardcover', physical_dimensions: '20 x 13 x 2 centimeters' }));
+      await vi.waitFor(() => expect(wertIm(blatt, 'format')).toBe('Print · Hardcover'), W);
+      const { b } = await anlegen(blatt, repo);
+      const g = (await repo.get(b.id))!;
+      expect([g.breiteMm, g.hoeheMm, g.dickeMm]).toEqual([130, 200, 20]);
     });
   });
 });

@@ -11,6 +11,7 @@ import {
   kennzahlen,
   lesetage,
   serie,
+  serieZustand,
   vergleichText,
   ZEITRAUM_PILLEN,
   zeitraumartLesen,
@@ -157,7 +158,7 @@ const kachelZahlStil: CSSProperties = {
   lineHeight: 1.2,
   color: statistikFarbe('kachelZahl'),
 };
-const kachelBezeichnungStil: CSSProperties = { display: 'block', ...textstufe('meta'), color: statistikFarbe('kachelBezeichnung') };
+const kachelBezeichnungStil: CSSProperties = { display: 'block', overflowWrap: 'break-word', ...textstufe('meta'), color: statistikFarbe('kachelBezeichnung') };
 
 const kennzahlZeileStil: CSSProperties = { display: 'flex', alignItems: 'baseline', gap: abstand('s'), marginTop: abstand('l') };
 // Größte zentrale Stufe „Seite“ (REQ-065 erlaubt nur sechs Stufen; REF zeigt die Zahl noch größer).
@@ -362,7 +363,7 @@ export default function StatistikAnsicht({ buecher, repository, bildspeicher, ei
         <span data-serie={serieTage} style={serieStil}>
           <span style={flammeStil}>
             <span style={{ display: 'block', ...flammeInnenStil }}>
-              <Flamme zahl={serieTage} />
+              <Flamme zahl={serieTage} zustand={serieZustand(alle, heute)} />
             </span>
           </span>
           <span data-serie-text="">

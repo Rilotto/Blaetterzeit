@@ -1,6 +1,6 @@
 /**
  * Akzeptanztests REQ-102 – Startseite: „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen.
- * Abgeleitet aus dem REQ-Text (Sprint 10, Teil C). Schwarzkasten über die App (Rollen und Texte):
+ * Abgeleitet aus dem REQ-Text (Sprint 10, Teil C; Mini-Änderung 2026-11-25: Anordnung der Karte, AK-2). Schwarzkasten über die App (Rollen und Texte):
  *  - Fortschritt wie in den Buchdetails (REQ-023): role="progressbar" „Lesefortschritt“ bzw. Herz-Schaltfläche
  *    „Buchlänge festlegen“; Angabe „Seite / Gesamt“ bzw. „x %“.
  *  - Karte = nächster Vorfahr des Titels, der genau einen Fortschritt enthält.
@@ -170,6 +170,42 @@ describe('REQ-102 Fortschritt wie in den Buchdetails', () => {
     expect(Number(within(k).getByRole('progressbar', { name: 'Lesefortschritt' }).getAttribute('aria-valuenow'))).toBeCloseTo(5, 0);
     expect(norm(k.textContent)).toContain('5 %');
     expect(norm(k.textContent)).not.toContain('/ 400');
+  });
+
+  it.each([
+    ['Seite / Gesamt', { seitenanzahl: 400, aktuelleSeite: 42 }, '42 / 400'],
+    ['Modus „%“', { seitenanzahl: 400, fortschrittsmodus: 'prozent', fortschrittProzent: 5 }, '5 %'],
+  ] as const)('[REQ-102/AK-2] Anordnung (%s): Balken unter Titel/Autor linksbündig über die Restbreite, „%s“ rechts daneben', async (_n, f, wert) => {
+    // Mini-Änderung 2026-11-25. jsdom berechnet kein Layout, geprüft werden Reihenfolge und Stilangaben.
+    await starte([buch('Fourth Wing', { autor: 'Rebecca Yarros', ...(f as Partial<Buch>) })]);
+    const k = await karteDa('Fourth Wing');
+    const balken = within(k).getByRole('progressbar', { name: 'Lesefortschritt' });
+    const angabe = textEls(wert, k)[0];
+    expect(angabe, `Angabe „${wert}“`).toBeDefined();
+    // Gemeinsamer Behälter von Balken und Angabe: eine Zeile, Balken zuerst (links), Angabe danach (rechts).
+    let zeile: HTMLElement = balken.parentElement!;
+    while (!zeile.contains(angabe)) zeile = zeile.parentElement!;
+    const zs = getComputedStyle(zeile);
+    expect(zs.display).toBe('flex');
+    expect(zs.flexDirection === '' || zs.flexDirection === 'row', 'Balken und Angabe nebeneinander').toBe(true);
+    expect(balken.compareDocumentPosition(angabe) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    // Balken nimmt die Restbreite ein (wächst), statt einer festen Breite.
+    const bs = getComputedStyle(balken);
+    expect(bs.flexGrow).toBe('1');
+    expect(bs.width === 'auto' || bs.width === '').toBe(true);
+    // Unter Titel und Autor, linksbündig mit ihnen: gleiche Rasterspalte, keine Zentrierung.
+    const titel = textEls('Fourth Wing', k)[0];
+    const autor = textEls('Rebecca Yarros', k)[0];
+    expect(titel.compareDocumentPosition(zeile) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(autor.compareDocumentPosition(zeile) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(zs.alignItems).not.toBe('');
+    expect(zs.justifyContent === '' || zs.justifyContent === 'flex-start' || zs.justifyContent === 'normal').toBe(true);
+    const spalte = (el: HTMLElement) => {
+      let e: HTMLElement | null = el;
+      while (e && e.parentElement !== k) e = e.parentElement;
+      return e ? getComputedStyle(e).gridColumn : '';
+    };
+    expect(spalte(zeile)).toBe(spalte(titel));
   });
 
   it('[REQ-102/AK-2] Grenzen: noch nichts gelesen „0 / 400“, fertig „400 / 400“', async () => {

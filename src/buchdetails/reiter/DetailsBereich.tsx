@@ -1,12 +1,11 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { masseVorschlagText } from '@/buchdetails/masse';
+import { masseVollstaendig, masseVorschlagText } from '@/buchdetails/masse';
 import {
   PREIS_LEER,
   beendetText,
   erschienenText,
   exemplarText,
   formatText,
-  hatMasse,
   hinzugefuegtText,
   masseText,
   preisText,
@@ -24,6 +23,7 @@ export type AusgabeZeile =
   | 'format'
   | 'masse'
   | 'exemplar'
+  | 'band'
   | 'sonderausgabe'
   | 'fotos'
   | 'preis'
@@ -54,6 +54,8 @@ interface Props {
   onBeendet?: () => void;
   /** Zeile „Erschienen“ angetippt (REQ-092). */
   onErschienen?: () => void;
+  /** Zeile „Band“ angetippt (REQ-112). */
+  onBand?: () => void;
   /** Abschnitt „Sagas, Sammlungen und Bibliotheken“ (REQ-095). */
   listen?: ListenAbschnittProps;
 }
@@ -335,6 +337,7 @@ export function KartenZeile({
   letzte = false,
   trennlinieOben = false,
   onAntippen,
+  nurAnzeige = false,
 }: {
   /** data-Attribute der Zeile (z. B. data-ausgabe-zeile). */
   zeilenAttribute: Record<`data-${string}`, string>;
@@ -350,6 +353,8 @@ export function KartenZeile({
   /** Trennlinie über statt unter der Zeile (Zeile „Beendet am“, REQ-085). */
   trennlinieOben?: boolean;
   onAntippen?: () => void;
+  /** Nur Anzeige ohne Schaltfläche (z. B. „Versionsinfo“, REQ-113): Zeile ist ein div, kein Antippen. */
+  nurAnzeige?: boolean;
 }) {
   const wertUndPfeil = (
     <>
@@ -367,8 +372,8 @@ export function KartenZeile({
       ) : null}
     </>
   );
-  return (
-    <button type="button" {...zeilenAttribute} onClick={onAntippen} {...stilRolle('eintrag')} style={zeileStil(letzte, Boolean(onAntippen), trennlinieOben)}>
+  const inhalt = (
+    <>
       <span data-zeile-bezeichnung="" style={bezeichnungStil}>
         {beschriftung}
       </span>
@@ -379,6 +384,18 @@ export function KartenZeile({
       ) : (
         wertUndPfeil
       )}
+    </>
+  );
+  if (nurAnzeige) {
+    return (
+      <div {...zeilenAttribute} {...stilRolle('eintrag')} style={zeileStil(letzte, false, trennlinieOben)}>
+        {inhalt}
+      </div>
+    );
+  }
+  return (
+    <button type="button" {...zeilenAttribute} onClick={onAntippen} {...stilRolle('eintrag')} style={zeileStil(letzte, Boolean(onAntippen), trennlinieOben)}>
+      {inhalt}
     </button>
   );
 }
@@ -386,7 +403,7 @@ export function KartenZeile({
 /** Angaben der Karte „Ausgabe“, die direkt aus dem Buch bzw. den Eingaben kommen. */
 export type AusgabeAngaben = Pick<
   Buch,
-  'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn' | 'breiteMm' | 'hoeheMm' | 'dickeMm' | 'seitenanzahl'
+  'format' | 'unterformat' | 'sonderausgabe' | 'exemplar' | 'preisCent' | 'verlag' | 'isbn' | 'breiteMm' | 'hoeheMm' | 'dickeMm' | 'seitenanzahl' | 'bandnummer'
 >;
 
 export interface AusgabeKarteProps {
@@ -411,12 +428,14 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
       <Zeile
         id="masse"
         beschriftung="Maße"
-        wert={hatMasse(angaben) ? masseText(angaben) : masseVorschlagText(angaben)}
-        hervorgehoben={!hatMasse(angaben)}
-        vorschlag={!hatMasse(angaben)}
+        wert={masseVollstaendig(angaben) ? masseText(angaben) : masseVorschlagText(angaben)}
+        hervorgehoben={!masseVollstaendig(angaben)}
+        vorschlag={!masseVollstaendig(angaben)}
         onAntippen={onZeile.masse}
       />
       <Zeile id="exemplar" beschriftung="Exemplar" wert={exemplarText(angaben)} onAntippen={onZeile.exemplar} />
+      {/* Zeile „Band“ direkt unter „Exemplar“ (REQ-112): Bandnummer des Buches, ohne Band leer. */}
+      <Zeile id="band" beschriftung="Band" wert={angaben.bandnummer !== undefined ? String(angaben.bandnummer) : ''} onAntippen={onZeile.band} />
       <Zeile id="sonderausgabe" beschriftung="Sonderausgabe" wert={sonderausgabeText(angaben)} onAntippen={onZeile.sonderausgabe} />
       {ohneFotos ? null : <Zeile id="fotos" beschriftung="Fotos" wert="Cover" />}
       <Zeile
@@ -440,7 +459,7 @@ export function AusgabeKarte({ angaben, werte, onZeile = {}, ohneFotos = false, 
 }
 
 /** Reiter „Details“ (REQ-051 bis REQ-056, REQ-063, REQ-064). */
-export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet, onErschienen, listen }: Props) {
+export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet, onErschienen, onBand, listen }: Props) {
   return (
     <div style={{ paddingBottom: abstand('s') }}>
       <Abschnitt id="genres" titel="Genres" bearbeiten>
@@ -476,6 +495,7 @@ export default function DetailsBereich({ buch, onSeiten, onFormat, onPreis, onMa
             hinzugefuegt: onHinzugefuegt,
             beendet: onBeendet,
             erschienen: onErschienen,
+            band: onBand,
           }}
         />
       </Abschnitt>

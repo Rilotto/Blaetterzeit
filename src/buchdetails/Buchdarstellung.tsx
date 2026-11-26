@@ -75,7 +75,7 @@ const coverTitelStil: CSSProperties = {
   fontWeight: 700,
   lineHeight: 1.25,
   textAlign: 'left',
-  overflowWrap: 'anywhere',
+  overflowWrap: 'break-word',
   color: buchdetailsFarbe('covertitel'),
 };
 

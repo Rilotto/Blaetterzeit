@@ -168,6 +168,23 @@ export const MIGRATIONEN: readonly Migration[] = [
       )`,
     ],
   },
+  {
+    version: 12,
+    beschreibung: 'Bandnummer gehört zum Buch: Übernahme aus liste_buch.band (REQ-112, AK-10)',
+    anweisungen: [
+      // Bücher ohne eigene Bandnummer erhalten die kleinste gültige Bandnummer ihrer Saga-Zugehörigkeiten.
+      // Eigene Bandnummern (aus dem Scan) bleiben. Zugehörigkeiten bleiben unverändert; die Spalte
+      // liste_buch.band wird nicht mehr gelesen oder geschrieben (bleibt als Altbestand erhalten).
+      `UPDATE buch SET bandnummer = (
+        SELECT MIN(lb.band) FROM liste_buch lb JOIN liste l ON l.id = lb.liste_id
+        WHERE lb.buch_id = buch.id AND l.art = 'saga' AND lb.band IS NOT NULL AND lb.band >= 1 AND lb.band = CAST(lb.band AS INTEGER)
+      )
+      WHERE (bandnummer IS NULL OR bandnummer < 1) AND EXISTS (
+        SELECT 1 FROM liste_buch lb JOIN liste l ON l.id = lb.liste_id
+        WHERE lb.buch_id = buch.id AND l.art = 'saga' AND lb.band IS NOT NULL AND lb.band >= 1 AND lb.band = CAST(lb.band AS INTEGER)
+      )`,
+    ],
+  },
 ];
 
 /** Aktuelle Schemaversion der Datenbank (0 = leer). */

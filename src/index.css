@@ -9,6 +9,15 @@ body {
   margin: 0;
 }
 
+/* REQ-111: Globale Trennregel. Dokumentsprache ist „de“ (index.html), Wörter brechen mit Trennstrich nach
+   deutschen Regeln um. Vererbt sich auf alle Elemente; keine Regel der App schaltet sie wieder aus.
+   Verboten (automatische Prüfung): word-break: break-all / break-word und overflow-wrap: anywhere. */
+html,
+body {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
 /* REQ-016: Solange die native Kameravorschau HINTER der WebView läuft, müssen die
    Flächen darüber durchsichtig sein (gesetzt von src/bild/kamera.ts). */
 html[data-kamera-aktiv],

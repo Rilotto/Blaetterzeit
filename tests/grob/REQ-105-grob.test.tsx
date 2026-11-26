@@ -54,7 +54,7 @@ it('[REQ-105/GROB] leeres Zitat wird nicht gesichert; Zitate mit Sprecher/Seite 
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull(), W);
   await anlegen('Frühes Zitat', 'Xaden', '15');
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull(), W);
-  await waitFor(() => expect(ohneLeer(bereich().textContent)).toContain(ohneLeer('Ich bin nicht das Feuer.VioletS. 312')), W);
+  await waitFor(() => expect(ohneLeer(bereich().textContent)).toContain(ohneLeer('„Ich bin nicht das Feuer.“VioletS. 312')), W);
   const t = ohneLeer(bereich().textContent);
   expect(t.indexOf('FrühesZitat')).toBeLessThan(t.indexOf('IchbinnichtdasFeuer.'));
   const gespeichert = await zitate.vonBuch('fw');

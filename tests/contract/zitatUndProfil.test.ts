@@ -55,7 +55,7 @@ describe('Migrationen Zitate, Name, Jahresziel (REQ-104, REQ-105, REQ-107)', () 
     await migrieren(db, MIGRATIONEN.filter((m) => m.version <= 10));
     await db.ausfuehren("INSERT INTO buch (id, titel, status, geaendert) VALUES ('x', 'Alt', 'ungelesen', '2026-01-01T00:00:00.000Z')");
     await db.ausfuehren("INSERT INTO liste (id, art, name, geaendert) VALUES ('l', 'saga', 'S', '2026-01-01T00:00:00.000Z')");
-    expect(await migrieren(db)).toBe(11);
+    expect(await migrieren(db)).toBe(Math.max(...MIGRATIONEN.map((m) => m.version)));
     expect(await new SqliteBookRepository(db).get('x')).toEqual({ id: 'x', titel: 'Alt', status: 'ungelesen' });
     expect(await new SqliteListenRepository(db).listen()).toEqual([{ id: 'l', art: 'saga', name: 'S' }]);
     await new SqliteZitatRepository(db).speichern({ id: 'z', buchId: 'x', text: 'T', angelegtAm: '2026-01-01T00:00:00.000Z' });

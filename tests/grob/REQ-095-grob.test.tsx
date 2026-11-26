@@ -24,7 +24,7 @@ it('[REQ-095/GROB] Buch in einer Saga: Abschnitt zeigt „In Saga“ mit Namen, 
   const listen = new InMemoryListenRepository();
   await repo.save(b);
   await listen.listeSpeichern({ id: 's1', art: 'saga', name: 'The Empyrean' });
-  await listen.zuordnen({ listeId: 's1', buchId: b.id, band: 1 });
+  await listen.zuordnen({ listeId: 's1', buchId: b.id });
   render(<BuchDetails buchId={b.id} repository={repo} listenRepository={listen} bildspeicher={leer} bildquelle={{ scannen: async () => null, galerie: async () => null }} onZurueck={() => {}} />);
   const d = await screen.findByRole('region', { name: 'Buchdetails' }, W);
   const reiter = await waitFor(() => within(d).queryByRole('tab', { name: 'Details' }) ?? within(d).getAllByRole('button', { name: 'Details' })[0], W);

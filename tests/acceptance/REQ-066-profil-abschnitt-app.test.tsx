@@ -1,5 +1,5 @@
 /**
- * Akzeptanztests REQ-066 – Seite „Profil“: Abschnitt „App“ mit Zeile „Design“.
+ * Akzeptanztests REQ-066 – Seite „Profil“: Abschnitt „App“ mit Zeilen „Design“ und „Versionsinfo“ (REQ-113).
  * Abgeleitet aus dem REQ-Text. Schnittstellen laut Entwickler (Sprint 06 Teil C):
  *  - App nimmt den Prop `einstellungRepository` (Speicher der Designwahl).
  *  - [data-profil-zeile="design"] mit [data-design-anzeige]; Fenster [data-fenster-design] (role=dialog „Design“).
@@ -46,9 +46,12 @@ async function profil() {
 }
 const anzeige = () => norm(document.querySelector('[data-profil-zeile="design"] [data-design-anzeige]')?.textContent);
 const fenster = () => screen.queryByRole('dialog', { name: 'Design' });
+/** Pille „Hell“ / „Dunkel“ (REQ-110) über Rolle und Text. */
+const gruppenPille = (f: HTMLElement, name: 'Hell' | 'Dunkel') => within(f).getByRole('tab', { name });
 
 describe('REQ-066 Profil › App › Design', () => {
-  it('[REQ-066/AK-1] Profil antippen: Überschrift „App“ in Stufe „Label“, darunter Karte mit genau einer Zeile „Design“', async () => {
+  // Fassung 2026-11-25 (REQ-113): Karte mit genau den Zeilen „Design“ und darunter „Versionsinfo“.
+  it('[REQ-066/AK-1] Profil antippen: Überschrift „App“ in Stufe „Label“, darunter Karte mit genau den Zeilen „Design“ und „Versionsinfo“', async () => {
     await starteMit();
     const zeile = await profil();
     const main = screen.getByRole('main');
@@ -58,9 +61,15 @@ describe('REQ-066 Profil › App › Design', () => {
     while (n && !n.style.fontSize) n = n.parentElement;
     expect(n?.style.fontSize).toBe('var(--bz-schriftgroesse-label)');
     expect(getComputedStyle(ueberschrift).textTransform).toBe('uppercase');
-    // Überschrift steht vor der Karte, die Karte enthält genau eine Zeile.
+    // Überschrift steht vor der Karte; die Karte enthält genau „Design … ›“ und darunter „Versionsinfo <Version>“ (ohne Pfeil).
     expect(ueberschrift.compareDocumentPosition(zeile) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(main.querySelectorAll('[data-profil-zeile]')).toHaveLength(1);
+    const karte = document.querySelector<HTMLElement>('[data-profil-karte]')!;
+    expect(karte.contains(zeile)).toBe(true);
+    // Zeilen der Karte = ihre direkten Kinder; genau „Design“ und darunter „Versionsinfo“.
+    const zeilen = Array.from(karte.children) as HTMLElement[];
+    expect(zeilen.map((z) => (z.querySelector('[data-zeile-bezeichnung]') ?? z).textContent?.trim().split(/\s/)[0])).toEqual(['Design', 'Versionsinfo']);
+    expect(zeilen[0]).toBe(zeile);
+    expect(main.querySelectorAll('[data-profil-karte]')).toHaveLength(1);
     expect(norm(zeile.textContent).startsWith('Design')).toBe(true);
     expect(within(zeile).getByText('Design')).toBeInTheDocument();
   });
@@ -91,7 +100,13 @@ describe('REQ-066 Profil › App › Design', () => {
       expect(e).not.toBeNull();
       return e!;
     }, W);
-    const letzteZeile = ausgabe.querySelector<HTMLElement>('[data-ausgabe-zeile="hinzugefuegt"]')!;
+    // Fassung 2026-11-25 (REQ-113): „Design“ ist nicht mehr die letzte Zeile → Vergleich mit einer mittleren Zeile
+    // der Karte „Ausgabe“ (mit Trennlinie); die letzte Zeile („Versionsinfo“) mit der letzten Zeile der Karte „Ausgabe“.
+    const ausgabeZeilen = Array.from(ausgabe.querySelectorAll<HTMLElement>('[data-ausgabe-zeile]'));
+    const letzteZeile = ausgabeZeilen[0];
+    const ohneZeigerRef = (e: HTMLElement) => { const c = e.cloneNode() as HTMLElement; c.style.cursor = ''; return c.style.cssText; };
+    // „Hinzugefügt“ ist die letzte Zeile ihres Blocks (ohne Trennlinie); „Beendet am“ hat zusätzlich eine Linie oben (REQ-085).
+    const refLetzte = ohneZeigerRef(ausgabe.querySelector<HTMLElement>('[data-ausgabe-zeile="hinzugefuegt"]')!);
     const mitPfeil = ausgabe.querySelector<HTMLElement>('[data-zeile-pfeil]')!;
     const normaleZeile = Array.from(ausgabe.querySelectorAll<HTMLElement>('[data-ausgabe-zeile]')).find((z) => z.querySelector('[data-zeile-pfeil]'))!;
     const ref = {
@@ -118,6 +133,12 @@ describe('REQ-066 Profil › App › Design', () => {
     const pfeil = zeile.querySelector<HTMLElement>('[data-zeile-pfeil]');
     expect(pfeil?.style.cssText).toBe(ref.pfeil);
     expect(norm(pfeil?.textContent)).toBe(ref.pfeilText);
+    // letzte Zeile der Karte „App“ („Versionsinfo“) wie die letzte Zeile der Karte „Ausgabe“ (Trennlinie nur zwischen Zeilen)
+    const letzte = karte.lastElementChild as HTMLElement;
+    expect(letzte).not.toBe(zeile);
+    const l = letzte.cloneNode() as HTMLElement;
+    l.style.cursor = '';
+    expect(l.style.cssText).toBe(refLetzte);
     // Fläche hebt sich hell vom Hintergrund ab (nicht die Rubrik „Hintergrund“)
     expect(karte.style.backgroundColor).not.toBe('var(--bz-farbe-hintergrund)');
   });
@@ -141,6 +162,7 @@ describe('REQ-066 Profil › App › Design', () => {
     await vi.waitFor(() => expect(anzeige()).toBe('Salbei · Systemschrift · Klassisch ›'), W);
     await tippe(zeile);
     const f = await screen.findByRole('dialog', { name: 'Design' }, W);
+    await tippe(gruppenPille(f, 'Dunkel'));
     await tippe(f.querySelector('button[data-farbdesign="nachtlektuere"]')!);
     await tippe(f.querySelector('[data-design-reiter="schriftart"]')!);
     await tippe(f.querySelector('button[data-schrift-zeile="fraunces"]')!);

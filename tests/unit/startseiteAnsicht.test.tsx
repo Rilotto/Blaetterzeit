@@ -60,7 +60,8 @@ describe('Startseite (REQ-101 bis REQ-104, REQ-106)', () => {
     expect(icon.getAttribute('data-tageszeit-icon')).toBe('sonnenaufgang');
     expect((icon as unknown as SVGElement).style.stroke).toBe('var(--bz-farbe-primaer)');
     const reihe = [...document.querySelectorAll('[data-start-abschnitt]')].map((e) => e.getAttribute('data-start-abschnitt'));
-    expect(reihe).toEqual(['lesen', 'woche', 'jahresziel']);
+    // Ohne eigene Zitate erscheint das Standard-Zitat (REQ-106, AK-1).
+    expect(reihe).toEqual(['lesen', 'woche', 'jahresziel', 'zitat']);
     expect(document.body.textContent).not.toContain('under construction');
   });
 
@@ -76,11 +77,11 @@ describe('Startseite (REQ-101 bis REQ-104, REQ-106)', () => {
     expect(q('[data-tageszeit-icon]')!.getAttribute('data-tageszeit-icon')).toBe('sonnenuntergang');
   });
 
-  it('ohne Buch am lesen der Hinweis, ohne Zitat keine Kachel, ohne Ziel „Jahresziel festlegen“', async () => {
+  it('ohne Buch am lesen der Hinweis, ohne Zitat das Standard-Zitat, ohne Ziel „Jahresziel festlegen“', async () => {
     await zeige({ buecher: [buch({ titel: 'Onyx Storm' })] });
     expect(q('[data-start-leer]')!.textContent).toBe('Gerade kein Buch offen');
     expect(q('[data-start-lesekarte]')).toBeNull();
-    expect(q('[data-start-zitat]')).toBeNull();
+    expect(q('[data-start-zitat]')).toHaveAttribute('data-start-zitat', 'standard');
     expect(q('[data-start-jahresziel]')!.textContent).toBe('Jahresziel festlegen');
   });
 
@@ -164,13 +165,55 @@ describe('Startseite (REQ-101 bis REQ-104, REQ-106)', () => {
     const z: Zitat = { id: crypto.randomUUID(), buchId: fw.id, text: 'Ich bin nicht das Feuer.', seite: 312, angelegtAm: '2026-11-01T10:00:00.000Z' };
     await zeige({ buecher: [fw], zitate: [z] });
     const kachel = q(`[data-start-zitat="${z.id}"]`)!;
-    expect(kachel.querySelector('[data-zitat-text]')!.textContent).toBe('Ich bin nicht das Feuer.');
+    expect(kachel.querySelector('[data-zitat-text]')!.textContent).toBe('„Ich bin nicht das Feuer.“');
     expect(kachel.querySelector('[data-zitat-buch]')!.textContent).toBe('Fourth Wing');
     expect(kachel.querySelector('[data-zitat-seite]')!.textContent).toBe('S. 312');
     await tippe(kachel);
     await warte();
     expect(q('[data-reiter="notizbuch"]')!.getAttribute('data-aktiv')).toBe('true');
     expect(q('[data-reiter-bereich="notizbuch"] [data-zitat]')).not.toBeNull();
+  });
+});
+
+describe('Standard-Zitat (REQ-106, AK-1/AK-6/AK-7)', () => {
+  it('ohne eigene Zitate: Standard-Zitat ohne Seite, keine Schaltfläche, Antippen öffnet nichts', async () => {
+    await zeige({ buecher: [buch({ titel: 'Fourth Wing' })] });
+    const kachel = q('[data-start-zitat="standard"]')!;
+    expect(kachel.tagName).not.toBe('BUTTON');
+    expect(kachel.querySelector('[data-zitat-text]')!.textContent).toBe('„Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot.“');
+    expect(kachel.querySelector('[data-zitat-sprecher]')!.textContent).toBe('Kodex des Drachenreiters');
+    expect(kachel.querySelector('[data-zitat-buch]')!.textContent).toBe('Fourth Wing');
+    expect(kachel.querySelector('[data-zitat-seite]')).toBeNull();
+    await tippe(kachel);
+    expect(q('[data-reiter]')).toBeNull();
+    expect(q('[data-start-zitat="standard"]')).not.toBeNull();
+  });
+
+  it('ein eigenes Zitat verdrängt das Standard-Zitat', async () => {
+    const fw = buch({ titel: 'Fourth Wing' });
+    const z: Zitat = { id: crypto.randomUUID(), buchId: fw.id, text: 'Ich bin nicht das Feuer.', angelegtAm: '2026-11-01T10:00:00.000Z' };
+    await zeige({ buecher: [fw], zitate: [z] });
+    expect(q('[data-start-zitat="standard"]')).toBeNull();
+    expect(q(`[data-start-zitat="${z.id}"] [data-zitat-text]`)!.textContent).toBe('„Ich bin nicht das Feuer.“');
+  });
+});
+
+describe('Profil › App › Versionsinfo (REQ-113)', () => {
+  it('Zeile unter „Design“, ohne Pfeil, nur Anzeige; Format ohne Patch-Stelle 0', async () => {
+    render(<ProfilAnsicht profilRepository={new InMemoryProfilRepository()} />);
+    await warte();
+    const zeilen = [...document.querySelectorAll('[data-profil-karte] [data-profil-zeile]')].map((z) => z.getAttribute('data-profil-zeile'));
+    expect(zeilen).toEqual(['design', 'versionsinfo']);
+    const zeile = q('[data-profil-zeile="versionsinfo"]')!;
+    expect(zeile.tagName).not.toBe('BUTTON');
+    expect(zeile.querySelector('[data-zeile-pfeil]')).toBeNull();
+    expect(zeile.querySelector('[data-versionsinfo] [data-zeile-wert]')!.textContent).toBe('0.11');
+    await tippe(zeile);
+    expect(document.querySelector('[role="dialog"]')).toBeNull();
+    cleanup();
+    render(<ProfilAnsicht profilRepository={new InMemoryProfilRepository()} appVersion="0.11.2" />);
+    await warte();
+    expect(q('[data-profil-zeile="versionsinfo"] [data-zeile-wert]')!.textContent).toBe('0.11.2');
   });
 });
 

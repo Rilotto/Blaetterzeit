@@ -24,13 +24,13 @@ function textEls(text: string, root: ParentNode = document.body) {
 const vor = (a: Node, b: Node) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
 
 it('[REQ-099/GROB] direkt unter dem Autor steht „Band 1 · The Empyrean“ (Sammlung erzeugt keine Zeile); Antippen öffnet die Saga', async () => {
-  const b: Buch = { id: crypto.randomUUID(), titel: 'Fourth Wing', autor: 'Rebecca Yarros', status: 'ungelesen', seitenanzahl: 300 };
+  const b: Buch = { id: crypto.randomUUID(), titel: 'Fourth Wing', autor: 'Rebecca Yarros', status: 'ungelesen', seitenanzahl: 300, bandnummer: 1 };
   const repo = new InMemoryBookRepository();
   const listen = new InMemoryListenRepository();
   await repo.save(b);
   await listen.listeSpeichern({ id: 'e', art: 'saga', name: 'The Empyrean' });
   await listen.listeSpeichern({ id: 'm', art: 'sammlung', name: 'Lieblingsbücher' });
-  await listen.zuordnen({ listeId: 'e', buchId: b.id, band: 1 });
+  await listen.zuordnen({ listeId: 'e', buchId: b.id });
   await listen.zuordnen({ listeId: 'm', buchId: b.id });
   render(<BuchDetails buchId={b.id} repository={repo} listenRepository={listen} bildspeicher={leer} bildquelle={{ scannen: async () => null, galerie: async () => null }} onZurueck={() => {}} />);
   const d = await screen.findByRole('region', { name: 'Buchdetails' }, W);

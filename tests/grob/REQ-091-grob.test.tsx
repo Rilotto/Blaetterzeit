@@ -1,5 +1,5 @@
 /**
- * Grober Test REQ-091 – Karte „Ausgabe“: Pfeil „›“ an allen zwölf Zeilen, auch ohne Wert.
+ * Grober Test REQ-091 – Karte „Ausgabe“: Pfeil „›“ an allen Zeilen (seit REQ-112 dreizehn), auch ohne Wert.
  * Aufbau aus dem feinen Test tests/acceptance/REQ-091-ausgabe-pfeile-alle-zeilen.test.tsx.
  */
 import '@testing-library/jest-dom/vitest';
@@ -15,9 +15,12 @@ afterEach(cleanup);
 
 const W = { timeout: 4000 };
 const leer = { get: async () => undefined, put: async () => {}, remove: async () => {} } as unknown as ImageStore;
-const ALLE = ['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet'];
+const norm = (t: string | null | undefined) => (t ?? '').replace(/[\s  ]+/g, ' ').trim();
+/** Kennung einer Zeile; die Zeile „Band“ (REQ-112) wird an ihrer Bezeichnung erkannt (Kennung legt der Entwickler fest). */
+const zid = (z: Element) => (/^Band\b/.test(norm(z.querySelector('[data-zeile-bezeichnung]')?.textContent ?? z.textContent)) ? 'band' : z.getAttribute('data-ausgabe-zeile'));
+const ALLE = ['seiten', 'format', 'masse', 'exemplar', 'band', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet'];
 
-it('[REQ-091/GROB] alle zwölf Zeilen der Karte „Ausgabe“ haben einen Pfeil „›“, auch ohne Verlag/ISBN/Erschienen/Beendet', async () => {
+it('[REQ-091/GROB] alle dreizehn Zeilen der Karte „Ausgabe“ haben einen Pfeil „›“, auch ohne Verlag/ISBN/Erschienen/Beendet', async () => {
   const b: Buch = { id: crypto.randomUUID(), titel: 'Der Testroman', status: 'ungelesen' };
   const repo = new InMemoryBookRepository();
   await repo.save(b);
@@ -30,6 +33,6 @@ it('[REQ-091/GROB] alle zwölf Zeilen der Karte „Ausgabe“ haben einen Pfeil 
   });
   await waitFor(() => expect(d.querySelector('[data-reiter-bereich="details"] [data-ausgabe-karte]')).not.toBeNull(), W);
   const zeilen = Array.from(d.querySelectorAll<HTMLElement>('[data-reiter-bereich="details"] [data-ausgabe-karte] [data-ausgabe-zeile]'));
-  expect(zeilen.map((z) => z.getAttribute('data-ausgabe-zeile'))).toEqual(ALLE);
+  expect(zeilen.map(zid)).toEqual(ALLE);
   for (const z of zeilen) expect(z.querySelector('[data-zeile-pfeil]')?.textContent?.trim(), z.getAttribute('data-ausgabe-zeile')!).toBe('›');
 });

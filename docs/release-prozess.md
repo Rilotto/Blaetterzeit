@@ -38,3 +38,7 @@ APK im Browser oder über „Eigene Dateien“ öffnen → Android fragt einmali
 ## Versionierung
 
 - SemVer `MAJOR.MINOR.PATCH`. `versionName` = Tag, `versionCode` = laufende Build-Nummer der Pipeline (steigt automatisch).
+
+## Debug-Testschlüssel (seit 2026-11-25)
+
+Debug-APKs aus der CI werden immer mit dem festen Testschlüssel `android/app/debug.keystore` signiert (Android-Standardwerte, kein Geheimnis). Damit lassen sich Debug-Versionen übereinander installieren. Dieser Schlüssel hat nichts mit dem Release-Schlüssel in den GitHub-Secrets zu tun und darf nie für Releases verwendet werden. Der Wechsel von einer Debug- zu einer Release-App erfordert einmalig eine Neuinstallation.

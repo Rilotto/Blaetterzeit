@@ -299,3 +299,66 @@ describe('REQ-037 Übersichten: Raster oder Liste', () => {
     });
   });
 });
+
+// Sprint 11 (Fassung 2026-11-25): AK-10 – immer drei Bücher nebeneinander, skaliert mit der Bildschirmbreite.
+// jsdom berechnet kein Layout: geprüft wird die Rasterregel (3 gleich breite, schrumpfbare Spalten), dass keine feste
+// Breite in px und kein waagerechtes Scrollen vorkommt, und das Seitenverhältnis 2:3 der Cover bei 320/360/412 px.
+const RASTER_REGEL = /^repeat\(\s*3\s*,\s*(minmax\(\s*0(px)?\s*,\s*1fr\s*\)|1fr)\s*\)$/;
+function breite(px: number) {
+  Object.defineProperty(window, 'innerWidth', { configurable: true, value: px });
+  Object.defineProperty(document.documentElement, 'clientWidth', { configurable: true, value: px });
+  window.dispatchEvent(new Event('resize'));
+}
+/** Prüft Rasterregel, gleiche Spalten, keine festen Breiten und Cover 2:3 einer Rasterliste. */
+function pruefeDreiSpalten(ul: HTMLElement, anzahl: number) {
+  expect(ul.getAttribute('data-raster-spalten')).toBe('3');
+  const cs = getComputedStyle(ul);
+  expect(cs.display === 'grid' || ul.style.display === 'grid', 'Raster als Grid').toBe(true);
+  expect((ul.style.gridTemplateColumns || cs.gridTemplateColumns).replace(/\s+/g, ' ').trim()).toMatch(RASTER_REGEL);
+  const lis = Array.from(ul.children) as HTMLElement[];
+  expect(lis).toHaveLength(anzahl);
+  for (const li of lis) {
+    // keine Spaltenüberspannung, keine feste Breite → Spalten bleiben gleich breit
+    expect(li.style.gridColumn || '').not.toMatch(/span/);
+    expect(li.style.width || '').not.toMatch(/\d+px/);
+    expect(li.style.minWidth || '').not.toMatch(/[1-9]\d*px/);
+    const cover = [li, ...Array.from(li.querySelectorAll<HTMLElement>('*'))].find((e) => /^2\s*\/\s*3$/.test(e.style.aspectRatio));
+    expect(cover, 'Cover mit Seitenverhältnis 2:3').toBeDefined();
+    expect(cover!.style.width || '100%').not.toMatch(/\d+px/);
+  }
+  for (let n: HTMLElement | null = ul; n; n = n.parentElement) expect(['scroll', 'auto']).not.toContain(n.style.overflowX);
+}
+
+describe('REQ-037 AK-10 Immer drei Bücher nebeneinander', () => {
+  afterEach(() => breite(1024));
+  it.each([320, 360, 412])('[REQ-037/AK-10] „Alle Bücher“ mit sieben Büchern bei %i px: drei gleich breite Spalten (Reihen 3, 3, 1), Cover 2:3, kein waagerechtes Scrollen', async (px) => {
+    breite(px);
+    await zeige(['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((t) => buch(t)));
+    await ansicht('raster');
+    await waitFor(() => expect(eintraege()).toHaveLength(7));
+    pruefeDreiSpalten(uebersicht()!.querySelector<HTMLElement>('ul[data-buecher]')!, 7);
+  });
+
+  it('[REQ-037/AK-10] Breitenwechsel 412 → 320 px ändert die Spaltenzahl nicht', async () => {
+    breite(412);
+    await zeige(['A', 'B', 'C', 'D'].map((t) => buch(t)));
+    await ansicht('raster');
+    breite(320);
+    await waitFor(() => expect(eintraege()).toHaveLength(4));
+    pruefeDreiSpalten(uebersicht()!.querySelector<HTMLElement>('ul[data-buecher]')!, 4);
+  });
+
+  it('[REQ-037/AK-10] Variante mit Frontcover: Coverbild füllt die Spalte im Seitenverhältnis 2:3', async () => {
+    const bilder = new InMemoryImageStore();
+    const b = buch('Mit Cover');
+    await bilder.put(b.id, 'cover', PNG);
+    const repository = new InMemoryBookRepository();
+    for (const x of [b, buch('Ohne Cover')]) await repository.save(x);
+    render(<BuecherAnsicht repository={repository} bildspeicher={bilder} ansichtRepository={new InMemoryAnsichtRepository()} jetzt={() => new Date('2026-11-12T10:00:00Z')} />);
+    await waitFor(() => expect(document.querySelector('[data-abschnitt="alle-buecher"] ul')).not.toBeNull());
+    await oeffne('Alle');
+    await ansicht('raster');
+    await waitFor(() => expect(eintrag('Mit Cover').querySelector('img')).not.toBeNull());
+    pruefeDreiSpalten(uebersicht()!.querySelector<HTMLElement>('ul[data-buecher]')!, 2);
+  });
+});

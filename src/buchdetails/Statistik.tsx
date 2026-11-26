@@ -1,13 +1,13 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Buch } from '@/domain/buch';
-import { fortschrittGerundet, streak } from '@/domain/fortschritt';
+import { fortschrittGerundet, laengsterStreak } from '@/domain/fortschritt';
 import { fortschrittFarbe, textstufe, kartenSchatten, abstand, stilRolle } from '@/theme';
 import Flamme from './Flamme';
 import { RAND } from './masse';
 
 interface Props {
   buch: Buch;
-  /** Aktuelle Zeit (Systemzeit des Geräts, REQ-027). */
+  /** Aktuelle Zeit; seit REQ-109 (Rekord je Buch) für die Pille ohne Bedeutung, bleibt für Aufrufer erhalten. */
   jetzt: Date;
 }
 
@@ -56,10 +56,13 @@ const zahlStil: CSSProperties = {
   color: fortschrittFarbe('statistikText'),
 };
 
+// REQ-111 AK-4: Beschriftung darf umbrechen (globale Silbentrennung aus index.css), bleibt in ihrer Box.
 const beschriftungStil: CSSProperties = {
   ...textstufe('meta'),
   lineHeight: 1.2,
-  whiteSpace: 'nowrap',
+  maxWidth: '100%',
+  textAlign: 'center',
+  overflowWrap: 'break-word',
   color: fortschrittFarbe('statistikText'),
 };
 
@@ -74,12 +77,13 @@ function Teil({ merkmal, oben, text }: { merkmal: string; oben: ReactNode; text:
   );
 }
 
-/** Statistik-Pille: Streak, Fortschritt in % und Sitzungen (REQ-026, REQ-027). Ohne Zitat darunter. */
-export default function Statistik({ buch, jetzt }: Props) {
-  const tage = streak(buch.sitzungen, jetzt);
+/** Statistik-Pille: „Längste Serie“ des Buches (REQ-109), Fortschritt in % und Sitzungen (REQ-026, REQ-027). Ohne Zitat darunter. */
+export default function Statistik({ buch }: Props) {
+  // Rekord je Buch (REQ-109): unabhängig von heute, daher nie ausgegraut.
+  const tage = laengsterStreak(buch.sitzungen);
   return (
     <div data-statistik="" {...stilRolle('eintrag')} style={pilleStil}>
-      <Teil merkmal="data-streak" oben={<Flamme zahl={tage} />} text="Tage in Folge" />
+      <Teil merkmal="data-streak" oben={<Flamme zahl={tage} />} text="Längste Serie" />
       <div data-trennlinie="" aria-hidden="true" style={trennlinieStil} />
       <Teil
         merkmal="data-prozent"

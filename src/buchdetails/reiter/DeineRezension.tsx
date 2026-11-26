@@ -30,7 +30,7 @@ const textStil: CSSProperties = {
   ...textstufe('text'),
   lineHeight: zeilenabstand,
   whiteSpace: 'pre-wrap',
-  overflowWrap: 'anywhere',
+  overflowWrap: 'break-word',
   color: rezensionFarbe('schreibfeldText'),
 };
 

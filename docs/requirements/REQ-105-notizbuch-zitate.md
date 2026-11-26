@@ -22,6 +22,7 @@ CEO (2026-11-24, über den Scrum Master): Im Reiter „Notizbuch“ ein Abschnit
 - Wenn der Reiter „Notizbuch“ (REQ-043) aktiv ist, muss das System an Stelle von „under construction :)“ den Abschnitt „Zitate“ anzeigen (Überschrift im Stil der Abschnittsüberschriften im Reiter „Details“, REQ-051, **Auslegung**).
 - Ohne Zitate muss das System darunter eine gestrichelte Pille „+ Zitat hinzufügen“ im Muster von REQ-052 bzw. REQ-095 anzeigen (je Stil angepasst, REQ-071).
 - Mit Zitaten muss das System die Zitate untereinander anzeigen, je mit Zitattext (vollständig), darunter „Wer sagt es?“ und „S. <Seite>“, soweit vorhanden: ohne Seite nur der Sprecher, ohne Sprecher nur die Seite, ohne beides nur der Text. Sortierung aufsteigend nach Seite, Zitate ohne Seite am Ende, bei gleicher bzw. ohne Seite in der Reihenfolge des Anlegens (**Auslegung**). Dazu ein „+“ zum Hinzufügen weiterer Zitate (Lage nach der Konzeptskizze, kein Akzeptanzkriterium).
+- Das System muss den Zitattext in der Liste in deutschen Anführungszeichen „…“ anzeigen (CEO, 2026-11-25: „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“). **Auslegung:** Die Anführungszeichen gehören nur zur Anzeige. Sie werden nicht gespeichert und erscheinen nicht im Feld „Zitat“ des Blatts. Vom Nutzer selbst eingegebene Anführungszeichen bleiben unverändert.
 
 **Blatt „Zitat“**
 - Antippen von „+ Zitat hinzufügen“ bzw. „+“ öffnet ein Blatt von unten (Muster REQ-063) mit: Feld „Zitat“ (mehrzeilig, ohne Längenbegrenzung wie REQ-049, Pflicht), Feld „Wer sagt es?“ (einzeilig, freier Text, optional), Feld „Seite“ (optional, ganze Zahl ≥ 1, **Auslegung**) und „Sichern“.
@@ -43,6 +44,8 @@ CEO (2026-11-24, über den Scrum Master): Im Reiter „Notizbuch“ ein Abschnit
 - **Gegeben** das Blatt „Zitat“ ist über „+ Zitat hinzufügen“ geöffnet
 - **Wenn** der Nutzer „Ich bin nicht das Feuer.“, „Violet“ und 312 einträgt und „Sichern“ antippt
 - **Dann** zeigt der Abschnitt dieses Zitat mit „Violet“ und „S. 312“, auch nach einem Neustart
+- **Und** der Zitattext erscheint in deutschen Anführungszeichen, also genau `„Ich bin nicht das Feuer.“`
+- **Und** öffnet der Nutzer das Zitat erneut, steht im Feld „Zitat“ der Text ohne zusätzliche Anführungszeichen
 
 ### AK-3 Zitat ist Pflicht
 - **Gegeben** das Blatt „Zitat“ ist geöffnet, „Zitat“ ist leer bzw. (zweiter Durchlauf) nur Leerzeichen
@@ -112,3 +115,4 @@ CEO (2026-11-24, über den Scrum Master): Im Reiter „Notizbuch“ ein Abschnit
 | 2026-11-24 | Erstellt aus CEO-Vision und abgenommener Konzeptskizze, Entwurf | Anforderungsmanager |
 | 2026-11-24 | Vom CEO bestätigt (wörtlich): „sieht alles super aus! Danke!“. Status „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-24 | Details aus dem Konzeptentwurf übernommen, vom CEO bestätigt (wörtlich): „perfekt! Bitte auch so umsetzen“. Platzhalter „Was soll bleiben?“, „Xaden“, „214“ (AK-9 neu). Leeres Zitat wird in Primär hervorgehoben wie bei der ISBN (AK-3). Anzeige je nach Sprecher und Seite (AK-10 neu). Rückfrage mit „Abbrechen“ und „Löschen“ (AK-7). Status unverändert | Anforderungsmanager |
+| 2026-11-25 | Mini-Änderung (leichter Weg): Zitattext in der Liste in deutschen Anführungszeichen „…“. CEO (wörtlich): „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“, per Konzeptskizze geklärt. Anforderung und AK-2 ergänzt, Auslegung: nur Anzeige, nicht gespeichert. Status unverändert | Anforderungsmanager |

@@ -27,7 +27,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 
 - Das System muss in den Buchdetails unter dem Lesefortschritt (REQ-023) eine Statistik-Pille mit drei durch Trennlinien getrennten Teilen in der Aufteilung des Referenzbilds darstellen.
 - Das System muss die Statistik-Pille mit Hintergrund in Farbrubrik „Ghost“, durchgehendem (nicht gestricheltem) Rahmen und Trennlinien in Farbrubrik „GhostFrame“ sowie allen Zahlen und Texten in Farbrubrik „Dunkelbraun“ darstellen (Ausnahme: Zahl in der Flamme, REQ-027).
-- Das System muss im linken Teil die Flamme mit der Streak-Zahl (REQ-027) und darunter den Text „Tage in Folge“ darstellen.
+- Das System muss im linken Teil die Flamme mit der Streak-Zahl (REQ-027, REQ-109) und darunter den Text „Längste Serie“ darstellen (REQ-109, früher „Tage in Folge“).
 - Das System muss im mittleren Teil den Lesefortschritt des Buches als ganze Prozentzahl mit „%“ und darunter den Text „gelesen“ darstellen (statt der Lesezeit aus dem Referenzbild).
 - Das System muss den Prozentwert im Fortschrittsmodus „Seite“ als aktuelle Seite / Seitenanzahl × 100, kaufmännisch auf eine ganze Zahl gerundet, und im Fortschrittsmodus „%“ als gespeicherten Prozentwert ermitteln; ohne Seitenanzahl oder ohne gespeicherten Fortschritt zeigt es „0 %“.
 - Das System muss im rechten Teil die Anzahl der Sitzungen des Buches (REQ-024) und darunter den Text „Sitzungen“ darstellen.
@@ -38,14 +38,14 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 ### AK-1 Drei Teile in der Pille
 - **Gegeben** die Buchdetails werden angezeigt
 - **Wenn** der Bereich unter dem Lesefortschritt betrachtet wird
-- **Dann** steht dort die Statistik-Pille mit linkem Teil (Flamme, „Tage in Folge“), mittlerem Teil (Prozent, „gelesen“) und rechtem Teil (Zahl, „Sitzungen“)
+- **Dann** steht dort die Statistik-Pille mit linkem Teil (Flamme, „Längste Serie“), mittlerem Teil (Prozent, „gelesen“) und rechtem Teil (Zahl, „Sitzungen“)
 
 ### AK-2 Farben und Rahmen
 - **Gegeben** die Statistik-Pille wird angezeigt
 - **Wenn** die Farben geprüft werden
 - **Dann** ist der Hintergrund in „Ghost“
 - **Und** Rahmen (durchgehende Linie) und Trennlinien sind in „GhostFrame“
-- **Und** Prozentzahl, Sitzungszahl und die Texte „Tage in Folge“, „gelesen“, „Sitzungen“ sind in „Dunkelbraun“
+- **Und** Prozentzahl, Sitzungszahl und die Texte „Längste Serie“, „gelesen“, „Sitzungen“ sind in „Dunkelbraun“
 
 ### AK-3 Fortschritt kaufmännisch gerundet
 - **Gegeben** ein Buch im Modus „Seite“ mit Seitenanzahl 400 und aktueller Seite 42 (10,5 %)
@@ -86,6 +86,7 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 ## Abhängigkeiten
 
 - **REQ-023, REQ-024, REQ-027.** **REQ-006:** Farbrubriken Ghost, GhostFrame. **REQ-009:** Farbrubrik Dunkelbraun.
+- **REQ-109 (Entwurf):** Mit dessen Abstimmung lautet die Beschriftung unter der Flamme „Längste Serie“ statt „Tage in Folge“ (betrifft Anforderung, AK-1, AK-2).
 
 ## Offene Fragen
 
@@ -100,3 +101,6 @@ Referenzbild: [referenzen/REF-buchdetails-01.png](referenzen/REF-buchdetails-01.
 | 2026-11-10 | Erstellt (Entwurf aus CEO-Beschreibung, Erweiterung 3) | Anforderungsmanager |
 | 2026-11-10 | CEO-Antworten eingearbeitet: F6 Sitzung nur bei Erhöhung (AK-6); F7 kaufmännische Rundung, „0 %“ ohne Angaben, Modus „%“, Text „gelesen“ (AK-3 konkretisiert, neu AK-4, AK-5); F8 Farben (AK-2). Priorität Must. Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
 | 2026-11-10 | Konsistenz mit REQ-023/024/025 (CEO: „Ja, auch beim %-Modus muss ich die Seitenanzahl angeben.“): Modus „%“ ohne Seitenanzahl kommt nicht mehr vor. Geändert: AK-4 (mit Seitenanzahl 400), AK-5 (zusätzlich Seitenanzahl ohne Fortschritt). Status „Abgestimmt“ (CEO 2026-11-10) | Anforderungsmanager |
+| 2026-11-25 | Verweis auf REQ-109 (Entwurf, neue Beschriftung) unter Abhängigkeiten ergänzt. AKs bleiben bis zur Abstimmung unverändert. Status unverändert | Anforderungsmanager |
+| 2026-11-25 | An REQ-109 angepasst (Abgestimmt, CEO: „beide punkte passen für mich.“): Beschriftung „Längster Streak für dieses Buch“ statt „Tage in Folge“ (Anforderung, AK-1, AK-2). Status unverändert | Anforderungsmanager |
+| 2026-11-25 | Beschriftung an REQ-109 angepasst (CEO: „Ändern wir den Text bitte unter der Flamme zu Längste Serie“): „Längste Serie“ statt „Längster Streak für dieses Buch“ (Anforderung, AK-1, AK-2, Abhängigkeiten). Status unverändert | Anforderungsmanager |

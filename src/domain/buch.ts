@@ -103,8 +103,9 @@ export interface Buch {
    */
   beendetAm?: string;
   /**
-   * Bandnummer aus dem Barcode-Scan (REQ-099), ganze Zahl ≥ 1. Füllt bei der späteren Zuordnung zu einer Saga das Feld
-   * „Band“ vor; die Bandnummer je Saga selbst liegt bei der Zugehörigkeit (ListenRepository, REQ-096).
+   * Bandnummer des Buches (REQ-112), ganze Zahl ≥ 1; fehlend = keine. Eine je Buch, in allen Sagas dieselbe.
+   * Zeile „Band“ der Karte „Ausgabe“, Saga-Zeilen (REQ-099), Feld „Band“ (REQ-096, REQ-097) und Sortierung „nach
+   * Bänden“ (REQ-098) lesen und schreiben nur diesen Wert. Kann aus dem Barcode-Scan stammen (REQ-099).
    */
   bandnummer?: number;
 }
@@ -190,12 +191,19 @@ export interface NeuesBuch {
   seitenanzahl?: number;
   /** Eintragungsdatum (ISO), REQ-041. */
   eingetragenAm?: string;
-  /** Bandnummer aus dem Barcode-Scan (REQ-099). */
+  /** Bandnummer (REQ-112), z. B. aus dem Barcode-Scan (REQ-099) oder dem Manuellen Eintrag. */
   bandnummer?: number;
 }
 
-/** Bandnummer: ganze Zahl ≥ 1 (REQ-096, REQ-099). */
+/** Bandnummer: ganze Zahl ≥ 1 (REQ-096, REQ-099, REQ-112). */
 export const istBandnummer = (w: unknown): w is number => typeof w === 'number' && Number.isInteger(w) && w >= 1;
+
+/** Buch mit neuer Bandnummer (REQ-112); undefined bzw. ungültig entfernt sie. */
+export function bandnummerSetzen(buch: Buch, band: number | undefined): Buch {
+  const { bandnummer: _alt, ...rest } = buch;
+  void _alt;
+  return istBandnummer(band) ? { ...rest, bandnummer: band } : rest;
+}
 
 /** Prüft, ob ein Wert ein gültiger ISO-Zeitpunkt ist (Eintragungsdatum, REQ-041). */
 export const istZeitpunkt = (wert: unknown): wert is string => typeof wert === 'string' && !Number.isNaN(Date.parse(wert));

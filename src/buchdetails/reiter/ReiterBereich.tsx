@@ -29,6 +29,8 @@ interface Props {
   onBeendet?: () => void;
   /** Zeile „Erschienen“ (REQ-092). */
   onErschienen?: () => void;
+  /** Zeile „Band“ (REQ-112). */
+  onBand?: () => void;
   /** Abschnitt „Sagas, Sammlungen und Bibliotheken“ (REQ-095). */
   listen?: ListenAbschnittProps;
   /** Inhalt des Reiters „Notizbuch“: Abschnitt „Zitate“ (REQ-105). */
@@ -36,7 +38,7 @@ interface Props {
 }
 
 /** Inhalt des aktiven Reiters (REQ-043). Notizbuch: Zitate (REQ-105). Figuren & Orte: „under construction :)“. */
-export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSchreiben, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet, onErschienen, listen, notizbuch }: Props) {
+export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSchreiben, onSeiten, onFormat, onPreis, onMasse, onVerlag, onIsbn, onHinzugefuegt, onBeendet, onErschienen, onBand, listen, notizbuch }: Props) {
   if (reiter === 'details') {
     return (
       <div role="tabpanel" aria-label="Details" data-reiter-bereich="details">
@@ -51,6 +53,7 @@ export default function ReiterBereich({ reiter, buch, onBewertungAntippen, onSch
           onHinzugefuegt={onHinzugefuegt}
           onBeendet={onBeendet}
           onErschienen={onErschienen}
+          onBand={onBand}
           listen={listen}
         />
       </div>

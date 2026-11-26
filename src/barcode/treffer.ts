@@ -77,16 +77,28 @@ export function preisCentAus(angabe: string | undefined): number | undefined {
   return (preise.find((p) => p.de) ?? preise[0])?.cent;
 }
 
-/** Format und Unterformat aus einer Formatangabe der Quelle (DNB-Einbandart, Open-Library-„physical_format“). */
+/**
+ * Zentrale Liste der erkannten Formatangaben der Quellen (REQ-062, AK-10): Open Library „physical_format“ und
+ * DNB-Einbandart (020 $c/$q, 250, 337/338). Groß- und Kleinschreibung spielt keine Rolle. Darf ohne REQ-Änderung
+ * erweitert werden. Geprüft wird Hardcover vor Taschenbuch (z. B. „Hardcover with Paperback-Insert“ = Hardcover).
+ */
+export const FORMATANGABEN: readonly { unterformat: 'hardcover' | 'taschenbuch'; muster: RegExp }[] = [
+  { unterformat: 'hardcover', muster: /hardcover|hard cover|hardback|festeinband|fester einband|gebunden|\bgeb\.|\bgb\.|\bpp\.|pappband|leinen|\bln\./ },
+  {
+    unterformat: 'taschenbuch',
+    muster: /paperback|taschenbuch|softcover|soft cover|broschiert|broschur|kartoniert|flexibler einband|\bkart\.|\bkt\.|\bpb\.|\bbr\./,
+  },
+];
+
+/**
+ * Format aus einer Formatangabe der Quelle (REQ-062, AK-10): Taschenbuch-Angaben → „Print · Taschenbuch“,
+ * Hardcover-Angaben → „Print · Hardcover“. Alles andere (z. B. „Audio CD“, „E-Book“) wird nicht übernommen.
+ */
 export function formatAus(angabe: string | undefined): { format?: FormatId; unterformat?: UnterformatId } {
   const t = angabe?.toLowerCase() ?? '';
   if (!t) return {};
-  if (/h(ö|oe)rbuch|audio|\bcd\b|mp3|h(ö|oe)rspiel/.test(t)) return { format: 'hoerbuch' };
-  if (/e-?book|epub|online-ressource|kindle|\bpdf\b/.test(t)) return { format: 'ebook' };
-  if (/mass market|kleinformat/.test(t)) return { format: 'print', unterformat: 'kleinformat' };
-  if (/hardcover|hardback|festeinband|\bgeb\.|gebunden|\bgb\.|\bpp\.|pappband|leinen|\bln\./.test(t)) return { format: 'print', unterformat: 'hardcover' };
-  if (/paperback|taschenbuch|softcover|broschiert|broschur|kartoniert|flexibler einband|\bkart\.|\bkt\.|\bpb\.|\bbr\./.test(t)) return { format: 'print', unterformat: 'taschenbuch' };
-  return {};
+  const treffer = FORMATANGABEN.find((f) => f.muster.test(t));
+  return treffer ? { format: 'print', unterformat: treffer.unterformat } : {};
 }
 
 const zahlAus = (w: string): number => Number(w.replace(',', '.'));
@@ -209,12 +221,16 @@ export function dnbTrefferLesen(xml: string, gesuchteIsbn?: string): Treffer[] {
 }
 
 // ---------------------------------------------------------------------------
-// Open Library: Books API (jscmd=data)
+// Open Library: Books API (jscmd=details)
 // ---------------------------------------------------------------------------
 
-/** Books API von Open Library. Übertragen wird nur die ISBN. */
+/**
+ * Books API von Open Library. Übertragen wird nur die ISBN.
+ * jscmd=details (statt „data“): Nur der Ausgabe-Datensatz unter „details“ enthält „physical_format“,
+ * „physical_dimensions“ und „series“ (REQ-062 AK-10, REQ-072 AK-8, REQ-099); „data“ liefert diese Felder nicht.
+ */
 export const openLibraryUrl = (isbn: string): string =>
-  `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
+  `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`;
 
 interface OlEintrag {
   title?: unknown;
@@ -228,9 +244,29 @@ interface OlEintrag {
   series?: unknown;
   physical_dimensions?: unknown;
   /** Bei jscmd=details liegt der Ausgabe-Datensatz unter „details“. */
-  details?: { physical_dimensions?: unknown };
+  details?: OlEintrag;
   identifiers?: { isbn_13?: unknown; isbn_10?: unknown };
+  /** Ausgabe-Datensatz (jscmd=details): ISBN-Listen direkt im Datensatz. */
+  isbn_13?: unknown;
+  isbn_10?: unknown;
+  /** Verfasserangabe, Rückfall ohne Autorennamen. */
+  by_statement?: unknown;
   cover?: { large?: unknown; medium?: unknown; small?: unknown };
+  /** Ausgabe-Datensatz: Cover-IDs; Antwort jscmd=details: kleines Vorschaubild. */
+  covers?: unknown;
+  thumbnail_url?: unknown;
+}
+
+/** Führt die Antwort von jscmd=details (Datensatz unter „details“) und jscmd=data zu einem Eintrag zusammen. */
+const olEintragFlach = (e: OlEintrag): OlEintrag => (e.details && typeof e.details === 'object' ? { ...e.details, ...e, details: undefined } : e);
+
+/** Cover-Adresse von Open Library: Cover der Antwort, sonst Cover-ID des Datensatzes, sonst großes Vorschaubild. */
+function olCover(e: OlEintrag): string | undefined {
+  const direkt = zeichen(e.cover?.large) ?? zeichen(e.cover?.medium) ?? zeichen(e.cover?.small);
+  if (direkt) return direkt;
+  const id = Array.isArray(e.covers) ? e.covers.find((c) => typeof c === 'number' && Number.isInteger(c) && c > 0) : undefined;
+  if (typeof id === 'number') return `https://covers.openlibrary.org/b/id/${id}-L.jpg`;
+  return zeichen(e.thumbnail_url)?.replace(/-S\.jpg$/, '-L.jpg');
 }
 
 const namen = (liste: unknown): string[] =>
@@ -262,26 +298,31 @@ export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Tre
   }
   if (!daten || typeof daten !== 'object') return [];
   const ergebnis: Treffer[] = [];
-  for (const eintrag of Object.values(daten as Record<string, OlEintrag>)) {
-    if (!eintrag || typeof eintrag !== 'object') continue;
+  for (const roh of Object.values(daten as Record<string, OlEintrag>)) {
+    if (!roh || typeof roh !== 'object') continue;
+    const eintrag = olEintragFlach(roh);
     const autoren = namen(eintrag.authors);
+    const verfasser = autoren.length ? undefined : textBereinigen(zeichen(eintrag.by_statement)?.replace(/^by\s+/i, '').replace(/\.$/, ''));
     const verlage = namen(eintrag.publishers);
     const seiten = typeof eintrag.number_of_pages === 'number' && Number.isInteger(eintrag.number_of_pages) && eintrag.number_of_pages > 0
       ? eintrag.number_of_pages
       : undefined;
+    const liste = (w: unknown): unknown[] => (Array.isArray(w) ? w : []);
     const kandidaten = [
-      ...(Array.isArray(eintrag.identifiers?.isbn_13) ? eintrag.identifiers.isbn_13 : []),
-      ...(Array.isArray(eintrag.identifiers?.isbn_10) ? eintrag.identifiers.isbn_10 : []),
+      ...liste(eintrag.identifiers?.isbn_13),
+      ...liste(eintrag.isbn_13),
+      ...liste(eintrag.identifiers?.isbn_10),
+      ...liste(eintrag.isbn_10),
     ].filter((x): x is string => typeof x === 'string');
     const isbn = kandidaten.includes(gesuchteIsbn)
       ? gesuchteIsbn
       : (kandidaten.map(isbnNormalisieren).find((x) => x !== null) ?? gesuchteIsbn);
-    const cover = zeichen(eintrag.cover?.large) ?? zeichen(eintrag.cover?.medium) ?? zeichen(eintrag.cover?.small);
+    const cover = olCover(eintrag);
     const t: Treffer = {
       quelle: 'openlibrary',
       angaben: ohneLeere({
         titel: textBereinigen(zeichen(eintrag.title)),
-        autor: autoren.length ? autoren.join('; ') : undefined,
+        autor: autoren.length ? autoren.join('; ') : verfasser,
         verlag: verlage[0],
         erscheinungsjahr: jahrAus(zeichen(eintrag.publish_date)),
         seitenanzahl: seiten,
@@ -292,7 +333,7 @@ export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Tre
         // Reihe und Band (REQ-099), nur falls die Quelle sie liefert.
         ...reiheAusOl(eintrag.series),
         // Maße (REQ-072, AK-8), nur falls eindeutig.
-        ...openLibraryMasseAus(zeichen(eintrag.physical_dimensions) ?? zeichen(eintrag.details?.physical_dimensions)),
+        ...openLibraryMasseAus(zeichen(eintrag.physical_dimensions)),
       }),
       ...(cover && /^https:\/\/covers\.openlibrary\.org\//.test(cover) ? { coverUrl: cover } : {}),
     };

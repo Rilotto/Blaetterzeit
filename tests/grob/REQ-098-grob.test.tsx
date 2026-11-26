@@ -43,11 +43,11 @@ it('[REQ-098/GROB] Saga öffnen: Bücher nach Bänden; Plus → „Iron Flame“
   const repo = new InMemoryBookRepository();
   const listen = new InMemoryListenRepository();
   const b = (titel: string): Buch => ({ id: crypto.randomUUID(), titel, status: 'ungelesen', seitenanzahl: 300 });
-  const [fw, os, ir] = [b('Fourth Wing'), b('Onyx Storm'), b('Iron Flame')];
+  const [fw, os, ir] = [{ ...b('Fourth Wing'), bandnummer: 1 }, { ...b('Onyx Storm'), bandnummer: 3 }, b('Iron Flame')];
   for (const x of [fw, os, ir]) await repo.save(x);
   await listen.listeSpeichern({ id: 'e', art: 'saga', name: 'The Empyrean' });
-  await listen.zuordnen({ listeId: 'e', buchId: os.id, band: 3 });
-  await listen.zuordnen({ listeId: 'e', buchId: fw.id, band: 1 });
+  await listen.zuordnen({ listeId: 'e', buchId: os.id });
+  await listen.zuordnen({ listeId: 'e', buchId: fw.id });
   render(<BuecherAnsicht repository={repo} listenRepository={listen} bildspeicher={leer} bildquelle={{ scannen: async () => null, galerie: async () => null }} />);
   const r = await screen.findByRole('region', { name: 'Sagas' }, W);
   await tippe(await waitFor(() => textEls('The Empyrean', r)[0], W));

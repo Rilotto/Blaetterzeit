@@ -3,6 +3,8 @@
  * liegen in derselben Datenbank; Schemaänderungen nur als versionierte Migration.
  * Regeln: Einträge werden nur angehängt, nie geändert oder entfernt.
  */
+import { bandnummernAusAltenZugehoerigkeiten } from '../domain/listen';
+
 export const DB_NAME = 'blaetterzeit';
 export const STORE_BILDER = 'bilder';
 export const STORE_BUECHER = 'buecher';
@@ -62,6 +64,30 @@ const MIGRATIONEN: ((db: IDBDatabase, tx: IDBTransaction) => void)[] = [
     db.createObjectStore(STORE_ZITATE, { keyPath: 'id' });
     db.createObjectStore(STORE_PROFIL);
     db.createObjectStore(STORE_JAHRESZIELE, { keyPath: 'jahr' });
+  },
+  // Version 10: Bandnummer gehört zum Buch (REQ-112, AK-10). Bücher ohne eigene Bandnummer erhalten die kleinste
+  // gültige Bandnummer ihrer Saga-Zugehörigkeiten; eigene Bandnummern (Scan) bleiben. Zugehörigkeiten bleiben
+  // unverändert, ihr altes Feld `band` wird nicht mehr gelesen.
+  (_db, tx) => {
+    const listenReq = tx.objectStore(STORE_LISTEN).getAll();
+    listenReq.onsuccess = () => {
+      const sagaIds = new Set(
+        (listenReq.result as { id?: unknown; art?: unknown }[]).filter((l) => l.art === 'saga' && typeof l.id === 'string').map((l) => l.id as string),
+      );
+      const zugReq = tx.objectStore(STORE_LISTEN_BUECHER).getAll();
+      zugReq.onsuccess = () => {
+        const alte = zugReq.result as { listeId?: unknown; buchId?: unknown; band?: unknown }[];
+        const req = tx.objectStore(STORE_BUECHER).openCursor();
+        req.onsuccess = () => {
+          const cursor = req.result;
+          if (!cursor) return;
+          const satz = cursor.value as { buch: { id: string; bandnummer?: unknown } };
+          const band = bandnummernAusAltenZugehoerigkeiten([satz.buch], sagaIds, alte).get(satz.buch.id);
+          if (band !== undefined) cursor.update({ ...satz, buch: { ...satz.buch, bandnummer: band } });
+          cursor.continue();
+        };
+      };
+    };
   },
 ];
 

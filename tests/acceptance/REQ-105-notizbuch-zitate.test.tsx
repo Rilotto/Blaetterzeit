@@ -1,6 +1,6 @@
 /**
  * Akzeptanztests REQ-105 – Reiter „Notizbuch“: Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt.
- * Abgeleitet aus dem REQ-Text (Stand 2026-11-24 inkl. AK-9/AK-10). Rollen und Texte:
+ * Abgeleitet aus dem REQ-Text (Stand 2026-11-24 inkl. AK-9/AK-10, Mini-Änderung 2026-11-25: Anzeige in „…“). Rollen und Texte:
  *  - Reiter: role="tab" „Notizbuch“ (REQ-043), Bereich [data-reiter-bereich="notizbuch"].
  *  - Hinzufügen: Schaltfläche „+ Zitat hinzufügen“ bzw. „+“ (Name „+“ oder „… Zitat hinzufügen“).
  *  - Blatt: role="dialog", Felder mit Namen „Zitat“ (textarea), „Wer sagt es?“, „Seite“, Schaltflächen „Sichern“,
@@ -151,9 +151,15 @@ describe('REQ-105 Zitat anlegen', () => {
     await ausfuellen(Q1, 'Violet', '312');
     await sichern();
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(btext()).toContain(ohneLeer(`${Q1}VioletS. 312`));
+    expect(btext()).toContain(ohneLeer(`„${Q1}“VioletS. 312`));
     expect(pille()).toBeNull();
+    // Mini-Änderung 2026-11-25: Zitattext genau in deutschen Anführungszeichen, nur in der Anzeige.
+    expect(within(bereich()).getByText(`„${Q1}“`)).toBeInTheDocument();
     await zeige(b.id);
+    expect(within(bereich()).getByText(`„${Q1}“`)).toBeInTheDocument();
+    await oeffneZitat(Q1);
+    expect(feld('Zitat'), 'Feld „Zitat“ ohne zusätzliche Anführungszeichen').toHaveValue(Q1);
+    await tippe(within(blatt()).getByRole('button', { name: 'Schließen' }));
     expect(btext()).toContain(ohneLeer(Q1));
     expect(btext()).toContain('Violet');
     expect(btext()).toContain('S.312');
@@ -267,7 +273,7 @@ describe('REQ-105 Anzeige je nach Angaben', () => {
     await anlegen('Erstes Zitat.', 'Violet');
     await anlegen('Zweites Zitat.');
     const t = btext();
-    expect(t).toContain(ohneLeer('Erstes Zitat.Violet'));
+    expect(t).toContain(ohneLeer('„Erstes Zitat.“Violet'));
     expect(t).not.toMatch(/S\.\d/);
     expect(t).not.toContain('Seite');
     expect(t.split('Violet')).toHaveLength(2);
@@ -279,7 +285,7 @@ describe('REQ-105 Anzeige je nach Angaben', () => {
     await neu();
     await anlegen('Nur Seite.', undefined, '15');
     const t = btext();
-    expect(t).toContain(ohneLeer('Nur Seite.S. 15'));
+    expect(t).toContain(ohneLeer('„Nur Seite.“S. 15'));
     expect(t).not.toMatch(/Xaden|undefined|null/);
   });
 });
@@ -376,7 +382,7 @@ describe('REQ-105 Ändern und Leeren', () => {
     await eingeben(feld('Zitat'), 'Neuer Text.');
     await eingeben(feld('Seite'), '');
     await sichern();
-    expect(btext()).toContain(ohneLeer('Neuer Text.Violet'));
+    expect(btext()).toContain(ohneLeer('„Neuer Text.“Violet'));
     expect(btext()).not.toContain(ohneLeer(Q1));
     expect(btext()).not.toMatch(/S\.\d/);
     await zeige(b.id);
@@ -392,7 +398,7 @@ describe('REQ-105 Ändern und Leeren', () => {
     await sichern();
     expect(feld('Zitat')).toHaveAttribute('aria-invalid', 'true');
     await tippe(within(blatt()).getByRole('button', { name: 'Schließen' }));
-    expect(btext()).toContain(ohneLeer(`${Q1}Violet`));
+    expect(btext()).toContain(ohneLeer(`„${Q1}“Violet`));
   });
 });
 
@@ -426,9 +432,9 @@ describe('REQ-105 Löschen mit Rückfrage', () => {
     await tippe(screen.getByRole('button', { name: 'Abbrechen' }));
     await warte(60);
     expect(screen.queryByRole('button', { name: 'Löschen' })).toBeNull();
-    expect(btext()).toContain(ohneLeer(`${Q1}Violet`));
+    expect(btext()).toContain(ohneLeer(`„${Q1}“Violet`));
     await zeige(b.id);
-    expect(btext()).toContain(ohneLeer(`${Q1}Violet`));
+    expect(btext()).toContain(ohneLeer(`„${Q1}“Violet`));
   });
 
   it('[REQ-105/AK-7] von mehreren Zitaten wird nur das gewählte gelöscht; die Pille erscheint nicht', async () => {
@@ -474,10 +480,10 @@ describe('REQ-105 Schließen ohne Sichern', () => {
     await ausfuellen('Geändert.', 'Xaden', '1');
     await tippe(within(d).getByRole('button', { name: 'Schließen' }));
     await warte(60);
-    expect(btext()).toContain(ohneLeer(`${Q1}VioletS. 312`));
+    expect(btext()).toContain(ohneLeer(`„${Q1}“VioletS. 312`));
     expect(bereich().textContent).not.toContain('Geändert.');
     await zeige(b.id);
-    expect(btext()).toContain(ohneLeer(`${Q1}VioletS. 312`));
+    expect(btext()).toContain(ohneLeer(`„${Q1}“VioletS. 312`));
     await oeffneZitat(Q1);
     expect(feld('Wer sagt es?')).toHaveValue('Violet');
   });

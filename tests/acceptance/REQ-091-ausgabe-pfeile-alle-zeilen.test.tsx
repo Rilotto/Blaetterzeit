@@ -56,7 +56,10 @@ async function details(b: Buch) {
   return d;
 }
 const norm = (t: string | null | undefined) => (t ?? '').replace(/[\s  ]+/g, ' ').trim();
-const ALLE = ['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet'];
+/** Kennung einer Zeile; die Zeile „Band“ (REQ-112) wird an ihrer Bezeichnung erkannt (Kennung legt der Entwickler fest). */
+const zid = (z: Element) => (/^Band\b/.test(norm(z.querySelector('[data-zeile-bezeichnung]')?.textContent ?? z.textContent)) ? 'band' : z.getAttribute('data-ausgabe-zeile'));
+// REQ-112: Zeile „Band“ unter „Exemplar“ (Sprint 11)
+const ALLE = ['seiten', 'format', 'masse', 'exemplar', 'band', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet'];
 const NEU = ['verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet'];
 const zeilen = (d: HTMLElement) => Array.from(d.querySelectorAll<HTMLElement>('[data-reiter-bereich="details"] [data-ausgabe-karte] [data-ausgabe-zeile]'));
 const zeile = (d: HTMLElement, id: string) => d.querySelector<HTMLElement>(`[data-reiter-bereich="details"] [data-ausgabe-zeile="${id}"]`)!;
@@ -66,13 +69,13 @@ const amEnde = (z: HTMLElement, p: HTMLElement) =>
   Array.from(z.querySelectorAll<HTMLElement>('*')).every((e) => e === p || e.contains(p) || p.contains(e) || !norm(e.textContent) || Boolean(e.compareDocumentPosition(p) & Node.DOCUMENT_POSITION_FOLLOWING));
 
 describe('REQ-091 Pfeil „›“ an allen Zeilen der Karte „Ausgabe“', () => {
-  it('[REQ-091/AK-1] mit Werten: alle zwölf Zeilen haben genau einen Pfeil „›“, rechts nach dem Wert', async () => {
+  it('[REQ-091/AK-1] mit Werten: alle dreizehn Zeilen haben genau einen Pfeil „›“, rechts nach dem Wert', async () => {
     const d = await details(
       buch({ seitenanzahl: 608, erscheinungsdatum: '01.02.2025', verlag: 'Carlsen', isbn: '9783551551672', eingetragenAm: '2026-10-14T12:00:00', status: 'gelesen', beendetAm: '2026-11-03', preisCent: 1299 }),
     );
-    expect(zeilen(d).map((z) => z.getAttribute('data-ausgabe-zeile'))).toEqual(ALLE);
+    expect(zeilen(d).map(zid)).toEqual(ALLE);
     for (const z of zeilen(d)) {
-      const id = z.getAttribute('data-ausgabe-zeile')!;
+      const id = zid(z)!;
       const p = z.querySelectorAll<HTMLElement>('[data-zeile-pfeil]');
       expect(p, `${id}: genau ein Pfeil`).toHaveLength(1);
       expect(norm(p[0].textContent), id).toBe('›');

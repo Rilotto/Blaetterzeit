@@ -161,11 +161,27 @@ describe('REQ-072 Maße', () => {
 
     it.each([
       [{ breiteMm: 135, hoeheMm: 210, dickeMm: 32 }, '13,5 × 21,0 × 3,2 cm'],
-      [{ hoeheMm: 210 }, '– × 21,0 × – cm'],
-      [{ breiteMm: 100, dickeMm: 5 }, '10,0 × – × 0,5 cm'],
     ] as [Partial<Buch>, string][])('[REQ-072/AK-2] Maße %j → „%s“', async (m, soll) => {
       const { d } = await mitBuch(buch(m));
       expect(wert(d)).toBe(soll);
+    });
+
+    // Fassung 2026-11-25 (Konflikt mit REQ-077 AK-10 gelöst): fehlende Einzelwerte aus den Standardwerten, mit „ca.“,
+    // abgeschwächt bzw. kursiv, nicht gespeichert (statt „–“).
+    it.each([
+      [{ format: 'print', unterformat: 'hardcover', seitenanzahl: 400, hoeheMm: 240 }, 'ca. 14,8 × 24,0 × 2,8 cm', [undefined, 240, undefined]],
+      [{ hoeheMm: 210 }, 'ca. 13,8 × 21,0 × 2,5 cm', [undefined, 210, undefined]],
+      [{ breiteMm: 100, dickeMm: 5 }, 'ca. 10,0 × 21,8 × 0,5 cm', [100, undefined, 5]],
+      [{ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400, breiteMm: 135, hoeheMm: 210 }, 'ca. 13,5 × 21,0 × 2,4 cm', [135, 210, undefined]],
+    ] as [Partial<Buch>, string, (number | undefined)[]][])('[REQ-072/AK-2] nur Teilwerte %j → kursiv/abgeschwächt „%s“, gespeichert bleibt nur Hinterlegtes', async (m, soll, mm) => {
+      const { d, id } = await mitBuch(buch(m));
+      expect(wert(d)).toBe(soll);
+      expect(wertEl(d).getAttribute('data-zeile-vorschlag')).toBe('true');
+      expect(getComputedStyle(wertEl(d)).fontStyle).toBe('italic');
+      expect(wert(d)).not.toContain('–');
+      await warte(100);
+      const g = await gespeichert(id);
+      expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual(mm);
     });
   });
 
@@ -214,22 +230,28 @@ describe('REQ-072 Maße', () => {
   });
 
   describe('AK-4 Gültig sichern', () => {
-    it('[REQ-072/AK-4] „13.5“ bei Breite, Rest leer → Blatt zu, „13,5 × – × – cm“, auch nach Neuladen', async () => {
-      const { d, id } = await mitBuch();
+    // Fassung 2026-11-25: fehlende Werte aus den Standardwerten mit „ca.“ (siehe AK-2).
+    it('[REQ-072/AK-4] Taschenbuch 400 Seiten: „13.5“ bei Breite, Rest leer → Blatt zu, „ca. 13,5 × 21,8 × 2,4 cm“, nach Neuladen nur Breite hinterlegt', async () => {
+      const { d, id } = await mitBuch(buch({ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 }));
       await oeffne(d);
       await gib('breite', '13.5');
       await gib('hoehe', '');
       await gib('dicke', '');
       await sichern();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      await vi.waitFor(() => expect(wert(d)).toBe('13,5 × – × – cm'), W);
+      await vi.waitFor(() => expect(wert(d)).toBe('ca. 13,5 × 21,8 × 2,4 cm'), W);
+      expect(getComputedStyle(zeile(d, 'masse').querySelector<HTMLElement>('[data-zeile-wert]')!).fontStyle).toBe('italic');
       const g = await gespeichert(id);
       expect(g?.breiteMm).toBe(135);
       expect(g?.hoeheMm).toBeUndefined();
       expect(g?.dickeMm).toBeUndefined();
       cleanup();
       const w = await starte();
-      expect(wert(await zeige(w, id))).toBe('13,5 × – × – cm');
+      const d2 = await zeige(w, id);
+      expect(wert(d2)).toBe('ca. 13,5 × 21,8 × 2,4 cm');
+      // Blatt füllt nur die hinterlegten Werte vor
+      await oeffne(d2);
+      expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['13,5', '', '']);
     });
 
     it.each([
@@ -254,7 +276,7 @@ describe('REQ-072 Maße', () => {
       await gib('dicke', '');
       await sichern();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      expect(wert(d)).toBe('13,5 × 21,0 × – cm');
+      expect(wert(d)).toBe('ca. 13,5 × 21,0 × 2,5 cm');
       const g = await gespeichert(id);
       expect(g?.dickeMm).toBeUndefined();
       expect(g?.breiteMm).toBe(135);
@@ -284,7 +306,7 @@ describe('REQ-072 Maße', () => {
       expect(fehler('breite')).toBe(false);
       expect(fehler('dicke')).toBe(false);
       expect(feld('hoehe').style.border).not.toBe(feld('breite').style.border);
-      expect(wert(d)).toBe('12,0 × 19,0 × – cm');
+      expect(wert(d)).toBe('ca. 12,0 × 19,0 × 2,5 cm');
       const g = await gespeichert(id);
       expect([g?.breiteMm, g?.hoeheMm, g?.dickeMm]).toEqual([120, 190, undefined]);
     });
@@ -311,7 +333,7 @@ describe('REQ-072 Maße', () => {
       await gib('dicke', '');
       await sichern();
       await vi.waitFor(() => expect(blatt()).toBeNull(), W);
-      expect(wert(d)).toBe('13,5 × – × – cm');
+      expect(wert(d)).toBe('ca. 13,5 × 21,8 × 2,5 cm');
     });
   });
 
@@ -437,9 +459,10 @@ describe('REQ-072 Maße', () => {
       return w;
     }
 
-    it('[REQ-072/AK-8] Quelle liefert nur die Höhe 21 cm → vorbefüllt „– × 21,0 × – cm“, andere Felder leer, angelegt mit Höhe', async () => {
+    // Fassung 2026-11-25: Zeile ergänzt fehlende Werte mit „ca.“ (REQ-072 AK-2); Blatt füllt nur die gelieferte Höhe vor.
+    it('[REQ-072/AK-8] Quelle liefert nur die Höhe 21 cm → Zeile „ca. 13,8 × 21,0 × 1,3 cm“, im Blatt nur Höhe 21,0, angelegt nur mit Höhe', async () => {
       const w = await scanneUndTippe([{ quelle: 'dnb', angaben: { titel: 'Hoch', seitenanzahl: 200, isbn: ISBN, hoeheMm: 210 } }]);
-      expect(wert(me()!)).toBe('– × 21,0 × – cm');
+      expect(wert(me()!)).toBe('ca. 13,8 × 21,0 × 1,3 cm');
       await oeffne(me()!);
       expect([feld('breite').value, feld('hoehe').value, feld('dicke').value]).toEqual(['', '21,0', '']);
       await tippe(blatt()!.querySelector('[aria-label="Schließen"]')!);

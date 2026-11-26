@@ -1,7 +1,7 @@
 ---
 id: REQ-056
-titel: Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen
-status: Implementiert
+titel: Reiter „Details“ – Abschnitt „Ausgabe“ mit dreizehn Zeilen
+status: In Umsetzung
 prioritaet: Must
 art: funktional
 quelle: CEO
@@ -25,7 +25,8 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ## Anforderung (Satzschablone)
 
-- Das System muss unter „Ausgabe“ eine Karte mit genau diesen Zeilen in dieser Reihenfolge darstellen, je links Bezeichnung, rechts Wert: Seiten, Format, Maße (REQ-072), Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt, Beendet am (REQ-085).
+- Das System muss unter „Ausgabe“ eine Karte mit genau diesen Zeilen in dieser Reihenfolge darstellen, je links Bezeichnung, rechts Wert: Seiten, Format, Maße (REQ-072), Exemplar, Band (REQ-112), Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt, Beendet am (REQ-085).
+  - Band: Bandnummer des Buches, ohne Bandnummer rechts leer; Antippen: REQ-112.
 - Das System darf keine Zeile „Signiert“ darstellen (CEO: „Signiert soll bitte nicht umgesetzt werden.“).
 - Das System muss alle Zeilen rechts mit einem Pfeil „›“ darstellen (REQ-091).
 - Werte:
@@ -45,10 +46,10 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 
 ## Akzeptanzkriterien
 
-### AK-1 Zwölf Zeilen in fester Reihenfolge, kein „Signiert“
+### AK-1 Dreizehn Zeilen in fester Reihenfolge, kein „Signiert“
 - **Gegeben** der Reiter „Details“ ist aktiv
 - **Wenn** die Karte unter „Ausgabe“ betrachtet wird
-- **Dann** lauten die Zeilen von oben nach unten genau: Seiten, Format, Maße, Exemplar, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt, Beendet am
+- **Dann** lauten die Zeilen von oben nach unten genau: Seiten, Format, Maße, Exemplar, Band, Sonderausgabe, Fotos, Preis, Verlag, Erschienen, ISBN, Hinzugefügt, Beendet am
 - **Und** es gibt keine Zeile „Signiert“
 
 ### AK-2 Pfeile
@@ -70,7 +71,7 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 ### AK-5 Neues Buch
 - **Gegeben** ein neu angelegtes Buch nur mit Titel
 - **Wenn** die Karte „Ausgabe“ betrachtet wird
-- **Dann** sind Seiten, Format, Exemplar, Erschienen, Verlag und ISBN rechts leer
+- **Dann** sind Seiten, Format, Exemplar, Band, Erschienen, Verlag und ISBN rechts leer
 - **Und** Sonderausgabe zeigt „Keins“, Preis „Trag ein, was du bezahlt hast“, Fotos „Cover“
 
 ### AK-6 Hinzugefügt
@@ -119,3 +120,4 @@ Referenzbild: [referenzen/REF-details-02-ausgabe.png](referenzen/REF-details-02-
 | 2026-11-23 | Widerspruch zu REQ-063 aufgelöst, CEO (wörtlich): „Ja req-063 ist hier maßgebend.“ Verlag und ISBN: Wert „derzeit leer, ohne Eingabemöglichkeit“ ersetzt durch gespeicherten Wert, Antippen nach REQ-063; aus den Zeilen ohne Funktion (Anforderung, AK-7) und der Abgrenzung entfernt. Pfeil-Regel unverändert. Status unverändert | Anforderungsmanager |
 | 2026-11-23 | Verweise auf REQ-091 (Pfeile an allen Zeilen) und REQ-092 (Erschienen bearbeiten und leeren) und REQ-093 (Felder leeren), alle Entwurf, unter Abhängigkeiten ergänzt. Text und AKs bleiben bis zur Bestätigung durch den CEO unverändert. Status unverändert | Anforderungsmanager |
 | 2026-11-23 | An REQ-091 und REQ-092 angepasst (beide Abgestimmt, CEO: „okay, freigegeben. Starte mit dem nächsten Prototypen“): Pfeil an allen Zeilen (AK-2), „Erschienen“ zeigt Datum bzw. Jahr und öffnet ein Blatt (Werte, AK-3, AK-7). Status unverändert | Anforderungsmanager |
+| 2026-11-25 | An REQ-112 angepasst: dreizehnte Zeile „Band“ direkt unter „Exemplar“. CEO (wörtlich): „Der Band soll aus dem ISBN Code auch ausgelesen werden, sofern er hinterlegt ist“. Titel, Zeilenliste, AK-1 und AK-5 geändert. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |
