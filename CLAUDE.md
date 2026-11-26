@@ -69,6 +69,18 @@ Alle Farben der App kommen aus einer zentralen Farbdefinition (Design-Tokens, Or
 3. Abwarten, bis die CI für den Branch grün ist, und das Ergebnis tatsächlich prüfen.
 4. Dem CEO den Link zum Erstellen des Pull Requests geben (`https://github.com/Rilotto/Blaetterzeit/compare/main...<branch>?expand=1`) und kurz zusammenfassen, was drinsteckt. Der CEO führt den Merge durch.
 
+### Pflichtprüfungen gegen verlorene Sprints (CEO-Auftrag 2026-11-26: „vermeide solche Fehler in der Zukunft“)
+
+Anlass: Sprint 11 lag fertig auf seinem Branch, wurde nie gemergt. Sprint 12 startete auf dem alten `main`, vergab dieselben REQ-Nummern (108–111), und die Sprint-12-APK ließ sich nicht installieren, weil fester Debug-Schlüssel und steigender versionCode fehlten.
+
+1. **Vor jedem Sprintstart:** prüfen, dass kein Branch Commits enthält, die `main` fehlen:
+   `for b in $(gh api repos/Rilotto/Blaetterzeit/branches --jq '.[].name'); do echo "$b $(gh api repos/Rilotto/Blaetterzeit/compare/main...$b --jq .ahead_by)"; done`
+   Hat ein Branch `ahead_by > 0` (außer dem eigenen), **nicht** auf `main` starten. Den CEO fragen, ob er den Branch zuerst mergt. Notfalls den neuen Sprint auf diesem Branch aufbauen.
+2. **Neue REQ-Nummern** vergibt der Anforderungsmanager erst, nachdem der Scrum Master die höchste vergebene Nummer über **alle** Branches ermittelt hat. Diese Nummer gibt der Scrum Master im Auftrag mit:
+   `git fetch -q --depth=1 origin '+refs/heads/*:refs/remotes/origin/*' && for r in $(git for-each-ref --format='%(refname)' refs/remotes/origin); do git ls-tree -r --name-only $r -- docs/requirements; done | grep -o 'REQ-[0-9]*' | sort -u -V | tail -1`
+3. **Vor jeder APK-Lieferung:** Die APK stammt aus einem CI-Lauf, dessen Stand alle bisher gelieferten Sprints enthält. Außerdem prüfen, dass `android/app/debug.keystore` und `VERSION_CODE` in `android/app/build.gradle` bzw. `.github/workflows/ci.yml` vorhanden sind. Fehlt eines, keine APK ausliefern, sondern melden.
+4. **Am Sprintende** bleibt kein fertiger Sprint-Branch ungemergt liegen. Der Scrum Master erinnert den CEO an den offenen PR-Link, bevor ein neuer Sprint beginnt.
+
 ## Token sparen beim Testen (CEO-Vorgabe 2026-11-10)
 
 „Nur neu entwickelte Funktionen sollen so genau getestet werden. Alles bislang Abgenommene soll in groben Tests abgedeckt sein und nur bei Fehlschlag genauer untersucht werden.“
