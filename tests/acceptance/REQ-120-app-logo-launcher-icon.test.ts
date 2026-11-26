@@ -223,3 +223,15 @@ describe('REQ-120 App-Logo als Launcher-Icon', () => {
     expect(fs.existsSync(skript!)).toBe(true);
   });
 });
+
+describe('REQ-120 AK-8 (manuelle Geräteprüfung)', () => {
+  it('[REQ-120/AK-8] Geräteprüfung durch den CEO ist im Abnahmeprotokoll dokumentiert', () => {
+    const PROTOKOLL = 'sprints/sprint-13/abnahme.md';
+    expect(fs.existsSync(PROTOKOLL)).toBe(true);
+    const zeilen = fs.readFileSync(PROTOKOLL, 'utf8').split('\n');
+    const treffer = zeilen.filter(
+      (z) => z.trim().startsWith('|') && z.includes('REQ-120/AK-8') && /abgenommen/i.test(z),
+    );
+    expect(treffer.length).toBeGreaterThan(0);
+  });
+});

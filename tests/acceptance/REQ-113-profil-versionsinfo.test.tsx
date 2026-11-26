@@ -106,14 +106,14 @@ describe('REQ-113 Profil › App › Versionsinfo', () => {
     });
   });
 
-  describe('AK-2 Aktuelle Version 0.11', () => {
-    it('[REQ-113/AK-2] die Versionsquelle enthält 0.11.0', () => {
-      expect(PAKET_VERSION).toBe('0.11.0');
+  describe('AK-2 Aktuelle Version 0.13.1', () => {
+    it('[REQ-113/AK-2] die Versionsquelle enthält 0.13.1', () => {
+      expect(PAKET_VERSION).toBe('0.13.1');
     });
 
-    it('[REQ-113/AK-2] die Zeile „Versionsinfo“ zeigt rechts genau „0.11“', async () => {
+    it('[REQ-113/AK-2] die Zeile „Versionsinfo“ zeigt rechts genau „0.13.1“', async () => {
       const karte = await profil();
-      expect(versionsWert(karte)).toBe('0.11');
+      expect(versionsWert(karte)).toBe('0.13.1');
     });
   });
 

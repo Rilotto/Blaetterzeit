@@ -199,7 +199,7 @@ describe('Standard-Zitat (REQ-106, AK-1/AK-6/AK-7)', () => {
 });
 
 describe('Profil › App › Versionsinfo (REQ-113)', () => {
-  it('Zeile unter „Design“, ohne Pfeil, nur Anzeige; Format ohne Patch-Stelle 0', async () => {
+  it('Zeile unter „Design“, ohne Pfeil, nur Anzeige; aktuelle Version', async () => {
     render(<ProfilAnsicht profilRepository={new InMemoryProfilRepository()} />);
     await warte();
     const zeilen = [...document.querySelectorAll('[data-profil-karte] [data-profil-zeile]')].map((z) => z.getAttribute('data-profil-zeile'));
@@ -207,7 +207,7 @@ describe('Profil › App › Versionsinfo (REQ-113)', () => {
     const zeile = q('[data-profil-zeile="versionsinfo"]')!;
     expect(zeile.tagName).not.toBe('BUTTON');
     expect(zeile.querySelector('[data-zeile-pfeil]')).toBeNull();
-    expect(zeile.querySelector('[data-versionsinfo] [data-zeile-wert]')!.textContent).toBe('0.11');
+    expect(zeile.querySelector('[data-versionsinfo] [data-zeile-wert]')!.textContent).toBe('0.13.1');
     await tippe(zeile);
     expect(document.querySelector('[role="dialog"]')).toBeNull();
     cleanup();

@@ -19,7 +19,7 @@ describe('Versionsinfo (REQ-113)', () => {
 
   it('einzige Quelle package.json: App-Version und versionName der APK leiten sich daraus ab', () => {
     const paket = JSON.parse(datei('package.json')) as { version: string };
-    expect(paket.version).toBe('0.11.0');
+    expect(paket.version).toBe('0.13.1');
     expect(APP_VERSION).toBe(paket.version);
     const gradle = datei('android/app/build.gradle');
     const zeile = gradle.split('\n').find((z: string) => /^\s*versionName\b/.test(z));

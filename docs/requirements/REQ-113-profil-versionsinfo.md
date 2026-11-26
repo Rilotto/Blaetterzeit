@@ -1,7 +1,7 @@
 ---
 id: REQ-113
 titel: Seite „Profil“ – Zeile „Versionsinfo“ im Abschnitt „App“, nur Anzeige, aus einer einzigen Versionsquelle
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -27,7 +27,7 @@ Beauftragt vom CEO (wörtlich, 2026-11-25): „okay, setze bitte Sprint 11 um al
 
 **Randbedingung: eine einzige Versionsquelle (Auslegung)**
 - Die Version wird an genau einer Stelle im Projekt gepflegt: im Feld `version` der `package.json`. Die angezeigte Version, der `versionName` der Android-APK und das Release-Tag werden daraus abgeleitet, damit sie nie auseinanderlaufen.
-- Aktueller Stand: 0.11.0, angezeigt „0.11“.
+- Aktueller Stand: 0.13.1, angezeigt „0.13.1“.
 
 ## Akzeptanzkriterien
 
@@ -37,10 +37,10 @@ Beauftragt vom CEO (wörtlich, 2026-11-25): „okay, setze bitte Sprint 11 um al
 - **Dann** enthält die Karte im Abschnitt „App“ die Zeilen „Design“ und darunter „Versionsinfo“
 - **Und** die Zeile „Versionsinfo“ hat keinen Pfeil „›“
 
-### AK-2 Aktuelle Version 0.11
-- **Gegeben** die zentrale Versionsquelle enthält 0.11.0
+### AK-2 Aktuelle Version 0.13.1
+- **Gegeben** die zentrale Versionsquelle enthält 0.13.1
 - **Wenn** die Seite „Profil“ angezeigt wird
-- **Dann** zeigt die Zeile „Versionsinfo“ rechts genau „0.11“
+- **Dann** zeigt die Zeile „Versionsinfo“ rechts genau „0.13.1“
 
 ### AK-3 Anzeigeformat
 - **Gegeben** die zentrale Versionsquelle enthält 0.12.0 bzw. 0.11.2 bzw. 1.0.0
@@ -81,3 +81,4 @@ Beauftragt vom CEO (wörtlich, 2026-11-25): „okay, setze bitte Sprint 11 um al
 | Datum | Änderung | durch |
 |---|---|---|
 | 2026-11-25 | Erstellt aus den gesammelten Punkten für Sprint 11. CEO (wörtlich): „in dieser ist immer die jeweilige Appversion fest hinterlegt und kann auch nicht geändert werden manuell. Die App hat aktuell 0.11“. Auslegungen (nur Anzeige ohne Pfeil, eine Quelle `package.json`, Anzeige ohne Patch-Stelle 0) vom CEO ohne Gegenrede. Eigene Auslegung: Position unter „Design“. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-26 | Mini-Änderung: aktueller Stand und AK-2 auf 0.13.1 (Anzeige „0.13.1“). CEO (wörtlich): „in der App die Versionsinfo auf 0.13.1 upzudaten“. AK-3 unverändert. | Anforderungsmanager |
