@@ -4,6 +4,9 @@ import { doppeltippErkennen, type Doppeltipp } from '@/buchdetails/doppeltipp';
 import iconMehr from '@/assets/icons/icon-mehr.png';
 import { zuschneiden } from '@/bild/bildverarbeitung';
 import { standardBildquelle, type Bildquelle } from '@/bild/bildquelle';
+import { standardCoverSuche, type CoverSuche } from '@/barcode/suche';
+import { onlineCoverZuschneiden } from '@/buchdetails/automatischerZuschnitt';
+import CoverSuchfenster, { coverSuchtext } from '@/onlinesuche/CoverSuchfenster';
 import type { Ecken } from '@/bild/entzerren';
 import { standardBildspeicher, standardListenRepository, standardRepository, standardZitatRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
@@ -38,7 +41,15 @@ import ListenNavigation, { type ListenZiel } from '@/listen/ListenNavigation';
 import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
 import { bandnummerSetzen, statusSetzen, type Buch, type Fortschrittsmodus, type LesestatusId } from '@/domain/buch';
 import { fortschrittEntfernen, fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
-import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore, type ListenRepository, type ZitatRepository } from '@/storage';
+import {
+  BILDBEREICHE,
+  type BookRepository,
+  type Bildbereich,
+  type EinstellungRepository,
+  type ImageStore,
+  type ListenRepository,
+  type ZitatRepository,
+} from '@/storage';
 import { ansicht3dFarbe, ansicht3dSchatten, buchdetailsFarbe, fortschrittFarbe, listenFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
 
 export interface BuchDetailsProps {
@@ -63,6 +74,10 @@ export interface BuchDetailsProps {
   startReiter?: ReiterId;
   /** Bereits geladene Zitate des Buches (z. B. von der Startseite), damit das Notizbuch sofort gefüllt ist. */
   zitateVorab?: Zitat[];
+  /** Cover-Suche „Cover online suchen“ (REQ-118); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
+  coverSuche?: CoverSuche;
+  /** Speicher der Sprachauswahl (REQ-119); ohne Angabe der des DesignAnbieters bzw. flüchtig. In Tests ersetzbar. */
+  einstellungRepository?: EinstellungRepository;
   /** Zurück zur Seite „Bücher“. */
   onZurueck: () => void;
 }
@@ -205,8 +220,13 @@ export default function BuchDetails({
   zitatRepository,
   startReiter = START_REITER,
   zitateVorab,
+  coverSuche,
+  einstellungRepository,
   onZurueck,
 }: BuchDetailsProps) {
+  const coverSucheAktiv = useMemo(() => coverSuche ?? standardCoverSuche(), [coverSuche]);
+  // Fenster „Cover online suchen“ (REQ-118) mit der Vorbelegung beim Öffnen.
+  const [coverSucheText, setCoverSucheText] = useState<string | null>(null);
   const zitatRepo = useMemo(() => zitatRepository ?? standardZitatRepository(), [zitatRepository]);
   const speicher = useMemo(() => bildspeicher ?? standardBildspeicher(), [bildspeicher]);
   const listenRepo = useMemo(() => listenRepository ?? standardListenRepository(), [listenRepository]);
@@ -530,7 +550,9 @@ export default function BuchDetails({
         await bildHolen(bereich, () => quelle(bereich).galerie());
         return;
       case 'online':
-        // „Cover online suchen“: sichtbar, aber ohne Funktion (REQ-015, AK-5).
+        // „Cover online suchen“ (REQ-118): nur im Bereich „Cover“; Vorbelegung ISBN, sonst Titel + Autor.
+        setMenue(null);
+        if (bereich === 'cover') setCoverSucheText(coverSuchtext(buch ?? {}));
         return;
       case 'entfernen':
         await speicher.remove(buchId, bereich);
@@ -543,6 +565,16 @@ export default function BuchDetails({
         setMenue(null);
         return;
     }
+  };
+
+  // Online-Cover übernehmen (REQ-118, AK-8/AK-9): auf das Cover-Seitenverhältnis des Buches zuschneiden (REQ-115),
+  // als Frontcover speichern (ersetzt ein vorhandenes); sonst bleibt das Buch unverändert.
+  const onlineCoverUebernehmen = async (cover: string) => {
+    setCoverSucheText(null);
+    const bild = await onlineCoverZuschneiden(cover, buchRef.current ?? buch);
+    await speicher.put(buchId, 'cover', bild);
+    if (!aktiv.current) return;
+    setBilder((alt) => ({ ...alt, cover: bild }));
   };
 
   const zuschnittBestaetigen = async (bild: string, bereich: Bildbereich, ecken: Ecken) => {
@@ -738,6 +770,7 @@ export default function BuchDetails({
         <Auswahlmenue
           oben={menueOben(darstellungsMasse(buch).hoehe)}
           mitEntfernen={Boolean(bilder[menue])}
+          mitOnline={menue === 'cover'}
           onAktion={(a) => void aktion(a)}
           onSchliessen={() => setMenue(null)}
         />
@@ -758,6 +791,17 @@ export default function BuchDetails({
       <p role="status" data-hinweis-3d="" style={hinweisStil}>
         {HINWEIS_3D_TEXT}
       </p>
+    ) : null}
+    {coverSucheText !== null ? (
+      <CoverSuchfenster
+        suche={coverSucheAktiv}
+        vorbelegung={coverSucheText}
+        einstellungRepository={einstellungRepository}
+        onZurueck={() => setCoverSucheText(null)}
+        onWahl={(cover) => {
+          void onlineCoverUebernehmen(cover).catch((fehler: unknown) => console.warn('Cover nicht gespeichert:', fehler));
+        }}
+      />
     ) : null}
     </>
   );

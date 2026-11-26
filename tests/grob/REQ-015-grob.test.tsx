@@ -27,7 +27,9 @@ const bereich = (b: string) => document.querySelector<HTMLElement>(`[data-bereic
 const bildIn = (b: string) => bereich(b)?.querySelector("img[data-bereich-bild]")?.getAttribute("src") ?? null;
 async function zeige(s: ImageStore, neu: string | null = PNG.gruen, onZurueck = () => {}, buch = MOMO) {
   const q: Bildquelle = { scannen: vi.fn(async () => neu), galerie: vi.fn(async () => neu) };
-  render(<BuchDetails buchId={buch.id} buch={buch} bildquelle={q} bildspeicher={s} onZurueck={onZurueck} />);
+  // Cover-Suche (REQ-118) als Test-Double ohne Antwort; „Cover online suchen“ nur im Bereich „Cover“.
+  const coverSuche = { suchen: vi.fn(() => new Promise<never>(() => {})) };
+  render(<BuchDetails buchId={buch.id} buch={buch} bildquelle={q} bildspeicher={s} coverSuche={coverSuche} onZurueck={onZurueck} />);
   const d = await screen.findByRole("region", { name: "Buchdetails" });
   await vi.waitFor(() => expect(document.querySelectorAll("[data-bereich]")).toHaveLength(3));
   await new Promise((r) => setTimeout(r, 10));
@@ -50,7 +52,7 @@ it('[REQ-015/GROB] Auswahlmenü je Bereich, „Foto entfernen“ nur bei Bild, B
   const s = speicher({ [`${MOMO.id}|cover`]: PNG.rot });
   const { q } = await zeige(s);
   for (const b of ['ruecken', 'schnitt']) {
-    expect(namen(await menue(b))).toEqual(['Scannen', 'Aus Galerie auswählen', 'Cover online suchen']);
+    expect(namen(await menue(b))).toEqual(['Scannen', 'Aus Galerie auswählen']);
     const h = document.querySelector<HTMLElement>('[data-menue-hintergrund]')!;
     fireEvent.pointerDown(h);
     fireEvent.click(h);
@@ -59,9 +61,12 @@ it('[REQ-015/GROB] Auswahlmenü je Bereich, „Foto entfernen“ nur bei Bild, B
   const m = await menue('cover');
   expect(namen(m)).toEqual(['Scannen', 'Aus Galerie auswählen', 'Cover online suchen', 'Foto entfernen']);
   fireEvent.click(within(m).getByRole('menuitem', { name: 'Cover online suchen' }));
+  expect(await screen.findByRole('dialog', { name: 'Cover online suchen' })).toBeInTheDocument();
   expect(q.scannen).not.toHaveBeenCalled();
   expect(q.galerie).not.toHaveBeenCalled();
   expect(s.daten.get(`${MOMO.id}|cover`)).toBe(PNG.rot);
+  fireEvent.click(within(screen.getByRole('dialog', { name: 'Cover online suchen' })).getByRole('button', { name: 'Zurück' }));
+  await vi.waitFor(() => expect(screen.queryByRole('dialog', { name: 'Cover online suchen' })).toBeNull());
 
   await hinterlege('schnitt');
   expect(s.daten.has(`${MOMO.id}|schnitt`)).toBe(true);

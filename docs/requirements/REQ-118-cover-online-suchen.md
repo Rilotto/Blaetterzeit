@@ -1,7 +1,7 @@
 ---
 id: REQ-118
 titel: „Cover online suchen“ – Cover-Suchfenster mit Raster aus beiden Quellen und Übernahme als Buchcover
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

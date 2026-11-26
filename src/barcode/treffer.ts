@@ -17,6 +17,11 @@ export interface Treffer {
   angaben: Vorbelegung;
   /** Cover-Adresse der Quelle (enthält nur die ISBN bzw. eine Cover-ID der Quelle); vor dem Laden gesetzt. */
   coverUrl?: string;
+  /**
+   * Sprachen laut Quelle als Sprachcodes nach MARC/ISO 639-2/B (z. B. „ger“, „eng“); fehlt, wenn die Quelle keine
+   * Sprache angibt (REQ-119, AK-8).
+   */
+  sprachen?: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -140,6 +145,19 @@ export function openLibraryMasseAus(angabe: string | undefined): Masse {
 const ohneLeere = (v: Vorbelegung): Vorbelegung =>
   Object.fromEntries(Object.entries(v).filter(([, w]) => w !== undefined && w !== '')) as Vorbelegung;
 
+/**
+ * Sprachcodes einer Quelle vereinheitlicht: drei Kleinbuchstaben (MARC/ISO 639-2/B), ohne Dubletten. Leere Angaben,
+ * „und“ (unbestimmt), „mul“ (mehrsprachig), „zxx“ (ohne Sprache) und Füllzeichen gelten als keine Angabe (REQ-119, AK-8).
+ */
+export function sprachcodes(werte: readonly unknown[]): string[] {
+  const codes = werte
+    .filter((w): w is string => typeof w === 'string')
+    // Open Library liefert teils Schlüssel wie „/languages/ger“.
+    .map((w) => w.trim().toLowerCase().replace(/^\/languages\//, ''))
+    .filter((w) => /^[a-z]{3}$/.test(w) && !['und', 'mul', 'zxx'].includes(w));
+  return [...new Set(codes)];
+}
+
 /** Ein Treffer ist nur brauchbar, wenn er mindestens einen Titel hat. */
 const brauchbar = (t: Treffer): boolean => !!t.angaben.titel;
 
@@ -209,11 +227,17 @@ export function dnbTrefferLesen(xml: string, gesuchteIsbn?: string): Treffer[] {
     const reiheFeld = erstes('490') ?? erstes('830');
     const reihe = textBereinigen(unterfeld(reiheFeld, 'a'));
     const bandnummer = bandAus(unterfeld(reiheFeld, 'v'));
+    // Sprache (REQ-119): 041 $a (Sprachcode), sonst Position 35–37 des Kontrollfelds 008.
+    const sprachen = sprachcodes([
+      ...f.filter((x) => x.tag === '041').flatMap((x) => x.unterfelder.filter(([c]) => c === 'a').map(([, w]) => w)),
+      ...(kontroll?.textContent && kontroll.textContent.length >= 38 ? [kontroll.textContent.slice(35, 38)] : []),
+    ]);
     const t: Treffer = {
       quelle: 'dnb',
       // Maße (REQ-072, AK-8): Höhe aus 300 $c.
       angaben: ohneLeere({ titel, autor, verlag, erscheinungsjahr: jahr, seitenanzahl: seiten, isbn, ...fmt, preisCent, ...dnbMasseAus(unterfeld(erstes('300'), 'c')), reihe, bandnummer }),
       ...(coverIsbn ? { coverUrl: dnbCoverUrl(coverIsbn) } : {}),
+      ...(sprachen.length ? { sprachen } : {}),
     };
     if (brauchbar(t)) ergebnis.push(t);
   }
@@ -346,8 +370,8 @@ export function openLibraryTrefferLesen(json: string, gesuchteIsbn: string): Tre
 // Freitextsuche „Online suchen“ (REQ-116, REQ-117): Titel, Autor oder ISBN, auch kombiniert
 // ---------------------------------------------------------------------------
 
-/** Höchstzahl der Treffer insgesamt und je Quelle (REQ-117, AK-1). */
-export const ONLINE_SUCHE_MAX = 9;
+/** Höchstzahl der Treffer insgesamt und je Quelle (REQ-117, AK-1; Cover: REQ-118, AK-5). */
+export const ONLINE_SUCHE_MAX = 15;
 
 /** Wörter des Suchtexts für die CQL-Abfrage der DNB; Anführungszeichen und Backslash werden entfernt. */
 export const suchwoerter = (text: string): string[] =>
@@ -360,17 +384,24 @@ export const suchwoerter = (text: string): string[] =>
  * SRU-Abfrage der DNB zum Suchtext. Ist der Suchtext eine ISBN, wird nach der ISBN gesucht (Index „num“),
  * sonst müssen alle Wörter vorkommen (Index „woe“, verknüpft mit „and“). Übertragen wird nur der Suchtext.
  */
-export function dnbSucheUrl(text: string, max = ONLINE_SUCHE_MAX): string {
+export function dnbSucheUrl(text: string, max = ONLINE_SUCHE_MAX, sprachen: readonly string[] = []): string {
   const isbn = isbnNormalisieren(text);
-  const query = isbn ? `num=${isbn}` : suchwoerter(text).map((w) => `woe="${w}"`).join(' and ');
+  const suche = isbn ? `num=${isbn}` : suchwoerter(text).map((w) => `woe="${w}"`).join(' and ');
+  // Sprachfilter (REQ-119): Index „spr“ der DNB mit Sprachcode (ger, eng); mehrere mit „or“.
+  const spr = sprachen.map((c) => `spr=${c}`);
+  const query = spr.length === 0 ? suche : `${suche} and ${spr.length === 1 ? spr[0] : `(${spr.join(' or ')})`}`;
   return `https://services.dnb.de/sru/dnb?version=1.1&operation=searchRetrieve&query=${encodeURIComponent(query)}&recordSchema=MARC21-xml&maximumRecords=${max}`;
 }
 
-const OL_FELDER = 'title,author_name,publisher,first_publish_year,number_of_pages_median,isbn,cover_i';
+const OL_FELDER = 'title,author_name,publisher,first_publish_year,number_of_pages_median,isbn,cover_i,language';
 
-/** Such-API von Open Library zum Suchtext (ISBN normalisiert). Übertragen wird nur der Suchtext. */
-export function openLibrarySucheUrl(text: string, max = ONLINE_SUCHE_MAX): string {
-  const q = isbnNormalisieren(text) ?? text.trim().replace(/\s+/g, ' ');
+/**
+ * Such-API von Open Library zum Suchtext (ISBN normalisiert). Übertragen werden nur der Suchtext und die
+ * Sprachauswahl (REQ-119) als Feldsuche im Parameter q: „language:ger“ bzw. „language:(ger OR eng)“.
+ */
+export function openLibrarySucheUrl(text: string, max = ONLINE_SUCHE_MAX, sprachen: readonly string[] = []): string {
+  const suche = isbnNormalisieren(text) ?? text.trim().replace(/\s+/g, ' ');
+  const q = sprachen.length === 0 ? suche : `${suche} language:${sprachen.length === 1 ? sprachen[0] : `(${sprachen.join(' OR ')})`}`;
   return `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=${max}&fields=${OL_FELDER}`;
 }
 
@@ -385,6 +416,8 @@ interface OlSuchDokument {
   number_of_pages_median?: unknown;
   isbn?: unknown;
   cover_i?: unknown;
+  /** Sprachcodes aller Ausgaben des Werks, z. B. ["ger", "eng"]. */
+  language?: unknown;
 }
 
 const ganzeZahl = (w: unknown): number | undefined => (typeof w === 'number' && Number.isInteger(w) && w > 0 ? w : undefined);
@@ -417,6 +450,7 @@ export function openLibrarySucheLesen(json: string, gesuchteIsbn?: string | null
     ];
     const isbn = gesuchteIsbn && isbns.includes(gesuchteIsbn) ? gesuchteIsbn : isbns.length === 1 ? isbns[0] : undefined;
     const coverId = ganzeZahl(d.cover_i);
+    const sprachen = sprachcodes(Array.isArray(d.language) ? d.language : []);
     const t: Treffer = {
       quelle: 'openlibrary',
       angaben: ohneLeere({
@@ -428,6 +462,7 @@ export function openLibrarySucheLesen(json: string, gesuchteIsbn?: string | null
         isbn,
       }),
       ...(coverId !== undefined ? { coverUrl: openLibraryCoverIdUrl(coverId) } : {}),
+      ...(sprachen.length ? { sprachen } : {}),
     };
     if (brauchbar(t)) ergebnis.push(t);
   }
@@ -447,4 +482,12 @@ export function trefferMischen(dnb: readonly Treffer[], ol: readonly Treffer[], 
     if (ergebnis.length < max && j < ol.length) ergebnis.push(ol[j++]);
   }
   return ergebnis;
+}
+
+/**
+ * Sprachfilter (REQ-119, AK-2 bis AK-4, AK-8): nur Treffer, deren Sprachangabe mindestens eine der gewählten
+ * Sprachen enthält. Treffer ohne Sprachangabe entfallen.
+ */
+export function nachSpracheFiltern(treffer: readonly Treffer[], sprachen: readonly string[]): Treffer[] {
+  return treffer.filter((t) => t.sprachen?.some((s) => sprachen.includes(s)) ?? false);
 }

@@ -6,6 +6,8 @@
  *  - Selektoren: [data-option="online"], dialog „Online suchen“ [data-online-suche], [data-ziehgriff],
  *    searchbox „Titel, Autor oder ISBN“ in form[role=search], [data-online-suche-zurueck], [data-online-suche-laeuft],
  *    [data-online-suche-hinweis] (role status), [data-online-treffer-raster], [data-online-treffer].
+ * Anpassung 2026-11-26 (Entwickler, REQ-116 AK-4/REQ-119): Suche erhält zusätzlich die Sprachauswahl (Standard ["ger"]);
+ * Open-Library-Fakes mit Sprachangabe, da Treffer ohne Sprachangabe entfallen.
  */
 import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -209,7 +211,7 @@ describe('REQ-116 Online suchen', () => {
         await new Promise((r) => setTimeout(r, 30));
       });
       expect(suche.suchen).toHaveBeenCalledTimes(1);
-      expect(suche.suchen).toHaveBeenCalledWith('Harry Potter Rowling');
+      expect(suche.suchen).toHaveBeenCalledWith('Harry Potter Rowling', ['ger']);
     });
 
     it('[REQ-116/AK-3] Titel, Autor und ISBN (auch kombiniert) werden angenommen: Wörter landen in beiden Anfragen', async () => {
@@ -252,9 +254,9 @@ describe('REQ-116 Online suchen', () => {
     });
   });
 
-  describe('AK-4 Nur der Suchtext wird übermittelt', () => {
+  describe('AK-4 Nur Suchtext und Sprachauswahl werden übermittelt', () => {
     it('[REQ-116/AK-4] keine Anfrage (auch Cover) enthält Angaben der eigenen Bücher; Textanfragen enthalten die ISBN', async () => {
-      const ol = JSON.stringify({ docs: [{ title: 'Harry Potter', author_name: ['J. K. Rowling'], isbn: [ISBN], cover_i: 42 }] });
+      const ol = JSON.stringify({ docs: [{ title: 'Harry Potter', author_name: ['J. K. Rowling'], isbn: [ISBN], cover_i: 42, language: ['ger'] }] });
       const http = httpFake((u) => (u.includes('openlibrary') ? { status: 200, text: ol } : { status: 404, text: '' }));
       await zeige(onlineSucheMit(http));
       await oeffneSuche();
@@ -330,7 +332,7 @@ describe('REQ-116 Online suchen', () => {
     });
 
     it('[REQ-116/AK-6] nur eine Quelle scheitert mit Fehler: Treffer der anderen ohne Hinweis', async () => {
-      const ol = JSON.stringify({ docs: [{ title: 'Nur Open Library', author_name: ['Autorin'] }] });
+      const ol = JSON.stringify({ docs: [{ title: 'Nur Open Library', author_name: ['Autorin'], language: ['ger'] }] });
       const http = httpFake((u) => (u.includes('openlibrary') ? { status: 200, text: ol } : Promise.reject(new TypeError('DNB down'))));
       await zeige(onlineSucheMit(http));
       const f = await oeffneSuche();

@@ -1,7 +1,7 @@
 ---
 id: REQ-119
 titel: Sprachfilter „Sprache“ (Deutsch/Englisch, Mehrfachauswahl) bei „Online suchen“ und „Cover online suchen“
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

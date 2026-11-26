@@ -1,7 +1,7 @@
 ---
 id: REQ-121
 titel: Seite „Profil“ – Abschnitt „Deine Bibliothek“ mit Zeile „Aktueller Wert“ (Summe der Preise ohne Wunschliste)
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

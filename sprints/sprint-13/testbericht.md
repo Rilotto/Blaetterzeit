@@ -46,3 +46,29 @@
 - Es sind keine Capacitor-Standard-Icons mehr vorhanden (kein `drawable*/ic_launcher*`).
 
 **Empfehlung:** REQ-120 ist nach grüner CI (`npm run verify`) und der Geräteprüfung AK-8 durch den CEO freigabefähig.
+
+## REQ-118/REQ-119 (Tester, 2026-11-26)
+
+**Lokal ausgeführt** (CEO-Vorgabe: nur aktueller Auftrag, volle Suite nur in der CI): `npx vitest run` für tests/unit/coverSuche, tests/unit/onlineSuche, tests/acceptance/REQ-015, -032, -116, -117, -118, -119 und tests/grob/REQ-015 mit `--reporter=dot` → **9 Dateien, 185 Tests grün**. `npm run typecheck` grün, `npm run lint` ohne Fehler. `npm run verify` (volle Suite) wurde lokal **nicht** ausgeführt und steht noch aus (CI).
+
+**Neue Tests:** `tests/acceptance/REQ-118-cover-online-suchen.test.tsx` (37 Tests, AK-1 bis AK-17), `tests/acceptance/REQ-119-sprachfilter-online-suche.test.tsx` (24 Tests, AK-1 bis AK-9).
+
+| REQ | AK | Ergebnis |
+|---|---|---|
+| REQ-118 | AK-1 bis AK-17 | bestanden (lokal) |
+| REQ-119 | AK-1 bis AK-9 | bestanden (lokal) |
+
+**Gegenprobe:** 5 von 5 eingebauten Fehlern erkannt (Sprachfilter im Ergebnis, Merken, mindestens eine Sprache, Cover-Übernahme ohne Zuschnitt, Cover-Suche ohne Coverfilter bzw. ohne 15er-Grenze).
+
+**Gegenlesen der Alttests:** REQ-015 (fein und grob), REQ-116 und REQ-117 sind sachgerecht an die neuen AKs angepasst und nicht abgeschwächt. Bei REQ-032 AK-6 fehlte der laut AK eingetragene Autor. Das habe ich ergänzt: Der Autor wird eingetragen und bleibt unverändert.
+
+**Befunde am Produktcode:** kein AK-Verstoß.
+
+**Risiken (nur auf dem Gerät bzw. mit echten Diensten prüfbar):**
+1. Open Library liefert mit `language` die Sprachen **aller Ausgaben eines Werks**. Das Cover (`cover_i`) ist das Standardcover des Werks. Bei „nur Deutsch“ kann daher das Cover einer englischen Ausgabe erscheinen (REQ-119 AK-2, „deren Cover“).
+2. Die Cover-Suche fragt je Quelle 20 Treffer an und lädt alle Cover, bevor sie mischt. Das sind bis zu 40 Bilddownloads je Suche, was im Mobilnetz langsam sein kann.
+3. DNB: Steht in MARC 041 $a mehr als ein Sprachcode zusammengeschrieben (ältere Praxis, z. B. `gereng`), wird 041 verworfen. Dann gilt 008, sonst entfällt der Treffer.
+4. Beim Öffnen sind die beiden Sprachknöpfe kurz nicht gewählt, bis die gemerkte Auswahl geladen ist. Das betrifft nur die Darstellung.
+5. Nicht automatisiert geprüft: Tastatur schließen mit der Android-Zurück-Taste bei offener Tastatur und Optik im Prototyp.
+
+**Empfehlung:** REQ-118 und REQ-119 sind freigabefähig, sobald die CI (`npm run verify`, volle Suite) grün ist.

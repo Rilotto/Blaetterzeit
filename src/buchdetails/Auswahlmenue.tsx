@@ -12,6 +12,8 @@ interface Props {
   /** Oberkante des Menüs in px, relativ zum Fenster „Buchdetails“ (unter der Buchdarstellung). */
   oben: number;
   mitEntfernen: boolean;
+  /** „Cover online suchen“ anbieten: nur im Bereich „Cover“ (REQ-015 AK-1, REQ-118); Standard ja. */
+  mitOnline?: boolean;
   onAktion: (aktion: MenueAktion) => void;
   onSchliessen: () => void;
 }
@@ -101,9 +103,10 @@ const textStil: CSSProperties = {
   overflowWrap: 'break-word',
 };
 
-/** Auswahlmenü eines Bereichs (REQ-015). Schließt sich beim Tippen außerhalb. */
-export default function Auswahlmenue({ oben, mitEntfernen, onAktion, onSchliessen }: Props) {
-  const eintraege = mitEntfernen ? [...EINTRAEGE, ENTFERNEN] : EINTRAEGE;
+/** Auswahlmenü eines Bereichs (REQ-015, REQ-118). Schließt sich beim Tippen außerhalb. */
+export default function Auswahlmenue({ oben, mitEntfernen, mitOnline = true, onAktion, onSchliessen }: Props) {
+  const quellen = mitOnline ? EINTRAEGE : EINTRAEGE.filter((e) => e.aktion !== 'online');
+  const eintraege = mitEntfernen ? [...quellen, ENTFERNEN] : quellen;
   return (
     <>
       <div data-menue-hintergrund="" onClick={onSchliessen} style={hintergrundStil} />

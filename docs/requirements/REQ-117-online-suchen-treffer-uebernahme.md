@@ -1,7 +1,7 @@
 ---
 id: REQ-117
 titel: „Online suchen“ – bis zu 15 Treffer im Raster mit 3 Spalten abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan
-status: In Umsetzung
+status: Implementiert
 prioritaet: Should
 art: funktional
 quelle: CEO

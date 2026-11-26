@@ -8,6 +8,8 @@
  *  - Bild wird vorgemerkt und erst beim Anlegen als Frontcover (Bereich „cover“) im ImageStore gespeichert
  *  - Android-Zurück im Test per `popstate`, Herunterziehen per Pointer-Ereignissen
  * „Neustart“ (AK-7): neue Instanzen der zentralen Speicher (neu geladene Module) auf derselben fake-indexeddb.
+ * Anpassung 2026-11-26 (Entwickler, REQ-118): AK-6 „Cover online suchen“ öffnet das Fenster „Cover online suchen“;
+ * Cover-Suche als Test-Double (Prop `coverSuche` der BuecherAnsicht).
  */
 import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -56,9 +58,11 @@ async function zeige(opt: { repo?: BookRepository; s?: ImageStore; q?: Bildquell
   const repo = opt.repo ?? repoFake();
   const s = opt.s ?? speicherFake();
   const q = opt.q ?? quelle();
+  // Cover-Suche (REQ-118) ohne Netz: antwortet nie.
+  const coverSuche = { suchen: vi.fn(() => new Promise<never>(() => {})) };
   render(
     <div data-testwurzel="" style={farbVariablen() as CSSProperties}>
-      <BuecherAnsicht repository={repo} bildquelle={q} bildspeicher={s} />
+      <BuecherAnsicht repository={repo} bildquelle={q} bildspeicher={s} coverSuche={coverSuche} />
     </div>,
   );
   await screen.findByRole('heading', { name: 'Deine Bücher' });
@@ -309,8 +313,8 @@ describe('REQ-032 Cover beim manuellen Eintrag', () => {
     });
   });
 
-  describe('AK-6 „Cover online suchen“ ohne Funktion', () => {
-    it.each([false, true])('[REQ-032/AK-6] Antippen: keine Online-Suche, keine Bildquelle, Feld unverändert (Bild vorgemerkt: %s)', async (mitBild) => {
+  describe('AK-6 „Cover online suchen“ öffnet das Cover-Suchfenster', () => {
+    it.each([false, true])('[REQ-032/AK-6] Antippen: Menü zu, Fenster „Cover online suchen“ offen, keine Bildquelle, Feld und Titel unverändert (Bild vorgemerkt: %s)', async (mitBild) => {
       const fetchSpy = vi.fn();
       vi.stubGlobal('fetch', fetchSpy);
       const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
@@ -318,11 +322,15 @@ describe('REQ-032 Cover beim manuellen Eintrag', () => {
       const { s } = await zeige({ q });
       await oeffneBlatt();
       gib('Titel', 'Testbuch');
+      // AK-6 (Stand 2026-11-26): Titel und Autor sind eingetragen (Tester-Ergänzung).
+      gib('Autor', 'Testautorin');
       if (mitBild) await merkeVor();
       q.scannen.mockClear();
       q.galerie.mockClear();
       const vorher = coverFeld().innerHTML;
       await waehle('Cover online suchen');
+      expect(auswahl()).toBeNull();
+      expect(screen.getByRole('dialog', { name: 'Cover online suchen' })).toBeInTheDocument();
       expect(fetchSpy).not.toHaveBeenCalled();
       expect(openSpy).not.toHaveBeenCalled();
       expect(q.scannen).not.toHaveBeenCalled();
@@ -330,11 +338,12 @@ describe('REQ-032 Cover beim manuellen Eintrag', () => {
       expect(zuschnitt()).toBeNull();
       expect(screen.queryByRole('region', { name: 'Kamera' })).toBeNull();
       expect(s.put).not.toHaveBeenCalled();
-      if (auswahl()) fireEvent.click(document.querySelector('[data-menue-hintergrund]')!);
-      await vi.waitFor(() => expect(auswahl()).toBeNull());
+      fireEvent.click(within(screen.getByRole('dialog', { name: 'Cover online suchen' })).getByRole('button', { name: 'Zurück' }));
+      await vi.waitFor(() => expect(screen.queryByRole('dialog', { name: 'Cover online suchen' })).toBeNull());
       expect(blatt()).toBeVisible();
       expect(coverFeld().innerHTML).toBe(vorher);
       expect(feld('Titel').value).toBe('Testbuch');
+      expect(feld('Autor').value).toBe('Testautorin');
     });
   });
 

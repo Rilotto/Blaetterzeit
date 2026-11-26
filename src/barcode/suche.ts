@@ -6,6 +6,8 @@ import {
   dnbSucheUrl,
   dnbTrefferLesen,
   dnbUrl,
+  nachSpracheFiltern,
+  ONLINE_SUCHE_MAX,
   openLibrarySucheLesen,
   openLibrarySucheUrl,
   openLibraryTrefferLesen,
@@ -87,32 +89,76 @@ export function isbnSucheMit(http: HttpClient, frist = SUCHE_FRIST_MS): IsbnSuch
 export const standardIsbnSuche = (): IsbnSuche => isbnSucheMit(standardHttpClient());
 
 // ---------------------------------------------------------------------------
-// „Online suchen“ (REQ-116, REQ-117): Freitext (Titel, Autor, ISBN) bei DNB und Open Library gleichzeitig
+// „Online suchen“ (REQ-116, REQ-117) und „Cover online suchen“ (REQ-118): Freitext (Titel, Autor, ISBN) bei DNB und
+// Open Library gleichzeitig, beschränkt auf die gewählten Sprachen (REQ-119)
 // ---------------------------------------------------------------------------
 
 export interface OnlineSuche {
   /**
-   * Höchstens 9 Treffer, abwechselnd DNB/Open Library (REQ-117), Cover als Data-URL. Leere Liste = nichts gefunden.
+   * Höchstens 15 Treffer, abwechselnd DNB/Open Library (REQ-117), Cover als Data-URL. Leere Liste = nichts gefunden.
+   * `sprachen` (Sprachcodes „ger“/„eng“, REQ-119): Anfrage und Ergebnis auf diese Sprachen beschränkt, Treffer ohne
+   * Sprachangabe entfallen; ohne Angabe ungefiltert.
    * Schlägt fehl, wenn keine Quelle erreichbar war (z. B. keine Internetverbindung).
    */
-  suchen(text: string): Promise<Treffer[]>;
+  suchen(text: string, sprachen?: readonly string[]): Promise<Treffer[]>;
 }
 
-/** Freitextsuche über DNB (SRU) und Open Library (search.json). An die Dienste geht nur der Suchtext. */
+export interface CoverSuche {
+  /**
+   * „Cover online suchen“ (REQ-118): nur Treffer mit geladenem Cover (`angaben.cover` als Data-URL), höchstens 15,
+   * abwechselnd DNB/Open Library, die andere Quelle füllt auf. Sprachfilter wie bei {@link OnlineSuche}.
+   * Leere Liste = kein Cover gefunden. Schlägt fehl, wenn keine Quelle erreichbar war.
+   */
+  suchen(text: string, sprachen?: readonly string[]): Promise<Treffer[]>;
+}
+
+/** So viele Treffer fragt die Cover-Suche je Quelle an, damit trotz Treffern ohne Cover bis zu 15 Cover bleiben. */
+export const COVER_SUCHE_ANFRAGE = 20;
+
+/** Beide Quellen gleichzeitig abfragen; nach Sprache gefiltert. Wirft, wenn keine Quelle erreichbar war. */
+async function quellenAbfragen(
+  http: HttpClient,
+  text: string,
+  sprachen: readonly string[] | undefined,
+  max: number,
+  frist: number,
+): Promise<[Treffer[], Treffer[]]> {
+  const isbn = isbnNormalisieren(text);
+  const spr = sprachen ?? [];
+  const [dnb, ol] = await Promise.allSettled([
+    mitFrist(abfragen(http, dnbSucheUrl(text, max, spr), (t) => dnbTrefferLesen(t, isbn ?? undefined)), frist),
+    mitFrist(abfragen(http, openLibrarySucheUrl(text, max, spr), (t) => openLibrarySucheLesen(t, isbn)), frist),
+  ]);
+  if (dnb.status === 'rejected' && ol.status === 'rejected') throw new Error('Keine Quelle erreichbar');
+  const filtern = (t: Treffer[]) => (sprachen ? nachSpracheFiltern(t, sprachen) : t);
+  return [filtern(dnb.status === 'fulfilled' ? dnb.value : []), filtern(ol.status === 'fulfilled' ? ol.value : [])];
+}
+
+/** Freitextsuche über DNB (SRU) und Open Library (search.json). An die Dienste gehen nur Suchtext und Sprachauswahl. */
 export function onlineSucheMit(http: HttpClient, frist = SUCHE_FRIST_MS): OnlineSuche {
   return {
-    async suchen(text) {
+    async suchen(text, sprachen) {
       if (suchwoerter(text).length === 0) return [];
-      const isbn = isbnNormalisieren(text);
-      const [dnb, ol] = await Promise.allSettled([
-        mitFrist(abfragen(http, dnbSucheUrl(text), (t) => dnbTrefferLesen(t, isbn ?? undefined)), frist),
-        mitFrist(abfragen(http, openLibrarySucheUrl(text), (t) => openLibrarySucheLesen(t, isbn)), frist),
-      ]);
-      if (dnb.status === 'rejected' && ol.status === 'rejected') throw new Error('Keine Quelle erreichbar');
-      const gemischt = trefferMischen(dnb.status === 'fulfilled' ? dnb.value : [], ol.status === 'fulfilled' ? ol.value : []);
-      return coverLaden(http, gemischt, frist);
+      const [dnb, ol] = await quellenAbfragen(http, text, sprachen, ONLINE_SUCHE_MAX, frist);
+      return coverLaden(http, trefferMischen(dnb, ol), frist);
     },
   };
 }
 
 export const standardOnlineSuche = (): OnlineSuche => onlineSucheMit(standardHttpClient());
+
+/** Cover-Suche über dieselben Quellen; Treffer ohne Cover entfallen vor dem Mischen (REQ-118, AK-5/AK-6). */
+export function coverSucheMit(http: HttpClient, frist = SUCHE_FRIST_MS): CoverSuche {
+  return {
+    async suchen(text, sprachen) {
+      if (suchwoerter(text).length === 0) return [];
+      const [dnb, ol] = await quellenAbfragen(http, text, sprachen, COVER_SUCHE_ANFRAGE, frist);
+      const mitCover = async (t: Treffer[]) =>
+        (await coverLaden(http, t.filter((x) => x.coverUrl), frist)).filter((x) => !!x.angaben.cover);
+      const [d, o] = await Promise.all([mitCover(dnb), mitCover(ol)]);
+      return trefferMischen(d, o, ONLINE_SUCHE_MAX);
+    },
+  };
+}
+
+export const standardCoverSuche = (): CoverSuche => coverSucheMit(standardHttpClient());
