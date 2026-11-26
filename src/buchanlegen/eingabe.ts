@@ -32,7 +32,7 @@ export interface Eingaben {
   dickeMm?: number;
   /** „Erschienen“ als TT.MM.JJJJ oder JJJJ (REQ-060, REQ-092); das Feld „JAHR“ entfällt. */
   erschienen?: string;
-  /** Bandnummer aus dem Barcode-Scan (REQ-099); wird mit dem Buch gespeichert. */
+  /** Zeile „Band“ (REQ-112), auch aus dem Barcode-Scan (REQ-099); wird mit dem Buch gespeichert. */
   bandnummer?: number;
   /** Überschriebenes „Hinzugefügt“ als TT.MM.JJJJ (REQ-060, AK-9); fehlend = Zeitpunkt des Anlegens. */
   hinzugefuegt?: string;

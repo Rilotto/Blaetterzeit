@@ -1,0 +1,10 @@
+- 2026-11-25 REQ-068 (neu: AK-1–3) + REQ-110 (AK-1–6): 9 betroffene Dateien lokal grün, 115/115 (dot), Typecheck und Lint ohne Fehler. Alttests REQ-066/067/069 auf Pille „Dunkel“/„Hell“ angepasst. Gegenprobe (gespeicherte Design-Auswahl verfälscht): 7 Tests rot, erkannt. Volle Suite: nur CI.
+
+## 2026-11-25 Gesammelte Punkte (REQ-111, 112, 113, 106, 062 AK-10, 077 AK-8–10, angepasste 037/056/060/066/072/096–099)
+
+- Lokal (dot): 31 Dateien (acceptance 026, 037, 056, 060, 062, 066, 072, 073, 076, 077, 087, 091, 095–099, 106, 109, 111–113; grob 026, 056, 072, 091, 095, 096, 098, 099, 106), 580/580 grün. Typecheck und Lint ohne Fehler. Volle Suite: nur CI.
+- Ergebnis je REQ: 111 AK-1–5, 112 AK-1–10, 113 AK-1–5, 106 AK-1–7, 062 AK-10, 077 AK-8–10, 037 AK-10, 096 AK-4/5/6, 097 AK-11, 098 AK-10/11, 099 AK-2/5/6, 056 AK-1/2/5, 060 AK-1, 066 AK-1: bestanden (lokal).
+- Neu bzw. angepasst: Tests REQ-111/112/113 neu; Band je Buch statt je Zugehörigkeit (095–099, grob 095/096/098/099); 13 Zeilen (056, 060, 091, grob 056/091); Standard-Zitat (106, grob 106); „Längste Serie“ (026, 087, 109, grob 026); Maße mit „ca.“ statt „–“ nach geändertem REQ-072/077 (072, 077, grob 072); Karte „App“ mit zwei Zeilen (066); Raster drei Spalten (037/098 AK-10).
+- REQ-113 AK-1 geprüft: Leerzeichen nach „Design“ und Trennlinie unter der letzten Zeile verlangt der REQ nicht. Das war ein Fehler im Test, nicht im Code; korrigiert.
+- Gegenprobe (5 Fehler): verbotene Umbruchregel, Band je Saga verschieden, Migration aus, Standard-Zitat trotz eigener Zitate, Format Hardcover/Taschenbuch vertauscht: alle 5 erkannt (1/3/4/13/16 Tests rot).
+- Offene Punkte: (1) REQ-026 und REQ-087 nennen noch „Längster Streak für dieses Buch“, REQ-109 dagegen „Längste Serie“. Die Tests folgen REQ-109; Textangleich durch den Anforderungsmanager nötig. (2) Bei REQ-111 AK-4/5 und den drei Spalten (037/098 AK-10) prüfen die Tests nur Regeln, weil jsdom kein Layout berechnet. Überlauf bei 320 px bleibt Sichtprüfung im Prototyp. (3) Die Migration aus AK-10 ist nur für IndexedDB (Web) getestet. SQLite (APK) deckt nur der Update-Test der CI ab.

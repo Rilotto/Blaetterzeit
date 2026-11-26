@@ -16,6 +16,12 @@ export interface Zitat {
   angelegtAm: string;
 }
 
+/**
+ * Anzeigetext eines Zitats in deutschen Anführungszeichen „…“ (REQ-105 AK-2, REQ-106 AK-2). Nur für die Anzeige:
+ * Gespeichert und im Feld „Zitat“ bleibt der Text ohne diese Zeichen. Eigene Anführungszeichen bleiben unverändert.
+ */
+export const zitatAnzeige = (text: string): string => `\u201E${text}\u201C`;
+
 const istText = (w: unknown): w is string => typeof w === 'string';
 export const istSeite = (w: unknown): w is number => typeof w === 'number' && Number.isInteger(w) && w >= 1;
 
@@ -102,6 +108,16 @@ export function zitatMitWerten(basis: Pick<Zitat, 'id' | 'buchId' | 'angelegtAm'
 
 /** Fortlaufende Nummer des lokalen Kalendertags (Tage seit 1970-01-01, sommerzeitfest). */
 export const tagesnummer = (d: Date): number => Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000);
+
+/**
+ * Standard-Zitat der Kachel „Zitat des Tages“ (REQ-106, AK-1/AK-6/AK-7): erscheint nur, solange kein eigenes Zitat
+ * gespeichert ist. Kein gespeichertes Zitat, in keinem Notizbuch, ohne Seite; Antippen öffnet nichts.
+ */
+export const STANDARD_ZITAT = {
+  text: 'Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot.',
+  sprecher: 'Kodex des Drachenreiters',
+  buchtitel: 'Fourth Wing',
+} as const;
 
 /** Gemerkte Wahl des Zitats des Tages (über das EinstellungRepository, Schlüssel „zitatDesTages“). */
 export interface ZitatDesTagesWahl {

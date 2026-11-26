@@ -56,9 +56,15 @@ async function liste(w: Welt, art: ListenArt, name: string): Promise<Liste> {
   await w.listen.listeSpeichern(l);
   return l;
 }
+/** Buch in eine Liste aufnehmen; ein Band gehört seit REQ-112 zum Buch (Buch.bandnummer), nicht zur Zugehörigkeit. */
 async function zuordnen(w: Welt, l: Liste, b: Buch, band?: number) {
-  await w.listen.zuordnen(band === undefined ? { listeId: l.id, buchId: b.id } : { listeId: l.id, buchId: b.id, band });
+  if (band !== undefined) await w.repo.save({ ...((await w.repo.get(b.id)) ?? b), bandnummer: band });
+  await w.listen.zuordnen({ listeId: l.id, buchId: b.id });
 }
+/** Bandnummer des Buches (REQ-112). */
+const bandVon = async (w: Welt, b: Buch) => (await w.repo.get(b.id))?.bandnummer;
+/** Zugehörigkeiten ohne Bandangabe (nur listeId/buchId). */
+const zugOhneBand = async (w: Welt) => (await w.listen.zugehoerigkeiten()).map((z) => ({ listeId: z.listeId, buchId: z.buchId }));
 /** Element sichtbar (kein hidden, aria-hidden, display:none, inert in der Kette). */
 function sichtbar(el: Element | null): boolean {
   for (let n = el as HTMLElement | null; n; n = n.parentElement) {
@@ -183,7 +189,13 @@ function zeile(d: HTMLElement, bez: string) {
 }
 /** Wert der Zeile ohne Bezeichnung und Pfeil. */
 const zeilenWert = (d: HTMLElement, bez: string) => norm(norm(zeile(d, bez)?.textContent).slice(bez.length).replace('›', ''));
-void [ohneLeer, textEls, zuordnen, blatt, zeilenWert, pillenTexte, neustartDetails, haken, angehakt, neuerName, sichern, schliessen, markiert, bandFeld, ARTEN, checkboxen];
+void [bandVon, zugOhneBand, ohneLeer, textEls, zuordnen, blatt, zeilenWert, pillenTexte, neustartDetails, haken, angehakt, neuerName, sichern, schliessen, markiert, bandFeld, ARTEN, checkboxen];
+/** Wert der Zeile „Band“ der Karte „Ausgabe“ (REQ-112), Reiter „Details“ aktiv. */
+function ausgabeBand(d: HTMLElement) {
+  const z = Array.from(d.querySelectorAll<HTMLElement>('[data-ausgabe-zeile]')).find((e) => norm(e.querySelector('[data-zeile-bezeichnung]')?.textContent) === 'Band');
+  expect(z, 'Zeile „Band“ in der Karte „Ausgabe“').toBeDefined();
+  return norm(z!.querySelector('[data-zeile-wert]')?.textContent);
+}
 // ----------------------------------------------------------------------------- Ende Kopf
 
 async function seiteBuecher(w: Welt) {
@@ -462,9 +474,10 @@ describe('REQ-098 Geöffnete Liste', () => {
       await warte(60);
       const zug = await zugVon(w, l);
       expect(zug.map((z) => z.buchId).sort()).toEqual([fw.id, os.id, ir.id].sort());
-      expect(zug.find((z) => z.buchId === fw.id)?.band).toBe(1);
-      expect(zug.find((z) => z.buchId === ir.id)?.band).toBeUndefined();
-      expect(zug.find((z) => z.buchId === os.id)?.band).toBeUndefined();
+      // Fassung 2026-11-25 (REQ-112): Hinzufügen ändert die Bandnummer des Buches nicht.
+      expect(await bandVon(w, fw)).toBe(1);
+      expect(await bandVon(w, ir)).toBeUndefined();
+      expect(await bandVon(w, os)).toBeUndefined();
     });
 
     it('[REQ-098/AK-8] Bandnummer aus dem Scan: neu hinzugefügtes Buch mit Scan-Band 3 erhält in der Saga Band 3', async () => {
@@ -477,7 +490,8 @@ describe('REQ-098 Geöffnete Liste', () => {
       await sichern(blatt());
       await vi.waitFor(() => expect(anzahlText()).toEqual(['1 Buch']), W);
       await warte(60);
-      expect(await zugVon(w, s)).toEqual([{ listeId: s.id, buchId: gescannt.id, band: 3 }]);
+      expect((await zugVon(w, s)).map((z) => z.buchId)).toEqual([gescannt.id]);
+      expect(await bandVon(w, gescannt)).toBe(3);
     });
 
     it('[REQ-098/AK-8] Grenzfall: alle entmarkieren und sichern → Liste bleibt bestehen, leer, Bücher bleiben', async () => {
@@ -499,8 +513,9 @@ describe('REQ-098 Geöffnete Liste', () => {
       await sichern(await auswahl());
       await vi.waitFor(() => expect(screen.queryAllByRole('dialog')).toHaveLength(0), W);
       await warte(60);
-      expect(await zugVon(w, l)).toEqual([{ listeId: l.id, buchId: fw.id, band: 1 }]);
-      expect(await zugVon(w, andere)).toEqual([{ listeId: andere.id, buchId: ir.id }]);
+      expect((await zugVon(w, l)).map((z) => z.buchId)).toEqual([fw.id]);
+      expect(await bandVon(w, fw)).toBe(1);
+      expect((await zugVon(w, andere)).map((z) => z.buchId)).toEqual([ir.id]);
     });
   });
 
@@ -518,7 +533,8 @@ describe('REQ-098 Geöffnete Liste', () => {
       await warte(60);
       cleanup();
       const w2 = await starte();
-      expect(await zugVon(w2, l)).toEqual([{ listeId: l.id, buchId: fw.id, band: 1 }]);
+      expect((await zugVon(w2, l)).map((z) => z.buchId)).toEqual([fw.id]);
+      expect(await bandVon(w2, fw)).toBe(1);
     });
 
     it('[REQ-098/AK-9] nach Verwerfen öffnet das Plus erneut mit dem gespeicherten Stand (nur „Fourth Wing“ markiert)', async () => {
@@ -678,7 +694,7 @@ describe('REQ-098 Geöffnete Liste', () => {
       expect((await w2.listen.listen()).map((x) => x.id)).toEqual([andere.id]);
       const zug = await w2.listen.zugehoerigkeiten();
       expect(zug.filter((z) => z.listeId === l.id)).toEqual([]);
-      expect(zug).toEqual([{ listeId: andere.id, buchId: bs[0].id }]);
+      expect(zug.map((z) => ({ listeId: z.listeId, buchId: z.buchId }))).toEqual([{ listeId: andere.id, buchId: bs[0].id }]);
       expect((await w2.repo.list()).map((b) => b.titel).sort()).toEqual(['Krabat', 'Momo']);
       void w;
     });
@@ -692,7 +708,7 @@ describe('REQ-098 Geöffnete Liste', () => {
       expect((await w.listen.zugehoerigkeiten()).filter((z) => z.listeId === l.id)).toHaveLength(bs.length);
     });
 
-    it('[REQ-098/AK-4] Saga löschen entfernt auch Zugehörigkeit und Bandnummer, das Buch bleibt', async () => {
+    it('[REQ-098/AK-4] Saga löschen entfernt die Zugehörigkeit, das Buch bleibt', async () => {
       const w = await starte();
       const b = buch('Fourth Wing');
       await w.repo.save(b);
@@ -705,6 +721,43 @@ describe('REQ-098 Geöffnete Liste', () => {
       await warte(60);
       expect(await w.listen.zugehoerigkeiten()).toEqual([]);
       expect(await w.repo.get(b.id)).toBeDefined();
+    });
+  });
+
+  // Neu 2026-11-25 (REQ-112): Die Bandnummer gehört zum Buch und überlebt das Löschen der Saga.
+  describe('AK-11 Saga löschen, Bandnummer bleibt', () => {
+    async function loeschen(w: Welt, s: Liste) {
+      await oeffne(w, s);
+      await tippe(stift(s.name));
+      await tippe(within(blatt()).getByRole('button', { name: /Liste löschen/ }));
+      await tippe(within(rueckfrage()).getAllByRole('button').find((x) => JA.test(norm(x.textContent)))!);
+      await warte(60);
+    }
+
+    it('[REQ-098/AK-11] „House of Earth and Blood“ (Band 1) nur in „Crescent City“: Saga löschen → Buch vorhanden, Zeile „Band“ zeigt 1, auch nach Neustart', async () => {
+      const w = await starte();
+      const b = buch('House of Earth and Blood');
+      await w.repo.save(b);
+      const s = await liste(w, 'saga', 'Crescent City');
+      await zuordnen(w, s, b, 1);
+      await loeschen(w, s);
+      expect(await w.listen.listen()).toEqual([]);
+      expect(await bandVon(w, b)).toBe(1);
+      const { d } = await neustartDetails(b.id);
+      expect(ausgabeBand(d)).toBe('1');
+    });
+
+    it('[REQ-098/AK-11] Variante: Buch auch in einer zweiten Saga → dort weiter „Band 1 · The Empyrean“', async () => {
+      const w = await starte();
+      const b = buch('Crossover', { autor: 'Rebecca Yarros' });
+      await w.repo.save(b);
+      const s = await liste(w, 'saga', 'Crescent City');
+      const e = await liste(w, 'saga', 'The Empyrean');
+      await zuordnen(w, s, b, 1);
+      await zuordnen(w, e, b);
+      await loeschen(w, s);
+      const { d } = await neustartDetails(b.id);
+      await vi.waitFor(() => expect(textEls(/^Band \d+ · .+$/, d).map((x) => norm(x.textContent))).toEqual(['Band 1 · The Empyrean']), W);
     });
   });
 
@@ -723,5 +776,56 @@ describe('REQ-098 Geöffnete Liste', () => {
       expect(screen.queryByRole('region', { name: 'Buchdetails' })).toBeNull();
       expect(textEls('Momo').length).toBeGreaterThan(0);
     });
+  });
+});
+
+// Sprint 11 (Fassung 2026-11-25): AK-10 – Raster mit drei Spalten, nach derselben Regel wie REQ-037 (jsdom ohne Layout:
+// geprüft werden Rasterregel, gleiche Spalten ohne feste Breiten, kein waagerechtes Scrollen, Cover 2:3).
+describe('REQ-098 AK-10 Raster mit drei Spalten', () => {
+  const RASTER_REGEL = /^repeat\(\s*3\s*,\s*(minmax\(\s*0(px)?\s*,\s*1fr\s*\)|1fr)\s*\)$/;
+  function breite(px: number) {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: px });
+    window.dispatchEvent(new Event('resize'));
+  }
+  afterEach(() => breite(1024));
+  async function rasterListe(art: ListenArt, name: string, n: number, px: number) {
+    breite(px);
+    const w = await starte();
+    const l = await liste(w, art, name);
+    for (let i = 1; i <= n; i++) {
+      const b = buch(`Buch ${i}`);
+      await w.repo.save(b);
+      await zuordnen(w, l, b, art === 'saga' ? i : undefined);
+    }
+    await oeffne(w, l);
+    const r = screen.getAllByRole('button').find((b) => b.getAttribute('data-ansicht-wahl') === 'raster' && sichtbar(b));
+    expect(r, 'Umschalter „Raster“').toBeDefined();
+    await tippe(r!);
+    return vi.waitFor(() => {
+      const ul = Array.from(document.querySelectorAll<HTMLElement>('ul[data-buecher]')).filter(sichtbar).at(-1);
+      expect(ul?.children.length).toBe(n);
+      return ul!;
+    }, W);
+  }
+  function pruefe(ul: HTMLElement, n: number) {
+    expect(ul.getAttribute('data-raster-spalten')).toBe('3');
+    expect(ul.style.display === 'grid' || getComputedStyle(ul).display === 'grid').toBe(true);
+    expect((ul.style.gridTemplateColumns || getComputedStyle(ul).gridTemplateColumns).replace(/\s+/g, ' ').trim()).toMatch(RASTER_REGEL);
+    const lis = Array.from(ul.children) as HTMLElement[];
+    expect(lis).toHaveLength(n);
+    for (const li of lis) {
+      expect(li.style.gridColumn || '').not.toMatch(/span/);
+      expect(li.style.width || '').not.toMatch(/\d+px/);
+      expect([li, ...Array.from(li.querySelectorAll<HTMLElement>('*'))].some((e) => /^2\s*\/\s*3$/.test(e.style.aspectRatio)), 'Cover 2:3').toBe(true);
+    }
+    for (let x: HTMLElement | null = ul; x; x = x.parentElement) expect(['scroll', 'auto']).not.toContain(x.style.overflowX);
+  }
+
+  it.each([320, 412])('[REQ-098/AK-10] Saga „Crescent City“ mit vier Büchern bei %i px: drei gleich breite Spalten (Reihen 3, 1), Cover 2:3', async (px) => {
+    pruefe(await rasterListe('saga', 'Crescent City', 4, px), 4);
+  });
+
+  it.each(['sammlung', 'bibliothek'] as const)('[REQ-098/AK-10] in einer %s gilt dasselbe (320 px)', async (art) => {
+    pruefe(await rasterListe(art, 'Meine Liste', 4, 320), 4);
   });
 });

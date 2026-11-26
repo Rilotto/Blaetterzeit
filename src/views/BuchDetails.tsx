@@ -9,7 +9,7 @@ import { standardBildspeicher, standardListenRepository, standardRepository, sta
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattAktuelleSeite from '@/buchdetails/BlattAktuelleSeite';
 import BlattBuchlaenge from '@/buchdetails/BlattBuchlaenge';
-import { BlattAutor, BlattBeendet, BlattErschienen, BlattHinzugefuegt, BlattIsbn, BlattTitel, BlattVerlag } from '@/buchdetails/BlattFeld';
+import { BlattAutor, BlattBand, BlattBeendet, BlattErschienen, BlattHinzugefuegt, BlattIsbn, BlattTitel, BlattVerlag } from '@/buchdetails/BlattFeld';
 import BlattPreis from '@/buchdetails/BlattPreis';
 import Buchdarstellung, { type Bilder } from '@/buchdetails/Buchdarstellung';
 import Fortschritt from '@/buchdetails/Fortschritt';
@@ -36,7 +36,7 @@ import BlattZuListe from '@/listen/BlattZuListe';
 import { useListen } from '@/listen/gemeinsam';
 import ListenNavigation, { type ListenZiel } from '@/listen/ListenNavigation';
 import { bewertungAntippen, rezensionSichern, type KriteriumId } from '@/domain/bewertung';
-import { statusSetzen, type Buch, type Fortschrittsmodus, type LesestatusId } from '@/domain/buch';
+import { bandnummerSetzen, statusSetzen, type Buch, type Fortschrittsmodus, type LesestatusId } from '@/domain/buch';
 import { fortschrittEntfernen, fortschrittSichern, gespeicherteEingabe, hatSeitenanzahl, modusVon } from '@/domain/fortschritt';
 import { BILDBEREICHE, type BookRepository, type Bildbereich, type ImageStore, type ListenRepository, type ZitatRepository } from '@/storage';
 import { ansicht3dFarbe, ansicht3dSchatten, buchdetailsFarbe, fortschrittFarbe, listenFarbe, textstufe, abstand, bildschirmrand, stilRolle } from '@/theme';
@@ -79,6 +79,7 @@ type Blatt =
   | 'preis'
   | 'masse'
   | 'verlag'
+  | 'band'
   | 'isbn'
   | 'hinzugefuegt'
   | 'beendet'
@@ -285,7 +286,7 @@ export default function BuchDetails({
           return false;
         },
       )
-      // Format, Maße oder Seitenzahl geändert: gespeicherte Bilder neu zuschneiden (REQ-109, AK-4 bis AK-6),
+      // Format, Maße oder Seitenzahl geändert: gespeicherte Bilder neu zuschneiden (REQ-115, AK-4 bis AK-6),
       // nur nach erfolgreichem Speichern.
       .then(async (gespeichert) => {
         if (!gespeichert || !alt || geaenderteBereiche(alt, neu).length === 0) return;
@@ -418,6 +419,13 @@ export default function BuchDetails({
     delete neu.hoeheMm;
     delete neu.dickeMm;
     speichern({ ...neu, ...m });
+    setBlatt(null);
+  };
+
+  // Bandnummer sichern (REQ-112); leer entfernt sie. Saga-Zeilen und Feld „Band“ lesen denselben Wert.
+  const bandSpeichern = (band: number | undefined) => {
+    if (!buch) return;
+    speichern(bandnummerSetzen(buch, band));
     setBlatt(null);
   };
 
@@ -576,7 +584,7 @@ export default function BuchDetails({
   }
 
   const verwischt = ansicht3d && !backdrop;
-  const sagen = buch ? sagenDesBuches(listen ?? [], zug, buch.id) : [];
+  const sagen = buch ? sagenDesBuches(listen ?? [], zug, buch) : [];
   return (
     <>
     <section aria-label="Buchdetails" style={verwischt ? { ...ansichtStil, filter: UNSCHAERFE } : ansichtStil}>
@@ -635,6 +643,7 @@ export default function BuchDetails({
             onHinzugefuegt={() => setBlatt('hinzugefuegt')}
             onBeendet={() => setBlatt('beendet')}
             onErschienen={() => setBlatt('erschienen')}
+            onBand={() => setBlatt('band')}
             listen={{
               listen: listen ?? [],
               zug,
@@ -686,6 +695,7 @@ export default function BuchDetails({
       {buch && blatt === 'preis' ? <BlattPreis preisCent={buch.preisCent} onSichern={preisSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'masse' ? <BlattMasse masse={buch} onSichern={masseSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'verlag' ? <BlattVerlag verlag={buch.verlag} onSichern={verlagSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
+      {buch && blatt === 'band' ? <BlattBand band={buch.bandnummer} onSichern={bandSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'isbn' ? <BlattIsbn isbn={buch.isbn} onSichern={isbnSpeichern} onSchliessen={() => setBlatt(null)} /> : null}
       {buch && blatt === 'hinzugefuegt' ? (
         <BlattHinzugefuegt
@@ -709,6 +719,11 @@ export default function BuchDetails({
           listen={listen ?? []}
           zug={zug}
           repository={listenRepo}
+          onBandnummer={async (band) => {
+            // Bandnummer gehört zum Buch (REQ-112); Speichern über die Buch-Repository-Schnittstelle.
+            speichern(bandnummerSetzen(buch, band));
+            await ausstehend.current;
+          }}
           onGesichert={() => {
             setListenBlatt(null);
             void listenNeuLaden();

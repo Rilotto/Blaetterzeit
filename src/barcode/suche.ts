@@ -87,12 +87,12 @@ export function isbnSucheMit(http: HttpClient, frist = SUCHE_FRIST_MS): IsbnSuch
 export const standardIsbnSuche = (): IsbnSuche => isbnSucheMit(standardHttpClient());
 
 // ---------------------------------------------------------------------------
-// „Online suchen“ (REQ-110, REQ-111): Freitext (Titel, Autor, ISBN) bei DNB und Open Library gleichzeitig
+// „Online suchen“ (REQ-116, REQ-117): Freitext (Titel, Autor, ISBN) bei DNB und Open Library gleichzeitig
 // ---------------------------------------------------------------------------
 
 export interface OnlineSuche {
   /**
-   * Höchstens 9 Treffer, abwechselnd DNB/Open Library (REQ-111), Cover als Data-URL. Leere Liste = nichts gefunden.
+   * Höchstens 9 Treffer, abwechselnd DNB/Open Library (REQ-117), Cover als Data-URL. Leere Liste = nichts gefunden.
    * Schlägt fehl, wenn keine Quelle erreichbar war (z. B. keine Internetverbindung).
    */
   suchen(text: string): Promise<Treffer[]>;

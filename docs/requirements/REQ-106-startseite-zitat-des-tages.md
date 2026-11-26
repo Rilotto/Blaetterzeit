@@ -1,7 +1,7 @@
 ---
 id: REQ-106
 titel: Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten
-status: Implementiert
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -19,23 +19,40 @@ CEO (2026-11-24, über den Scrum Master): „Zitat des Tages“: jeden Tag ein a
 ## Anforderung (Satzschablone)
 
 - Wenn mindestens ein Zitat gespeichert ist (REQ-105), muss das System auf der Startseite die Kachel „Zitat des Tages“ mit Zitattext, Buchtitel und Seite anzeigen (ohne Seite entfällt die Seitenangabe, mit „Wer sagt es?“ zusätzlich der Sprecher, **Auslegung**).
+- Das System muss den Zitattext in der Kachel in deutschen Anführungszeichen „…“ anzeigen (CEO, 2026-11-25: „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“). **Auslegung:** wie REQ-105, nur Anzeige, gespeichert bleibt der Text ohne Anführungszeichen.
 - Das System muss je Kalendertag (lokale Gerätezeit) genau ein Zitat aus allen Zitaten aller Bücher wählen. Es bleibt für den ganzen Tag gleich, auch nach Neustart (**Auslegung**).
 - Am Folgetag muss das System ein anderes Zitat als am Vortag wählen, sofern es mehr als ein Zitat gibt. Bei genau einem Zitat erscheint dieses jeden Tag.
-- Wird das Zitat des Tages gelöscht, wählt das System für diesen Tag ein anderes. Gibt es dann keines mehr, entfällt die Kachel.
-- Ohne gespeicherte Zitate darf das System die Kachel nicht anzeigen.
-- Wenn der Nutzer die Kachel antippt, muss das System die Buchdetails des zugehörigen Buches mit aktivem Reiter „Notizbuch“ öffnen (Ausnahme von REQ-043 AK-3, wo beim Öffnen „Rezension“ aktiv ist).
+- Wird das Zitat des Tages gelöscht, wählt das System für diesen Tag ein anderes. Gibt es dann keines mehr, zeigt die Kachel das Standard-Zitat.
+- **Standard-Zitat.** CEO (wörtlich, 2026-11-25): „Füge bitte als Standard-Zitat folgendes ein: "Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot." - Kodex des Drachenreiters / Fourth Wing“
+  - Wenn kein eigenes Zitat gespeichert ist, muss das System die Kachel „Zitat des Tages“ mit dem Standard-Zitat anzeigen. Bisher entfiel die Kachel in diesem Fall.
+  - Text: „Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot.“, in der Kachel wie jedes Zitat in deutschen Anführungszeichen „…“. Sprecher: „Kodex des Drachenreiters“. Buch: „Fourth Wing“. Keine Seitenangabe (**Auslegung**).
+  - Das Standard-Zitat ist kein im Notizbuch eines Buches gespeichertes Zitat. Es erscheint in keinem Notizbuch, und Antippen der Kachel öffnet nichts, auch wenn ein Buch „Fourth Wing“ gespeichert ist (**Auslegung**).
+  - Sobald mindestens ein eigenes Zitat gespeichert ist, gilt die normale Auswahl aus den eigenen Zitaten. Das Standard-Zitat nimmt daran nicht teil.
+- Wenn der Nutzer die Kachel mit einem eigenen Zitat antippt, muss das System die Buchdetails des zugehörigen Buches mit aktivem Reiter „Notizbuch“ öffnen (Ausnahme von REQ-043 AK-3, wo beim Öffnen „Rezension“ aktiv ist).
 
 ## Akzeptanzkriterien
 
-### AK-1 Ohne Zitate keine Kachel
+### AK-1 Ohne eigene Zitate das Standard-Zitat
 - **Gegeben** kein Buch hat Zitate
 - **Wenn** die Startseite angezeigt wird
-- **Dann** gibt es keine Kachel „Zitat des Tages“
+- **Dann** zeigt die Kachel „Zitat des Tages“ genau `„Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot.“`, dazu „Kodex des Drachenreiters“ und „Fourth Wing“, ohne Seitenangabe
+- **Und** in keinem Notizbuch erscheint dieses Zitat
+
+### AK-6 Standard-Zitat antippen
+- **Gegeben** die Kachel zeigt das Standard-Zitat, ein Buch „Fourth Wing“ ist gespeichert
+- **Wenn** der Nutzer die Kachel antippt
+- **Dann** öffnet sich nichts, die Startseite bleibt angezeigt
+
+### AK-7 Eigene Zitate verdrängen das Standard-Zitat
+- **Gegeben** die Kachel zeigt das Standard-Zitat
+- **Wenn** der Nutzer im Notizbuch eines Buches ein Zitat „Ich bin nicht das Feuer.“ speichert und die Startseite wieder angezeigt wird
+- **Dann** zeigt die Kachel `„Ich bin nicht das Feuer.“` und nicht das Standard-Zitat
+- **Und** wird dieses einzige Zitat wieder gelöscht, zeigt die Kachel wieder das Standard-Zitat
 
 ### AK-2 Kachel mit Titel und Seite
 - **Gegeben** genau ein Zitat „Ich bin nicht das Feuer.“ aus „Fourth Wing“, S. 312
 - **Wenn** die Startseite angezeigt wird
-- **Dann** zeigt die Kachel den Zitattext, „Fourth Wing“ und „S. 312“
+- **Dann** zeigt die Kachel den Zitattext in deutschen Anführungszeichen, also genau `„Ich bin nicht das Feuer.“`, dazu „Fourth Wing“ und „S. 312“
 
 ### AK-3 Gleich über den Tag, anders am Folgetag
 - **Gegeben** drei Zitate aus zwei Büchern
@@ -76,3 +93,5 @@ CEO (2026-11-24, über den Scrum Master): „Zitat des Tages“: jeden Tag ein a
 |---|---|---|
 | 2026-11-24 | Erstellt aus CEO-Vision und abgenommener Konzeptskizze, Entwurf | Anforderungsmanager |
 | 2026-11-24 | Vom CEO bestätigt (wörtlich): „sieht alles super aus! Danke!“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Mini-Änderung (leichter Weg): Zitattext in der Kachel in deutschen Anführungszeichen „…“. CEO (wörtlich): „Bei den Zitaten hätte ich gerne die Zitate in Anführungszeichen :)“, per Konzeptskizze geklärt. Anforderung und AK-2 ergänzt. Status unverändert | Anforderungsmanager |
+| 2026-11-25 | Standard-Zitat ohne eigene Zitate statt entfallender Kachel. CEO (wörtlich): „Füge bitte als Standard-Zitat folgendes ein: "Ein Drache ohne seinen Reiter ist tragisch. Ein Reiter ohne seinen Drachen ist tot." - Kodex des Drachenreiters / Fourth Wing“. Auslegungen (Sprecher „Kodex des Drachenreiters“, Buch „Fourth Wing“, nicht im Notizbuch, Antippen öffnet nichts, eigene Zitate haben Vorrang) vom CEO ohne Gegenrede; eigene Auslegung: ohne Seitenangabe. Anforderung, AK-1 geändert, AK-6 und AK-7 neu. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |

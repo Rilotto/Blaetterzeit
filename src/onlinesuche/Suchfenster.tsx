@@ -1,4 +1,4 @@
-// Suchfenster „Online suchen“ (REQ-110) mit Trefferraster (REQ-111).
+// Suchfenster „Online suchen“ (REQ-116) mit Trefferraster (REQ-117).
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 import iconLupe from '@/assets/icons/icon-lupe.png';
 import iconZurueck from '@/assets/icons/icon-zurueck.png';
@@ -13,7 +13,7 @@ import { useZurueckTaste } from '@/plattform/zurueckTaste';
 import { fensterStil, griffBereichStil, griffStil, hintergrundStil } from '@/profil/blattStil';
 import { abstand, barcodeFarbe, coverSchatten, stilRolle, textstufe, uebersichtFarbe } from '@/theme';
 
-/** Hinweise (REQ-110, AK-6/AK-7). */
+/** Hinweise (REQ-116, AK-6/AK-7). */
 export const KEINE_TREFFER_HINWEIS = 'Keine Bücher gefunden';
 export const KEIN_INTERNET_HINWEIS = 'Keine Internetverbindung';
 /** So lange bleibt ein Hinweis sichtbar. */
@@ -23,9 +23,9 @@ export const ONLINE_SUCHFELD_TEXT = 'Titel, Autor oder ISBN';
 
 interface Props {
   suche: OnlineSuche;
-  /** Zurück-Pfeil, Android-Zurück-Taste oder Herunterziehen: eine Stufe zurück ins Menü (REQ-110, AK-8). */
+  /** Zurück-Pfeil, Android-Zurück-Taste oder Herunterziehen: eine Stufe zurück ins Menü (REQ-116, AK-8). */
   onZurueck: () => void;
-  /** Treffer angetippt: weiter wie beim Barcode-Scan (REQ-111, AK-7). */
+  /** Treffer angetippt: weiter wie beim Barcode-Scan (REQ-117, AK-7). */
   onWahl: (vorbelegung: Vorbelegung) => void;
 }
 
@@ -147,8 +147,8 @@ const quelleStil: CSSProperties = {
 };
 
 /**
- * Suchfenster „Online suchen“ (REQ-110): Blatt von unten mit Zurück-Pfeil und Suchfeld (Fokus beim Öffnen).
- * Gesucht wird erst mit der Such-Taste; Treffer erscheinen im 3-Spalten-Raster (REQ-111).
+ * Suchfenster „Online suchen“ (REQ-116): Blatt von unten mit Zurück-Pfeil und Suchfeld (Fokus beim Öffnen).
+ * Gesucht wird erst mit der Such-Taste; Treffer erscheinen im 3-Spalten-Raster (REQ-117).
  */
 export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
   const [text, setText] = useState('');
@@ -162,7 +162,7 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
 
   useEffect(() => {
     aktiv.current = true;
-    // Fokus beim Öffnen: Tastatur sofort offen (REQ-110, AK-2).
+    // Fokus beim Öffnen: Tastatur sofort offen (REQ-116, AK-2).
     feld.current?.focus();
     return () => {
       aktiv.current = false;
@@ -198,7 +198,7 @@ export default function Suchfenster({ suche, onZurueck, onWahl }: Props) {
   const hinweisZeigen = (h: string) => setHinweis((alt) => ({ text: h, n: (alt?.n ?? 0) + 1 }));
 
   const starten = () => {
-    // Leeres Suchfeld bzw. nur Leerzeichen: nichts (REQ-110, AK-5).
+    // Leeres Suchfeld bzw. nur Leerzeichen: nichts (REQ-116, AK-5).
     if (text.trim() === '' || !aktiv.current) return;
     const nr = ++lauf.current;
     setHinweis(null);

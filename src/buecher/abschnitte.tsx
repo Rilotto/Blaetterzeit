@@ -1,4 +1,4 @@
-// Zentrale Liste der Abschnitte der Seite „Bücher“ (REQ-009, REQ-012, REQ-035, REQ-108).
+// Zentrale Liste der Abschnitte der Seite „Bücher“ (REQ-009, REQ-012, REQ-035, REQ-114).
 // Einzige Stelle, an der Abschnitte festgelegt werden: Reihenfolge der Liste = Reihenfolge auf der Seite.
 // Das Blatt „„Für dich“ anpassen“ erzeugt seine Zeilen aus dieser Liste; ein hier ergänzter Abschnitt
 // erscheint dort automatisch und ist sichtbar, solange er nicht ausdrücklich ausgeblendet wurde.
@@ -28,7 +28,7 @@ export interface AbschnittKontext {
 }
 
 export interface AbschnittDefinition {
-  /** Stabile technische ID (Schlüssel der gespeicherten Auswahl, REQ-108; = data-abschnitt des Abschnitts). */
+  /** Stabile technische ID (Schlüssel der gespeicherten Auswahl, REQ-114; = data-abschnitt des Abschnitts). */
   id: string;
   /** Name im Blatt „„Für dich“ anpassen“ (= Abschnittsüberschrift). */
   titel: string;
@@ -78,7 +78,7 @@ export const buecherAbschnitte: readonly AbschnittDefinition[] = [
 
 /**
  * Sichtbare Abschnitte in unveränderter Reihenfolge. Abschnitte ohne gespeicherte Auswahl sind sichtbar.
- * Wären alle ausgeblendet (z. B. veraltete Auswahl), gelten alle als sichtbar (mindestens einer, REQ-108 AK-5).
+ * Wären alle ausgeblendet (z. B. veraltete Auswahl), gelten alle als sichtbar (mindestens einer, REQ-114 AK-5).
  */
 export function sichtbareAbschnitte(abschnitte: readonly AbschnittDefinition[], ausgeblendet: readonly string[]): AbschnittDefinition[] {
   const sichtbar = abschnitte.filter((a) => !ausgeblendet.includes(a.id));

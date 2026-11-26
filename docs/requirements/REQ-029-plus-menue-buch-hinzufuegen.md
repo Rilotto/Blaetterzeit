@@ -24,7 +24,7 @@ Priorität: Must (vom CEO bestätigt, 2026-11-10).
 
 > **Hinweis (2026-11-16):** REQ-061 (Entwurf) ergänzt die Option „Barcode scannen“. Nach dessen Umsetzung ist hier AK-2 (genau eine Option) hinfällig. Bis dahin gilt dieser REQ unverändert.
 >
-> **Hinweis (2026-11-25):** REQ-110 ergänzt die Option „Online suchen“. REQ-011 öffnet dasselbe Menü auch über den Leere-Liste-Platzhalter; „+“ wird dabei ebenso zu „×“.
+> **Hinweis (2026-11-25):** REQ-116 ergänzt die Option „Online suchen“. REQ-011 öffnet dasselbe Menü auch über den Leere-Liste-Platzhalter; „+“ wird dabei ebenso zu „×“.
 
 ## Anforderung (Satzschablone)
 
@@ -146,4 +146,4 @@ CEO (wörtlich): „Das Menü schließt sich nur durch einen Klick auf ein Feld 
 | 2026-11-10 | CEO-Antworten eingearbeitet. F5: Schließen nur über eine Option, Tippen außerhalb oder „×“; „+“ wird bei geöffnetem Menü zu „×“; Abdunklung wie „Aktuelle Seite“ (neu AK-6 bis AK-9, AK-1 ergänzt). F7: Farbzuordnung (Tabelle). Priorität Must (Bestätigung ausstehend). Status „Abgestimmt“ auf Weisung des Scrum Masters nach den übermittelten CEO-Antworten | Anforderungsmanager |
 | 2026-11-10 | Vom CEO mit „Ja“ bestätigt: „×“ in den Farben des Plus-Icons. Priorität Must vom CEO bestätigt („ja“). Status bleibt „Abgestimmt“ | Anforderungsmanager |
 | 2026-11-16 | Hinweis auf REQ-061 („Barcode scannen“) ergänzt; Inhalt unverändert | Anforderungsmanager |
-| 2026-11-25 | Hinweis auf REQ-110 („Online suchen“) und REQ-011 (Öffnen über den Leere-Liste-Platzhalter) ergänzt; Inhalt unverändert | Anforderungsmanager |
+| 2026-11-25 | Hinweis auf REQ-116 („Online suchen“) und REQ-011 (Öffnen über den Leere-Liste-Platzhalter) ergänzt; Inhalt unverändert | Anforderungsmanager |

@@ -21,6 +21,8 @@ interface Props {
   /** Listenbilder je Listen-ID (REQ-100); ohne Bild ein Platzhalter gleicher Größe. */
   listenbilder?: Record<string, string>;
   repository: ListenRepository;
+  /** Bandnummer des Buches im Kontext speichern (REQ-112; undefined = keine). Ohne Angabe kein Feld „Band“. */
+  onBandnummer?: (band: number | undefined) => Promise<void>;
   /** Nach jeder Änderung: Listen neu laden. */
   onGeaendert: () => Promise<void> | void;
   /** Name angetippt: geöffnete Liste (REQ-098). */
@@ -84,16 +86,18 @@ const nameKnopfStil: CSSProperties = {
  * Listenübersicht einer Art (REQ-097): alle Listen A–Z mit Name und Anzahl der Bücher, „+“ für eine neue Liste;
  * mit Buch im Kontext zusätzlich Häkchen (sofort wirksam) und bei Sagas das Feld „Band“.
  */
-export default function Listenuebersicht({ art, buch, listen, zug, buecher, listenbilder, repository, onGeaendert, onListeOeffnen, onZurueck }: Props) {
+export default function Listenuebersicht({ art, buch, listen, zug, buecher, listenbilder, repository, onBandnummer, onGeaendert, onListeOeffnen, onZurueck }: Props) {
   const texte = listenArt(art);
   const [neuOffen, setNeuOffen] = useState(false);
-  const [baende, setBaende] = useState<Record<string, string>>({});
-  const [fehler, setFehler] = useState<Set<string>>(new Set());
+  // Eingabe im Feld „Band“; undefined = Bandnummer des Buches anzeigen (REQ-112).
+  const [bandEingabe, setBandEingabe] = useState<string | undefined>(undefined);
+  const [fehler, setFehler] = useState(false);
   const alle = listen === undefined ? undefined : listenDerArt(listen, art);
   const anzahl = useMemo(() => anzahlJeListe(zug, buecher ? new Set(buecher.map((b) => b.id)) : undefined), [zug, buecher]);
   const eigene = buch ? zug.filter((z) => z.buchId === buch.id) : [];
 
-  const bandText = (id: string) => baende[id] ?? (eigene.find((z) => z.listeId === id)?.band?.toString() ?? '');
+  const bandText = bandEingabe ?? (buch?.bandnummer !== undefined ? String(buch.bandnummer) : '');
+  const mitBandFeld = Boolean(buch && onBandnummer && art === 'saga' && alle?.some((l) => eigene.some((z) => z.listeId === l.id)));
 
   const speichern = async (aktion: () => Promise<void>) => {
     try {
@@ -104,34 +108,23 @@ export default function Listenuebersicht({ art, buch, listen, zug, buecher, list
     await onGeaendert();
   };
 
-  const zuordnen = (listeId: string) =>
-    buch && art === 'saga' && buch.bandnummer !== undefined
-      ? repository.zuordnen({ listeId, buchId: buch.id, band: buch.bandnummer })
-      : repository.zuordnen({ listeId, buchId: buch!.id });
+  // Die Bandnummer gehört zum Buch (REQ-112): Häkchen setzen oder entfernen ändert sie nicht.
+  const zuordnen = (listeId: string) => repository.zuordnen({ listeId, buchId: buch!.id });
 
   const umschalten = (l: Liste) => {
     if (!buch) return;
     const drin = eigene.some((z) => z.listeId === l.id);
-    setBaende((b) => {
-      const n = { ...b };
-      delete n[l.id];
-      return n;
-    });
     void speichern(() => (drin ? repository.herausnehmen(l.id, buch.id) : zuordnen(l.id)));
   };
 
-  const bandAendern = (l: Liste, wert: string) => {
-    if (!buch) return;
-    setBaende((b) => ({ ...b, [l.id]: wert }));
+  /** Feld „Band“: gültige Eingaben werden sofort als Bandnummer des Buches übernommen (REQ-097, REQ-112). */
+  const bandAendern = (wert: string) => {
+    if (!buch || !onBandnummer) return;
+    setBandEingabe(wert);
     const p = bandPruefen(wert);
-    setFehler((f) => {
-      const n = new Set(f);
-      if (p.ok) n.delete(l.id);
-      else n.add(l.id);
-      return n;
-    });
+    setFehler(!p.ok);
     if (!p.ok) return;
-    void speichern(() => repository.zuordnen(p.band === undefined ? { listeId: l.id, buchId: buch.id } : { listeId: l.id, buchId: buch.id, band: p.band }));
+    void speichern(() => onBandnummer(p.band));
   };
 
   const anlegen = (name: string) => {
@@ -170,13 +163,15 @@ export default function Listenuebersicht({ art, buch, listen, zug, buecher, list
                     {anzahlText(anzahl.get(l.id) ?? 0)}
                   </span>
                 </button>
-                {buch && art === 'saga' && an ? (
-                  <BandFeld listeId={l.id} wert={bandText(l.id)} fehler={fehler.has(l.id)} onWert={(w) => bandAendern(l, w)} />
-                ) : null}
               </li>
             );
           })}
         </ul>
+      ) : null}
+      {mitBandFeld ? (
+        <div style={{ padding: `0 ${bildschirmrandPx}px` }}>
+          <BandFeld wert={bandText} fehler={fehler} onWert={bandAendern} />
+        </div>
       ) : null}
       {neuOffen ? (
         <BlattUnten titel={texte.neu} onSchliessen={() => setNeuOffen(false)}>

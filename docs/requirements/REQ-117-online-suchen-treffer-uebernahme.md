@@ -1,5 +1,5 @@
 ---
-id: REQ-111
+id: REQ-117
 titel: „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan
 status: Implementiert
 prioritaet: Should
@@ -19,7 +19,7 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 ## Anforderung (Satzschablone)
 
 **Auswahl und Reihenfolge**
-- Das System muss nach einer Suche (REQ-110) höchstens 9 Treffer anzeigen.
+- Das System muss nach einer Suche (REQ-116) höchstens 9 Treffer anzeigen.
 - Das System muss die Treffer abwechselnd aus beiden Quellen anordnen, beginnend mit der Deutschen Nationalbibliothek (DNB, Open Library, DNB, …), jeweils in der von der Quelle gelieferten Reihenfolge.
 - Wenn eine Quelle weniger Treffer liefert, muss das System die freien Plätze mit den weiteren Treffern der anderen Quelle in deren Reihenfolge auffüllen.
 - Das System darf Treffer verschiedener Quellen nicht zusammenführen; dasselbe Buch aus beiden Quellen erscheint als zwei Einträge.
@@ -31,9 +31,9 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 - Lange Titel kürzt das System (**Auslegung**: höchstens zwei Zeilen); Optik prüft der CEO im Prototyp.
 
 **Übernahme**
-- Wenn der Nutzer einen Treffer antippt, muss das System genau so fortfahren wie nach Antippen eines Treffers im Auswahlfenster des Barcode-Scans (REQ-062, Abschnitt „Übernahme“): Blatt „Manueller Eintrag“ öffnen und mit den Angaben des Treffers ausfüllen, einschließlich Preis und Format, fehlende Angaben leer, alles bearbeitbar; das Coverfoto wird nach REQ-109 zugeschnitten übernommen. Das Buch wird erst mit „Hinzufügen“ angelegt.
+- Wenn der Nutzer einen Treffer antippt, muss das System genau so fortfahren wie nach Antippen eines Treffers im Auswahlfenster des Barcode-Scans (REQ-062, Abschnitt „Übernahme“): Blatt „Manueller Eintrag“ öffnen und mit den Angaben des Treffers ausfüllen, einschließlich Preis und Format, fehlende Angaben leer, alles bearbeitbar; das Coverfoto wird nach REQ-115 zugeschnitten übernommen. Das Buch wird erst mit „Hinzufügen“ angelegt.
 - Das Schließen des Blatts „Manueller Eintrag“ richtet sich unverändert nach REQ-030 (**Auslegung**: wie beim Barcode-Scan; X, Android-Zurück-Taste und Herunterziehen führen zur Seite „Bücher“).
-- Zurück aus dem Suchfenster: REQ-110.
+- Zurück aus dem Suchfenster: REQ-116.
 
 ## Akzeptanzkriterien
 
@@ -72,7 +72,7 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 - **Gegeben** ein Treffer mit Titel, Autor, Seitenzahl, Verlag, Preis, Format und Coverfoto wird angezeigt
 - **Wenn** der Nutzer ihn antippt
 - **Dann** ist das Blatt „Manueller Eintrag“ geöffnet und Titel, Autor, Seiten, Verlag, Preis und Format sind mit diesen Angaben ausgefüllt
-- **Und** das Coverfoto ist nach REQ-109 zugeschnitten als Cover eingetragen
+- **Und** das Coverfoto ist nach REQ-115 zugeschnitten als Cover eingetragen
 - **Und** es wurde noch kein Buch angelegt
 
 ### AK-8 Fehlende Angaben bleiben leer
@@ -82,7 +82,7 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Suchfenster, Suche, Hinweise und Zurück (REQ-110).
+- Suchfenster, Suche, Hinweise und Zurück (REQ-116).
 - Weitere Treffer nachladen (mehr als 9) – nicht vorgesehen.
 - Google Books (To-do-Liste).
 
@@ -92,7 +92,7 @@ CEO (2026-11-25, im Chat festgelegt): höchstens 9 Treffer insgesamt, abwechseln
 
 ## Abhängigkeiten
 
-- REQ-110, REQ-062 (Übernahme), REQ-109 (Cover-Zuschnitt), REQ-010, REQ-030, REQ-031, REQ-060.
+- REQ-116, REQ-062 (Übernahme), REQ-115 (Cover-Zuschnitt), REQ-010, REQ-030, REQ-031, REQ-060.
 
 ## Offene Fragen
 

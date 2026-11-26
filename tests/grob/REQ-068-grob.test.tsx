@@ -44,12 +44,33 @@ async function oeffneDesign() {
   await tippe(await profil());
   return screen.findByRole('dialog', { name: 'Design' }, W);
 }
-const zeilen = () => Array.from(fenster()!.querySelectorAll<HTMLElement>('button[data-farbdesign]')).map((z) => z.getAttribute('data-farbdesign'));
+function sichtbar(e: Element | null): boolean {
+  for (let n: Element | null = e; n; n = n.parentElement) {
+    if (n.hasAttribute('hidden') || n.getAttribute('aria-hidden') === 'true') return false;
+    const st = getComputedStyle(n);
+    if (st.display === 'none' || st.visibility === 'hidden') return false;
+  }
+  return true;
+}
+const zeilen = () =>
+  Array.from(fenster()!.querySelectorAll<HTMLElement>('button[data-farbdesign]'))
+    .filter(sichtbar)
+    .map((z) => z.getAttribute('data-farbdesign'));
+function pille(name: 'Hell' | 'Dunkel') {
+  for (const rolle of ['tab', 'radio', 'button'] as const) {
+    const t = within(fenster()!).queryAllByRole(rolle, { name }).filter(sichtbar);
+    if (t.length === 1) return t[0];
+  }
+  throw new Error(`Pille „${name}“ nicht gefunden`);
+}
 
-it('[REQ-068/GROB] fünf Designs; „Nachtlektüre“ wirkt sofort und bleibt nach Neustart aktiv', async () => {
+it('[REQ-068/GROB] sieben Designs nach Hell/Dunkel; „Nachtlektüre“ wirkt sofort und bleibt nach Neustart aktiv', async () => {
   const repo = starte();
   await oeffneDesign();
-  expect(zeilen()).toEqual(['klassisch', 'salbei', 'nachtlektuere', 'raureif', 'polarnacht']);
+  await tippe(pille('Hell'));
+  expect(zeilen()).toEqual(['klassisch', 'salbei', 'raureif', 'minztraube']);
+  await tippe(pille('Dunkel'));
+  expect(zeilen()).toEqual(['nachtlektuere', 'polarnacht', 'traubennacht']);
   expect(wurzel()).toHaveAttribute('data-farbdesign', 'klassisch');
   await tippe(fenster()!.querySelector('button[data-farbdesign="nachtlektuere"]')!);
   expect(wurzel()).toHaveAttribute('data-farbdesign', 'nachtlektuere');

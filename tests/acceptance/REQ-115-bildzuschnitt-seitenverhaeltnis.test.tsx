@@ -1,5 +1,5 @@
 /**
- * Akzeptanztests REQ-109 – Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches.
+ * Akzeptanztests REQ-115 – Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches.
  * Abgeleitet aus dem REQ-Text. Schnittstellen laut Entwickler (Sprint 12):
  *  - @/bild/mittigerAusschnitt: mittigerAusschnitt(breite, hoehe, verhaeltnis) → {x,y,breite,hoehe}, ausschnittNoetig, verhaeltnisGleich
  *  - @/buchdetails/automatischerZuschnitt: onlineCoverZuschneiden, geaenderteBereiche, bilderNeuZuschneiden
@@ -66,8 +66,8 @@ async function warte(ms = 60) {
 // ---------------------------------------------------------------------------
 // Reine Funktionen (Kernlogik mittiger Ausschnitt)
 // ---------------------------------------------------------------------------
-describe('REQ-109 mittiger Ausschnitt', () => {
-  it('[REQ-109/AK-1] 600 × 600 auf 13,8 : 21,8 → volle Höhe, mittig, links und rechts gleich viel entfernt', () => {
+describe('REQ-115 mittiger Ausschnitt', () => {
+  it('[REQ-115/AK-1] 600 × 600 auf 13,8 : 21,8 → volle Höhe, mittig, links und rechts gleich viel entfernt', () => {
     const a = mittigerAusschnitt(600, 600, TB);
     expect(a.y).toBe(0);
     expect(a.hoehe).toBe(600);
@@ -83,7 +83,7 @@ describe('REQ-109 mittiger Ausschnitt', () => {
     [300, 2000, TB],
     [2000, 300, KF],
     [601, 600, TB],
-  ])('[REQ-109/AK-1] %i × %i: größtmöglicher mittiger Ausschnitt im Zielverhältnis, innerhalb des Bildes', (b, h, v) => {
+  ])('[REQ-115/AK-1] %i × %i: größtmöglicher mittiger Ausschnitt im Zielverhältnis, innerhalb des Bildes', (b, h, v) => {
     const a = mittigerAusschnitt(b, h, v);
     // eine Seite bleibt voll erhalten (größtmöglich), nichts außerhalb des Bildes (keine Ränder)
     expect(a.breite === b || a.hoehe === h).toBe(true);
@@ -103,13 +103,13 @@ describe('REQ-109 mittiger Ausschnitt', () => {
     [1380, 2180, TB],
     [148, 210, HC],
     [420, 592, KF],
-  ])('[REQ-109/AK-2] %i × %i passt bereits → voller Rahmen, kein Zuschnitt nötig', (b, h, v) => {
+  ])('[REQ-115/AK-2] %i × %i passt bereits → voller Rahmen, kein Zuschnitt nötig', (b, h, v) => {
     const a = mittigerAusschnitt(b, h, v);
     expect(a).toEqual({ x: 0, y: 0, breite: b, hoehe: h });
     expect(ausschnittNoetig(a, b, h)).toBe(false);
   });
 
-  it('[REQ-109/AK-2] nicht passendes Bild → Zuschnitt nötig', () => {
+  it('[REQ-115/AK-2] nicht passendes Bild → Zuschnitt nötig', () => {
     expect(ausschnittNoetig(mittigerAusschnitt(600, 600, TB), 600, 600)).toBe(true);
     expect(verhaeltnisGleich(TB, 138 / 218)).toBe(true);
     expect(verhaeltnisGleich(TB, HC)).toBe(false);
@@ -119,14 +119,14 @@ describe('REQ-109 mittiger Ausschnitt', () => {
 // ---------------------------------------------------------------------------
 // Fachfunktionen (Online-Cover, geänderte Bereiche, Neuzuschnitt im Speicher)
 // ---------------------------------------------------------------------------
-describe('REQ-109 Fachfunktionen', () => {
-  it('[REQ-109/AK-1] onlineCoverZuschneiden: Treffer ohne Maße, Taschenbuch → 13,8 : 21,8', async () => {
+describe('REQ-115 Fachfunktionen', () => {
+  it('[REQ-115/AK-1] onlineCoverZuschneiden: Treffer ohne Maße, Taschenbuch → 13,8 : 21,8', async () => {
     const neu = await onlineCoverZuschneiden(PNG, { format: 'print', unterformat: 'taschenbuch' });
     expect(schnitte(neu)).toHaveLength(1);
     expect(schnitte(neu)[0]).toBeCloseTo(TB, 6);
   });
 
-  it('[REQ-109/AK-1] onlineCoverZuschneiden: Maße des Treffers haben Vorrang vor dem Format', async () => {
+  it('[REQ-115/AK-1] onlineCoverZuschneiden: Maße des Treffers haben Vorrang vor dem Format', async () => {
     const neu = await onlineCoverZuschneiden(PNG, { format: 'print', unterformat: 'hardcover', breiteMm: 120, hoeheMm: 180 });
     expect(schnitte(neu)[0]).toBeCloseTo(120 / 180, 6);
   });
@@ -137,11 +137,11 @@ describe('REQ-109 Fachfunktionen', () => {
     ['Seitenzahl ohne Dicke 200 → 600', { format: 'print', unterformat: 'taschenbuch', seitenanzahl: 200 }, { format: 'print', unterformat: 'taschenbuch', seitenanzahl: 600 }, ['ruecken', 'schnitt']],
     ['Seitenzahl mit hinterlegter Dicke', { dickeMm: 30, seitenanzahl: 200 }, { dickeMm: 30, seitenanzahl: 600 }, []],
     ['Taschenbuch → E-Book (gleiche Standardmaße)', { format: 'print', unterformat: 'taschenbuch' }, { format: 'ebook' }, []],
-  ] as [string, Partial<Buch>, Partial<Buch>, string[]][])('[REQ-109/AK-5] geaenderteBereiche: %s', (_n, alt, neu, erwartet) => {
+  ] as [string, Partial<Buch>, Partial<Buch>, string[]][])('[REQ-115/AK-5] geaenderteBereiche: %s', (_n, alt, neu, erwartet) => {
     expect([...geaenderteBereiche(alt, neu)].sort()).toEqual([...erwartet].sort());
   });
 
-  it('[REQ-109/AK-5] bilderNeuZuschneiden: nur geänderte Bereiche, Ergebnis ersetzt das gespeicherte Bild', async () => {
+  it('[REQ-115/AK-5] bilderNeuZuschneiden: nur geänderte Bereiche, Ergebnis ersetzt das gespeicherte Bild', async () => {
     const id = 'b1';
     const s = speicherFake({ [`${id}|cover`]: 'C', [`${id}|ruecken`]: 'R', [`${id}|schnitt`]: 'S' });
     await bilderNeuZuschneiden(s, id, { breiteMm: 120, hoeheMm: 180, dickeMm: 20 }, { breiteMm: 120, hoeheMm: 180, dickeMm: 40 });
@@ -150,7 +150,7 @@ describe('REQ-109 Fachfunktionen', () => {
     expect(s.daten.get(`${id}|schnitt`)).toBe(`S|${40 / 180}`);
   });
 
-  it('[REQ-109/AK-4] bilderNeuZuschneiden: Bereich ohne Bild bleibt leer, kein Fehler', async () => {
+  it('[REQ-115/AK-4] bilderNeuZuschneiden: Bereich ohne Bild bleibt leer, kein Fehler', async () => {
     const s = speicherFake();
     await bilderNeuZuschneiden(s, 'x', { format: 'print', unterformat: 'taschenbuch' }, { format: 'print', unterformat: 'kleinformat' });
     expect(s.put).not.toHaveBeenCalled();
@@ -208,8 +208,8 @@ async function hinzufuegen(repo: ReturnType<typeof repoFake>, bilder: ReturnType
   return bilder.daten.get(`${id}|cover`);
 }
 
-describe('REQ-109 Online-Cover beim Übernehmen (Barcode)', () => {
-  it('[REQ-109/AK-1] Treffer ohne Maße, Taschenbuch: gespeichertes Cover einmal auf 13,8 : 21,8 zugeschnitten', async () => {
+describe('REQ-115 Online-Cover beim Übernehmen (Barcode)', () => {
+  it('[REQ-115/AK-1] Treffer ohne Maße, Taschenbuch: gespeichertes Cover einmal auf 13,8 : 21,8 zugeschnitten', async () => {
     const { repo, bilder } = await uebernimm({ format: 'print', unterformat: 'taschenbuch' });
     const cover = await hinzufuegen(repo, bilder);
     expect(cover!.startsWith(PNG)).toBe(true);
@@ -217,27 +217,27 @@ describe('REQ-109 Online-Cover beim Übernehmen (Barcode)', () => {
     expect(schnitte(cover)[0]).toBeCloseTo(TB, 6);
   });
 
-  it('[REQ-109/AK-1] Treffer mit Maßen: Cover auf Breite : Höhe des Treffers zugeschnitten', async () => {
+  it('[REQ-115/AK-1] Treffer mit Maßen: Cover auf Breite : Höhe des Treffers zugeschnitten', async () => {
     const { repo, bilder } = await uebernimm({ format: 'print', unterformat: 'taschenbuch', breiteMm: 120, hoeheMm: 190 });
     const cover = await hinzufuegen(repo, bilder);
     expect(schnitte(cover)).toHaveLength(1);
     expect(schnitte(cover)[0]).toBeCloseTo(120 / 190, 6);
   });
 
-  it('[REQ-109/AK-1] Treffer ohne Format: Taschenbuch-Standard 13,8 : 21,8', async () => {
+  it('[REQ-115/AK-1] Treffer ohne Format: Taschenbuch-Standard 13,8 : 21,8', async () => {
     const { repo, bilder } = await uebernimm({});
     const cover = await hinzufuegen(repo, bilder);
     expect(schnitte(cover).map((v) => nah(v, TB))).toEqual([true]);
   });
 
-  it('[REQ-109/AK-2] bereits zugeschnittenes Cover wird beim Hinzufügen nicht erneut zugeschnitten', async () => {
+  it('[REQ-115/AK-2] bereits zugeschnittenes Cover wird beim Hinzufügen nicht erneut zugeschnitten', async () => {
     const { repo, bilder } = await uebernimm({ format: 'print', unterformat: 'hardcover' });
     const cover = await hinzufuegen(repo, bilder);
     expect(schnitte(cover)).toHaveLength(1);
     expect(schnitte(cover)[0]).toBeCloseTo(HC, 6);
   });
 
-  it('[REQ-109/AK-7] im Manuellen Eintrag Format auf Hardcover ändern, „Hinzufügen“ → Cover 14,8 : 21,0', async () => {
+  it('[REQ-115/AK-7] im Manuellen Eintrag Format auf Hardcover ändern, „Hinzufügen“ → Cover 14,8 : 21,0', async () => {
     const { repo, bilder } = await uebernimm({ format: 'print', unterformat: 'taschenbuch' });
     await tippe(blatt()!.querySelector('[data-ausgabe-zeile="format"]')!);
     await vi.waitFor(() => expect(fenster()).not.toBeNull(), W);
@@ -281,8 +281,8 @@ async function formatAendern(d: HTMLElement, unterformat: string) {
 }
 const coverEl = () => document.querySelector<HTMLElement>('[data-bereich="cover"]')!;
 
-describe('REQ-109 Buchdetails', () => {
-  it('[REQ-109/AK-3] übernommenes Cover (13,8 : 21,8) füllt die Cover-Form mit gleichem Verhältnis: nichts wird beim Einpassen abgeschnitten', async () => {
+describe('REQ-115 Buchdetails', () => {
+  it('[REQ-115/AK-3] übernommenes Cover (13,8 : 21,8) füllt die Cover-Form mit gleichem Verhältnis: nichts wird beim Einpassen abgeschnitten', async () => {
     const zugeschnitten = await onlineCoverZuschneiden(PNG, { format: 'print', unterformat: 'taschenbuch' });
     await details({ format: 'print', unterformat: 'taschenbuch' }, { cover: zugeschnitten });
     await vi.waitFor(() => expect(coverEl().querySelector('img[data-bereich-bild]')).not.toBeNull(), W);
@@ -295,7 +295,7 @@ describe('REQ-109 Buchdetails', () => {
     expect(cs.height).toBe('100%');
   });
 
-  it('[REQ-109/AK-4] Format Taschenbuch → Kleinformat gesichert: gespeichertes Cover mittig auf 10,5 : 14,8 zugeschnitten', async () => {
+  it('[REQ-115/AK-4] Format Taschenbuch → Kleinformat gesichert: gespeichertes Cover mittig auf 10,5 : 14,8 zugeschnitten', async () => {
     const { d, s, id } = await details({ format: 'print', unterformat: 'taschenbuch' }, { cover: `${PNG}|${TB}` });
     await formatAendern(d, 'kleinformat');
     await vi.waitFor(() => expect(schnitte(s.daten.get(`${id}|cover`))).toHaveLength(2), W);
@@ -304,7 +304,7 @@ describe('REQ-109 Buchdetails', () => {
     await vi.waitFor(() => expect(coverEl().querySelector('img[data-bereich-bild]')).toHaveAttribute('src', s.daten.get(`${id}|cover`)), W);
   });
 
-  it('[REQ-109/AK-4] auch Rücken und Schnitt (vom Nutzer aufgenommen) werden beim Formatwechsel neu zugeschnitten', async () => {
+  it('[REQ-115/AK-4] auch Rücken und Schnitt (vom Nutzer aufgenommen) werden beim Formatwechsel neu zugeschnitten', async () => {
     const { d, s, id } = await details({ format: 'print', unterformat: 'taschenbuch', seitenanzahl: 400 }, { cover: 'C', ruecken: 'R', schnitt: 'S' });
     await formatAendern(d, 'hardcover');
     await vi.waitFor(() => expect(s.daten.get(`${id}|cover`)).toBe(`C|${HC}`), W);
@@ -314,7 +314,7 @@ describe('REQ-109 Buchdetails', () => {
     expect(schnitte(s.daten.get(`${id}|schnitt`))).toHaveLength(1);
   });
 
-  it('[REQ-109/AK-4] Format ohne Änderung des Verhältnisses (Taschenbuch → Weiß ich nicht) schneidet nichts zu', async () => {
+  it('[REQ-115/AK-4] Format ohne Änderung des Verhältnisses (Taschenbuch → Weiß ich nicht) schneidet nichts zu', async () => {
     const { d, s, id } = await details({ format: 'print', unterformat: 'taschenbuch' }, { cover: 'C', ruecken: 'R', schnitt: 'S' });
     await formatAendern(d, 'weissNicht');
     await warte(150);
@@ -323,7 +323,7 @@ describe('REQ-109 Buchdetails', () => {
     expect(s.put).not.toHaveBeenCalled();
   });
 
-  it('[REQ-109/AK-5] Maße 12 × 18 × 2, Dicke auf 4 gesichert: Rücken und Schnitt auf 4 : 18, Cover unverändert', async () => {
+  it('[REQ-115/AK-5] Maße 12 × 18 × 2, Dicke auf 4 gesichert: Rücken und Schnitt auf 4 : 18, Cover unverändert', async () => {
     const { d, s, id, repo } = await details({ breiteMm: 120, hoeheMm: 180, dickeMm: 20 }, { cover: 'C', ruecken: 'R', schnitt: 'S' });
     await tippe(d.querySelector('[data-ausgabe-zeile="masse"]')!);
     const b = await vi.waitFor(() => {
@@ -343,7 +343,7 @@ describe('REQ-109 Buchdetails', () => {
     expect(s.put).not.toHaveBeenCalledWith(id, 'cover', expect.anything());
   });
 
-  it('[REQ-109/AK-6] Kleinformat zurück auf Taschenbuch: bereits beschnittenes Cover wird erneut auf 13,8 : 21,8 zugeschnitten', async () => {
+  it('[REQ-115/AK-6] Kleinformat zurück auf Taschenbuch: bereits beschnittenes Cover wird erneut auf 13,8 : 21,8 zugeschnitten', async () => {
     const { d, s, id } = await details({ format: 'print', unterformat: 'taschenbuch' }, { cover: `${PNG}|${TB}` });
     await formatAendern(d, 'kleinformat');
     await vi.waitFor(() => expect(schnitte(s.daten.get(`${id}|cover`))).toHaveLength(2), W);

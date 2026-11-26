@@ -72,16 +72,19 @@ async function zustand(w: Welt, d: HTMLElement, id: string) {
 }
 import { neuesBuch } from '@/domain/buch';
 
-// REQ-072/AK-1: Zeile „Maße“ direkt unter „Format“ (Anpassung Sprint 07); REQ-085: „Beendet am“ unter „Hinzugefügt“ (Sprint 09)
-const ZEILEN = ['seiten', 'format', 'masse', 'exemplar', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet'];
-const NAMEN = ['Seiten', 'Format', 'Maße', 'Exemplar', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt', 'Beendet am'];
+// REQ-072/AK-1: Zeile „Maße“ direkt unter „Format“ (Anpassung Sprint 07); REQ-085: „Beendet am“ unter „Hinzugefügt“ (Sprint 09);
+// REQ-112: Zeile „Band“ direkt unter „Exemplar“ (Sprint 11)
+/** Kennung einer Zeile; die Zeile „Band“ (REQ-112) wird an ihrer Bezeichnung erkannt (Kennung legt der Entwickler fest). */
+const zid = (z: Element) => (/^Band\b/.test(norm(z.querySelector('[data-zeile-bezeichnung]')?.textContent ?? z.textContent)) ? 'band' : z.getAttribute('data-ausgabe-zeile'));
+const ZEILEN = ['seiten', 'format', 'masse', 'exemplar', 'band', 'sonderausgabe', 'fotos', 'preis', 'verlag', 'erschienen', 'isbn', 'hinzugefuegt', 'beendet'];
+const NAMEN = ['Seiten', 'Format', 'Maße', 'Exemplar', 'Band', 'Sonderausgabe', 'Fotos', 'Preis', 'Verlag', 'Erschienen', 'ISBN', 'Hinzugefügt', 'Beendet am'];
 const karte = (d: HTMLElement) => abschnitt(d, 'ausgabe').querySelector<HTMLElement>('[data-ausgabe-karte]')!;
 const zeilen = (d: HTMLElement) => Array.from(karte(d).querySelectorAll<HTMLElement>('[data-ausgabe-zeile]'));
 
 describe('REQ-056 Karte „Ausgabe“', () => {
-  it('[REQ-056/AK-1] zwölf Zeilen (mit „Maße“ laut REQ-072 und „Beendet am“ laut REQ-085) in fester Reihenfolge, links Bezeichnung, kein „Signiert“', async () => {
+  it('[REQ-056/AK-1] dreizehn Zeilen (mit „Maße“ laut REQ-072, „Band“ laut REQ-112 und „Beendet am“ laut REQ-085) in fester Reihenfolge, links Bezeichnung, kein „Signiert“', async () => {
     const { d } = await mitBuch();
-    expect(zeilen(d).map((z) => z.getAttribute('data-ausgabe-zeile'))).toEqual(ZEILEN);
+    expect(zeilen(d).map(zid)).toEqual(ZEILEN);
     expect(zeilen(d).map((z) => norm(z.querySelector('[data-zeile-bezeichnung]')?.textContent))).toEqual(NAMEN);
     for (const z of zeilen(d)) {
       const b = z.querySelector('[data-zeile-bezeichnung]')!;
@@ -93,13 +96,13 @@ describe('REQ-056 Karte „Ausgabe“', () => {
 
   // Fassung 2026-11-23 (REQ-091): alle Zeilen haben den Pfeil „›“, auch Verlag, Erschienen, ISBN, Hinzugefügt und Beendet am.
   it.each([
-    ['mit Werten', { seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00', status: 'gelesen', beendetAm: '2026-11-03', verlag: 'Carlsen', isbn: '9783551551672' }],
+    ['mit Werten', { bandnummer: 2, seitenanzahl: 608, erscheinungsjahr: 2025, eingetragenAm: '2026-10-14T12:00:00', status: 'gelesen', beendetAm: '2026-11-03', verlag: 'Carlsen', isbn: '9783551551672' }],
     ['ohne Werte', {}],
-  ] as const)('[REQ-056/AK-2] alle zwölf Zeilen haben genau einen Pfeil „›“ (%s)', async (_n, felder) => {
+  ] as const)('[REQ-056/AK-2] alle dreizehn Zeilen haben genau einen Pfeil „›“ (%s)', async (_n, felder) => {
     const { d } = await mitBuch(buch(felder as Partial<Buch>));
-    expect(zeilen(d)).toHaveLength(12);
+    expect(zeilen(d)).toHaveLength(13);
     for (const z of zeilen(d)) {
-      const id = z.getAttribute('data-ausgabe-zeile');
+      const id = zid(z);
       const p = z.querySelectorAll('[data-zeile-pfeil]');
       expect(p, `${id}: Pfeil`).toHaveLength(1);
       expect(norm(p[0].textContent), id!).toBe('›');
@@ -141,9 +144,11 @@ describe('REQ-056 Karte „Ausgabe“', () => {
     expect(wert(d, 'sonderausgabe')).toBe(s);
   });
 
-  it('[REQ-056/AK-5] neues Buch nur mit Titel: leere Werte, „Keins“, Preis-Hinweis, „Cover“', async () => {
+  it('[REQ-056/AK-5] neues Buch nur mit Titel: leere Werte (auch „Band“), „Keins“, Preis-Hinweis, „Cover“', async () => {
     const { d } = await mitBuch(neuesBuch({ titel: 'Nur Titel', status: 'ungelesen' }));
     for (const id of ['seiten', 'format', 'exemplar', 'erschienen', 'verlag', 'isbn']) expect(wert(d, id)).toBe('');
+    const band = zeilen(d).find((z) => zid(z) === 'band')!;
+    expect(norm(band.querySelector('[data-zeile-wert]')?.textContent)).toBe('');
     expect(wert(d, 'sonderausgabe')).toBe('Keins');
     expect(wert(d, 'preis')).toBe('Trag ein, was du bezahlt hast');
     expect(wert(d, 'fotos')).toBe('Cover');

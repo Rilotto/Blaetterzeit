@@ -1,11 +1,11 @@
 /**
- * Akzeptanztests REQ-111 – „Online suchen“: Treffer als 3×3-Raster abwechselnd aus beiden Quellen, Übernahme wie beim Barcode-Scan.
+ * Akzeptanztests REQ-117 – „Online suchen“: Treffer als 3×3-Raster abwechselnd aus beiden Quellen, Übernahme wie beim Barcode-Scan.
  * Abgeleitet aus dem REQ-Text. Schnittstellen laut Entwickler (Sprint 12):
  *  - onlineSucheMit(http) aus @/barcode/suche (DNB SRU MARC21-xml, Open Library search.json), trefferMischen/ONLINE_SUCHE_MAX aus @/barcode/treffer.
  *  - BuecherAnsicht { onlineSuche } liefert bereits gemischte Liste.
  *  - Raster [data-online-treffer-raster] (role list), Treffer [data-online-treffer="i"][data-quelle], img[data-treffer-cover] / [data-cover-platzhalter],
  *    [data-treffer-titel], [data-treffer-autor], [data-treffer-quelle].
- *  - Canvas fehlt in jsdom: mittigZuschneiden wird partiell gemockt und markiert das Bild mit „|<verhältnis>“ (wie REQ-109-Tests).
+ *  - Canvas fehlt in jsdom: mittigZuschneiden wird partiell gemockt und markiert das Bild mit „|<verhältnis>“ (wie REQ-115-Tests).
  */
 import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -138,20 +138,20 @@ async function sucheIn(suche: OnlineSuche, text = 'Harry Potter') {
 const tr = (quelle: Treffer['quelle'], t: string, extra: Treffer['angaben'] = {}): Treffer => ({ quelle, angaben: { titel: t, autor: `Autor ${t}`, ...extra } });
 
 // ---------------------------------------------------------------------------
-describe('REQ-111 Auswahl und Reihenfolge', () => {
-  it('[REQ-111/AK-1] DNB D1–D6, Open Library O1–O6 → genau 9: D1,O1,D2,O2,D3,O3,D4,O4,D5', async () => {
+describe('REQ-117 Auswahl und Reihenfolge', () => {
+  it('[REQ-117/AK-1] DNB D1–D6, Open Library O1–O6 → genau 9: D1,O1,D2,O2,D3,O3,D4,O4,D5', async () => {
     const t = await onlineSucheMit(httpFake(dnbN(6), olN(6))).suchen('Harry Potter');
     expect(titel(t)).toEqual(['D1', 'O1', 'D2', 'O2', 'D3', 'O3', 'D4', 'O4', 'D5']);
     expect(t.map((x) => x.quelle)).toEqual(['dnb', 'openlibrary', 'dnb', 'openlibrary', 'dnb', 'openlibrary', 'dnb', 'openlibrary', 'dnb']);
   });
 
-  it('[REQ-111/AK-1] auch wenn eine Quelle mehr als angefragt liefert: höchstens 9', async () => {
+  it('[REQ-117/AK-1] auch wenn eine Quelle mehr als angefragt liefert: höchstens 9', async () => {
     const t = await onlineSucheMit(httpFake(dnbN(12), olN(12))).suchen('Harry Potter');
     expect(t).toHaveLength(ONLINE_SUCHE_MAX);
     expect(ONLINE_SUCHE_MAX).toBe(9);
   });
 
-  it('[REQ-111/AK-1] jede Quelle wird um höchstens 9 Treffer gebeten (keine unnötig großen Abfragen)', async () => {
+  it('[REQ-117/AK-1] jede Quelle wird um höchstens 9 Treffer gebeten (keine unnötig großen Abfragen)', async () => {
     const http = httpFake(dnbN(0), olN(0));
     await onlineSucheMit(http).suchen('Harry Potter');
     const dnb = http.text.mock.calls.map((c) => c[0]).find((u) => u.includes('dnb.de'))!;
@@ -160,42 +160,42 @@ describe('REQ-111 Auswahl und Reihenfolge', () => {
     expect(new URL(ol).searchParams.get('limit')).toBe('9');
   });
 
-  it('[REQ-111/AK-1] UI: Raster zeigt die 9 Treffer in genau der gelieferten Reihenfolge', async () => {
+  it('[REQ-117/AK-1] UI: Raster zeigt die 9 Treffer in genau der gelieferten Reihenfolge', async () => {
     const liste = ['D1', 'O1', 'D2', 'O2', 'D3', 'O3', 'D4', 'O4', 'D5'].map((t) => tr(t[0] === 'D' ? 'dnb' : 'openlibrary', t));
     await sucheIn({ suchen: vi.fn(async () => liste) });
     expect(kacheln().map((k) => norm(k.querySelector('[data-treffer-titel]')!.textContent))).toEqual(['D1', 'O1', 'D2', 'O2', 'D3', 'O3', 'D4', 'O4', 'D5']);
   });
 
-  it('[REQ-111/AK-2] DNB D1–D2, Open Library O1–O10 → D1,O1,D2,O2,O3,O4,O5,O6,O7', async () => {
+  it('[REQ-117/AK-2] DNB D1–D2, Open Library O1–O10 → D1,O1,D2,O2,O3,O4,O5,O6,O7', async () => {
     const t = await onlineSucheMit(httpFake(dnbN(2), olN(10))).suchen('Harry Potter');
     expect(titel(t)).toEqual(['D1', 'O1', 'D2', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7']);
   });
 
-  it('[REQ-111/AK-2] umgekehrt: Open Library O1–O2, DNB D1–D10 → DNB füllt auf', () => {
+  it('[REQ-117/AK-2] umgekehrt: Open Library O1–O2, DNB D1–D10 → DNB füllt auf', () => {
     const d = Array.from({ length: 10 }, (_, i) => tr('dnb', `D${i + 1}`));
     const o = [tr('openlibrary', 'O1'), tr('openlibrary', 'O2')];
     expect(titel(trefferMischen(d, o))).toEqual(['D1', 'O1', 'D2', 'O2', 'D3', 'D4', 'D5', 'D6', 'D7']);
   });
 
-  it('[REQ-111/AK-3] DNB liefert nichts, Open Library O1–O4 → O1,O2,O3,O4', async () => {
+  it('[REQ-117/AK-3] DNB liefert nichts, Open Library O1–O4 → O1,O2,O3,O4', async () => {
     const t = await onlineSucheMit(httpFake(dnbN(0), olN(4))).suchen('Harry Potter');
     expect(titel(t)).toEqual(['O1', 'O2', 'O3', 'O4']);
   });
 
-  it('[REQ-111/AK-3] DNB nicht erreichbar, Open Library O1–O4 → O1,O2,O3,O4', async () => {
+  it('[REQ-117/AK-3] DNB nicht erreichbar, Open Library O1–O4 → O1,O2,O3,O4', async () => {
     const t = await onlineSucheMit(httpFake(null, olN(4))).suchen('Harry Potter');
     expect(titel(t)).toEqual(['O1', 'O2', 'O3', 'O4']);
   });
 
-  it('[REQ-111/AK-3] UI: nur Open Library liefert → 4 Kacheln, alle mit Quelle „Open Library“', async () => {
+  it('[REQ-117/AK-3] UI: nur Open Library liefert → 4 Kacheln, alle mit Quelle „Open Library“', async () => {
     await sucheIn(onlineSucheMit(httpFake(dnbN(0), olN(4))));
     expect(kacheln().map((k) => norm(k.querySelector('[data-treffer-titel]')!.textContent))).toEqual(['O1', 'O2', 'O3', 'O4']);
     for (const k of kacheln()) expect(norm(k.querySelector('[data-treffer-quelle]')!.textContent)).toBe('Open Library');
   });
 });
 
-describe('REQ-111 Darstellung', () => {
-  it('[REQ-111/AK-4] 9 Treffer: Raster mit 3 Spalten (3 Zeilen à 3), unter dem Suchfeld; je Treffer Cover, Titel, Autor, Quelle', async () => {
+describe('REQ-117 Darstellung', () => {
+  it('[REQ-117/AK-4] 9 Treffer: Raster mit 3 Spalten (3 Zeilen à 3), unter dem Suchfeld; je Treffer Cover, Titel, Autor, Quelle', async () => {
     const liste = Array.from({ length: 9 }, (_, i) => tr(i % 2 ? 'openlibrary' : 'dnb', `Buch ${i + 1}`, { cover: PNG }));
     await sucheIn({ suchen: vi.fn(async () => liste) });
     const raster = fenster()!.querySelector<HTMLElement>('[data-online-treffer-raster]')!;
@@ -222,7 +222,7 @@ describe('REQ-111 Darstellung', () => {
     });
   });
 
-  it('[REQ-111/AK-4] Treffer ohne Autor: Autorzeile entfällt, Titel und Quelle bleiben', async () => {
+  it('[REQ-117/AK-4] Treffer ohne Autor: Autorzeile entfällt, Titel und Quelle bleiben', async () => {
     await sucheIn({ suchen: vi.fn(async () => [{ quelle: 'dnb', angaben: { titel: 'Ohne Autor' } } as Treffer]) });
     const k = kacheln()[0];
     expect(k.querySelector('[data-treffer-autor]')).toBeNull();
@@ -230,7 +230,7 @@ describe('REQ-111 Darstellung', () => {
     expect(norm(k.querySelector('[data-treffer-quelle]')!.textContent)).toBe('Deutsche Nationalbibliothek');
   });
 
-  it('[REQ-111/AK-4] Cover werden aus den Quellen geladen (DNB per ISBN, Open Library per Cover-ID) und angezeigt', async () => {
+  it('[REQ-117/AK-4] Cover werden aus den Quellen geladen (DNB per ISBN, Open Library per Cover-ID) und angezeigt', async () => {
     const dnb = dnbXml([dnbRecord('Mit DNB-Cover', 'A', ISBN)]);
     const ol = JSON.stringify({ docs: [{ title: 'Mit OL-Cover', author_name: ['B'], cover_i: 4711 }] });
     const http = httpFake(dnb, ol, (u) => (u.includes('portal.dnb.de') || u.includes('covers.openlibrary.org/b/id/4711') ? PNG : null));
@@ -241,7 +241,7 @@ describe('REQ-111 Darstellung', () => {
     for (const k of kacheln()) expect(k.querySelector('img[data-treffer-cover]')).toHaveAttribute('src', PNG);
   });
 
-  it('[REQ-111/AK-5] Treffer ohne Coverfoto: Cover-Platzhalter (REQ-010) statt Bild', async () => {
+  it('[REQ-117/AK-5] Treffer ohne Coverfoto: Cover-Platzhalter (REQ-010) statt Bild', async () => {
     await sucheIn({ suchen: vi.fn(async () => [tr('dnb', 'Mit Cover', { cover: PNG }), tr('openlibrary', 'Ohne Cover')]) });
     const [a, b] = kacheln();
     expect(a.querySelector('img[data-treffer-cover]')).not.toBeNull();
@@ -252,13 +252,13 @@ describe('REQ-111 Darstellung', () => {
     expect(p!.querySelector('[data-icon="icon-herz.png"]')).not.toBeNull();
   });
 
-  it('[REQ-111/AK-5] Cover-Abruf liefert nichts (Fehlerstatus): Platzhalter', async () => {
+  it('[REQ-117/AK-5] Cover-Abruf liefert nichts (Fehlerstatus): Platzhalter', async () => {
     const ol = JSON.stringify({ docs: [{ title: 'Cover kaputt', cover_i: 99 }] });
     await sucheIn(onlineSucheMit(httpFake(dnbN(0), ol, () => null)));
     expect(kacheln()[0].querySelector('[data-cover-platzhalter]')).not.toBeNull();
   });
 
-  it('[REQ-111/AK-6] dasselbe Buch aus DNB und Open Library: zwei Einträge mit je eigener Quellenangabe', async () => {
+  it('[REQ-117/AK-6] dasselbe Buch aus DNB und Open Library: zwei Einträge mit je eigener Quellenangabe', async () => {
     const dnb = dnbXml([dnbRecord('Harry Potter und der Stein der Weisen', 'Rowling, J. K.', ISBN)]);
     const ol = JSON.stringify({ docs: [{ title: 'Harry Potter und der Stein der Weisen', author_name: ['J. K. Rowling'], isbn: [ISBN] }] });
     const t = await onlineSucheMit(httpFake(dnb, ol)).suchen(ISBN);
@@ -272,7 +272,7 @@ describe('REQ-111 Darstellung', () => {
   });
 });
 
-describe('REQ-111 Übernahme', () => {
+describe('REQ-117 Übernahme', () => {
   const VOLL = tr('dnb', 'Harry Potter und der Stein der Weisen', {
     autor: 'Rowling, J. K.',
     seitenanzahl: 335,
@@ -293,7 +293,7 @@ describe('REQ-111 Übernahme', () => {
     return w;
   }
 
-  it('[REQ-111/AK-7] Antippen: Suchfenster zu, „Manueller Eintrag“ offen mit Titel, Autor, Seiten, Verlag, Preis, Format; noch kein Buch', async () => {
+  it('[REQ-117/AK-7] Antippen: Suchfenster zu, „Manueller Eintrag“ offen mit Titel, Autor, Seiten, Verlag, Preis, Format; noch kein Buch', async () => {
     const { repo, bilder } = await waehle([OHNE_VERLAG, VOLL], 1);
     expect(fenster()).toBeNull();
     expect(feld('Titel').value).toBe('Harry Potter und der Stein der Weisen');
@@ -307,7 +307,7 @@ describe('REQ-111 Übernahme', () => {
     expect(bilder.put).not.toHaveBeenCalled();
   });
 
-  it('[REQ-111/AK-7] Coverfoto nach REQ-109 zugeschnitten eingetragen (Taschenbuch 13,8 : 21,8) – schon im Blatt sichtbar', async () => {
+  it('[REQ-117/AK-7] Coverfoto nach REQ-115 zugeschnitten eingetragen (Taschenbuch 13,8 : 21,8) – schon im Blatt sichtbar', async () => {
     await waehle([VOLL]);
     expect(vi.mocked(mittigZuschneiden)).toHaveBeenCalled();
     const img = blatt()!.querySelector('[data-cover-hinzufuegen] img');
@@ -318,7 +318,7 @@ describe('REQ-111 Übernahme', () => {
     expect(schnitte(src)[0]).toBeCloseTo(TB, 6);
   });
 
-  it('[REQ-111/AK-7] erst „Hinzufügen“ legt das Buch an: Angaben samt Preis/Format, Cover genau einmal zugeschnitten', async () => {
+  it('[REQ-117/AK-7] erst „Hinzufügen“ legt das Buch an: Angaben samt Preis/Format, Cover genau einmal zugeschnitten', async () => {
     const { repo, bilder } = await waehle([VOLL]);
     expect(repo.save).not.toHaveBeenCalled();
     await tippe(within(blatt()!).getByRole('button', { name: 'Hinzufügen' }));
@@ -332,7 +332,7 @@ describe('REQ-111 Übernahme', () => {
     expect(schnitte(cover)[0]).toBeCloseTo(TB, 6);
   });
 
-  it('[REQ-111/AK-7] Schließen des Blatts (X) nach REQ-030: Seite „Bücher“, kein Buch', async () => {
+  it('[REQ-117/AK-7] Schließen des Blatts (X) nach REQ-030: Seite „Bücher“, kein Buch', async () => {
     const { repo } = await waehle([VOLL]);
     await tippe(within(blatt()!).getByRole('button', { name: 'Schließen' }));
     await vi.waitFor(() => expect(blatt()).toBeNull(), W);
@@ -341,7 +341,7 @@ describe('REQ-111 Übernahme', () => {
     expect(repo.save).not.toHaveBeenCalled();
   });
 
-  it('[REQ-111/AK-8] Treffer ohne Verlag: Verlag leer, Felder bearbeitbar (auch Verlag), danach mit Eingaben anlegbar', async () => {
+  it('[REQ-117/AK-8] Treffer ohne Verlag: Verlag leer, Felder bearbeitbar (auch Verlag), danach mit Eingaben anlegbar', async () => {
     const { repo } = await waehle([VOLL, OHNE_VERLAG], 1);
     expect(norm(zeile('verlag').textContent).replace(/›/g, '').trim()).toBe('Verlag');
     for (const n of ['Titel', 'Autor', 'Seiten']) {
@@ -365,7 +365,7 @@ describe('REQ-111 Übernahme', () => {
     expect([...repo.daten.values()][0]).toMatchObject({ titel: 'Eigener Titel', autor: 'Eigene Autorin', seitenanzahl: 321, verlag: 'Mein Verlag' });
   });
 
-  it('[REQ-111/AK-8] Treffer ohne Preis, Format und Cover: diese bleiben leer, kein Zuschnitt', async () => {
+  it('[REQ-117/AK-8] Treffer ohne Preis, Format und Cover: diese bleiben leer, kein Zuschnitt', async () => {
     const { repo, bilder } = await waehle([OHNE_VERLAG]);
     expect(wertIn('preis')).not.toMatch(/\d/);
     expect(wertIn('format')).not.toMatch(/Print|Taschenbuch|E-Book|Hörbuch/);

@@ -1,5 +1,5 @@
 ---
-id: REQ-108
+id: REQ-114
 titel: Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden
 status: Implementiert
 prioritaet: Should

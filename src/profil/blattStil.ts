@@ -1,4 +1,4 @@
-// Gemeinsame Stile der Blätter von unten (Fenster „Design“, REQ-067; Blatt „„Für dich“ anpassen“, REQ-108).
+// Gemeinsame Stile der Blätter von unten (Fenster „Design“, REQ-067; Blatt „„Für dich“ anpassen“, REQ-114).
 import type { CSSProperties } from 'react';
 import { abdunklung, abstand, bildschirmrand, detailsFarbe, pillenhoehe, rezensionFarbe, textstufe } from '@/theme';
 

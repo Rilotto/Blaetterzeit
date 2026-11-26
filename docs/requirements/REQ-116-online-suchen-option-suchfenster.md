@@ -1,5 +1,5 @@
 ---
-id: REQ-110
+id: REQ-116
 titel: Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster
 status: Implementiert
 prioritaet: Should
@@ -14,7 +14,7 @@ freigegeben_in:
 
 Als **Nutzer** möchte ich **ein Buch über Titel, Autor oder ISBN online suchen**, damit **ich auch ohne Barcode schnell an die Angaben samt Cover komme**.
 
-CEO (2026-11-25, im Chat festgelegt): „Online suchen“ öffnet von unten ein Fenster mit Suchfeld, Tastatur sofort offen; Eingabe Titel, Autor oder ISBN (auch kombiniert); Suche über die Such-Taste der Tastatur; Abfrage gleichzeitig bei Deutscher Nationalbibliothek und Open Library wie REQ-062; an die Dienste geht nur der Suchtext; ohne Internet oder ohne Treffer bleibt das Fenster offen mit kurzem Hinweis; Pfeil zurück jeweils eine Stufe zurück. Ergebnisse und Übernahme: REQ-111.
+CEO (2026-11-25, im Chat festgelegt): „Online suchen“ öffnet von unten ein Fenster mit Suchfeld, Tastatur sofort offen; Eingabe Titel, Autor oder ISBN (auch kombiniert); Suche über die Such-Taste der Tastatur; Abfrage gleichzeitig bei Deutscher Nationalbibliothek und Open Library wie REQ-062; an die Dienste geht nur der Suchtext; ohne Internet oder ohne Treffer bleibt das Fenster offen mit kurzem Hinweis; Pfeil zurück jeweils eine Stufe zurück. Ergebnisse und Übernahme: REQ-117.
 
 Referenzbild Menü: [referenzen/REF-buch-anlegen-01-menue.png](referenzen/REF-buch-anlegen-01-menue.png).
 
@@ -96,7 +96,7 @@ Referenzbild Menü: [referenzen/REF-buch-anlegen-01-menue.png](referenzen/REF-bu
 
 ## Abgrenzung (nicht Teil dieses REQ)
 
-- Darstellung der Treffer und Übernahme (REQ-111).
+- Darstellung der Treffer und Übernahme (REQ-117).
 - Option „Deine Bücher importieren“ (To-do-Liste).
 - Google Books als weitere Quelle (To-do-Liste).
 
@@ -106,7 +106,7 @@ Referenzbild Menü: [referenzen/REF-buch-anlegen-01-menue.png](referenzen/REF-bu
 
 ## Abhängigkeiten
 
-- REQ-029 (Menü; dessen AK-2 „genau eine Option“ ist wie bereits durch REQ-061 hinfällig), REQ-061, REQ-062 (Quellen), REQ-011 (Öffnen über den Platzhalter), REQ-111.
+- REQ-029 (Menü; dessen AK-2 „genau eine Option“ ist wie bereits durch REQ-061 hinfällig), REQ-061, REQ-062 (Quellen), REQ-011 (Öffnen über den Platzhalter), REQ-117.
 
 ## Offene Fragen
 

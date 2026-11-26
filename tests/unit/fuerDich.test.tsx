@@ -16,7 +16,7 @@ const blatt = () => screen.queryByRole('dialog', { name: '„Für dich“ anpass
 const zeile = (name: string) => within(blatt()!).getByRole('checkbox', { name });
 const oeffnen = () => fireEvent.click(screen.getByRole('button', { name: 'Filter und Einstellungen' }));
 
-describe('Abschnitte „Für dich“ (REQ-108)', () => {
+describe('Abschnitte „Für dich“ (REQ-114)', () => {
   it('zentrale Liste in Seitenreihenfolge', () => {
     expect(buecherAbschnitte.map((a) => a.titel)).toEqual(['Noch zu lesen', 'Sagas', 'Sammlungen', 'Alle Bücher']);
   });

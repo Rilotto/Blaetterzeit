@@ -303,15 +303,16 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
 | REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
 | REQ-036 | Übersicht „Alle Bücher“ – Fenster, Kopf, Anzahl, Reihenfolge, Rückweg | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-036-uebersicht-alle-buecher.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-6 | 8 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-7 | 4 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
-| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | Implementiert | AK-9 | 4 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-3 | 5 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-4 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-10 | 5 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-6 | 8 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-7 | 4 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-8 | 3 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
+| REQ-037 | Übersichten – Darstellung als Raster oder Liste, zuletzt gewählte Ansicht gemerkt | In Umsetzung | AK-9 | 4 | 0 | tests/acceptance/REQ-037-uebersicht-raster-liste.test.tsx |
 | REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
 | REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
 | REQ-038 | Übersichten – Suche nach Titel oder Autor | Implementiert | AK-3 | 6 | 0 | tests/acceptance/REQ-038-uebersicht-suche.test.tsx |
@@ -386,13 +387,13 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-053 | Reiter „Details“ – Inhaltswarnungen als Pillen | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-053-details-inhaltswarnungen.test.tsx |
 | REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
 | REQ-055 | Reiter „Details“ – „Sammlungen und Bibliotheken“ ohne Funktion | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-055-details-sammlungen-bibliotheken.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
-| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit zwölf Zeilen | Implementiert | AK-7 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit dreizehn Zeilen | In Umsetzung | AK-1 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit dreizehn Zeilen | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit dreizehn Zeilen | In Umsetzung | AK-3 | 4 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit dreizehn Zeilen | In Umsetzung | AK-4 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit dreizehn Zeilen | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit dreizehn Zeilen | In Umsetzung | AK-6 | 1 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
+| REQ-056 | Reiter „Details“ – Abschnitt „Ausgabe“ mit dreizehn Zeilen | In Umsetzung | AK-7 | 5 | 0 | tests/acceptance/REQ-056-details-ausgabe-liste.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
 | REQ-057 | Reiter „Details“ – Seitenanzahl über die Zeile „Seiten“ ändern | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-057-details-seiten-aendern.test.tsx |
@@ -411,16 +412,16 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-059-details-preis.test.tsx |
 | REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-059-details-preis.test.tsx |
 | REQ-059 | Reiter „Details“ – Preis über ein Menü eingeben | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-059-details-preis.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-1 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-8 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-9 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
-| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-1 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-2 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-3 | 4 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-6 | 3 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-7 | 2 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-8 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-9 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
+| REQ-060 | Manueller Eintrag – Angaben der Karte „Ausgabe“ beim Anlegen eingeben, Seitenzahl Pflicht | In Umsetzung | AK-10 | 1 | 0 | tests/acceptance/REQ-060-buch-anlegen-ausgabe-angaben.test.tsx |
 | REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
 | REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
 | REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
@@ -428,15 +429,16 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
 | REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
 | REQ-061 | Menü „Buch hinzufügen“ – Option „Barcode scannen“ und Scan-Bildschirm | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-061-barcode-scannen-option.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
-| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | Implementiert | AK-9 | 3 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-1 | 4 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-2 | 1 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-3 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-6 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-7 | 1 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-8 | 2 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-9 | 3 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
+| REQ-062 | Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen | In Umsetzung | AK-10 | 17 | 0 | tests/acceptance/REQ-062-barcode-angaben-aus-internet.test.tsx |
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
 | REQ-063 | Reiter „Details“ – Verlag und ISBN über ein Blatt eingeben | Implementiert | AK-3 | 7 | 0 | tests/acceptance/REQ-063-details-verlag-isbn-eingeben.test.tsx |
@@ -461,18 +463,18 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-10 | 1 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
 | REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-11 | 4 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
 | REQ-065 | Typografie und Proportionen – App-Schrift Fraunces, zentrale Schriftgrößenstufen, Abstandsraster und Cozy-Details | Implementiert | AK-12 | 5 | 0 | tests/acceptance/REQ-065-typografie-cozy.test.tsx |
-| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
-| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
-| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
+| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
+| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | In Umsetzung | AK-2 | 3 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
+| REQ-066 | Seite „Profil“ – Abschnitt „App“ mit Zeile „Design“ | In Umsetzung | AK-3 | 1 | 0 | tests/acceptance/REQ-066-profil-abschnitt-app.test.tsx |
 | REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
 | REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
 | REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
 | REQ-067 | Fenster „Design“ – Blatt mit Umschaltpille „Farben / Schriftart“ und Live-Vorschau | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-067-fenster-design.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-1 | 7 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
-| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht) | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht, Minztraube, Traubennacht) | In Umsetzung | AK-1 | 11 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht, Minztraube, Traubennacht) | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht, Minztraube, Traubennacht) | In Umsetzung | AK-3 | 4 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht, Minztraube, Traubennacht) | In Umsetzung | AK-4 | 4 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
+| REQ-068 | Fenster „Design“ – Farbdesigns auswählen (Klassisch, Salbei, Nachtlektüre, Raureif, Polarnacht, Minztraube, Traubennacht) | In Umsetzung | AK-5 | 1 | 0 | tests/acceptance/REQ-068-farbdesigns.test.tsx |
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-2 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
 | REQ-069 | Fenster „Design“ – Schrift auswählen (Systemschrift, Fraunces) | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-069-schriftauswahl.test.tsx |
@@ -499,7 +501,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-11 | 3 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
 | REQ-071 | Fenster „Design“ – dritte Pille „Stil“ mit „Klassisch“ und „Feuilleton“ | Implementiert | AK-12 | 4 | 0 | tests/acceptance/REQ-071-design-stil-feuilleton.test.tsx |
 | REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
-| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-2 | 7 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
+| REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-2 | 9 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
 | REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
 | REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-4 | 5 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
 | REQ-072 | Karte „Ausgabe“ – Zeile „Maße“ (Breite × Höhe × Dicke) mit Blatt „Maße“ | Implementiert | AK-5 | 8 | 0 | tests/acceptance/REQ-072-ausgabe-masse.test.tsx |
@@ -532,13 +534,16 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
 | REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
 | REQ-076 | 3D-Ansicht – Gestalt des Modells aus Maßen, Format und Bildern | Implementiert | AK-8 | 3 | 0 | tests/acceptance/REQ-076-3d-modell-gestalt.test.tsx |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-1 | 7 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-6 | 4 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-2 | 10 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
-| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-1 | 7 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-6 | 4 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-7 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-2 | 10 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-3 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-4 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-5 | 1 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-8 | 3 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-9 | 4 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
+| REQ-077 | Standardmaße je Format und geschätzte Dicke aus der Seitenzahl | In Umsetzung | AK-10 | 2 | 0 | tests/acceptance/REQ-077-standardmasse-je-format.test.tsx |
 | REQ-078 | 3D-Ansicht – Hinweis bei Hörbüchern | Implementiert | AK-1 | 5 | 0 | tests/acceptance/REQ-078-3d-hoerbuch-hinweis.test.tsx |
 | REQ-079 | Seite „Statistik“ – Kopf „Dein Lesen“ und Zeitraum-Pillen | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-079-statistik-kopf-und-pillen.test.tsx |
 | REQ-079 | Seite „Statistik“ – Kopf „Dein Lesen“ und Zeitraum-Pillen | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-079-statistik-kopf-und-pillen.test.tsx |
@@ -632,37 +637,41 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-095 | Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-095-listen-abschnitt-buchdetails.test.tsx |
 | REQ-095 | Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails | Implementiert | AK-4 | 6 | 0 | tests/acceptance/REQ-095-listen-abschnitt-buchdetails.test.tsx |
 | REQ-095 | Listen (Sagas, Sammlungen, Bibliotheken) und Abschnitt „Sagas, Sammlungen und Bibliotheken“ in den Buchdetails | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-095-listen-abschnitt-buchdetails.test.tsx |
-| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
-| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
-| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
-| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-4 | 10 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
-| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-5 | 4 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-6 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-8 | 4 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | Implementiert | AK-10 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-6 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-8 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-9 | 2 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-2 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-3 | 4 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
-| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
-| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
-| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
-| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
-| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-6 | 7 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
-| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
-| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | In Umsetzung | AK-2 | 4 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | In Umsetzung | AK-3 | 4 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | In Umsetzung | AK-4 | 10 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | In Umsetzung | AK-6 | 2 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-096 | Blatt „Zu einer Saga / Sammlung / Bibliothek hinzufügen“ mit Mehrfachauswahl, neuer Liste und Band | In Umsetzung | AK-5 | 4 | 0 | tests/acceptance/REQ-096-blatt-zu-liste-hinzufuegen.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-3 | 1 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-5 | 4 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-11 | 6 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-6 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-7 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-8 | 4 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-9 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-097 | Listenübersicht je Art (Sagas, Sammlungen, Bibliotheken) mit Häkchen und „+“, erreichbar aus Buchdetails, Seite „Bücher“ und Menüpunkt „Bibliothek“ | In Umsetzung | AK-10 | 2 | 0 | tests/acceptance/REQ-097-listenuebersicht-erreichbarkeit.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-1 | 4 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-6 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-7 | 2 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-8 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-9 | 2 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-2 | 5 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-3 | 4 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-4 | 3 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-10 | 4 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-098 | Geöffnete Liste – Übersicht wie „Gerade am Lesen“, Sortierung (Sagas auch nach Band), Umbenennen und Löschen über den Stift | In Umsetzung | AK-11 | 2 | 0 | tests/acceptance/REQ-098-geoeffnete-liste.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | In Umsetzung | AK-2 | 3 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | In Umsetzung | AK-3 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | In Umsetzung | AK-6 | 8 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | In Umsetzung | AK-7 | 2 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
+| REQ-099 | Buchdetails – Zeile „Band n · Saga“ unter dem Autor, Übernahme von Reihe und Band aus dem Barcode-Scan | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-099-saga-band-buchdetails-barcode.test.tsx |
 | REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
 | REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-2 | 7 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
 | REQ-100 | Listenbild – Bild im Cover-Format für Sagas, Sammlungen und Bibliotheken | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-100-listenbild.test.tsx |
@@ -678,7 +687,7 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-101 | Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon | Implementiert | AK-4 | 6 | 0 | tests/acceptance/REQ-101-startseite-kopf-gruss.test.tsx |
 | REQ-101 | Startseite – Aufbau, Kopf mit Datum, Uhrzeit, Gruß nach Tageszeit und Tageszeit-Icon | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-101-startseite-kopf-gruss.test.tsx |
 | REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
-| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
+| REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
 | REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
 | REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
 | REQ-102 | Startseite – „Gerade am Lesen“ mit Fortschritt, Fortschritt direkt eintragen | Implementiert | AK-5 | 1 | 0 | tests/acceptance/REQ-102-startseite-gerade-am-lesen.test.tsx |
@@ -702,43 +711,82 @@ _Automatisch erzeugt von `npm run trace:write` – nicht von Hand bearbeiten._
 | REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
 | REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-7 | 3 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
 | REQ-105 | Reiter „Notizbuch“ – Abschnitt „Zitate“ mit Anlegen, Ändern und Löschen über ein Blatt | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-105-notizbuch-zitate.test.tsx |
-| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
-| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
-| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
-| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
-| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | In Umsetzung | AK-1 | 4 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | In Umsetzung | AK-6 | 2 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | In Umsetzung | AK-7 | 3 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | In Umsetzung | AK-2 | 3 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | In Umsetzung | AK-3 | 5 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
+| REQ-106 | Startseite – „Zitat des Tages“ aus allen gespeicherten Zitaten | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-106-startseite-zitat-des-tages.test.tsx |
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-2 | 4 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-3 | 2 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
 | REQ-107 | Seite „Profil“ – eigenen Namen hinterlegen, ändern und leeren | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-107-profil-name.test.tsx |
-| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
-| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
-| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
-| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
-| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
-| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
-| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
-| REQ-108 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-108-fuer-dich-anpassen.test.tsx |
-| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-1 | 11 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
-| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
-| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
-| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
-| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-5 | 7 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
-| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
-| REQ-109 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-109-bildzuschnitt-seitenverhaeltnis.test.tsx |
-| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
-| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
-| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
-| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
-| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
-| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
-| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
-| REQ-110 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-8 | 5 | 0 | tests/acceptance/REQ-110-online-suchen-option-suchfenster.test.tsx |
-| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
-| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
-| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
-| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
-| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
-| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
-| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-7 | 4 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
-| REQ-111 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-111-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
+| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
+| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-3 | 1 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
+| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
+| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
+| REQ-108 | Gesamt-Streak (Startseite, Statistik) – Flamme erst durch Lesen am heutigen Tag „angezündet“, sonst ausgegraut | In Umsetzung | AK-6 | 3 | 0 | tests/acceptance/REQ-108-gesamt-streak-zustaende.test.tsx |
+| REQ-109 | Buchdetails – „Längste Serie“ für dieses Buch als Rekord statt laufender Streak | In Umsetzung | AK-1 | 2 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
+| REQ-109 | Buchdetails – „Längste Serie“ für dieses Buch als Rekord statt laufender Streak | In Umsetzung | AK-2 | 7 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
+| REQ-109 | Buchdetails – „Längste Serie“ für dieses Buch als Rekord statt laufender Streak | In Umsetzung | AK-3 | 3 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
+| REQ-109 | Buchdetails – „Längste Serie“ für dieses Buch als Rekord statt laufender Streak | In Umsetzung | AK-4 | 3 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
+| REQ-109 | Buchdetails – „Längste Serie“ für dieses Buch als Rekord statt laufender Streak | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-109-buch-streak-rekord.test.tsx |
+| REQ-110 | Fenster „Design“ – Farbdesigns nach Pillen „Hell“ und „Dunkel“ getrennt | In Umsetzung | AK-1 | 4 | 0 | tests/acceptance/REQ-110-farbdesigns-hell-dunkel.test.tsx |
+| REQ-110 | Fenster „Design“ – Farbdesigns nach Pillen „Hell“ und „Dunkel“ getrennt | In Umsetzung | AK-2 | 1 | 0 | tests/acceptance/REQ-110-farbdesigns-hell-dunkel.test.tsx |
+| REQ-110 | Fenster „Design“ – Farbdesigns nach Pillen „Hell“ und „Dunkel“ getrennt | In Umsetzung | AK-3 | 9 | 0 | tests/acceptance/REQ-110-farbdesigns-hell-dunkel.test.tsx |
+| REQ-110 | Fenster „Design“ – Farbdesigns nach Pillen „Hell“ und „Dunkel“ getrennt | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-110-farbdesigns-hell-dunkel.test.tsx |
+| REQ-110 | Fenster „Design“ – Farbdesigns nach Pillen „Hell“ und „Dunkel“ getrennt | In Umsetzung | AK-5 | 2 | 0 | tests/acceptance/REQ-110-farbdesigns-hell-dunkel.test.tsx |
+| REQ-110 | Fenster „Design“ – Farbdesigns nach Pillen „Hell“ und „Dunkel“ getrennt | In Umsetzung | AK-6 | 6 | 0 | tests/acceptance/REQ-110-farbdesigns-hell-dunkel.test.tsx |
+| REQ-111 | App-weit – deutsche Silbentrennung und Textumbruch, kein Text über seine Box hinaus, mit automatischer Prüfung | In Umsetzung | AK-1 | 2 | 0 | tests/acceptance/REQ-111-silbentrennung-textumbruch.test.tsx |
+| REQ-111 | App-weit – deutsche Silbentrennung und Textumbruch, kein Text über seine Box hinaus, mit automatischer Prüfung | In Umsetzung | AK-2 | 8 | 0 | tests/acceptance/REQ-111-silbentrennung-textumbruch.test.tsx |
+| REQ-111 | App-weit – deutsche Silbentrennung und Textumbruch, kein Text über seine Box hinaus, mit automatischer Prüfung | In Umsetzung | AK-3 | 12 | 0 | tests/acceptance/REQ-111-silbentrennung-textumbruch.test.tsx |
+| REQ-111 | App-weit – deutsche Silbentrennung und Textumbruch, kein Text über seine Box hinaus, mit automatischer Prüfung | In Umsetzung | AK-4 | 4 | 0 | tests/acceptance/REQ-111-silbentrennung-textumbruch.test.tsx |
+| REQ-111 | App-weit – deutsche Silbentrennung und Textumbruch, kein Text über seine Box hinaus, mit automatischer Prüfung | In Umsetzung | AK-5 | 1 | 0 | tests/acceptance/REQ-111-silbentrennung-textumbruch.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-2 | 3 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-3 | 7 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-4 | 1 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-6 | 2 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-7 | 2 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-8 | 5 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-9 | 8 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-112 | Karte „Ausgabe“ – Zeile „Band“ unter „Exemplar“, eine Bandnummer je Buch, auch aus dem Barcode-Scan | In Umsetzung | AK-10 | 7 | 0 | tests/acceptance/REQ-112-ausgabe-zeile-band.test.tsx |
+| REQ-113 | Seite „Profil“ – Zeile „Versionsinfo“ im Abschnitt „App“, nur Anzeige, aus einer einzigen Versionsquelle | In Umsetzung | AK-1 | 3 | 0 | tests/acceptance/REQ-113-profil-versionsinfo.test.tsx |
+| REQ-113 | Seite „Profil“ – Zeile „Versionsinfo“ im Abschnitt „App“, nur Anzeige, aus einer einzigen Versionsquelle | In Umsetzung | AK-2 | 2 | 0 | tests/acceptance/REQ-113-profil-versionsinfo.test.tsx |
+| REQ-113 | Seite „Profil“ – Zeile „Versionsinfo“ im Abschnitt „App“, nur Anzeige, aus einer einzigen Versionsquelle | In Umsetzung | AK-3 | 8 | 0 | tests/acceptance/REQ-113-profil-versionsinfo.test.tsx |
+| REQ-113 | Seite „Profil“ – Zeile „Versionsinfo“ im Abschnitt „App“, nur Anzeige, aus einer einzigen Versionsquelle | In Umsetzung | AK-4 | 2 | 0 | tests/acceptance/REQ-113-profil-versionsinfo.test.tsx |
+| REQ-113 | Seite „Profil“ – Zeile „Versionsinfo“ im Abschnitt „App“, nur Anzeige, aus einer einzigen Versionsquelle | In Umsetzung | AK-5 | 3 | 0 | tests/acceptance/REQ-113-profil-versionsinfo.test.tsx |
+| REQ-114 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-1 | 3 | 0 | tests/acceptance/REQ-114-fuer-dich-anpassen.test.tsx |
+| REQ-114 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-2 | 3 | 0 | tests/acceptance/REQ-114-fuer-dich-anpassen.test.tsx |
+| REQ-114 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-114-fuer-dich-anpassen.test.tsx |
+| REQ-114 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-114-fuer-dich-anpassen.test.tsx |
+| REQ-114 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-114-fuer-dich-anpassen.test.tsx |
+| REQ-114 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-114-fuer-dich-anpassen.test.tsx |
+| REQ-114 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-114-fuer-dich-anpassen.test.tsx |
+| REQ-114 | Blatt „„Für dich“ anpassen“ – Abschnitte der Filterpille „Für dich“ ein- und ausblenden | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-114-fuer-dich-anpassen.test.tsx |
+| REQ-115 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-1 | 11 | 0 | tests/acceptance/REQ-115-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-115 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-2 | 6 | 0 | tests/acceptance/REQ-115-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-115 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-3 | 1 | 0 | tests/acceptance/REQ-115-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-115 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-4 | 4 | 0 | tests/acceptance/REQ-115-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-115 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-5 | 7 | 0 | tests/acceptance/REQ-115-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-115 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-115-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-115 | Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches | Implementiert | AK-7 | 1 | 0 | tests/acceptance/REQ-115-bildzuschnitt-seitenverhaeltnis.test.tsx |
+| REQ-116 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-1 | 2 | 0 | tests/acceptance/REQ-116-online-suchen-option-suchfenster.test.tsx |
+| REQ-116 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-116-online-suchen-option-suchfenster.test.tsx |
+| REQ-116 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-3 | 5 | 0 | tests/acceptance/REQ-116-online-suchen-option-suchfenster.test.tsx |
+| REQ-116 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-4 | 2 | 0 | tests/acceptance/REQ-116-online-suchen-option-suchfenster.test.tsx |
+| REQ-116 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-5 | 3 | 0 | tests/acceptance/REQ-116-online-suchen-option-suchfenster.test.tsx |
+| REQ-116 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-6 | 3 | 0 | tests/acceptance/REQ-116-online-suchen-option-suchfenster.test.tsx |
+| REQ-116 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-7 | 2 | 0 | tests/acceptance/REQ-116-online-suchen-option-suchfenster.test.tsx |
+| REQ-116 | Menü „Buch hinzufügen“ – Option „Online suchen“ und Suchfenster | Implementiert | AK-8 | 5 | 0 | tests/acceptance/REQ-116-online-suchen-option-suchfenster.test.tsx |
+| REQ-117 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-1 | 4 | 0 | tests/acceptance/REQ-117-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-117 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-2 | 2 | 0 | tests/acceptance/REQ-117-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-117 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-3 | 3 | 0 | tests/acceptance/REQ-117-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-117 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-4 | 3 | 0 | tests/acceptance/REQ-117-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-117 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-5 | 2 | 0 | tests/acceptance/REQ-117-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-117 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-6 | 1 | 0 | tests/acceptance/REQ-117-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-117 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-7 | 4 | 0 | tests/acceptance/REQ-117-online-suchen-treffer-uebernahme.test.tsx |
+| REQ-117 | „Online suchen“ – Treffer als 3×3-Raster abwechselnd aus beiden Quellen und Übernahme wie beim Barcode-Scan | Implementiert | AK-8 | 2 | 0 | tests/acceptance/REQ-117-online-suchen-treffer-uebernahme.test.tsx |

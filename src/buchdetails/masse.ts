@@ -100,9 +100,15 @@ export function vollstaendigeMasse(q: MassQuelle = {}): { breite: number; hoehe:
   return { breite: w.breiteMm, hoehe: w.hoeheMm, dicke: w.dickeMm };
 }
 
-/** Vorschlag der Zeile „Maße“ ohne hinterlegte Werte (REQ-072, AK-2): „ca. 13,8 × 21,8 × 2,4 cm“. */
+/** Alle drei Maße hinterlegt? Dann zeigt die Zeile sie ohne „ca.“ (REQ-072, AK-2). */
+export const masseVollstaendig = (q: MassQuelle): boolean => q.breiteMm !== undefined && q.hoeheMm !== undefined && q.dickeMm !== undefined;
+
+/**
+ * Vorschlag der Zeile „Maße“, solange nicht alle Werte hinterlegt sind (REQ-072 AK-2/AK-4, REQ-077 AK-10):
+ * hinterlegte Einzelwerte, fehlende aus den Standardmaßen, z. B. „ca. 14,8 × 24,0 × 2,8 cm“. Nie gespeichert.
+ */
 export function masseVorschlagText(q: MassQuelle): string {
-  const w = wirksameMasse({ format: q.format, unterformat: q.unterformat, seitenanzahl: q.seitenanzahl });
+  const w = wirksameMasse({ format: q.format, unterformat: q.unterformat, seitenanzahl: q.seitenanzahl, breiteMm: q.breiteMm, hoeheMm: q.hoeheMm, dickeMm: q.dickeMm });
   return `ca. ${masseText({ breiteMm: w.breiteMm, hoeheMm: w.hoeheMm, dickeMm: w.dickeMm })}`;
 }
 

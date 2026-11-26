@@ -49,12 +49,13 @@ export interface Liste {
   name: string;
 }
 
-/** Ein Buch in einer Liste, bei Sagas optional mit Bandnummer (REQ-095, REQ-096). */
+/**
+ * Ein Buch in einer Liste (REQ-095). Seit REQ-112 gehört die Bandnummer zum Buch (`Buch.bandnummer`), nicht mehr
+ * zur Zugehörigkeit; ein Buch hat in allen Sagas denselben Band.
+ */
 export interface Zugehoerigkeit {
   listeId: string;
   buchId: string;
-  /** Bandnummer, ganze Zahl ≥ 1; nur bei Sagas sinnvoll. Fehlend = kein Band. */
-  band?: number;
 }
 
 /** Name gültig: nicht leer und nicht nur Leerzeichen (REQ-096, REQ-098). Liefert den bereinigten Namen oder null. */
@@ -77,14 +78,45 @@ export function listeAusDaten(daten: unknown): Liste | undefined {
   return { id: e.id, art: e.art, name: e.name };
 }
 
-/** Zugehörigkeit aus gespeicherten Daten; ungültig → undefined. Ungültige Bandnummern fehlen. */
+/** Zugehörigkeit aus gespeicherten Daten; ungültig → undefined. Eine alte Bandnummer je Zugehörigkeit wird ignoriert (REQ-112). */
 export function zugehoerigkeitAusDaten(daten: unknown): Zugehoerigkeit | undefined {
   const e = (daten ?? {}) as Record<string, unknown>;
   if (typeof e.listeId !== 'string' || typeof e.buchId !== 'string') return undefined;
-  const z: Zugehoerigkeit = { listeId: e.listeId, buchId: e.buchId };
-  const band = typeof e.band === 'number' ? e.band : e.band === null || e.band === undefined ? undefined : Number(e.band);
-  if (istBandnummer(band)) z.band = band;
-  return z;
+  return { listeId: e.listeId, buchId: e.buchId };
+}
+
+/** Bandangabe aus gespeicherten Daten (Zahl oder Text) → ganze Zahl ≥ 1, sonst undefined. */
+const bandAusDaten = (w: unknown): number | undefined => {
+  const n = typeof w === 'number' ? w : typeof w === 'string' && w.trim() !== '' ? Number(w) : undefined;
+  return istBandnummer(n) ? n : undefined;
+};
+
+/**
+ * Übernahme der alten Bandnummern je Saga-Zugehörigkeit in die Bandnummer des Buches (REQ-112, AK-10):
+ * Hat das Buch bereits eine eigene Bandnummer, bleibt sie. Sonst gilt die kleinste gültige Bandnummer seiner
+ * Saga-Zugehörigkeiten. Liefert je Buch-ID die neue Bandnummer (nur Bücher, die eine erhalten).
+ * Gemeinsame Regel für die Migrationen (IndexedDB 10, SQLite 12) und die Unit-Tests.
+ */
+export function bandnummernAusAltenZugehoerigkeiten(
+  buecher: readonly { id: string; bandnummer?: unknown }[],
+  sagaIds: ReadonlySet<string>,
+  alteZugehoerigkeiten: readonly { listeId?: unknown; buchId?: unknown; band?: unknown }[],
+): Map<string, number> {
+  const kleinste = new Map<string, number>();
+  for (const z of alteZugehoerigkeiten) {
+    if (typeof z.listeId !== 'string' || typeof z.buchId !== 'string' || !sagaIds.has(z.listeId)) continue;
+    const band = bandAusDaten(z.band);
+    if (band === undefined) continue;
+    const bisher = kleinste.get(z.buchId);
+    if (bisher === undefined || band < bisher) kleinste.set(z.buchId, band);
+  }
+  const ergebnis = new Map<string, number>();
+  for (const b of buecher) {
+    if (bandAusDaten(b.bandnummer) !== undefined) continue;
+    const band = kleinste.get(b.id);
+    if (band !== undefined) ergebnis.set(b.id, band);
+  }
+  return ergebnis;
 }
 
 export type BandPruefung = { ok: true; band?: number } | { ok: false };
@@ -131,13 +163,17 @@ export function anzahlJeListe(zug: readonly Zugehoerigkeit[], buchIds?: Readonly
 /** Zeile unter dem Autor (REQ-099): „Band 1 · The Empyrean“, ohne Band nur der Name. */
 export const sagaZeileText = (name: string, band?: number): string => (band === undefined ? name : `Band ${band} · ${name}`);
 
-/** Sagas eines Buches mit Band, A–Z nach Saga-Name (REQ-099). */
-export function sagenDesBuches(listen: readonly Liste[], zug: readonly Zugehoerigkeit[], buchId: string): { liste: Liste; band?: number }[] {
-  const eigene = zugehoerigkeitenVon(zug, buchId);
+/** Sagas eines Buches mit der Bandnummer des Buches (in allen Sagas dieselbe, REQ-112), A–Z nach Saga-Name (REQ-099). */
+export function sagenDesBuches(
+  listen: readonly Liste[],
+  zug: readonly Zugehoerigkeit[],
+  buch: Pick<Buch, 'id' | 'bandnummer'>,
+): { liste: Liste; band?: number }[] {
+  const ids = new Set(zugehoerigkeitenVon(zug, buch.id).map((z) => z.listeId));
+  const band = istBandnummer(buch.bandnummer) ? buch.bandnummer : undefined;
   return listenDerArt(listen, 'saga')
-    .map((liste) => ({ liste, z: eigene.find((z) => z.listeId === liste.id) }))
-    .filter((x) => x.z !== undefined)
-    .map(({ liste, z }) => (z!.band === undefined ? { liste } : { liste, band: z!.band }));
+    .filter((liste) => ids.has(liste.id))
+    .map((liste) => (band === undefined ? { liste } : { liste, band }));
 }
 
 /** Sortierung einer geöffneten Liste (REQ-098). */
@@ -150,8 +186,8 @@ export const standardSortierung = (art: ListenArt): ListenSortierung => (art ===
 export const sortierText = (s: ListenSortierung): string => (s === 'baende' ? 'Nach Bänden' : 'A–Z');
 
 /**
- * Bücher einer Liste (REQ-098): „nach Bänden“ aufsteigend nach Bandnummer, Bücher ohne Band danach A–Z;
- * „A–Z“ nach Titel.
+ * Bücher einer Liste (REQ-098): „nach Bänden“ aufsteigend nach der Bandnummer des Buches (REQ-112), Bücher ohne
+ * Band danach A–Z; „A–Z“ nach Titel.
  */
 export function buecherDerListeSortiert(
   buecher: readonly Buch[],
@@ -159,12 +195,13 @@ export function buecherDerListeSortiert(
   listeId: string,
   sortierung: ListenSortierung,
 ): Buch[] {
-  const band = new Map(zug.filter((z) => z.listeId === listeId).map((z) => [z.buchId, z.band] as const));
-  const drin = buecher.filter((b) => band.has(b.id));
+  const ids = buecherInListe(zug, listeId);
+  const drin = buecher.filter((b) => ids.has(b.id));
   if (sortierung === 'az') return alphabetisch(drin);
-  const mitBand = drin.filter((b) => band.get(b.id) !== undefined);
-  const ohneBand = drin.filter((b) => band.get(b.id) === undefined);
-  const nachBand = alphabetisch(mitBand).sort((a, b) => band.get(a.id)! - band.get(b.id)!);
+  const band = (b: Buch) => (istBandnummer(b.bandnummer) ? b.bandnummer : undefined);
+  const mitBand = drin.filter((b) => band(b) !== undefined);
+  const ohneBand = drin.filter((b) => band(b) === undefined);
+  const nachBand = alphabetisch(mitBand).sort((a, b) => band(a)! - band(b)!);
   return [...nachBand, ...alphabetisch(ohneBand)];
 }
 
@@ -176,9 +213,8 @@ export const buecherInListe = (zug: readonly Zugehoerigkeit[], listeId: string):
   new Set(zug.filter((z) => z.listeId === listeId).map((z) => z.buchId));
 
 /**
- * Änderungen beim „Sichern“ im Blatt „Bücher auswählen“ (REQ-098, AK-8): neu markierte Bücher werden aufgenommen
- * (bei Sagas mit der Bandnummer aus dem Barcode-Scan, REQ-099, sonst ohne Band), entmarkierte vorher enthaltene
- * herausgenommen. Bereits enthaltene, weiter markierte Bücher bleiben unverändert (Bandnummer bleibt).
+ * Änderungen beim „Sichern“ im Blatt „Bücher auswählen“ (REQ-098, AK-8): neu markierte Bücher werden aufgenommen,
+ * entmarkierte vorher enthaltene herausgenommen. Die Bandnummer gehört zum Buch und bleibt unverändert (REQ-112).
  */
 export function auswahlAenderungen(
   liste: Pick<Liste, 'id' | 'art'>,
@@ -190,8 +226,7 @@ export function auswahlAenderungen(
   const aufnehmen: Zugehoerigkeit[] = [];
   for (const b of buecher) {
     if (!markiert.has(b.id) || vorher.has(b.id)) continue;
-    const band = liste.art === 'saga' && istBandnummer(b.bandnummer) ? b.bandnummer : undefined;
-    aufnehmen.push(band === undefined ? { listeId: liste.id, buchId: b.id } : { listeId: liste.id, buchId: b.id, band });
+    aufnehmen.push({ listeId: liste.id, buchId: b.id });
   }
   const herausnehmen = [...vorher].filter((id) => !markiert.has(id));
   return { aufnehmen, herausnehmen };

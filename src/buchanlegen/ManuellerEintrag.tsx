@@ -9,7 +9,7 @@ import { standardRepository } from '@/buecher/buchQuelle';
 import Auswahlmenue, { type MenueAktion } from '@/buchdetails/Auswahlmenue';
 import BlattMasse from '@/buchdetails/BlattMasse';
 import BlattPreis from '@/buchdetails/BlattPreis';
-import { BlattErschienen, BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
+import { BlattBand, BlattErschienen, BlattHinzugefuegt, BlattIsbn, BlattVerlag } from '@/buchdetails/BlattFeld';
 import { AusgabeKarte } from '@/buchdetails/reiter/DetailsBereich';
 import FensterFormat from '@/buchdetails/reiter/FensterFormat';
 import { abschnittKopfStil } from '@/buchdetails/reiter/rezension';
@@ -51,7 +51,7 @@ export interface ManuellerEintragProps {
 }
 
 /** Blätter über dem Manuellen Eintrag für die Zeilen der Karte „Ausgabe“ (REQ-060). */
-type Unterblatt = 'format' | 'masse' | 'preis' | 'verlag' | 'isbn' | 'erschienen' | 'hinzugefuegt' | null;
+type Unterblatt = 'format' | 'masse' | 'preis' | 'verlag' | 'band' | 'isbn' | 'erschienen' | 'hinzugefuegt' | null;
 
 type Schritt = { art: 'blatt' } | { art: 'kamera' } | { art: 'zuschnitt'; bild: string };
 
@@ -327,7 +327,7 @@ export default function ManuellerEintrag({
   const [seitenFehler, setSeitenFehler] = useState(false);
   const [unterblatt, setUnterblatt] = useState<Unterblatt>(null);
   const [cover, setCover] = useState<string | null>(vorbelegung?.cover ?? null);
-  // Seitenverhältnis, auf das das Cover zugeschnitten ist; null = noch nicht (übernommenes Online-Cover, REQ-109).
+  // Seitenverhältnis, auf das das Cover zugeschnitten ist; null = noch nicht (übernommenes Online-Cover, REQ-115).
   const [coverVerhaeltnis, setCoverVerhaeltnis] = useState<number | null>(null);
   const [menue, setMenue] = useState(false);
   const [schritt, setSchritt] = useState<Schritt>({ art: 'blatt' });
@@ -404,7 +404,7 @@ export default function ManuellerEintrag({
   const zielVerhaeltnis = seitenverhaeltnis('cover', massQuelle);
   const coverPasst = coverVerhaeltnis !== null && verhaeltnisGleich(coverVerhaeltnis, zielVerhaeltnis);
 
-  // Online-Cover einmal zuschneiden und nach Änderung von Format oder Maßen neu zuschneiden (REQ-109, AK-1/AK-7).
+  // Online-Cover einmal zuschneiden und nach Änderung von Format oder Maßen neu zuschneiden (REQ-115, AK-1/AK-7).
   useEffect(() => {
     if (!cover || coverPasst) return;
     let laeuft = true;
@@ -442,7 +442,7 @@ export default function ManuellerEintrag({
       const buch = buchAusEingaben(eingaben, zeit());
       const repo = repository ?? (await standardRepository());
       await repo.save(buch);
-      // Noch nicht passend zugeschnittenes Cover vor dem Speichern zuschneiden (REQ-109, AK-7).
+      // Noch nicht passend zugeschnittenes Cover vor dem Speichern zuschneiden (REQ-115, AK-7).
       const coverBild = cover && !coverPasst ? await mittigZuschneiden(cover, zielVerhaeltnis).catch(() => cover) : cover;
       if (coverBild) {
         await bildspeicher.put(buch.id, 'cover', coverBild).catch((fehler: unknown) => {
@@ -650,6 +650,7 @@ export default function ManuellerEintrag({
               format: () => setUnterblatt('format'),
               masse: () => setUnterblatt('masse'),
               exemplar: () => setUnterblatt('format'),
+              band: () => setUnterblatt('band'),
               sonderausgabe: () => setUnterblatt('format'),
               preis: () => setUnterblatt('preis'),
               verlag: () => setUnterblatt('verlag'),
@@ -689,6 +690,14 @@ export default function ManuellerEintrag({
         <BlattVerlag
           verlag={eingaben.verlag}
           onSichern={(verlag) => (verlag ? ausgabeSetzen({ verlag }) : ausgabeSetzen({}, ['verlag']))}
+          onSchliessen={() => setUnterblatt(null)}
+        />
+      ) : null}
+      {unterblatt === 'band' ? (
+        // Zeile „Band“ wie in den Buchdetails (REQ-112, AK-8); der Wert wird mit dem Buch angelegt.
+        <BlattBand
+          band={eingaben.bandnummer}
+          onSichern={(bandnummer) => (bandnummer === undefined ? ausgabeSetzen({}, ['bandnummer']) : ausgabeSetzen({ bandnummer }))}
           onSchliessen={() => setUnterblatt(null)}
         />
       ) : null}

@@ -74,7 +74,7 @@ interface Props {
   menueOffen?: boolean;
   /** Plus-Schaltfläche bzw. „ד angetippt. */
   onPlus?: () => void;
-  /** Option „Online suchen“ gewählt (REQ-110). */
+  /** Option „Online suchen“ gewählt (REQ-116). */
   onOnlineSuche?: () => void;
   /** Option „Barcode scannen“ gewählt (REQ-061). */
   onBarcode?: () => void;
@@ -82,13 +82,13 @@ interface Props {
   onVonHand?: () => void;
   /** Tippen außerhalb des Menüs. */
   onMenueSchliessen?: () => void;
-  /** Filter-/Einstellungen-Schaltfläche angetippt: Blatt „„Für dich“ anpassen“ (REQ-108, REQ-005 AK-10). */
+  /** Filter-/Einstellungen-Schaltfläche angetippt: Blatt „„Für dich“ anpassen“ (REQ-114, REQ-005 AK-10). */
   onFilter?: () => void;
 }
 
 /**
  * Überschrift „Deine Bücher“ mit Filter-/Einstellungen- und Plus-Schaltfläche (REQ-005).
- * Die Filter-/Einstellungen-Schaltfläche öffnet das Blatt „„Für dich“ anpassen“ (REQ-108), ohne aktiven
+ * Die Filter-/Einstellungen-Schaltfläche öffnet das Blatt „„Für dich“ anpassen“ (REQ-114), ohne aktiven
  * Zustand (REQ-005 AK-10); die Plus-Schaltfläche öffnet das
  * Menü „Buch hinzufügen“ und zeigt „ד, solange es offen ist (REQ-029).
  */

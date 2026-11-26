@@ -93,20 +93,24 @@ const bandStil = (fehler: boolean): CSSProperties => ({
 });
 
 /**
- * Optionales Feld „Band“ je angehakter Saga (REQ-096): data-band-feld=<listeId>, ungültig data-fehler="true".
+ * Genau ein optionales Feld „Band“ mit der Bandnummer des Buches, sobald mindestens eine Saga angehakt ist
+ * (REQ-096, REQ-097, REQ-112): data-band-feld="buch", ungültig data-fehler="true".
  * Die Eingabe wird nicht gefiltert, damit ungültige Angaben (z. B. „0“, „-1“, „1,5“, Buchstaben) wie im Blatt
  * „ISBN“ hervorgehoben werden, statt stillschweigend verändert zu werden.
  */
-export function BandFeld({ listeId, wert, fehler, onWert }: { listeId: string; wert: string; fehler: boolean; onWert: (w: string) => void }) {
+export function BandFeld({ wert, fehler, onWert }: { wert: string; fehler: boolean; onWert: (w: string) => void }) {
   return (
-    <label style={{ display: 'flex', alignItems: 'center', gap: abstand('s'), ...textstufe('meta'), color: listenFarbe('bandBeschriftung') }}>
+    <label
+      data-band-zeile=""
+      style={{ display: 'flex', alignItems: 'center', gap: abstand('s'), marginTop: abstand('m'), ...textstufe('meta'), color: listenFarbe('bandBeschriftung') }}
+    >
       Band
       <input
         type="text"
         inputMode="numeric"
         autoComplete="off"
         aria-label="Band"
-        data-band-feld={listeId}
+        data-band-feld="buch"
         data-fehler={fehler ? 'true' : undefined}
         aria-invalid={fehler ? true : undefined}
         value={wert}

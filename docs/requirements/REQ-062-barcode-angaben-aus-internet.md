@@ -1,7 +1,7 @@
 ---
 id: REQ-062
 titel: Barcode scannen – Treffer zur ISBN aus dem Internet zur Auswahl anzeigen und ins Blatt „Manueller Eintrag“ übernehmen
-status: Implementiert
+status: In Umsetzung
 prioritaet: Should
 art: funktional
 quelle: CEO
@@ -38,8 +38,14 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 - Das System muss im Auswahlfenster einen Zurück-Pfeil anzeigen. Wenn der Nutzer ihn antippt oder die Android-Zurück-Taste betätigt, muss das System die Seite „Bücher“ anzeigen, ohne ein Buch anzulegen.
 
 **Übernahme**
-- Wenn der Nutzer einen Treffer antippt, muss das System das Blatt „Manueller Eintrag“ (REQ-030, REQ-060) öffnen und dessen Felder mit den Angaben dieses Treffers ausfüllen; ein vorhandenes Coverfoto wird als Cover übernommen (wie REQ-032). Das Coverfoto wird dabei nach REQ-109 auf das Seitenverhältnis des Buches zugeschnitten.
+- Wenn der Nutzer einen Treffer antippt, muss das System das Blatt „Manueller Eintrag“ (REQ-030, REQ-060) öffnen und dessen Felder mit den Angaben dieses Treffers ausfüllen; ein vorhandenes Coverfoto wird als Cover übernommen (wie REQ-032). Das Coverfoto wird dabei nach REQ-115 auf das Seitenverhältnis des Buches zugeschnitten.
 - Wenn der Treffer einen Preis und/oder ein Format liefert, muss das System auch diese Angaben in den Manuellen Eintrag übernehmen.
+- **Format zuordnen.** CEO (wörtlich, 2026-11-25): „Wenn online abrufbar ist, ob der gescannte Code ein Taschenbuch oder Hardcover ist, sollen jeweils dafür entsprechende Standardwerte hergenommen werden.“ Liefert der Treffer eine Formatangabe, muss das System sie dem Format der App zuordnen (**Auslegung**, z. B. Open Library „physical_format“):
+  - Taschenbuch-Angaben (z. B. „Paperback“, „Mass Market Paperback“, „Taschenbuch“, „kartoniert“, „Broschur“) → „Print · Taschenbuch“
+  - Hardcover-Angaben (z. B. „Hardcover“, „Hardback“, „gebunden“) → „Print · Hardcover“
+  - Groß- und Kleinschreibung spielt keine Rolle. Die Liste der erkannten Angaben wird zentral geführt und darf ohne REQ-Änderung erweitert werden.
+  - Eine nicht zuordenbare Angabe übernimmt das System nicht; das Format bleibt leer.
+- Die Maße aus dem Treffer und die Standardmaße bei fehlenden Maßen regeln REQ-072 und REQ-077.
 - Wenn zu einem Feld keine Angabe vorliegt, muss das System dieses Feld leer lassen.
 - Das System übernimmt den Autor so, wie die Quelle ihn liefert, ohne die Schreibweise zu vereinheitlichen.
 - Das System muss dem Nutzer die Möglichkeit bieten, alle Felder danach von Hand zu bearbeiten. Anlegen, Pflichtangaben und Schließen richten sich nach REQ-030, REQ-031 und REQ-060; das Buch wird erst mit „Hinzufügen“ angelegt.
@@ -98,6 +104,11 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 - **Dann** sind Preis und Format im Blatt „Manueller Eintrag“ mit diesen Angaben ausgefüllt
 - **Und** wählt der Nutzer stattdessen den zweiten Treffer, bleiben Preis und Format leer
 
+### AK-10 Formatangabe der Quelle wird zugeordnet
+- **Gegeben** Treffer mit der Formatangabe „Paperback“, „Hardcover“, „hardcover“ bzw. „Audio CD“
+- **Wenn** der Nutzer den jeweiligen Treffer antippt
+- **Dann** zeigt die Zeile „Format“ im Manuellen Eintrag „Print · Taschenbuch“, „Print · Hardcover“, „Print · Hardcover“ bzw. bleibt leer
+
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Option im Menü und Scan-Bildschirm (REQ-061).
@@ -125,4 +136,6 @@ Bestätigung des CEO (2026-11-16): „passt alles für mich. bitte für den näc
 | 2026-11-16 | Erstellt (Entwurf aus der CEO-Antwort zum Änderungsantrag „Buch anlegen“) | Anforderungsmanager |
 | 2026-11-16 | CEO-Antworten und angenommener Vorschlag eingearbeitet: Quellen DNB und Open Library, Auswahlfenster mit Quellenhinweis und Zurück-Pfeil, Übernahme ins Blatt „Manueller Eintrag“, kein Internet/nichts gefunden zur Seite „Bücher“. Status „Abgestimmt“ (CEO: „passt alles für mich. bitte für den nächsten Sprint planen.“) | Anforderungsmanager |
 | 2026-11-18 | Preis und Format werden übernommen (neu AK-9). CEO auf die Frage „Preis und Format beim Scan nicht übernehmen?“: „doch, sollen auch übernommen werden“. Autor wie geliefert, CEO auf die Frage „Autor-Schreibweise beim Scan vereinheitlichen?“: „nein das ist egal“. Status unverändert | Anforderungsmanager |
-| 2026-11-25 | Hinweis: übernommenes Coverfoto wird nach REQ-109 zugeschnitten; dieselbe Übernahme nutzt „Online suchen“ (REQ-111). AKs unverändert, Status unverändert | Anforderungsmanager |
+| 2026-11-25 | Fehler: Maße nach dem Scan. Formatangabe der Quelle wird Taschenbuch bzw. Hardcover zugeordnet (Auslegung: Liste der Angaben, nicht zuordenbar = leer), damit die passenden Standardmaße greifen (REQ-077). CEO (wörtlich): „wenn die Maße eines Buches nicht online verfügbar sind, sollen bitte die Standardmaße eines Taschenbuches verwendet werden. Wenn online abrufbar ist, ob der gescannte Code ein Taschenbuch oder Hardcover ist, sollen jeweils dafür entsprechende Standardwerte hergenommen werden.“ Anforderung ergänzt, AK-10 neu. Beauftragt (wörtlich): „okay, setze bitte Sprint 11 um als Prototypen“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Hinweis: übernommenes Coverfoto wird nach REQ-115 zugeschnitten; dieselbe Übernahme nutzt „Online suchen“ (REQ-117). AKs unverändert, Status unverändert | Anforderungsmanager |
+| 2026-11-26 | Zusammenführung Sprint 11 und Sprint 12: beide Änderungen vom 2026-11-25 erhalten (Formatzuordnung AK-10; Cover-Zuschnitt REQ-115 und Übernahme durch REQ-117). Status unverändert | Anforderungsmanager |

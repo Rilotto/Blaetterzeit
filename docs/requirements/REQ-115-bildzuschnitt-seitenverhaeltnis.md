@@ -1,5 +1,5 @@
 ---
-id: REQ-109
+id: REQ-115
 titel: Automatischer Zuschnitt von Cover, Rücken und Schnitt auf das Seitenverhältnis des Buches
 status: Implementiert
 prioritaet: Should
@@ -22,7 +22,7 @@ Fehlerbild (CEO 2026-11-25): Cover werden in den Buchdetails abgeschnitten, weil
 - Maßgeblich sind die Proportionen nach REQ-073 aus den hinterlegten Maßen bzw. den Standardmaßen nach REQ-077: Cover = Breite : Höhe, Buchrücken und Schnitt = Dicke : Höhe.
 
 **Online-Cover beim Übernehmen**
-- Wenn das System ein Coverfoto aus einer Online-Quelle übernimmt (Barcode-Scan, REQ-062; „Online suchen“, REQ-111), muss es das Bild einmal automatisch auf das Cover-Seitenverhältnis des Buches zuschneiden, das sich aus den Angaben des Treffers (Maße, sonst Format und Standardmaße) ergibt.
+- Wenn das System ein Coverfoto aus einer Online-Quelle übernimmt (Barcode-Scan, REQ-062; „Online suchen“, REQ-117), muss es das Bild einmal automatisch auf das Cover-Seitenverhältnis des Buches zuschneiden, das sich aus den Angaben des Treffers (Maße, sonst Format und Standardmaße) ergibt.
 - Das System muss mittig zuschneiden: Vom Bild bleibt der größtmögliche mittige Ausschnitt im Zielseitenverhältnis erhalten; überstehende Ränder werden gleichmäßig auf beiden Seiten entfernt (**Auslegung**).
 - Das System darf das Bild dabei nicht verzerren und keine Ränder hinzufügen.
 
@@ -85,7 +85,7 @@ Fehlerbild (CEO 2026-11-25): Cover werden in den Buchdetails abgeschnitten, weil
 
 ## Abhängigkeiten
 
-- REQ-062 (Barcode-Übernahme), REQ-111 („Online suchen“), REQ-072 (Maße), REQ-058 (Format), REQ-025 (Seitenzahl), REQ-073 (Proportionen, Einpassen), REQ-077 (Standardmaße), REQ-030/REQ-060 (Manueller Eintrag).
+- REQ-062 (Barcode-Übernahme), REQ-117 („Online suchen“), REQ-072 (Maße), REQ-058 (Format), REQ-025 (Seitenzahl), REQ-073 (Proportionen, Einpassen), REQ-077 (Standardmaße), REQ-030/REQ-060 (Manueller Eintrag).
 
 ## Offene Fragen
 

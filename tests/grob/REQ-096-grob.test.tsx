@@ -26,7 +26,7 @@ async function tippe(el: Element | undefined | null) {
 }
 const blatt = () => screen.queryAllByRole('dialog').at(-1) ?? null;
 
-it('[REQ-096/GROB] Saga-Blatt zeigt nur Sagas; „The Empyrean“ anhaken, Band 2, Sichern → Zuordnung mit Band 2', async () => {
+it('[REQ-096/GROB] Saga-Blatt zeigt nur Sagas; „The Empyrean“ anhaken, Band 2, Sichern → Zuordnung, Bandnummer des Buches 2 (REQ-112)', async () => {
   const b: Buch = { id: crypto.randomUUID(), titel: 'Iron Flame', status: 'ungelesen', seitenanzahl: 300 };
   const repo = new InMemoryBookRepository();
   const listen = new InMemoryListenRepository();
@@ -50,5 +50,6 @@ it('[REQ-096/GROB] Saga-Blatt zeigt nur Sagas; „The Empyrean“ anhaken, Band 
   fireEvent.change(band, { target: { value: '2' } });
   await tippe(within(blatt()!).getByRole('button', { name: 'Sichern' }));
   await waitFor(() => expect(blatt()).toBeNull(), W);
-  await waitFor(async () => expect((await listen.zugehoerigkeiten()).filter((z) => z.buchId === b.id)).toEqual([{ listeId: 's1', buchId: b.id, band: 2 }]), W);
+  await waitFor(async () => expect((await listen.zugehoerigkeiten()).filter((z) => z.buchId === b.id).map((z) => z.listeId)).toEqual(['s1']), W);
+  await waitFor(async () => expect((await repo.get(b.id))?.bandnummer).toBe(2), W);
 });

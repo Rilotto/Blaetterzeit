@@ -58,9 +58,15 @@ async function liste(w: Welt, art: ListenArt, name: string): Promise<Liste> {
   await w.listen.listeSpeichern(l);
   return l;
 }
+/** Buch in eine Liste aufnehmen; ein Band gehört seit REQ-112 zum Buch (Buch.bandnummer), nicht zur Zugehörigkeit. */
 async function zuordnen(w: Welt, l: Liste, b: Buch, band?: number) {
-  await w.listen.zuordnen(band === undefined ? { listeId: l.id, buchId: b.id } : { listeId: l.id, buchId: b.id, band });
+  if (band !== undefined) await w.repo.save({ ...((await w.repo.get(b.id)) ?? b), bandnummer: band });
+  await w.listen.zuordnen({ listeId: l.id, buchId: b.id });
 }
+/** Bandnummer des Buches (REQ-112). */
+const bandVon = async (w: Welt, b: Buch) => (await w.repo.get(b.id))?.bandnummer;
+/** Zugehörigkeiten ohne Bandangabe (nur listeId/buchId). */
+const zugOhneBand = async (w: Welt) => (await w.listen.zugehoerigkeiten()).map((z) => ({ listeId: z.listeId, buchId: z.buchId }));
 /** Element sichtbar (kein hidden, aria-hidden, display:none, inert in der Kette). */
 function sichtbar(el: Element | null): boolean {
   for (let n = el as HTMLElement | null; n; n = n.parentElement) {
@@ -185,7 +191,7 @@ function zeile(d: HTMLElement, bez: string) {
 }
 /** Wert der Zeile ohne Bezeichnung und Pfeil. */
 const zeilenWert = (d: HTMLElement, bez: string) => norm(norm(zeile(d, bez)?.textContent).slice(bez.length).replace('›', ''));
-void [ohneLeer, textEls, zuordnen, blatt, zeilenWert, pillenTexte, neustartDetails, haken, angehakt, neuerName, sichern, schliessen, markiert, bandFeld, ARTEN, checkboxen];
+void [bandVon, zugOhneBand, ohneLeer, textEls, zuordnen, blatt, zeilenWert, pillenTexte, neustartDetails, haken, angehakt, neuerName, sichern, schliessen, markiert, bandFeld, ARTEN, checkboxen];
 // ----------------------------------------------------------------------------- Ende Kopf
 
 describe('REQ-095 Abschnitt „Sagas, Sammlungen und Bibliotheken“', () => {
@@ -382,7 +388,9 @@ describe('REQ-095 Abschnitt „Sagas, Sammlungen und Bibliotheken“', () => {
       cleanup();
       const w2 = await starte();
       expect(await w2.listen.listen()).toEqual([s]);
-      expect(await w2.listen.zugehoerigkeiten()).toEqual([{ listeId: s.id, buchId: b.id, band: 3 }]);
+      // Seit REQ-112 gehört die Bandnummer zum Buch.
+      expect(await zugOhneBand(w2)).toEqual([{ listeId: s.id, buchId: b.id }]);
+      expect(await bandVon(w2, b)).toBe(3);
     });
   });
 });

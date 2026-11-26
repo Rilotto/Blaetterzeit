@@ -268,17 +268,19 @@ describe('REQ-027 Lese-Streak', () => {
     });
   });
 
-  describe('AK-5 Verpasster Tag setzt auf 0', () => {
+  // Angepasst Sprint 10 Teil D (REQ-109): Der Buch-Streak ist ein Rekord und sinkt nach einem verpassten Tag nicht.
+  describe('AK-5 Verpasster Tag setzt nicht zurück (Rekord, REQ-109)', () => {
     it.each([
-      ['vorgestern 12:00, angezeigt heute 15:00', [tag(-2)], tag(0, 15)],
-      ['vorgestern 23:59, angezeigt heute 00:01', [tag(-2, 23, 59)], new Date(2026, 10, 12, 0, 1)],
-      ['lange Serie bis vorgestern', [tag(-6), tag(-5), tag(-4), tag(-3), tag(-2)], tag(0, 15)],
-    ] as const)('[REQ-027/AK-5] %s → 0, Flamme inaktiv', async (_f, d, heute) => {
+      ['vorgestern 12:00, angezeigt heute 15:00', [tag(-2)], tag(0, 15), 1],
+      ['vorgestern 23:59, angezeigt heute 00:01', [tag(-2, 23, 59)], new Date(2026, 10, 12, 0, 1), 1],
+      ['lange Serie bis vorgestern', [tag(-6), tag(-5), tag(-4), tag(-3), tag(-2)], tag(0, 15), 5],
+    ] as const)('[REQ-027/AK-5] %s → %i, Flamme gefüllt (nicht 0)', async (_f, d, heute, n) => {
       await zeigeMit(s(...d), heute);
-      expect(streak()).toBe(0);
-      expect(flamme().getAttribute('data-flamme')).toBe('inaktiv');
+      expect(streak()).toBe(n);
+      expect(flamme().getAttribute('data-flamme')).not.toBe('inaktiv');
+      expect(flamme().querySelectorAll('[data-verlauf]')).toHaveLength(2);
     });
-    it('[REQ-027/AK-5] Tageswechsel bei geöffneten Details: gestern gelesen, nach Neustart übermorgen → 0', async () => {
+    it('[REQ-027/AK-5] Tageswechsel: gestern gelesen, nach Neustart übermorgen → weiter 1', async () => {
       const { b } = await zeigeMit(s(tag(-1)));
       expect(streak()).toBe(1);
       cleanup();
@@ -287,7 +289,7 @@ describe('REQ-027 Lese-Streak', () => {
       const BD = w.BD;
       render(<BD buchId={b.id} bildspeicher={bilderFake()} onZurueck={() => {}} jetzt={jetzt} />);
       await vi.waitFor(() => expect(sek().querySelector('[data-streak]')).not.toBeNull());
-      expect(streak()).toBe(0);
+      expect(streak()).toBe(1);
     });
   });
 
@@ -314,7 +316,7 @@ describe('REQ-027 Lese-Streak', () => {
   });
 
   describe('AK-7 Sichern ohne Erhöhung zählt nicht', () => {
-    it('[REQ-027/AK-7] gestern Sitzung, heute nur ohne Erhöhung gesichert → morgen 0', async () => {
+    it('[REQ-027/AK-7] gestern Sitzung, heute nur ohne Erhöhung gesichert → morgen 1 (heute kein Lesetag, Rekord bleibt 1)', async () => {
       const { b } = await zeigeMit(s(tag(-1)));
       await sichereAS('50');
       await sichereAS('40');
@@ -325,7 +327,8 @@ describe('REQ-027 Lese-Streak', () => {
       const BD = w.BD;
       render(<BD buchId={b.id} bildspeicher={bilderFake()} onZurueck={() => {}} jetzt={jetzt} />);
       await vi.waitFor(() => expect(sek().querySelector('[data-streak]')).not.toBeNull());
-      expect(streak()).toBe(0);
+      expect(streak()).toBe(1);
+      expect(sitzungenAnz()).toBe(1);
     });
   });
 

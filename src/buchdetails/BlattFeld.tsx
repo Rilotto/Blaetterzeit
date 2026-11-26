@@ -10,6 +10,7 @@ import {
   isbnFiltern,
   isbnGueltig,
 } from '@/domain/ausgabe';
+import { bandPruefen } from '@/domain/listen';
 import { fortschrittFarbe, abstand } from '@/theme';
 import BlattUnten, { blattEingabeStil, sichernStil } from './BlattUnten';
 
@@ -123,6 +124,30 @@ interface EinfachProps {
 /** Blatt „Verlag“ (REQ-063). Leer bzw. nur Leerzeichen sichern entfernt den Verlag (REQ-093). */
 export function BlattVerlag({ verlag, ...rest }: EinfachProps & { verlag?: string }) {
   return <BlattFeld titel="Verlag" kennung="verlag" startWert={verlag ?? ''} platzhalter="Verlag" maxLength={200} pruefen={(w) => w.trim()} {...rest} />;
+}
+
+/**
+ * Blatt „Band“ (REQ-112) nach Muster „Verlag“: Zahlenfeld mit der Bandnummer des Buches. Gültig ist eine ganze Zahl
+ * ≥ 1; leer entfernt die Bandnummer (REQ-093). Ungültige Eingaben (0, -1, 1,5, Buchstaben) werden nicht gefiltert,
+ * sondern beim Sichern hervorgehoben wie im Blatt „ISBN“ (REQ-063); es wird nichts gespeichert.
+ */
+export function BlattBand({ band, onSichern, onSchliessen }: { band?: number; onSichern: (band: number | undefined) => void; onSchliessen: () => void }) {
+  return (
+    <BlattFeld
+      titel="Band"
+      kennung="band"
+      startWert={band !== undefined ? String(band) : ''}
+      platzhalter="1"
+      inputMode="numeric"
+      maxLength={10}
+      pruefen={(w) => {
+        const p = bandPruefen(w);
+        return p.ok ? (p.band === undefined ? '' : String(p.band)) : null;
+      }}
+      onSichern={(w) => onSichern(w === '' ? undefined : Number(w))}
+      onSchliessen={onSchliessen}
+    />
+  );
 }
 
 /** Blatt „ISBN“ (REQ-063): nur Ziffern (und „X“ als zehnte Stelle), Prüfziffer wird beim Sichern geprüft; leer entfernt (REQ-093). */

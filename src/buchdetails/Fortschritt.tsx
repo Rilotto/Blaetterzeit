@@ -11,6 +11,11 @@ interface Props {
   onAktuelleSeite: () => void;
   /** Herz angetippt (keine Seitenanzahl): Menü „Buchlänge“ (REQ-023, AK-7; REQ-025). */
   onBuchlaenge: () => void;
+  /**
+   * Anordnung: „spalte“ (Standard, Buchdetails REQ-023 und übrige Nutzer) zentriert Balken und Angabe untereinander;
+   * „zeile“ (nur Startseite, REQ-102 AK-2) setzt den Balken linksbündig über die Restbreite und die Angabe rechts daneben.
+   */
+  anordnung?: 'spalte' | 'zeile';
 }
 
 // Maße nach REF-buchdetails-01.png (≈ 2,26 px je dp): Balken ≈ 236 × 8 dp, Angabe ≈ 17 dp.
@@ -23,6 +28,15 @@ const bereichStil: CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   marginTop: bildschirmrand,
+};
+
+// REQ-102 AK-2: Balken linksbündig über die Restbreite, Angabe rechts daneben.
+const zeileStil: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: abstand('s'),
+  marginTop: abstand('s'),
 };
 
 const balkenStil: CSSProperties = {
@@ -75,10 +89,12 @@ const herzStil: CSSProperties = {
 };
 
 /** Lesefortschritt unter der Statuspille: Herz ohne Seitenanzahl, sonst Balken mit Angabe (REQ-023). */
-export default function Fortschritt({ buch, onAktuelleSeite, onBuchlaenge }: Props) {
+export default function Fortschritt({ buch, onAktuelleSeite, onBuchlaenge, anordnung = 'spalte' }: Props) {
+  const zeile = anordnung === 'zeile';
+  const bereich = zeile ? zeileStil : bereichStil;
   if (!hatSeitenanzahl(buch)) {
     return (
-      <div data-fortschritt="" style={bereichStil}>
+      <div data-fortschritt="" data-fortschritt-anordnung={anordnung} style={bereich}>
         <button type="button" data-fortschritt-herz="" aria-label="Buchlänge festlegen" onClick={onBuchlaenge} style={herzStil}>
           <Icon datei="icon-herz.png" url={iconHerz} farbe={fortschrittFarbe('fortschrittHerz')} groesse={22} />
         </button>
@@ -87,7 +103,7 @@ export default function Fortschritt({ buch, onAktuelleSeite, onBuchlaenge }: Pro
   }
   const prozent = fortschrittExakt(buch);
   return (
-    <div data-fortschritt="" style={bereichStil}>
+    <div data-fortschritt="" data-fortschritt-anordnung={anordnung} style={bereich}>
       <div
         role="progressbar"
         aria-label="Lesefortschritt"
@@ -98,11 +114,16 @@ export default function Fortschritt({ buch, onAktuelleSeite, onBuchlaenge }: Pro
         // Erweiterte Tippfläche (REQ-065 AK-9); wirkt, sobald der Balken nicht mehr abschneidet (Feuilleton, REQ-071).
         {...tippflaecheAttr}
         {...stilRolle('balken')}
-        style={balkenStil}
+        style={zeile ? { ...balkenStil, flex: '1 1 auto', width: 'auto', minWidth: 0 } : balkenStil}
       >
         <span data-fortschritt-fuellung="" {...stilRolle('balkenfuellung')} style={fuellungStil(prozent)} />
       </div>
-      <button type="button" data-fortschritt-text="" onClick={onAktuelleSeite} style={textStil}>
+      <button
+        type="button"
+        data-fortschritt-text=""
+        onClick={onAktuelleSeite}
+        style={zeile ? { ...textStil, margin: 0, paddingRight: 0, flex: '0 0 auto', whiteSpace: 'nowrap' } : textStil}
+      >
         {fortschrittText(buch)}
       </button>
     </div>

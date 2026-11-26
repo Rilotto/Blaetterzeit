@@ -23,7 +23,7 @@ CEO (2026-11-24, über den Scrum Master): „Diese Woche“: Wochenübersicht wi
 - Wenn der Nutzer den Bereich „Diese Woche“ antippt, muss das System den Menüpunkt „Statistik“ mit „Wöchentlich“ und der laufenden Woche öffnen (**Auslegung**: Zeitraum passend zur Wochenübersicht). Die dort gespeicherte Pillenwahl (REQ-079) wird damit auf „Wöchentlich“ gesetzt (**Auslegung**).
 
 **Lesesträhne**
-- Das System muss auf der Startseite die Lesesträhne mit Flamme und Zahl anzeigen, berechnet wie „Serie X Tage“ der Statistik (REQ-087: buchübergreifend, nur Sitzungen, endet heute oder gestern). Die Flamme ist gestaltet wie in REQ-027 (bei 0 Umriss, sonst gefüllt). Die Strähne steht im Bereich „Diese Woche“ (**Auslegung**: Lage nach der Konzeptskizze, kein Akzeptanzkriterium).
+- Das System muss auf der Startseite die Lesesträhne mit Flamme und Zahl anzeigen, berechnet wie „Serie X Tage“ der Statistik (REQ-087: buchübergreifend, nur Sitzungen, endet heute oder gestern). Die Flamme ist angezündet, ausgegraut oder erloschen nach REQ-108 (Form und Farben wie REQ-027). Die Strähne steht im Bereich „Diese Woche“ (**Auslegung**: Lage nach der Konzeptskizze, kein Akzeptanzkriterium).
 
 ## Akzeptanzkriterien
 
@@ -40,7 +40,8 @@ CEO (2026-11-24, über den Scrum Master): „Diese Woche“: Wochenübersicht wi
 ### AK-3 Lesesträhne wie in der Statistik
 - **Gegeben** Sitzungen vorgestern, gestern und heute an verschiedenen Büchern
 - **Wenn** die Startseite angezeigt wird
-- **Dann** zeigt die Flamme 3, dieselbe Zahl wie „Serie 3 Tage“ in der Statistik
+- **Dann** zeigt die Flamme 3, angezündet, dieselbe Zahl wie „Serie 3 Tage“ in der Statistik
+- **Und** gibt es Sitzungen nur bis gestern, ist die Flamme ausgegraut mit sichtbarer Zahl (REQ-108)
 - **Und** liegt die letzte Sitzung vorgestern, zeigt sie 0 und die Flamme als Umriss
 
 ## Abgrenzung (nicht Teil dieses REQ)
@@ -54,6 +55,7 @@ CEO (2026-11-24, über den Scrum Master): „Diese Woche“: Wochenübersicht wi
 ## Abhängigkeiten
 
 - **REQ-027, REQ-079, REQ-080, REQ-086, REQ-087, REQ-088, REQ-101.**
+- **REQ-108 (Entwurf):** Die Lesesträhne bekommt den Zustand „ausgegraut“ (gestern gelesen, heute noch nicht). Bisher gilt „bei 0 Umriss, sonst gefüllt“.
 
 ## Offene Fragen
 
@@ -65,3 +67,5 @@ CEO (2026-11-24, über den Scrum Master): „Diese Woche“: Wochenübersicht wi
 |---|---|---|
 | 2026-11-24 | Erstellt aus CEO-Vision und abgenommener Konzeptskizze, Entwurf | Anforderungsmanager |
 | 2026-11-24 | Vom CEO bestätigt (wörtlich): „sieht alles super aus! Danke!“. Status „Abgestimmt“ | Anforderungsmanager |
+| 2026-11-25 | Verweis auf REQ-108 (Entwurf, ausgegraute Flamme) unter Abhängigkeiten ergänzt. AKs bleiben bis zur Abstimmung unverändert. Status unverändert | Anforderungsmanager |
+| 2026-11-25 | An REQ-108 angepasst (Abgestimmt, CEO: „beide punkte passen für mich.“): Flamme mit drei Zuständen (Anforderung, AK-3). Status unverändert | Anforderungsmanager |

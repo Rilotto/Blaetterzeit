@@ -53,13 +53,13 @@ interface Props {
   barcodeScanner?: BarcodeScanner;
   /** ISBN-Suche (REQ-062); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
   isbnSuche?: IsbnSuche;
-  /** Freitextsuche „Online suchen“ (REQ-110, REQ-111); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
+  /** Freitextsuche „Online suchen“ (REQ-116, REQ-117); ohne Angabe DNB + Open Library. In Tests ersetzbar. */
   onlineSuche?: OnlineSuche;
   /** Listenspeicher (Sagas, Sammlungen, Bibliotheken, REQ-095); ohne Angabe der der App. In Tests ersetzbar. */
   listenRepository?: ListenRepository;
-  /** Einstellungsspeicher (Auswahl „Für dich“, REQ-108); ohne Angabe der des DesignAnbieters bzw. flüchtig. In Tests ersetzbar. */
+  /** Einstellungsspeicher (Auswahl „Für dich“, REQ-114); ohne Angabe der des DesignAnbieters bzw. flüchtig. In Tests ersetzbar. */
   einstellungRepository?: EinstellungRepository;
-  /** Abschnitte der Seite „Bücher“; ohne Angabe die zentrale Liste (REQ-108). In Tests ersetzbar. */
+  /** Abschnitte der Seite „Bücher“; ohne Angabe die zentrale Liste (REQ-114). In Tests ersetzbar. */
   abschnitte?: readonly AbschnittDefinition[];
 }
 
@@ -69,7 +69,7 @@ const fluechtig = (): EinstellungRepository => {
   return { lesen: (s) => Promise.resolve(m.get(s)), speichern: (s, w) => Promise.resolve(void m.set(s, w)) };
 };
 
-/** In „Für dich“ ausgeblendete Abschnitte (REQ-108), geladen über das EinstellungRepository. */
+/** In „Für dich“ ausgeblendete Abschnitte (REQ-114), geladen über das EinstellungRepository. */
 function useAusgeblendet(repo: EinstellungRepository): [string[], boolean, (neu: string[]) => void] {
   // Geladen ist die Auswahl erst, wenn sie aus genau diesem Repository stammt.
   const [stand, setStand] = useState<{ repo: EinstellungRepository; ausgeblendet: string[] } | undefined>(undefined);
@@ -195,7 +195,7 @@ export default function BuecherAnsicht({
   const scanner = useMemo(() => barcodeScanner ?? standardBarcodeScanner(), [barcodeScanner]);
   const isbnSucheAktiv = useMemo(() => isbnSuche ?? standardIsbnSuche(), [isbnSuche]);
   const onlineSucheAktiv = useMemo(() => onlineSuche ?? standardOnlineSuche(), [onlineSuche]);
-  // Suchfenster „Online suchen“ (REQ-110) als Blatt über der Seite.
+  // Suchfenster „Online suchen“ (REQ-116) als Blatt über der Seite.
   const [sucheOffen, setSucheOffen] = useState(false);
   const ansichtSpeicher = useMemo(() => ansichtRepository ?? standardAnsichtRepository(), [ansichtRepository]);
   const [ansicht, setAnsicht] = useState<Ansicht>({ art: 'liste' });
@@ -337,12 +337,12 @@ export default function BuecherAnsicht({
       {sucheOffen ? (
         <Suchfenster
           suche={onlineSucheAktiv}
-          // Zurück: eine Stufe zurück ins Menü „Buch hinzufügen“ (REQ-110, AK-8).
+          // Zurück: eine Stufe zurück ins Menü „Buch hinzufügen“ (REQ-116, AK-8).
           onZurueck={() => {
             setSucheOffen(false);
             setMenueOffen(true);
           }}
-          // Treffer: weiter wie nach Auswahl eines Barcode-Treffers (REQ-111, AK-7; REQ-062).
+          // Treffer: weiter wie nach Auswahl eines Barcode-Treffers (REQ-117, AK-7; REQ-062).
           onWahl={(vorbelegung) => {
             setSucheOffen(false);
             setAnsicht({ art: 'eintrag', vorbelegung });
@@ -407,7 +407,7 @@ export default function BuecherAnsicht({
     <div data-seite="buecher" style={seiteStil}>
       {kopf}
       <Filterleiste filter={filterliste} buecher={alle ?? []} aktivId={seitenFilterId} onAntippen={seitenFilterAntippen} />
-      {/* Abschnitte aus der zentralen Liste; bei „Für dich“ nur die angehakten (REQ-108), Reihenfolge unverändert. */}
+      {/* Abschnitte aus der zentralen Liste; bei „Für dich“ nur die angehakten (REQ-114), Reihenfolge unverändert. */}
       {(seitenFilterId === PERSONALISIERBARER_FILTER_ID ? sichtbareAbschnitte(abschnitte, ausgeblendet) : abschnitte).map((a) => (
         <Fragment key={a.id}>{a.darstellen(abschnittKontext)}</Fragment>
       ))}

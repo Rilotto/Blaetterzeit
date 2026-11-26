@@ -71,7 +71,7 @@ const titelStil: CSSProperties = {
   ...textstufe('titel'),
   fontWeight: 700,
   lineHeight: 1.25,
-  overflowWrap: 'anywhere',
+  overflowWrap: 'break-word',
   color: rezensionFarbe('fensterTitel'),
 };
 

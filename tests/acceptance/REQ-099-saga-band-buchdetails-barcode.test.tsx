@@ -56,9 +56,15 @@ async function liste(w: Welt, art: ListenArt, name: string): Promise<Liste> {
   await w.listen.listeSpeichern(l);
   return l;
 }
+/** Buch in eine Liste aufnehmen; ein Band gehört seit REQ-112 zum Buch (Buch.bandnummer), nicht zur Zugehörigkeit. */
 async function zuordnen(w: Welt, l: Liste, b: Buch, band?: number) {
-  await w.listen.zuordnen(band === undefined ? { listeId: l.id, buchId: b.id } : { listeId: l.id, buchId: b.id, band });
+  if (band !== undefined) await w.repo.save({ ...((await w.repo.get(b.id)) ?? b), bandnummer: band });
+  await w.listen.zuordnen({ listeId: l.id, buchId: b.id });
 }
+/** Bandnummer des Buches (REQ-112). */
+const bandVon = async (w: Welt, b: Buch) => (await w.repo.get(b.id))?.bandnummer;
+/** Zugehörigkeiten ohne Bandangabe (nur listeId/buchId). */
+const zugOhneBand = async (w: Welt) => (await w.listen.zugehoerigkeiten()).map((z) => ({ listeId: z.listeId, buchId: z.buchId }));
 /** Element sichtbar (kein hidden, aria-hidden, display:none, inert in der Kette). */
 function sichtbar(el: Element | null): boolean {
   for (let n = el as HTMLElement | null; n; n = n.parentElement) {
@@ -183,7 +189,13 @@ function zeile(d: HTMLElement, bez: string) {
 }
 /** Wert der Zeile ohne Bezeichnung und Pfeil. */
 const zeilenWert = (d: HTMLElement, bez: string) => norm(norm(zeile(d, bez)?.textContent).slice(bez.length).replace('›', ''));
-void [ohneLeer, textEls, zuordnen, blatt, zeilenWert, pillenTexte, neustartDetails, haken, angehakt, neuerName, sichern, schliessen, markiert, bandFeld, ARTEN, checkboxen];
+void [bandVon, zugOhneBand, ohneLeer, textEls, zuordnen, blatt, zeilenWert, pillenTexte, neustartDetails, haken, angehakt, neuerName, sichern, schliessen, markiert, bandFeld, ARTEN, checkboxen];
+/** Wert der Zeile „Band“ der Karte „Ausgabe“ (REQ-112), Reiter „Details“ aktiv. */
+function ausgabeBand(d: HTMLElement) {
+  const z = Array.from(d.querySelectorAll<HTMLElement>('[data-ausgabe-zeile]')).find((e) => norm(e.querySelector('[data-zeile-bezeichnung]')?.textContent) === 'Band');
+  expect(z, 'Zeile „Band“ in der Karte „Ausgabe“').toBeDefined();
+  return norm(z!.querySelector('[data-zeile-wert]')?.textContent);
+}
 // ----------------------------------------------------------------------------- Ende Kopf
 
 const SAGA_ZEILE = /^(Band \d+ · )?.+$/;
@@ -232,14 +244,26 @@ describe('REQ-099 Band und Saga unter dem Autor; Band aus dem Barcode-Scan', () 
   });
 
   describe('AK-2 Mehrere Sagas', () => {
-    it('[REQ-099/AK-2] „The Empyrean“ (Band 1) und „Crescent City“ (ohne Band): zwei Zeilen „Crescent City“, „Band 1 · The Empyrean“', async () => {
+    // Fassung 2026-11-25 (REQ-112): eine Bandnummer je Buch, in allen Saga-Zeilen dieselbe.
+    it('[REQ-099/AK-2] Buch mit Bandnummer 1 in „The Empyrean“ und „Crescent City“: zwei Zeilen „Band 1 · Crescent City“, „Band 1 · The Empyrean“', async () => {
+      const w = await starte();
+      const b = buch('Crossover', { autor: 'Rebecca Yarros', bandnummer: 1 });
+      await w.repo.save(b);
+      await zuordnen(w, await liste(w, 'saga', 'The Empyrean'), b);
+      await zuordnen(w, await liste(w, 'saga', 'Crescent City'), b);
+      const d = await details(w, b.id, false);
+      await vi.waitFor(() => expect(nachAutor(d, 'Rebecca Yarros').slice(0, 2).map((e) => norm(e.textContent))).toEqual(['Band 1 · Crescent City', 'Band 1 · The Empyrean']), W);
+    });
+
+    it('[REQ-099/AK-2] ohne Bandnummer: zwei Zeilen „Crescent City“, „The Empyrean“', async () => {
       const w = await starte();
       const b = buch('Crossover', { autor: 'Rebecca Yarros' });
       await w.repo.save(b);
-      await zuordnen(w, await liste(w, 'saga', 'The Empyrean'), b, 1);
+      await zuordnen(w, await liste(w, 'saga', 'The Empyrean'), b);
       await zuordnen(w, await liste(w, 'saga', 'Crescent City'), b);
       const d = await details(w, b.id, false);
-      await vi.waitFor(() => expect(nachAutor(d, 'Rebecca Yarros').slice(0, 2).map((e) => norm(e.textContent))).toEqual(['Crescent City', 'Band 1 · The Empyrean']), W);
+      await vi.waitFor(() => expect(nachAutor(d, 'Rebecca Yarros').slice(0, 2).map((e) => norm(e.textContent))).toEqual(['Crescent City', 'The Empyrean']), W);
+      expect(sagaZeilen(d)).toEqual([]);
     });
 
     it('[REQ-099/AK-2] Negativfall: Sammlungen und Bibliotheken erzeugen keine Zeile unter dem Autor', async () => {
@@ -307,17 +331,17 @@ describe('REQ-099 Band und Saga unter dem Autor; Band aus dem Barcode-Scan', () 
       await zuordnen(w, await liste(w, 'saga', 'The Empyrean'), b, 1);
       await zuordnen(w, await liste(w, 'saga', 'Crescent City'), b);
       const d = await details(w, b.id, false);
-      await vi.waitFor(() => expect(textEls('Crescent City', d)).toHaveLength(1), W);
-      await tippe(textEls('Crescent City', d)[0]);
+      await vi.waitFor(() => expect(textEls('Band 1 · Crescent City', d)).toHaveLength(1), W);
+      await tippe(textEls('Band 1 · Crescent City', d)[0]);
       await vi.waitFor(() => expect(ueberschrift('Crescent City')).toBeDefined(), W);
       expect(ueberschrift('The Empyrean')).toBeUndefined();
     });
   });
 
-  describe('AK-6 Bandnummer aus dem Scan vorausgefüllt', () => {
+  describe('AK-6 Bandnummer aus dem Scan', () => {
     async function gescannt(band: number | undefined) {
       const w = await starte();
-      const b = buch('Onyx Storm', { autor: 'Rebecca Yarros', ...(band === undefined ? {} : { bandnummer: band }) } as Partial<Buch>);
+      const b = buch('Onyx Storm', { autor: 'Rebecca Yarros', ...(band === undefined ? {} : { bandnummer: band }) });
       await w.repo.save(b);
       const s = await liste(w, 'saga', 'The Empyrean');
       const d = await details(w, b.id);
@@ -334,7 +358,8 @@ describe('REQ-099 Band und Saga unter dem Autor; Band aus dem Barcode-Scan', () 
       await vi.waitFor(() => expect(screen.queryAllByRole('dialog')).toHaveLength(0), W);
       await vi.waitFor(() => expect(textEls('Band 2 · The Empyrean').length).toBeGreaterThan(0), W);
       await warte(60);
-      expect(await w.listen.zugehoerigkeiten()).toEqual([{ listeId: s.id, buchId: b.id, band: 2 }]);
+      expect(await zugOhneBand(w)).toEqual([{ listeId: s.id, buchId: b.id }]);
+      expect(await bandVon(w, b)).toBe(2);
     });
 
     it('[REQ-099/AK-6] vorausgefüllten Band vor dem Sichern ändern (3) bzw. leeren', async () => {
@@ -342,15 +367,15 @@ describe('REQ-099 Band und Saga unter dem Autor; Band aus dem Barcode-Scan', () 
       fireEvent.change(bandFeld(blatt(), 'The Empyrean')!, { target: { value: '3' } });
       await sichern(blatt());
       await warte(60);
-      expect((await a.w.listen.zugehoerigkeiten())[0].band).toBe(3);
+      expect(await bandVon(a.w, a.b)).toBe(3);
       cleanup();
       vi.stubGlobal('indexedDB', new IDBFactory());
       const c = await gescannt(2);
       fireEvent.change(bandFeld(blatt(), 'The Empyrean')!, { target: { value: '' } });
       await sichern(blatt());
       await warte(60);
-      const z = (await c.w.listen.zugehoerigkeiten()).find((x) => x.buchId === c.b.id)!;
-      expect(z.band).toBeUndefined();
+      expect((await c.w.listen.zugehoerigkeiten()).some((x) => x.buchId === c.b.id)).toBe(true);
+      expect(await bandVon(c.w, c.b)).toBeUndefined();
     });
 
     it('[REQ-099/AK-6] Gegenprobe: ohne Bandnummer aus dem Scan ist das Feld „Band“ leer', async () => {
@@ -366,10 +391,27 @@ describe('REQ-099 Band und Saga unter dem Autor; Band aus dem Barcode-Scan', () 
       const r = within(d).queryByRole('tab', { name: 'Details' }) ?? within(d).getAllByRole('button', { name: 'Details' })[0];
       await tippe(r);
       await vi.waitFor(() => expect(pillen(d).length).toBeGreaterThan(0), W);
+      // REQ-112: Zeile „Band“ der Karte „Ausgabe“ zeigt 2, unter dem Autor keine Saga-Zeile
+      await vi.waitFor(() => expect(ausgabeBand(d)).toBe('2'), W);
+      expect(sagaZeilen(d)).toEqual([]);
+      expect(textEls('The Empyrean', d)).toHaveLength(0);
       await tippe(pillen(d).find((p) => norm(p.textContent) === '+ Zu einer Saga hinzufügen')!);
       await vi.waitFor(() => expect(screen.queryAllByRole('dialog').length).toBeGreaterThan(0), W);
       await tippe(haken(blatt(), 'The Empyrean'));
       expect(bandFeld(blatt(), 'The Empyrean')!.value).toBe('2');
+      await sichern(blatt());
+      await vi.waitFor(() => expect(textEls('Band 2 · The Empyrean', d)).toHaveLength(1), W);
+    });
+
+    it('[REQ-099/AK-6] über den Scan angelegtes Buch mit Band 2: Zeile „Band“ zeigt 2, ohne Saga-Zeile (Buchdetails neu geöffnet)', async () => {
+      const w = await starte();
+      await scanneUndLege(w, { bandnummer: 2 });
+      const [b] = (await w.repo.list()).filter((x) => x.titel === 'Gescannt');
+      expect(b.bandnummer).toBe(2);
+      cleanup();
+      const d = await details(w, b.id);
+      await vi.waitFor(() => expect(ausgabeBand(d)).toBe('2'), W);
+      expect(sagaZeilen(d)).toEqual([]);
     });
 
     it.each([0, -1, 1.5])('[REQ-099/AK-6] Auslegung: Bandangabe %s aus dem Scan ist keine ganze Zahl ≥ 1 und wird nicht übernommen', async (band) => {
@@ -441,7 +483,8 @@ describe('REQ-099 Band und Saga unter dem Autor; Band aus dem Barcode-Scan', () 
       await tippe(zurueck());
       await vi.waitFor(() => expect(textEls('Band 2 · The Empyrean').length).toBeGreaterThan(0), W);
       await warte(60);
-      expect((await w.listen.zugehoerigkeiten())[0]).toEqual({ listeId: s.id, buchId: b.id, band: 2 });
+      expect(await zugOhneBand(w)).toEqual([{ listeId: s.id, buchId: b.id }]);
+      expect(await bandVon(w, b)).toBe(2);
     });
 
     it('[REQ-099/AK-5] Umbenennen und neuer Band zusammen (über das Repository), Buchdetails neu angezeigt: „Band 2 · Empyrean“', async () => {
@@ -451,7 +494,7 @@ describe('REQ-099 Band und Saga unter dem Autor; Band aus dem Barcode-Scan', () 
       const s = await liste(w, 'saga', 'The Empyrean');
       await zuordnen(w, s, b, 1);
       await w.listen.listeSpeichern({ ...s, name: 'Empyrean' });
-      await zuordnen(w, s, b, 2);
+      await w.repo.save({ ...b, bandnummer: 2 });
       const d = await details(w, b.id, false);
       await vi.waitFor(() => expect(norm(nachAutor(d, 'Rebecca Yarros')[0]?.textContent)).toBe('Band 2 · Empyrean'), W);
     });

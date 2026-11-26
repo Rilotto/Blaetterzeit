@@ -86,7 +86,7 @@ Referenzbild: Feld „Neue Sammlung“ in [referenzen/REQ-002-referenz-hauptnavi
 ## Abgrenzung (nicht Teil dieses REQ)
 
 - Die Rubrik „Sammlungen“ als Funktion (nur ihre Optik dient als Vorbild; Abschnittsüberschrift mit Platzhalter: REQ-012).
-- Inhalt und Verhalten des Menüs „Buch hinzufügen“ (REQ-029, REQ-061, REQ-110).
+- Inhalt und Verhalten des Menüs „Buch hinzufügen“ (REQ-029, REQ-061, REQ-116).
 - Cover-Platzhalter für Bücher ohne Cover (REQ-010).
 - Konkrete Maße und Farbwerte als Akzeptanzkriterium.
 

@@ -15,7 +15,7 @@ it('[REQ-005/GROB] Seite „Bücher“ zeigt Überschrift und zwei Schaltfläche
   expect(h.compareDocumentPosition(filter) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(filter.compareDocumentPosition(plus) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(within(main).queryByText('under construction :)')).toBeNull();
-  // Filter: öffnet das Blatt „„Für dich“ anpassen“ (REQ-005 AK-10 vom 2026-11-25, REQ-108), Schaltfläche ohne aktiven Zustand
+  // Filter: öffnet das Blatt „„Für dich“ anpassen“ (REQ-005 AK-10 vom 2026-11-25, REQ-114), Schaltfläche ohne aktiven Zustand
   const vorher = filter.outerHTML;
   fireEvent.click(filter);
   expect(screen.getByRole('dialog', { name: '„Für dich“ anpassen' })).toBeInTheDocument();

@@ -9,9 +9,9 @@ import { rezensionFarbe, stilRolle } from '@/theme';
 import { sichtbareAbschnitte, type AbschnittDefinition } from './abschnitte';
 import { personalisierbarerFilterName } from './filterKonfiguration';
 
-/** Titel des Blatts (REQ-108). */
+/** Titel des Blatts (REQ-114). */
 export const FUER_DICH_TITEL = `„${personalisierbarerFilterName}“ anpassen`;
-/** Hinweis, wenn der letzte Haken entfernt werden soll (REQ-108 AK-5). */
+/** Hinweis, wenn der letzte Haken entfernt werden soll (REQ-114 AK-5). */
 export const MINDESTENS_EINER_HINWEIS = 'Mindestens ein Abschnitt muss sichtbar sein';
 /** So lange bleibt der Hinweis sichtbar. */
 export const FUER_DICH_HINWEIS_MS = 2500;
@@ -29,7 +29,7 @@ interface Props {
   onSchliessen: () => void;
 }
 
-/** Blatt „„Für dich“ anpassen“ (REQ-108): je Abschnitt ein Haken, „Speichern“ übernimmt dauerhaft. */
+/** Blatt „„Für dich“ anpassen“ (REQ-114): je Abschnitt ein Haken, „Speichern“ übernimmt dauerhaft. */
 export default function BlattFuerDich({ abschnitte, ausgeblendet, geladen = true, onSpeichern, onSchliessen }: Props) {
   // Entwurf: `null`, solange der Nutzer nichts geändert hat – dann gilt immer die (ggf. später geladene)
   // gespeicherte Auswahl. Abschnitte ohne gespeicherte Auswahl gelten als sichtbar.

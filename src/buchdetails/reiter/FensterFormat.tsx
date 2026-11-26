@@ -148,7 +148,7 @@ const unterKachelStil = (gewaehlt: boolean): CSSProperties => ({
   ...textstufe('meta'),
   fontWeight: 700,
   lineHeight: 1.15,
-  overflowWrap: 'anywhere',
+  overflowWrap: 'break-word',
 });
 
 const sonderKopfStil: CSSProperties = {
